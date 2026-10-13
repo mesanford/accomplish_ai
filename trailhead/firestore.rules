@@ -1,0 +1,158 @@
+rules_version = '2';
+
+// Access model: troops/{t}/access/{uid} is written only by the server. It holds
+// { memberId, roles: [...], scoutIds: [...], yptExpiresAt }. Roles: leader, advancement,
+// counselor, parent, scout, committee. scoutIds = the Scouts this login acts for
+// (a Scout's own id, or a parent's children).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && request.auth.token.admin == true; }
+    function isMember(t) { return signedIn() && exists(/databases/$(database)/documents/troops/$(t)/access/$(request.auth.uid)); }
+    function access(t) { return get(/databases/$(database)/documents/troops/$(t)/access/$(request.auth.uid)).data; }
+    function hasRole(t, role) { return isMember(t) && role in access(t).roles; }
+    function isLeader(t) { return hasRole(t, 'leader') || hasRole(t, 'advancement'); }
+    function actsFor(t, scoutId) { return isMember(t) && scoutId in access(t).scoutIds; }
+    function canSeeScout(t, scoutId) { return isLeader(t) || actsFor(t, scoutId); }
+    function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
+    function card(t, cardId) { return get(/databases/$(database)/documents/troops/$(t)/blueCards/$(cardId)).data; }
+    function isCounselorFor(t, cardId) {
+      return hasRole(t, 'counselor')
+        && exists(/databases/$(database)/documents/troops/$(t)/blueCards/$(cardId))
+        && card(t, cardId).counselorUid == request.auth.uid;
+    }
+
+    // Shared program content: anyone signed in reads; only admins write.
+    match /awards/{awardId}/{rest=**} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+    match /awards/{awardId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+    match /pathTemplates/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /troops/{t} {
+      allow read: if isMember(t);
+      allow write: if false;
+
+      match /access/{uid} {
+        allow read: if signedIn() && (request.auth.uid == uid || isLeader(t));
+        allow write: if false;
+      }
+      // Roster: names, roles, patrols. Shared with the whole troop.
+      match /members/{m} {
+        allow read: if isMember(t);
+        allow create, update: if isLeader(t);
+        allow delete: if false;
+      }
+      // Private Scout details (birth month and year, rank dates).
+      match /scoutRecords/{s} {
+        allow read: if canSeeScout(t, s);
+        allow write: if isLeader(t);
+      }
+      // Progress id = {scoutId}_{awardId}, the same id as the Scout's blue card for that badge.
+      match /progress/{p} {
+        allow read: if canSeeScout(t, resource.data.scoutId) || isCounselorFor(t, p);
+        allow write: if false;
+      }
+      // Signatures are append-only. The server validates and applies them to progress.
+      match /signoffs/{id} {
+        allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.signerUid == request.auth.uid;
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'reqId', 'signerUid',
+                                                   'signedAt', 'deviceId', 'offline', 'supersedesId', 'status'])
+          && request.resource.data.signerUid == request.auth.uid
+          && request.resource.data.status == 'pending'
+          && yptCurrent(t)
+          && (isLeader(t)
+              || (isCounselorFor(t, request.resource.data.scoutId + '_' + request.resource.data.awardId)
+                  && card(t, request.resource.data.scoutId + '_' + request.resource.data.awardId).status
+                     in ['counselor_assigned', 'in_progress']));
+        allow update, delete: if false;
+      }
+      // Paths: the Scout, their parents and leaders edit; only the server writes feasibility.
+      match /paths/{id} {
+        allow read: if canSeeScout(t, resource.data.scoutId);
+        allow create: if canSeeScout(t, request.resource.data.scoutId)
+          && !('feasibility' in request.resource.data);
+        allow update: if canSeeScout(t, resource.data.scoutId)
+          && request.resource.data.scoutId == resource.data.scoutId
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['feasibility']);
+        allow delete: if canSeeScout(t, resource.data.scoutId);
+      }
+      // Blue card id = {scoutId}_{awardId}.
+      // requested -> approved -> counselor_assigned -> in_progress -> complete; leaders may cancel.
+      match /blueCards/{id} {
+        allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.counselorUid == request.auth.uid;
+        allow create: if actsFor(t, request.resource.data.scoutId)
+          && id == request.resource.data.scoutId + '_' + request.resource.data.awardId
+          && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'status', 'requestedAt'])
+          && request.resource.data.status == 'requested';
+        allow update: if (isLeader(t) && leaderTransition())
+          || (resource.data.counselorUid == request.auth.uid && counselorTransition());
+        allow delete: if false;
+
+        function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
+        function leaderTransition() {
+          let from = resource.data.status;
+          let to = request.resource.data.status;
+          return unchanged(['scoutId', 'awardId', 'versionId'])
+            && ((from == 'requested' && to == 'approved')
+              || (from in ['approved', 'counselor_assigned'] && to == 'counselor_assigned'
+                  && request.resource.data.counselorUid is string)
+              || (from != 'complete' && to == 'cancelled'));
+        }
+        function counselorTransition() {
+          let from = resource.data.status;
+          let to = request.resource.data.status;
+          return unchanged(['scoutId', 'awardId', 'versionId', 'counselorUid'])
+            && ((from == 'counselor_assigned' && to == 'in_progress')
+              || (from == 'in_progress' && to == 'complete'));
+        }
+      }
+      match /counselors/{c} {
+        allow read: if isMember(t);
+        allow write: if isLeader(t);
+      }
+      match /events/{e} {
+        allow read: if isMember(t);
+        allow write: if isLeader(t);
+        match /rsvps/{memberId} {
+          allow read: if isMember(t);
+          allow write: if isLeader(t) || actsFor(t, memberId) || access(t).memberId == memberId;
+        }
+        match /attendance/{memberId} {
+          allow read: if isMember(t);
+          allow write: if isLeader(t);
+        }
+      }
+      match /logs/{id} {
+        allow read: if canSeeScout(t, resource.data.scoutId);
+        allow write: if false;
+      }
+      // Messages are only created by the send_message function, which applies Youth Protection rules.
+      match /threads/{th} {
+        allow read: if signedIn() && request.auth.uid in resource.data.participantUids;
+        allow write: if false;
+        match /messages/{m} {
+          allow read: if signedIn()
+            && request.auth.uid in get(/databases/$(database)/documents/troops/$(t)/threads/$(th)).data.participantUids;
+          allow write: if false;
+        }
+      }
+      match /exports/{x} {
+        allow read: if isLeader(t);
+        allow write: if false;
+      }
+    }
+  }
+}

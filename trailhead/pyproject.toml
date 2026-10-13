@@ -1,0 +1,21 @@
+[project]
+name = "trailhead"
+version = "0.1.0"
+description = "Trailhead: Scouts BSA advancement planning on Firebase"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["functions"]
+testpaths = ["tests"]
+markers = ["emulator: needs the Firestore emulator (run through `firebase emulators:exec`)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".venv", "functions/venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["trailhead_core", "handlers"]

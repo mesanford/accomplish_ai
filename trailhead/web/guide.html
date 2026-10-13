@@ -1,0 +1,354 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Merit Badge Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: field-guide index — header ledger, sticky filter bar, card grid or sortable table */
+:root{
+  --bg:#f5f3ec; --surface:#fffdf7; --ink:#23281f; --muted:#5d6455; --line:#d9d6c8;
+  --accent:#4f6a2e; --accent-ink:#ffffff; --eagle:#a8741a;
+  --d1:#5f8f4e; --d2:#8aa13d; --d3:#c79a2b; --d4:#c66a2c; --d5:#a83a2c; --pip-off:#e2dfd2;
+  --cO:#4f6a2e; --cN:#2f7a5a; --cA:#2b6797; --cS:#5b4e9a; --cT:#8a5a2b; --cH:#a2456b; --cZ:#1f4f7a; --cF:#b0452f; --cB:#5a6470;
+  --display:"Zilla Slab",Rockwell,Georgia,serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171a14; --surface:#20241c; --ink:#e9e8de; --muted:#a6ab9a; --line:#353a2e;
+  --accent:#9cbc63; --accent-ink:#171a14; --eagle:#e0aa4a;
+  --d1:#7fb56c; --d2:#aec35a; --d3:#e2b84a; --d4:#e48a4c; --d5:#e0614f; --pip-off:#3a3f33;
+  --cO:#9cbc63; --cN:#5fbf92; --cA:#6aa8d8; --cS:#a497e0; --cT:#d39a5f; --cH:#e083a8; --cZ:#7aa9d6; --cF:#ea8a6f; --cB:#a3adb8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171a14; --surface:#20241c; --ink:#e9e8de; --muted:#a6ab9a; --line:#353a2e;
+  --accent:#9cbc63; --accent-ink:#171a14; --eagle:#e0aa4a;
+  --d1:#7fb56c; --d2:#aec35a; --d3:#e2b84a; --d4:#e48a4c; --d5:#e0614f; --pip-off:#3a3f33;
+  --cO:#9cbc63; --cN:#5fbf92; --cA:#6aa8d8; --cS:#a497e0; --cT:#d39a5f; --cH:#e083a8; --cZ:#7aa9d6; --cF:#ea8a6f; --cB:#a3adb8; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body)}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:20px;padding-block:28px 48px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+header.top{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;border-bottom:2px solid var(--ink);padding-bottom:18px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.05;margin-top:8px}
+.lede{color:var(--muted);max-width:62ch;margin:10px 0 0}
+.ledger{display:flex;gap:22px;flex-wrap:wrap}
+.ledger div{display:grid;min-width:0}
+.ledger b{font:700 1.9rem/1 var(--display);font-variant-numeric:tabular-nums}
+.ledger span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.scale{display:flex;flex-wrap:wrap;gap:8px 18px;margin:18px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted)}
+.scale li{display:flex;gap:8px;align-items:center}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:14px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.bar input,.bar select{font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:0}
+.bar input[type=search]{flex:1 1 220px}
+.bar label.chk{display:flex;gap:6px;align-items:center;font-size:14px;white-space:nowrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-left:auto}
+.seg button{font:600 14px var(--body);padding:8px 14px;border:0;background:var(--surface);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.count{font-size:13px;color:var(--muted);width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;grid-template-rows:auto 1fr auto;gap:12px;min-width:0}
+.card-head{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center}
+.emblem{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font:700 18px var(--display);color:#fff;background:var(--c);box-shadow:inset 0 0 0 3px var(--surface),inset 0 0 0 5px var(--c);position:relative}
+.emblem::after{content:"";position:absolute;inset:6px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.55)}
+.card h3{font-size:1.2rem;line-height:1.15}
+.cat{font-size:12px;color:var(--c);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.card p{margin:0;font-size:15px;min-width:0}
+.tough{font-size:13px;color:var(--muted)}
+.tough b{color:var(--ink);font-weight:600}
+.meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;border-top:1px dashed var(--line);padding-top:10px;font-size:13px;color:var(--muted)}
+.diff{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--ink)}
+.pips{display:inline-flex;gap:3px}
+.pips i{width:10px;height:10px;border-radius:2px;background:var(--pip-off)}
+.pips[data-d="1"] i:nth-child(-n+1){background:var(--d1)}
+.pips[data-d="2"] i:nth-child(-n+2){background:var(--d2)}
+.pips[data-d="3"] i:nth-child(-n+3){background:var(--d3)}
+.pips[data-d="4"] i:nth-child(-n+4){background:var(--d4)}
+.pips[data-d="5"] i:nth-child(-n+5){background:var(--d5)}
+.eagle{display:inline-block;font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--eagle);border:1px solid var(--eagle);border-radius:999px;padding:4px 8px;white-space:nowrap}
+.time{font-family:var(--mono);font-size:12px}
+a{color:var(--accent)}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:900px;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);position:sticky;top:0;background:var(--surface)}
+th button{all:unset;cursor:pointer;display:inline-flex;gap:4px}
+th button:focus-visible{outline:2px solid var(--accent)}
+td.name{font-weight:700;white-space:nowrap}
+td.name .dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:8px}
+td.sum{min-width:340px}
+tbody tr:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:40px;border-top:2px solid var(--ink);padding-top:22px}
+.notes h2{font-size:1.25rem;margin-bottom:8px}
+.notes p,.notes li{font-size:14px;color:var(--muted)}
+.notes ul{padding-left:18px;margin:0}
+@media (max-width:640px){header.top{grid-template-columns:1fr}.seg{margin-left:0}}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--c)}}
+</style>
+<div class="wrap">
+<header class="top">
+  <div>
+    <div class="eyebrow">Scouts BSA · Requirements as of 2026</div>
+    <h1>Merit Badge Field Guide</h1>
+    <p class="lede">Every current Scouts BSA merit badge with a plain-language summary of its requirements and a relative difficulty rating for finishing all of them. Filter by category, Eagle status or difficulty, then switch between cards and a sortable table.</p>
+  </div>
+  <div class="ledger" aria-label="Summary">
+    <div><b id="nTotal">0</b><span>Merit badges</span></div>
+    <div><b>13</b><span>Eagle-required slots</span></div>
+    <div><b>21</b><span>Badges for Eagle</span></div>
+  </div>
+</header>
+<ul class="scale" aria-label="Difficulty scale">
+  <li><span class="pips" data-d="1"><i></i><i></i><i></i><i></i><i></i></span>1 · One or two sessions</li>
+  <li><span class="pips" data-d="2"><i></i><i></i><i></i><i></i><i></i></span>2 · A few meetings</li>
+  <li><span class="pips" data-d="3"><i></i><i></i><i></i><i></i><i></i></span>3 · Multi-week projects or skill tests</li>
+  <li><span class="pips" data-d="4"><i></i><i></i><i></i><i></i><i></i></span>4 · Sustained tracking or endurance</li>
+  <li><span class="pips" data-d="5"><i></i><i></i><i></i><i></i><i></i></span>5 · Months of logged effort</li>
+</ul>
+<div class="bar" role="search">
+  <input type="search" id="q" placeholder="Search badges or requirements" aria-label="Search badges">
+  <select id="cat" aria-label="Category"><option value="">All categories</option></select>
+  <select id="diff" aria-label="Difficulty">
+    <option value="">Any difficulty</option><option value="1">1 · Easiest</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 · Hardest</option>
+  </select>
+  <select id="sort" aria-label="Sort">
+    <option value="name">Sort: A–Z</option><option value="diffAsc">Sort: Easiest first</option><option value="diffDesc">Sort: Hardest first</option><option value="cat">Sort: Category</option>
+  </select>
+  <label class="chk"><input type="checkbox" id="eagleOnly"> Eagle-required only</label>
+  <div class="seg" role="group" aria-label="View">
+    <button type="button" id="vCards" aria-pressed="true">Cards</button><button type="button" id="vTable" aria-pressed="false">Table</button>
+  </div>
+  <div class="count" id="count" aria-live="polite"></div>
+</div>
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="tablebox" id="tablebox" hidden>
+    <table>
+      <thead><tr>
+        <th><button type="button" data-k="name">Badge ↕</button></th>
+        <th><button type="button" data-k="cat">Category ↕</button></th>
+        <th><button type="button" data-k="diff">Difficulty ↕</button></th>
+        <th>Typical time</th><th>Eagle</th><th>Requirements summary</th><th>Toughest part</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="empty" id="empty" hidden>No badges match those filters. Clear the search or pick another category.</div>
+</main>
+<section class="notes">
+  <div>
+    <h2>What changed in 2026</h2>
+    <ul>
+      <li>More than 80 badges received requirement updates effective January 1, 2026. Scouts who started before then may finish on the old requirements or switch.</li>
+      <li>Citizenship in Society was discontinued February 27, 2026. Eagle now has 13 required badges and 8 electives. Scouts who had started it may finish and count it for Eagle through December 31, 2026.</li>
+      <li>Indian Lore was renamed and rewritten as American Indian Culture in January 2026.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Eagle choice groups</h2>
+    <p>Three Eagle slots let you pick one badge from a group. Cards marked with a group name count toward that slot:</p>
+    <ul>
+      <li>Emergency Preparedness <em>or</em> Lifesaving</li>
+      <li>Environmental Science <em>or</em> Sustainability</li>
+      <li>Swimming <em>or</em> Hiking <em>or</em> Cycling</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Test Lab badges</h2>
+    <p>Scouting America's Test Lab pilots possible new badges, including Auctioneering, Wildland Fire Management, Life Skills, Physics, Sewing and Needlework, Dance, Competitive Gaming, and Military Service &amp; Veterans. They are not official merit badges yet and are not listed above.</p>
+  </div>
+  <div>
+    <h2>How to read this guide</h2>
+    <p>Summaries condense the official requirements and are no substitute for them. Difficulty is an editorial estimate based on required time spans, physical demands, special access (boats, ranges, horses) and the number of projects. Always work from the current pamphlet and the official requirements on <a href="https://www.scouting.org/skills/merit-badges/all/" target="_blank" rel="noopener">scouting.org</a>, and confirm with your merit badge counselor.</p>
+  </div>
+</section>
+</div>
+<script>
+// [name, category, eagle(0|1|"or-group"), difficulty 1-5, typical time, summary, toughest part]
+const C={O:"Outdoor Skills",N:"Nature & Environment",A:"Aquatics",S:"Science & Tech",T:"Trades & Crafts",H:"Arts & Hobbies",Z:"Citizenship & Heritage",F:"Health, Safety & Fitness",B:"Careers & Business"};
+const BADGES=[
+["American Business","B",0,2,"2–4 weeks","Explain how businesses are owned, financed and run; study the role of capital, profit and stock; interview a business owner; and take part in or analyze a small business project.","Analyzing or running a real business project"],
+["American Cultures","Z",0,2,"2–3 weeks","Study three different racial, ethnic or religious groups in the U.S.: their traditions, contributions and challenges. Attend a cultural event or talk with members, and discuss how to counter prejudice.","Attending events and interviewing community members"],
+["American Heritage","Z",0,2,"2–4 weeks","Discuss the Declaration of Independence and other founding ideas, research a historic person, place or event, learn the history of the flag and national symbols, and complete a heritage project.","The research project on a historic site or family history"],
+["American Indian Culture","Z",0,3,"4–6 weeks","Learn about a specific tribe: its history, government, language and life today. Explore treaties and tribal sovereignty, and complete projects such as visiting a cultural center or learning a traditional skill with tribal guidance. Replaced Indian Lore in January 2026.","Building research on one tribe with input from tribal sources"],
+["American Labor","B",0,2,"2–3 weeks","Learn the history of organized labor, how unions and collective bargaining work, and current workplace issues like safety, wages and benefits. Interview workers or a labor representative.","Interviewing workers and a labor leader"],
+["Animal Science","N",0,3,"1–3 months","Study animal health, nutrition, breeding and the economics of livestock. Pick a track (beef, dairy, horses, sheep, swine or poultry), visit a farm or ranch, and care for or study animals over time.","Arranging a visit to a working farm or ranch"],
+["Animation","H",0,2,"2–4 weeks","Learn animation history and the principles of motion, try several techniques (flipbook, stop-motion, digital), and create your own short animated piece. Explore animation careers.","Producing a finished animated sequence"],
+["Archaeology","S",0,3,"1–2 months","Learn how archaeologists find, excavate, date and interpret sites. Study artifact laws and ethics, take part in a dig or lab session (or a simulated one), and research a site. Career requirement added in 2026.","Getting a supervised dig or lab experience"],
+["Archery","O",0,3,"3–6 weeks","Learn range safety, equipment and arrow care, then shoot qualifying scores at set distances in target, field or compound archery under a certified instructor.","Hitting the minimum qualifying score"],
+["Architecture","T",0,3,"3–6 weeks","Tour a building and analyze its design, meet with an architect, learn drafting basics, and design a floor plan or site plan for a real or imagined space. Explore careers in architecture.","Drafting a complete floor plan to scale"],
+["Art","H",0,2,"2–4 weeks","Learn the elements and principles of design, work in several media, create original artwork, and visit a museum, gallery or artist's studio. Explore art careers.","Producing multiple finished pieces in different media"],
+["Astronomy","S",0,3,"1–2 months","Identify constellations and planets, learn telescope and binocular use, observe and sketch the Moon and planets across several nights, and visit a planetarium or observatory. Explore careers.","Repeated night observations that depend on clear weather"],
+["Athletics","F",0,3,"2–3 months","Learn safety and conditioning, choose events across sprints, distance, jumps and throws, set baselines, follow a training plan, and retest to show improvement. 2026 update drops the physical exam and adds careers.","Training and documenting measurable improvement"],
+["Automotive Maintenance","T",0,3,"3–6 weeks","Read an owner's manual, learn the major vehicle systems, check fluids, tires, belts and lights, change a tire, figure the cost of owning a car, and perform basic maintenance with an adult.","Hands-on maintenance tasks on a real vehicle"],
+["Aviation","S",0,2,"2–4 weeks","Learn aircraft parts, forces of flight, instruments and airspace. Build and fly a model aircraft or use a flight simulator, and visit an airport, tower or take an orientation flight.","Arranging an airport visit or orientation flight"],
+["Backpacking","O",0,5,"3–6 months","Learn gear, menus, water treatment, navigation and Leave No Trace. Take three backpacking trips of at least 2 nights and 15 miles each, then plan and lead a trek of at least 5 days and 30 miles.","The 5-day, 30-mile trek"],
+["Basketry","T",0,2,"2–3 weeks","Learn basket materials and weaving methods, then make several baskets including square, round and seat-weaving projects.","Finishing several woven projects"],
+["Bird Study","N",0,3,"1–3 months","Learn bird anatomy, behavior and identification. Use binoculars and field guides to observe and identify at least 20 species in the wild, keep field notes, and build a feeder or nest box.","Identifying 20 species in the field"],
+["Bugling","H",0,5,"3–6 months","Learn the bugle's history and care, then sound the standard Scout camp calls accurately and serve as your troop's bugler for three months.","Learning the instrument and three months of service"],
+["Camping","O",1,5,"6–24 months","Learn camp safety, gear, menus and Leave No Trace; plan campouts; and log 20 days and nights of camping, including one long-term camp, plus activities such as a hike, climb or service project while camping.","Accumulating 20 documented nights outdoors"],
+["Canoeing","A",0,3,"2–4 weeks","Pass the BSA swimmer test, learn canoe parts, strokes and Safety Afloat, and demonstrate solo and tandem paddling, rescues and capsize recovery. Plan a canoe trip.","Solo paddling control and capsize recovery"],
+["Chemistry","S",0,3,"3–5 weeks","Explore reactions, mixtures and the periodic table through hands-on experiments. Study chemistry in everyday products and the environment, and visit a lab or interview a chemist.","Running and explaining a set of experiments"],
+["Chess","H",0,2,"2–4 weeks","Learn chess history, notation and how each piece moves; study openings, tactics and endgames; solve puzzles; and play in or organize a small tournament.","Running or playing in a tournament"],
+["Citizenship in the Community","Z",1,3,"1–2 months","Learn how your local government works, attend a public meeting, research a community issue, interview a civic leader, and complete 8 hours of volunteer service with a community organization.","Attending a public meeting and 8 service hours"],
+["Citizenship in the Nation","Z",1,3,"3–6 weeks","Study the founding documents and the three branches of government, visit a historic site or government facility, watch Congress in session, write to a member of Congress, and discuss citizen rights and duties.","Writing to Congress and the site visit"],
+["Citizenship in the World","Z",1,3,"3–6 weeks","Learn about international relations, world organizations and human rights. Study another country's government and economy, and attend a world event or talk with people from other countries.","Comparing another nation's system in depth"],
+["Climbing","O",0,3,"2–4 weeks","Learn climbing safety, gear, knots, belaying and rappelling. Climb several routes and rappel under qualified supervision at an approved site or climbing gym.","Belaying and rappelling to standard"],
+["Coin Collecting","H",0,2,"2–4 weeks","Learn how coins are minted and graded, identify mint marks and design features, build a coin set, and visit a coin show, club or museum.","Assembling the required collection"],
+["Collections","H",0,2,"1–3 months","Build and organize a collection of your choice, catalog and preserve it properly, and share what you've learned with others.","Building a meaningful collection"],
+["Communication","Z",1,3,"1–2 months","Practice listening and speaking: keep a communication log, give speeches and introductions, teach a skill, plan and run a troop event, write a letter to the editor, and study how media shape messages.","Planning and leading a troop program"],
+["Composite Materials","S",0,2,"2–3 weeks","Learn what composites are and how they are used, compare their properties to other materials, and make a composite part safely.","Fabricating a composite part"],
+["Cooking","F",1,4,"2–4 months","Learn food safety, nutrition and menu planning. Plan, cook and serve meals at home, in camp for your patrol, and on the trail using different cooking methods.","Planning and cooking many meals in three settings"],
+["Crime Prevention","Z",0,2,"2–3 weeks","Learn how crime affects communities, do a home security check, discuss drugs, gangs and cybercrime, and plan a crime prevention program for your community.","Developing the community prevention program"],
+["Cycling","F","Swim/Hike/Cycle",5,"2–4 months","Learn bike safety, maintenance and repair, then complete a series of progressive rides: two each of 10, 15 and 25 miles and a 50-mile ride in 8 hours (or a mountain-bike option).","The 50-mile ride"],
+["Dentistry","B",0,2,"2–3 weeks","Learn tooth anatomy and oral health, visit a dental office, explore dental careers, and make a model or demonstrate proper brushing and flossing.","Arranging the dental office visit"],
+["Digital Technology","S",0,2,"2–3 weeks","Learn how digital devices store and transmit information, practice online safety and digital citizenship, and use technology to create something. Updated for 2026 with QR codes and current online-safety topics.","Explaining how digital data works"],
+["Disabilities Awareness","F",0,3,"3–6 weeks","Learn about types of disabilities and accessibility laws, visit an agency or program, do an accessibility survey, and spend time with or serve people who have disabilities.","Sustained involvement with a disability program"],
+["Dog Care","N",0,3,"2–3 months","Learn breeds, care, nutrition, training and health; care for a dog for two months while keeping a log; and learn canine first aid and responsible ownership.","Two months of daily care log"],
+["Drafting","T",0,2,"2–4 weeks","Learn drafting tools and conventions, create both hand-drawn and CAD drawings, and produce a plan or technical drawing.","Producing accurate drawings in two methods"],
+["Electricity","S",0,2,"2–3 weeks","Learn circuits, electrical safety and basic laws; build simple circuits and an electromagnet; read a meter; and do a home electrical safety check.","Building working circuits"],
+["Electronics","S",0,3,"3–5 weeks","Learn components and schematics, solder safely, and build analog and digital circuits; troubleshoot a project.","Soldering and debugging a circuit"],
+["Emergency Preparedness","F","EP/Lifesaving",3,"1–2 months","Learn the phases of emergency management, prepare a family plan and kit, learn how to respond to different disasters, and take part in a mock drill or emergency service project.","Participating in a mock drill or service project"],
+["Energy","S",0,2,"2–4 weeks","Learn energy forms and sources, do a home energy audit, study efficiency, and explore future energy technologies.","The home energy audit"],
+["Engineering","S",0,2,"2–4 weeks","Learn the engineering design process, examine how a machine works, interview an engineer, and design a solution to a real problem.","Designing a solution end to end"],
+["Entrepreneurship","B",0,3,"1–3 months","Identify a business opportunity, write a business plan, and launch and run the venture, then report on results.","Actually launching and running a business"],
+["Environmental Science","N","EnvSci/Sustain",3,"1–2 months","Study ecology concepts, complete activities across several areas (air, water, land, endangered species, pollution prevention), and conduct a field study observing an ecosystem over time.","The timed field observations"],
+["Exploration","O",0,3,"1–2 months","Learn the history of exploration, plan an expedition, practice field skills and equipment use, and carry out an exploration expedition with documented findings.","Planning and completing the expedition"],
+["Family Life","Z",1,4,"3–4 months","Discuss family roles and values, complete a 90-day home chore plan, carry out individual and family projects, and plan and hold family meetings on several topics.","90 days of tracked home chores"],
+["Farm Mechanics","T",0,3,"3–5 weeks","Learn farm machinery and safety, perform maintenance on equipment, and complete a mechanical repair or project.","Access to farm equipment"],
+["Fingerprinting","S",0,1,"1–2 sessions","Learn the history of fingerprinting and how prints are classified, identify the basic pattern types (arches, loops, whorls), and take a complete, readable set of your own prints.","Taking clear, readable prints"],
+["Fire Safety","F",0,2,"2–3 weeks","Learn how fires start and spread, inspect your home for hazards, create an escape plan and run a drill, learn extinguisher use, and visit a fire station.","Home inspection and family drill"],
+["First Aid","F",1,3,"3–6 weeks","Learn to prevent and treat injuries and illnesses including bleeding, shock, burns, fractures, hypothermia and heat illness; demonstrate CPR and AED use and victim transport.","Demonstrating hands-on treatments correctly"],
+["Fish and Wildlife Management","N",0,3,"1–2 months","Learn wildlife habitats and management practices, study invasive species and laws, and complete a habitat improvement project or species survey.","The habitat or survey project"],
+["Fishing","O",0,2,"2–4 weeks","Learn tackle, knots and fishing regulations, cast accurately with spinning or baitcasting gear, and catch, identify, clean and cook a fish.","Catching a fish"],
+["Fly Fishing","O",0,3,"1–2 months","Learn fly tackle and casting, tie flies and knots, demonstrate casting, and catch and release a fish on a fly.","Catching a fish on a fly"],
+["Forestry","N",0,3,"1–2 months","Identify trees, learn forest ecology and management, measure trees, and visit a managed forest or complete a forestry project.","Identifying trees in the field"],
+["Game Design","S",0,2,"2–4 weeks","Learn game types and design elements, analyze existing games, design and playtest an original game, and present it.","Iterative playtesting of your game"],
+["Gardening","N",0,3,"2–4 months","Plan a garden, prepare soil, grow vegetables or flowers through a season, keep a log, compost, and harvest and use what you grow.","A full growing season"],
+["Genealogy","H",0,2,"3–6 weeks","Research your family tree, interview relatives, gather vital records, and create pedigree charts and family group sheets.","Finding and documenting records"],
+["Geocaching","O",0,2,"2–4 weeks","Learn GPS use and geocaching rules, find several caches, hide or place a cache or trackable, and plan a geocaching event.","Organizing the geocaching event"],
+["Geology","S",0,2,"2–4 weeks","Learn rock types and geologic processes, collect and identify rocks and minerals, and visit a geologic site, lab or museum.","Building an identified collection"],
+["Golf","F",0,2,"3–6 weeks","Learn the rules, etiquette and history of golf, practice grip, stance and the full swing, chip and putt, and play rounds while keeping score and following course safety.","Course access and playing rounds"],
+["Graphic Arts","H",0,2,"2–4 weeks","Learn the major printing processes, design a printed piece, and produce it using offset, screen, digital or another method.","Producing the printed piece"],
+["Health Care Professions","B",0,2,"2–4 weeks","Explore careers across health care fields, visit a care facility, and interview health care professionals.","Arranging interviews and the facility visit"],
+["Hiking","O","Swim/Hike/Cycle",4,"2–4 months","Learn hiking safety and first aid, then take five 10-mile hikes and one 20-mile hike, each completed in a day and followed by a written report.","The 20-mile hike in one day"],
+["Home Repairs","T",0,2,"2–4 weeks","Complete a set of household repairs such as fixing a faucet, patching drywall, clearing drains, and caulking, and learn home safety.","Doing several real repairs"],
+["Horsemanship","O",0,3,"1–2 months","Learn horse care, tack and safety, and ride while demonstrating gaits and control under supervision.","Access to horses and riding instruction"],
+["Insect Study","N",0,3,"1–2 months","Learn insect anatomy and life cycles, collect and identify insects, and observe a colony or raise insects through metamorphosis.","Raising insects through a life cycle"],
+["Inventing","S",0,3,"1–2 months","Learn the history of inventions and patents, then invent, build and present a working prototype.","Building a working prototype"],
+["Journalism","H",0,2,"2–4 weeks","Learn news writing, ethics and media types; write articles or produce a broadcast; and visit a newsroom.","Producing publishable stories"],
+["Kayaking","A",0,3,"2–4 weeks","Pass the BSA swimmer test, learn kayak types, gear and Safety Afloat, demonstrate forward, reverse and turning strokes, a wet exit, and assisted rescues, and paddle a short course.","Wet exit and rescue skills"],
+["Landscape Architecture","T",0,2,"2–4 weeks","Visit a landscape project, study design principles, and create a landscape plan for a site.","Drawing a scaled landscape plan"],
+["Law","Z",0,2,"2–4 weeks","Learn how laws are made and enforced, the history of law and the court system, and different kinds of law. Observe a trial or hearing, interview a lawyer or judge, and explore legal careers.","Observing court proceedings"],
+["Leatherwork","T",0,2,"2–4 weeks","Learn leather types and tools, then tool, stamp and finish several leather projects.","Finishing multiple projects"],
+["Lifesaving","A","EP/Lifesaving",4,"3–6 weeks","Pass demanding swim tests including a 400-yard swim, then demonstrate reaching, throwing and swimming rescues, defensive escapes and in-water skills.","Swimming rescues with a struggling victim"],
+["Mammal Study","N",0,2,"3–6 weeks","Learn how mammals are classified and adapted to their habitats, observe and record wild mammals or their signs, and complete a project such as tracking, a habitat survey or a museum visit.","Field observation of wild mammals"],
+["Metalwork","T",0,3,"1–2 months","Learn metalworking safety and tools, and complete projects in sheet metal, casting, silversmithing or blacksmithing.","Access to a supervised metal shop"],
+["Mining in Society","S",0,2,"2–4 weeks","Learn mining history, how minerals are used in everyday life, and mining's environmental impact; visit a mine or museum.","Arranging a mine or museum visit"],
+["Model Design and Building","T",0,2,"3–6 weeks","Plan, design and build a scale model of a structure, vehicle or device.","Building an accurate scale model"],
+["Motorboating","A",0,3,"2–4 weeks","Pass the BSA swimmer test, learn boat handling and Safety Afloat, and operate a motorboat. 2026 update removes the CPR requirement.","Access to a boat and qualified supervision"],
+["Moviemaking","H",0,2,"3–6 weeks","Learn storyboarding, camera work and editing, and produce a short film. 2026 update adds a career requirement.","Producing a finished film"],
+["Multisport","F",0,4,"2–4 months","Learn safety, gear and transitions for triathlon-style events, follow a structured training plan, and compete in two multisport races such as a triathlon, duathlon or aquathlon.","Training for and finishing two races"],
+["Music","H",0,2,"1–2 months","Learn music theory, notation and the history of several genres, perform pieces on an instrument or by voice, attend live performances, and explore careers in music.","Performing several pieces"],
+["Nature","N",0,2,"3–6 weeks","Learn how ecosystems work and the food web, then study and identify species across several groups (birds, mammals, reptiles, insects, fish, plants, rocks) in the field.","Field identification across categories"],
+["Nuclear Science","S",0,3,"3–5 weeks","Learn atomic structure, radiation types and safety, build an atom model, use a detector or cloud chamber, and explore nuclear energy, medicine and careers.","Radiation detection activity"],
+["Oceanography","S",0,3,"1–2 months","Learn ocean currents, waves, tides and marine life, run experiments on salinity or density, and complete a project such as a model, report or visit to a marine facility.","The independent project"],
+["Orienteering","O",0,3,"1–2 months","Learn map symbols, compass use and pace counting, complete several orienteering courses including a competitive event, and design and set up a course of your own.","Completing competitive courses"],
+["Painting","T",0,2,"2–4 weeks","Learn paint types, surface preparation and safety, and complete interior and exterior painting jobs plus a decorative project. Explore careers in the painting trade.","Finishing real painting jobs"],
+["Personal Fitness","F",1,4,"3–4 months","Get a health exam, take a fitness test, then follow a 12-week personal exercise program, logging progress and retesting at the end.","The 12-week logged program"],
+["Personal Management","B",1,5,"3–4 months","Learn budgeting, saving and investing; track income and expenses for 13 weeks; set goals; plan a major purchase; and manage your time with a one-week to-do plan.","The 13-week budget"],
+["Pets","N",0,2,"2–3 months","Choose a pet and care for it for two months while keeping a log of feeding, grooming and behavior; learn its needs, health issues and training.","Two months of care log"],
+["Photography","H",0,2,"2–4 weeks","Learn camera controls, exposure and composition, shoot a photo story or essay, edit and share your images, and explore careers in photography.","Creating a photo story"],
+["Pioneering","O",0,3,"1–2 months","Tie and use knots, whippings and lashings, learn rope care and safety, and build pioneering structures such as a monkey bridge, tower or trestle with your patrol.","Building a full-scale structure"],
+["Plant Science","N",0,3,"2–3 months","Study plant structure, growth and agriculture, then choose a track (agronomy, horticulture or field botany) to grow plants or run an experiment over a growing season.","A growing-season project"],
+["Plumbing","T",0,2,"2–4 weeks","Learn how water supply and drain systems work, repair a faucet, clear a clogged drain, cut and join copper or plastic pipe, and practice plumbing safety.","Hands-on pipe work"],
+["Pottery","H",0,2,"3–6 weeks","Learn clay types and techniques, make pots by hand-building and on the wheel, decorate and glaze them, and see how pieces are fired in a kiln.","Access to a kiln and wheel"],
+["Programming","S",0,3,"3–6 weeks","Learn programming history, languages and how code is executed; write and run programs in several languages; and discuss intellectual property and programming careers.","Writing working code in multiple languages"],
+["Public Health","F",0,2,"2–4 weeks","Learn how diseases spread, the roles of public health agencies, vaccines and sanitation, and visit a public health department or facility.","Arranging the agency visit"],
+["Public Speaking","Z",0,2,"2–4 weeks","Prepare and give several speeches including an informative talk, a persuasive talk and an impromptu speech, and learn to introduce a speaker.","Delivering speeches to an audience"],
+["Pulp and Paper","S",0,2,"2–3 weeks","Learn the history of papermaking and how pulp is produced and recycled, make a sheet of paper by hand, and visit a mill or explore the industry.","Making handmade paper"],
+["Radio","S",0,3,"3–6 weeks","Learn how radio waves travel and how stations work, then choose amateur, broadcast or shortwave radio and operate or monitor under supervision. Updated in 2026 for modern devices.","Operating a station under supervision"],
+["Railroading","H",0,2,"2–4 weeks","Learn railroad history, types of equipment and rail safety, ride a train or visit a rail facility, and build or operate a model railroad layout.","Model layout work"],
+["Reading","H",0,2,"1–2 months","Read books across several genres, keep notes, discuss them with others, and complete reading-related service such as reading to younger children.","Reading several books"],
+["Reptile and Amphibian Study","N",0,3,"1–2 months","Learn how reptiles and amphibians differ, identify local species, observe them in the wild, and care for one in captivity for at least a month.","A month of animal care"],
+["Rifle Shooting","O",0,3,"3–6 weeks","Learn firearm safety and the rules of the range, practice positions and marksmanship, and shoot a qualifying score with a .22 rifle or air rifle under a certified instructor.","Shooting the qualifying score"],
+["Robotics","S",0,3,"1–2 months","Learn robot types, sensors and programming; design, build and program a robot to complete a task; and present your work and explore robotics careers.","Building and programming a working robot"],
+["Rowing","A",0,4,"1–2 months","Pass the BSA swimmer test, learn boat parts, rowing strokes and Safety Afloat, demonstrate maneuvers and capsize recovery, and complete a long-distance row.","Endurance rowing distance"],
+["Safety","F",0,2,"2–3 weeks","Learn about safety at home, school, online and in the community; conduct safety inspections; and plan a safety event. 2026 update adds online-safety topics.","Running the safety event"],
+["Salesmanship","B",0,2,"2–4 weeks","Learn the steps of a sale and customer service, research a product, and sell products or services to customers.","Making real sales"],
+["Scholarship","Z",0,2,"Ongoing","Show a strong or improving school record, discuss study habits and goals, and interview teachers or school administrators about the value of education.","Maintaining grades over time"],
+["Scouting Heritage","Z",0,2,"2–4 weeks","Learn how Scouting began and grew, research your council's history, visit a Scouting museum or historic site, and interview a long-time Scouter.","The interview and site visit"],
+["Scuba Diving","A",0,5,"1–2 months","Learn diving physics, physiology and safety, then complete pool training and open-water dives to earn an open-water scuba certification under a certified instructor.","Open-water certification dives and cost"],
+["Sculpture","H",0,2,"2–4 weeks","Learn sculpture tools and methods, and create sculptures in clay, plaster or wood, including a modeled piece and a carved piece.","Completing several sculptures"],
+["Search and Rescue","F",0,3,"1–2 months","Learn how search and rescue teams are organized, search techniques and survival skills, and take part in a mock search operation.","The mock search"],
+["Shotgun Shooting","O",0,3,"3–6 weeks","Learn shotgun safety, parts and ammunition, practice stance and swing, and break a qualifying number of clay targets under a certified instructor.","Hitting the qualifying targets"],
+["Signs, Signals, and Codes","S",0,2,"2–4 weeks","Learn and use Morse code, American Sign Language, trail signs, semaphore and other codes to send and receive messages.","Sending and receiving Morse code"],
+["Skating","F",0,2,"2–4 weeks","Choose ice, roller or inline skating; learn safety and equipment care; and demonstrate forward and backward skating, stops and turns.","Demonstrating required skills"],
+["Small-Boat Sailing","A",0,3,"2–4 weeks","Pass the BSA swimmer test, learn sailing theory, parts and points of sail, rig a boat, sail a triangular course, and perform capsize recovery.","Sailing a course with recovery"],
+["Snow Sports","F",0,3,"1–2 months","Learn safety, gear and the responsibility code, then choose downhill, cross-country or snowboarding and demonstrate skills on the snow.","Access to slopes and lessons"],
+["Soil and Water Conservation","N",0,2,"3–6 weeks","Learn how soil forms and erodes and how water cycles through watersheds, and complete a conservation project such as erosion control.","The conservation project"],
+["Space Exploration","S",0,2,"2–4 weeks","Learn the history and purpose of space exploration, build and launch a model rocket, and design a crewed or robotic mission.","Building and launching a rocket"],
+["Sports","F",0,3,"1 season","Learn sportsmanship and safety, participate in two sports for a full season, and explain the rules and strategy of each.","A full season of two sports"],
+["Stamp Collecting","H",0,2,"1–2 months","Learn stamp terms and printing, use catalogs and albums, and build an organized stamp collection.","Building the collection"],
+["Surveying","S",0,2,"2–4 weeks","Learn surveying tools and methods, measure and map a plot of land, and explore careers in surveying and mapping.","Conducting the survey"],
+["Sustainability","N","EnvSci/Sustain",3,"1–2 months","Track your family's water, food, energy and waste use, hold a family meeting to set goals, and complete projects across several sustainability areas.","Family tracking projects"],
+["Swimming","A","Swim/Hike/Cycle",3,"2–4 weeks","Pass the BSA swimmer test, learn water safety, swim 150 yards using several strokes in good form, float, and perform surface dives and a safe entry.","The 150-yard swim in good form"],
+["Textile","H",0,2,"2–4 weeks","Learn about natural and synthetic fibers and how fabric is made, and complete textile projects such as weaving, knitting or sewing.","Making textile projects"],
+["Theater","H",0,2,"1–2 months","Learn theater terms and roles, act in a performance, and work on a technical area such as set design, lighting or costumes.","Performing on stage"],
+["Traffic Safety","F",0,2,"2–3 weeks","Learn how to stay safe as a pedestrian, cyclist and future driver, discuss distracted driving and seat belts, and plan a safety program. Updated for 2026.","Planning a safety program"],
+["Truck Transportation","B",0,2,"2–3 weeks","Learn how trucking moves goods, the regulations and safety rules for trucks, and visit a truck terminal or interview a driver.","Arranging the terminal visit"],
+["Veterinary Medicine","B",0,2,"2–4 weeks","Learn about veterinary careers and specialties, the role of vets in animal and public health, and visit a veterinary clinic.","Arranging the clinic visit"],
+["Water Sports","A",0,3,"2–4 weeks","Pass the BSA swimmer test, learn waterskiing or wakeboarding safety, and demonstrate getting up and riding behind a boat.","Getting up and riding"],
+["Weather","S",0,2,"3–6 weeks","Learn how weather forms and is forecast, make simple instruments, keep a weather log, and learn about severe weather safety.","Keeping the weather log"],
+["Welding","T",0,3,"3–5 weeks","Learn welding processes, metal properties and shop safety, and make several welds under qualified supervision.","Access to a supervised shop"],
+["Whitewater","A",0,4,"1–2 months","Requires Canoeing or Kayaking first. Learn river hazards and reading water, rescue techniques, and paddle Class II whitewater with a qualified leader.","Paddling Class II rapids"],
+["Wilderness Survival","O",0,3,"1–2 months","Learn the priorities of survival, build a survival kit and a shelter, and spend a night in the shelter you build.","A night in your own shelter"],
+["Woodcarving","T",0,2,"2–4 weeks","Learn carving tools, sharpening and knife safety, and carve several projects in relief and in the round.","Carving several projects"],
+["Woodwork","T",0,2,"3–6 weeks","Learn wood types, tools and joinery, and build finished woodwork projects.","Building finished projects"]
+];
+(function(){
+const rows=BADGES.map(b=>({name:b[0],ck:b[1],cat:C[b[1]],eagle:b[2],diff:b[3],time:b[4],sum:b[5],tough:b[6]}));
+const $=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+$("nTotal").textContent=rows.length;
+Object.entries(C).sort((a,b)=>a[1].localeCompare(b[1])).forEach(([k,v])=>{const o=document.createElement("option");o.value=k;o.textContent=v;$("cat").appendChild(o)});
+let view=store.get("mb-view")||"cards", tSort={k:"name",dir:1};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const initials=n=>n.replace(/\b(and|in|the|of)\b|,/gi," ").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const pips=d=>`<span class="pips" data-d="${d}" aria-label="Difficulty ${d} of 5"><i></i><i></i><i></i><i></i><i></i></span>`;
+const eagleTag=e=>{if(!e){return ""} if(e===1){return '<span class="eagle">Eagle required</span>'} return `<span class="eagle" title="Counts toward one Eagle choice slot">Eagle · ${esc(e)}</span>`};
+const DL=["","Easy","Moderate","Involved","Demanding","Hardest"];
+function filtered(){
+  const q=$("q").value.trim().toLowerCase(),c=$("cat").value,d=$("diff").value,eo=$("eagleOnly").checked;
+  let r=rows.filter(x=>(!c||x.ck===c)&&(!d||x.diff==d)&&(!eo||x.eagle)&&(!q||(x.name+" "+x.sum+" "+x.tough+" "+x.cat).toLowerCase().includes(q)));
+  const s=$("sort").value;
+  const cmp={name:(a,b)=>a.name.localeCompare(b.name),diffAsc:(a,b)=>a.diff-b.diff||a.name.localeCompare(b.name),diffDesc:(a,b)=>b.diff-a.diff||a.name.localeCompare(b.name),cat:(a,b)=>a.cat.localeCompare(b.cat)||a.name.localeCompare(b.name)};
+  r.sort(cmp[s]);
+  return r;
+}
+function render(){
+  const r=filtered();
+  $("count").textContent=`Showing ${r.length} of ${rows.length} badges`;
+  $("empty").hidden=r.length>0;
+  $("grid").hidden=view!=="cards"||!r.length; $("tablebox").hidden=view!=="table"||!r.length;
+  $("vCards").setAttribute("aria-pressed",view==="cards"); $("vTable").setAttribute("aria-pressed",view==="table");
+  if(view==="cards"){
+    $("grid").innerHTML=r.map(x=>`<article class="card" style="--c:var(--c${x.ck})">
+      <div class="card-head"><div class="emblem" aria-hidden="true">${initials(x.name)}</div><div><h3>${esc(x.name)}</h3><div class="cat">${esc(x.cat)}</div></div></div>
+      <div style="display:grid;gap:8px;align-content:start"><p>${esc(x.sum)}</p><div class="tough"><b>Toughest part:</b> ${esc(x.tough)}</div></div>
+      <div class="meta"><span class="diff">${pips(x.diff)} ${x.diff} · ${DL[x.diff]}</span><span class="time">${esc(x.time)}</span>${eagleTag(x.eagle)}</div>
+    </article>`).join("");
+  }else{
+    const t=[...r].sort((a,b)=>{const k=tSort.k;const v=k==="diff"?a.diff-b.diff:a[k].localeCompare(b[k]);return (v||a.name.localeCompare(b.name))*tSort.dir});
+    $("tbody").innerHTML=t.map(x=>`<tr style="--c:var(--c${x.ck})"><td class="name"><span class="dot"></span>${esc(x.name)}</td><td>${esc(x.cat)}</td><td style="white-space:nowrap">${pips(x.diff)} ${x.diff}</td><td class="time" style="white-space:nowrap">${esc(x.time)}</td><td>${eagleTag(x.eagle)}</td><td class="sum">${esc(x.sum)}</td><td>${esc(x.tough)}</td></tr>`).join("");
+  }
+}
+["q","cat","diff","sort","eagleOnly"].forEach(id=>$(id).addEventListener("input",render));
+$("vCards").onclick=()=>{view="cards";store.set("mb-view",view);render()};
+$("vTable").onclick=()=>{view="table";store.set("mb-view",view);render()};
+document.querySelectorAll("th button").forEach(b=>b.onclick=()=>{const k=b.dataset.k;tSort=tSort.k===k?{k,dir:-tSort.dir}:{k,dir:1};render()});
+if(location.hash==="#table"){view="table"}
+render();
+})();
+</script>
+
+</body></html>

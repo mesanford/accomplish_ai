@@ -1,0 +1,11 @@
+.venv/
+functions/venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+firebase-debug*.log
+firestore-debug*.log
+ui-debug*.log
+.firebase/
+*.local

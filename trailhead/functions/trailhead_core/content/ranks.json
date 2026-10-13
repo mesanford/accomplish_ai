@@ -1,0 +1,20 @@
+{
+ "source": "Scouts BSA rank requirements, timing and count rules only",
+ "effectiveDate": "2026-02-27",
+ "asOf": "2026-10-13",
+ "eagleRequiredSlots": 13,
+ "notes": [
+  "Citizenship in Society was discontinued 2026-02-27; Scouts who started it may still count it for Eagle through 2026-12-31.",
+  "Eagle must be completed before the Scout's 18th birthday unless an extension is granted."
+ ],
+ "ranks": [
+  {"id": "scout", "name": "Scout", "order": 0},
+  {"id": "tenderfoot", "name": "Tenderfoot", "order": 1, "minDays": 30, "note": "30-day physical fitness improvement"},
+  {"id": "second-class", "name": "Second Class", "order": 2},
+  {"id": "first-class", "name": "First Class", "order": 3},
+  {"id": "star", "name": "Star", "order": 4, "monthsAfterPrevious": 4, "totalBadges": 6, "totalEagleRequired": 4, "serviceHours": 6, "porMonths": 4},
+  {"id": "life", "name": "Life", "order": 5, "monthsAfterPrevious": 6, "totalBadges": 11, "totalEagleRequired": 7, "serviceHours": 6, "porMonths": 6},
+  {"id": "eagle", "name": "Eagle Scout", "order": 6, "monthsAfterPrevious": 6, "totalBadges": 21, "totalEagleRequired": 13, "porMonths": 6, "beforeAge": 18}
+ ],
+ "palm": {"monthsAfterPrevious": 3, "additionalBadges": 5}
+}

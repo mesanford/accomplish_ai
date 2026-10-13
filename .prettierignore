@@ -12,3 +12,6 @@ coverage/
 # Build artifacts
 **/mcp-tools/dev-browser/server.mjs
 **/mcp-tools/dev-browser/.browser-data/
+
+# Trailhead is a separate Python/Firebase project with its own tooling (ruff, pytest)
+trailhead/
