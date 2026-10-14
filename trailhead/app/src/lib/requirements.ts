@@ -28,6 +28,11 @@ export interface FlatRequirement extends Requirement {
   depth: number;
 }
 
+/** Requirements with lettered or numbered parts are headings; Scouts complete and sign the parts. */
+export function isSignable(req: Requirement): boolean {
+  return req.children.length === 0;
+}
+
 export const REQUIREMENTS_ATTRIBUTION = 'Requirements © Scouting America. Shown from scouting.org for troop use.';
 const RANKS_URL = 'https://www.scouting.org/programs/scouts-bsa/advancement-and-awards/';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { errorMessage } from '../lib/api';
 import { useAuth } from '../lib/auth';
-import { normalizeReqId } from '../lib/requirements';
+import { isSignable, normalizeReqId } from '../lib/requirements';
 import { recordSignOff } from '../lib/signoff';
 import { useRequirements } from '../lib/useRequirements';
 import { OfficialLink } from './AwardRequirements';
@@ -51,8 +51,11 @@ export function CounselChecklist({ troopId, scoutId, awardId, versionId, statuse
         doc={doc}
         statuses={statuses}
         collapsedCount={40}
-        action={(r) =>
-          statuses[normalizeReqId(r.id)] === 'signed' ? null : (
+        action={(r) => {
+          if (!isSignable(r) || statuses[normalizeReqId(r.id)] === 'signed') {
+            return null;
+          }
+          return (
             <button
               type="button"
               className="btn small"
@@ -62,8 +65,8 @@ export function CounselChecklist({ troopId, scoutId, awardId, versionId, statuse
             >
               {busy === r.id ? 'Signing…' : 'Sign'}
             </button>
-          )
-        }
+          );
+        }}
       />
       <Notice kind="error">{error}</Notice>
       <OfficialLink awardId={awardId}>Check against the official requirements first</OfficialLink>

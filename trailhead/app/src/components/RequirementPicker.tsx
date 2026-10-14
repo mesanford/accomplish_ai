@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { normalizeReqId } from '../lib/requirements';
+import { isSignable, normalizeReqId } from '../lib/requirements';
 import { useRequirements } from '../lib/useRequirements';
 import { OfficialLink } from './AwardRequirements';
 import { type ReqStatus, RequirementList } from './RequirementList';
@@ -72,8 +72,11 @@ export function RequirementPicker(props: Props) {
       doc={doc}
       statuses={statuses}
       selected={value}
-      action={(r) =>
-        multiple ? (
+      action={(r) => {
+        if (!isSignable(r)) {
+          return null;
+        }
+        return multiple ? (
           <input
             type="checkbox"
             aria-label={`Requirement ${r.id} done`}
@@ -91,8 +94,8 @@ export function RequirementPicker(props: Props) {
           >
             {chosen.has(normalizeReqId(r.id)) ? 'Chosen' : 'Choose'}
           </button>
-        )
-      }
+        );
+      }}
     />
   );
   if (!collapsible) {

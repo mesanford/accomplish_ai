@@ -120,3 +120,12 @@ describe('loadRequirements', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
+
+describe('isSignable', () => {
+  it('treats requirements with parts as headings', async () => {
+    const { isSignable } = await import('../requirements');
+    const leaf = { id: '1a', label: '(a)', text: 'x', resources: [], children: [] };
+    expect(isSignable(leaf)).toBe(true);
+    expect(isSignable({ ...leaf, id: '1', children: [leaf] })).toBe(false);
+  });
+});
