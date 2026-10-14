@@ -17,6 +17,8 @@ export interface Troop {
   name: string;
   unitNumber: string;
   council?: string;
+  /** The public website's state. Written only by the server. */
+  site?: { slug?: string; published?: boolean; publishedAt?: Timestamp | null };
 }
 
 export interface Access {
@@ -34,6 +36,8 @@ export interface Member {
   roles?: Role[];
   guardianIds?: string[];
   yptExpiresAt?: Timestamp | null;
+  /** May photos showing this Scout go on the public website? Written only by set_media_consent. */
+  mediaConsent?: { granted: boolean; byMemberId: string; at?: Timestamp };
 }
 
 export interface ScoutRecord {
@@ -123,6 +127,9 @@ export interface TroopEvent {
   start: string;
   logValues?: { nights?: number; miles?: number; serviceHours?: number };
   linkedRequirements?: { awardId: string; reqId: string }[];
+  /** Listed on the troop's public website (title, date and place only). */
+  public?: boolean;
+  place?: string;
 }
 
 export interface Thread {

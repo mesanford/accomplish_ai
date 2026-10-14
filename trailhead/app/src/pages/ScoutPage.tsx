@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
+import { MediaConsent } from '../components/MediaConsent';
 import { PathSummary } from '../components/PathSummary';
 import { BlueCardList, ProgressList } from '../components/ProgressList';
 import { RankForm } from '../components/RankForm';
@@ -87,6 +88,7 @@ export function ScoutPage() {
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} />
       </section>
+      <MediaConsent scout={scout} />
       {isLeader && record.data ? (
         <>
           {/* Full width: the requirement checklist needs room to read. */}

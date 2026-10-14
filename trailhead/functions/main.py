@@ -18,6 +18,9 @@ from endpoints.messaging import send_message
 from endpoints.prior import record_prior_advancement
 from endpoints.recruiting import submit_interest
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
+from endpoints.site import on_event_written_site, publish_site, unpublish_site
+from endpoints.site_about import draft_site_about
+from endpoints.site_consent import set_media_consent
 
 __all__ = [
     "accept_invite",
@@ -28,14 +31,19 @@ __all__ = [
     "create_scoutbook_report",
     "create_troop",
     "draft_path",
+    "draft_site_about",
     "move_to_custom_version",
     "on_attendance_written",
     "on_blue_card_written",
+    "on_event_written_site",
     "on_path_written",
     "on_signoff_created",
+    "publish_site",
     "record_prior_advancement",
     "save_custom_award",
     "send_message",
+    "set_media_consent",
     "set_scoutbook_entered",
     "submit_interest",
+    "unpublish_site",
 ]

@@ -8,11 +8,11 @@ cd "$(dirname "$0")/.."
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
 .venv/bin/pytest -q tests/unit
-firebase emulators:exec --only firestore --project demo-trailhead ".venv/bin/pytest -q tests/rules"
-RUN_FUNCTIONS_TESTS=1 firebase emulators:exec --only auth,firestore,functions --project demo-trailhead \
+firebase emulators:exec --only firestore,storage --project demo-trailhead ".venv/bin/pytest -q tests/rules"
+RUN_FUNCTIONS_TESTS=1 firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead \
   ".venv/bin/pytest -q tests/integration"
 
 npm --prefix app run typecheck
 npm --prefix app test
 npm --prefix app run build
-firebase emulators:exec --only auth,firestore,functions --project demo-trailhead "npm --prefix app run e2e"
+firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead "npm --prefix app run e2e"

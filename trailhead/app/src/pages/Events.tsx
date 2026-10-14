@@ -19,6 +19,8 @@ function EventForm({ troopId }: { troopId: string }) {
   const [hours, setHours] = useState('0');
   const [awardId, setAwardId] = useState('');
   const [reqId, setReqId] = useState('');
+  const [place, setPlace] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
   const [error, setError] = useState('');
 
   async function submit(e: FormEvent) {
@@ -31,8 +33,12 @@ function EventForm({ troopId }: { troopId: string }) {
         start,
         logValues: { nights: Number(nights), miles: Number(miles), serviceHours: Number(hours) },
         linkedRequirements: linked,
+        place: place.trim(),
+        public: isPublic,
       });
       setTitle('');
+      setPlace('');
+      setIsPublic(false);
       setReqId('');
       setAwardId('');
     } catch (err) {
@@ -48,6 +54,16 @@ function EventForm({ troopId }: { troopId: string }) {
       <Field label="Date" htmlFor="ev-date">
         <input id="ev-date" type="date" required value={start} onChange={(e) => setStart(e.target.value)} />
       </Field>
+      <Field label="Place" htmlFor="ev-place" hint="Optional. Shown on the troop website if the event is listed there.">
+        <input id="ev-place" maxLength={120} value={place} onChange={(e) => setPlace(e.target.value)} placeholder="Camp Lowden" />
+      </Field>
+      <div className="field">
+        <label className="check">
+          <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
+          Show on the troop website
+        </label>
+        <span className="hint">Only the event's name, day and place appear there.</span>
+      </div>
       <div className="row">
         <Field label="Nights camped" htmlFor="ev-nights">
           <input id="ev-nights" type="number" min="0" value={nights} onChange={(e) => setNights(e.target.value)} />
@@ -118,6 +134,8 @@ export function Events() {
                 <strong>{ev.title}</strong>
                 <span className="muted small">
                   {formatDate(ev.start)}
+                  {ev.place ? ` · ${ev.place}` : ''}
+                  {ev.public ? ' · On the troop website' : ''}
                   {ev.logValues?.nights ? ` · ${ev.logValues.nights} nights` : ''}
                   {ev.logValues?.miles ? ` · ${ev.logValues.miles} miles` : ''}
                   {ev.logValues?.serviceHours ? ` · ${ev.logValues.serviceHours} service hours` : ''}
