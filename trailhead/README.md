@@ -35,6 +35,10 @@ path templates, a Gemini plan assistant and the Scoutbook Plus handoff report. D
    each Scout to it, keeping what still matches and flagging what changed. Signing the last requirement completes it.
 10. **Scoutbook** gives the advancement chair a report of everything signed since the last one, grouped by Scout,
     to enter in Scoutbook Plus. Troop awards are left out, since Scoutbook doesn't know them.
+11. Counselors outside the troop need no account: under **Blue cards** a leader assigns "Someone outside the troop"
+    by name and signs requirements for them. A Scout's **paper blue card** can be recorded by a leader with each
+    signed requirement, its date and a photo; unlike earlier advancement it goes in the next Scoutbook report, counted
+    by when it was entered. Card photos live in Cloud Storage under `cards/{troop}/{scout}/{card}/`.
 
 ## Setup
 

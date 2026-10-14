@@ -31,23 +31,54 @@ def _day(value: datetime | date | str | None) -> str | None:
     return value[:10] if isinstance(value, str) and value else None
 
 
+def _recorded_day(item: dict) -> str | None:
+    return _day(item["recordedAt"]) if isinstance(item.get("recordedAt"), datetime) else None
+
+
 def _candidates(signoffs, progress, records, since: datetime | None, until: datetime):
-    """(kind, scoutId, awardId, requirement, day, signerUid) for everything in the period, before names are added."""
+    """Everything counted as new in the period, as dicts, before names are added.
+
+    Paper blue cards are often entered weeks after they were signed, so an item with a `recordedAt` counts by when
+    it was entered; others count by their signed or completed date. `date` is always the real signed or completed day.
+    """
     for s in signoffs:
         signed = s.get("signedAt")
         if s.get("status") != "accepted" or not isinstance(signed, datetime):
             continue
-        if (since is None or signed > since) and signed <= until:
-            yield "requirement", s["scoutId"], s["awardId"], str(s.get("reqId", "")), _day(signed), s.get("signerUid")
+        counted = s["recordedAt"] if isinstance(s.get("recordedAt"), datetime) else signed
+        if (since is None or counted > since) and counted <= until:
+            yield {
+                "kind": "requirement",
+                "scoutId": s["scoutId"],
+                "awardId": s["awardId"],
+                "requirement": str(s.get("reqId", "")),
+                "date": _day(signed),
+                "signer": s.get("signerUid"),
+                "onBehalfOf": s.get("onBehalfOf"),
+            }
     # Work recorded as earned before the Scout joined Trailhead is already in Scoutbook.
     for p in progress:
         if p.get("status") == "complete" and _day(p.get("completedAt")) and p.get("source") != "prior":
-            yield "merit_badge", p["scoutId"], p["awardId"], "", _day(p["completedAt"]), None
+            day = _day(p["completedAt"])
+            yield {
+                "kind": "merit_badge",
+                "scoutId": p["scoutId"],
+                "awardId": p["awardId"],
+                "date": day,
+                "counted": _recorded_day(p) or day,
+            }
     for scout_id, record in records.items():
         prior_ranks = set(record.get("priorRankIds") or [])
         for rank_id, earned in (record.get("rankDates") or {}).items():
             if _day(earned) and rank_id not in prior_ranks:
-                yield "rank", scout_id, rank_id, "", _day(earned), None
+                yield {"kind": "rank", "scoutId": scout_id, "awardId": rank_id, "date": _day(earned)}
+
+
+def _signed_by(signer_name: str | None, on_behalf_of: str | None) -> str | None:
+    if not on_behalf_of:
+        return signer_name
+    for_counselor = f"for {on_behalf_of}, counselor"
+    return f"{signer_name} ({for_counselor})" if signer_name else for_counselor
 
 
 def build_report(
@@ -71,25 +102,27 @@ def build_report(
     since_day = since.astimezone(UTC).date().isoformat() if since else None
     until_day = until.astimezone(UTC).date().isoformat()
     rows = []
-    for kind, scout_id, award_id, requirement, day, signer in _candidates(signoffs, progress, records, since, until):
+    for item in _candidates(signoffs, progress, records, since, until):
+        kind, award_id, day = item["kind"], item["awardId"], item["date"]
         if award_id.startswith(CUSTOM_PREFIX) or day is None or day > until_day:
             continue
-        if kind != "requirement" and since_day and day < since_day:
+        if kind != "requirement" and since_day and item.get("counted", day) < since_day:
             continue
         if kind == "rank" and award_id not in catalog.ranks:
             continue
         row = {
-            "scoutId": scout_id,
-            "scoutName": names.get(scout_id, "Unknown Scout"),
+            "scoutId": item["scoutId"],
+            "scoutName": names.get(item["scoutId"], "Unknown Scout"),
             "kind": kind,
             "awardId": award_id,
             "awardName": award_name(catalog, award_id),
             "date": day,
         }
-        if requirement:
-            row["requirement"] = requirement
-        if signer and signer_names.get(signer):
-            row["signedBy"] = signer_names[signer]
+        if item.get("requirement"):
+            row["requirement"] = item["requirement"]
+        signed_by = _signed_by(signer_names.get(item.get("signer")), item.get("onBehalfOf"))
+        if signed_by:
+            row["signedBy"] = signed_by
         if kind != "requirement" and _row_key(row) in already:
             continue
         rows.append(row)

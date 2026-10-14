@@ -87,8 +87,11 @@ service cloud.firestore {
         allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.signerUid == request.auth.uid;
         allow create: if signedIn()
           && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'reqId', 'signerUid',
-                                                   'signedAt', 'deviceId', 'offline', 'supersedesId', 'status'])
+                                                   'signedAt', 'deviceId', 'offline', 'supersedesId', 'status', 'onBehalfOf'])
           && request.resource.data.signerUid == request.auth.uid
+          && (!('onBehalfOf' in request.resource.data)
+              || (isLeader(t) && request.resource.data.onBehalfOf is string
+                  && request.resource.data.onBehalfOf.size() > 0 && request.resource.data.onBehalfOf.size() <= 80))
           && request.resource.data.status == 'pending'
           && yptCurrent(t)
           && (isLeader(t)
@@ -128,30 +131,46 @@ service cloud.firestore {
       }
       // Blue card id = {scoutId}_{awardId}.
       // requested -> approved -> counselor_assigned -> in_progress -> complete; leaders may cancel.
+      // The counselor is either a troop member (counselorUid) or someone outside the troop (counselorName, and
+      // counselorEmail when known). For an outside counselor a leader signs and completes the card. Leaders may
+      // also change photoPaths (photos of the paper card) alone, in any status.
       match /blueCards/{id} {
         allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.counselorUid == request.auth.uid;
         allow create: if (actsFor(t, request.resource.data.scoutId) || isLeader(t))
           && id == request.resource.data.scoutId + '_' + request.resource.data.awardId
           && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'status', 'requestedAt'])
           && request.resource.data.status == 'requested';
-        allow update: if (isLeader(t) && leaderTransition())
+        allow update: if (isLeader(t) && (leaderTransition() || photosOnly()))
           || (resource.data.counselorUid == request.auth.uid && counselorTransition());
         allow delete: if false;
 
         function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
+        function photosOnly() {
+          return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoPaths'])
+            && request.resource.data.photoPaths is list
+            && request.resource.data.photoPaths.size() <= 20;
+        }
+        function hasOutsideCounselor(d) {
+          return d.get('counselorName', null) is string && !('counselorUid' in d);
+        }
         function leaderTransition() {
           let from = resource.data.status;
           let to = request.resource.data.status;
-          return unchanged(['scoutId', 'awardId', 'versionId'])
+          let uid = request.resource.data.get('counselorUid', null);
+          let name = request.resource.data.get('counselorName', null);
+          return unchanged(['scoutId', 'awardId', 'versionId', 'source', 'recordedAt'])
             && ((from == 'requested' && to == 'approved')
               || (from in ['approved', 'counselor_assigned'] && to == 'counselor_assigned'
-                  && request.resource.data.counselorUid is string)
+                  && ((uid is string && !(name is string)) || (name is string && !(uid is string))))
+              || (from in ['counselor_assigned', 'in_progress'] && to == 'complete'
+                  && hasOutsideCounselor(resource.data) && hasOutsideCounselor(request.resource.data))
               || (from != 'complete' && to == 'cancelled'));
         }
         function counselorTransition() {
           let from = resource.data.status;
           let to = request.resource.data.status;
-          return unchanged(['scoutId', 'awardId', 'versionId', 'counselorUid'])
+          return unchanged(['scoutId', 'awardId', 'versionId', 'counselorUid', 'counselorName', 'counselorEmail',
+                            'photoPaths', 'source', 'recordedAt'])
             && ((from == 'counselor_assigned' && to == 'in_progress')
               || (from == 'in_progress' && to == 'complete'));
         }

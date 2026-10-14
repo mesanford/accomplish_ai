@@ -67,6 +67,11 @@ export function ScoutPage() {
             Record earlier ranks and badges
           </Link>
         ) : null}
+        {isLeader ? (
+          <Link className="btn quiet small" to={`/t/${troopId}/scouts/${scoutId}/paper-card`}>
+            Record a paper blue card
+          </Link>
+        ) : null}
       </PageHeader>
       {earned.length > 0 ? (
         <p className="muted small">
@@ -86,7 +91,7 @@ export function ScoutPage() {
       ) : null}
       <section className="stack">
         <h2>Blue cards</h2>
-        <BlueCardList cards={cards.data} counselorName={uidName} />
+        <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={isLeader} />
       </section>
       <MediaConsent scout={scout} />
       {isLeader && record.data ? (

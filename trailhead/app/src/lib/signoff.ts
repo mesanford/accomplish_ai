@@ -9,6 +9,8 @@ interface SignOffInput {
   versionId?: string;
   reqId: string;
   signerUid: string;
+  /** Leaders only: the name of an outside counselor the leader is signing for. */
+  onBehalfOf?: string;
 }
 
 /** Record a signed requirement. The server checks permissions and applies it to the Scout's progress. */
@@ -21,5 +23,6 @@ export async function recordSignOff(input: SignOffInput): Promise<void> {
     signerUid: input.signerUid,
     signedAt: serverTimestamp(),
     status: 'pending',
+    ...(input.onBehalfOf ? { onBehalfOf: input.onBehalfOf } : {}),
   });
 }

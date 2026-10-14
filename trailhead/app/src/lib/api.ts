@@ -153,6 +153,20 @@ export interface PriorForm {
 export const recordPriorAdvancement = (form: PriorForm) =>
   call<PriorForm, { ranks: number; badges: number; skipped: string[] }>('record_prior_advancement', form);
 
+export interface PaperCardForm {
+  troopId: string;
+  scoutId: string;
+  awardId: string;
+  counselorName: string;
+  counselorEmail?: string;
+  startedOn: string;
+  requirements: { reqId: string; date: string }[];
+  completedOn?: string;
+}
+
+export const recordPaperBlueCard = (form: PaperCardForm) =>
+  call<PaperCardForm, { cardId: string; requirements: number; complete: boolean }>('record_paper_blue_card', form);
+
 export interface InterestForm {
   name: string;
   email: string;

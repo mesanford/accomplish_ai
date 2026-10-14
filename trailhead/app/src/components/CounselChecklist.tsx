@@ -15,10 +15,12 @@ interface Props {
   awardId: string;
   versionId?: string;
   statuses: Record<string, ReqStatus>;
+  /** A leader signing for a counselor outside the troop: the counselor's name. */
+  onBehalfOf?: string;
 }
 
 /** The badge's full requirement list with a Sign button on each; falls back to typing a number. */
-export function CounselChecklist({ troopId, scoutId, awardId, versionId, statuses }: Props) {
+export function CounselChecklist({ troopId, scoutId, awardId, versionId, statuses, onBehalfOf }: Props) {
   const { user } = useAuth();
   const { doc, loading } = useRequirements(awardId);
   const [busy, setBusy] = useState('');
@@ -31,7 +33,7 @@ export function CounselChecklist({ troopId, scoutId, awardId, versionId, statuse
     setBusy(reqId);
     setError('');
     try {
-      await recordSignOff({ troopId, scoutId, awardId, versionId, reqId, signerUid: user.uid });
+      await recordSignOff({ troopId, scoutId, awardId, versionId, reqId, signerUid: user.uid, onBehalfOf });
     } catch (err) {
       setError(errorMessage(err));
     } finally {
@@ -43,7 +45,7 @@ export function CounselChecklist({ troopId, scoutId, awardId, versionId, statuse
     return <p className="small muted">Loading requirements…</p>;
   }
   if (!doc) {
-    return <SignOffForm troopId={troopId} scoutId={scoutId} fixedAwardId={awardId} versionId={versionId} />;
+    return <SignOffForm troopId={troopId} scoutId={scoutId} fixedAwardId={awardId} versionId={versionId} onBehalfOf={onBehalfOf} />;
   }
   return (
     <div className="stack">

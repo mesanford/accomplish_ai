@@ -1,7 +1,10 @@
+import { counselorLabel, signedForCounselors } from '../lib/cards';
 import { useAwardName } from '../lib/customAwardsContext';
 import { statusLookup } from '../lib/requirements';
+import { useTroop } from '../lib/troop';
 import type { BlueCard, Progress } from '../lib/types';
 import { RequirementsToggle } from './AwardRequirements';
+import { CardPhotos } from './CardPhotos';
 import { RequirementRefs } from './RequirementRef';
 import { CardStatusPill, Empty, formatDate } from './ui';
 
@@ -47,6 +50,11 @@ export function ProgressList({ progress }: { progress: Progress[] }) {
                   </>
                 ) : null}
               </span>
+              {signedForCounselors(p).map((s) => (
+                <span key={s.counselor} className="muted small">
+                  Signed by a leader for {s.counselor} (counselor): <RequirementRefs awardId={p.awardId} reqIds={s.reqIds} />
+                </span>
+              ))}
             </div>
             {p.status === 'complete' ? (
               <span className="pill good">Complete {formatDate(p.completedAt)}</span>
@@ -63,8 +71,16 @@ export function ProgressList({ progress }: { progress: Progress[] }) {
   );
 }
 
-export function BlueCardList({ cards, counselorName }: { cards: BlueCard[]; counselorName: (uid?: string) => string }) {
+interface BlueCardListProps {
+  cards: BlueCard[];
+  counselorName: (uid?: string) => string;
+  /** Leaders can add photos of the paper card. */
+  canAddPhotos?: boolean;
+}
+
+export function BlueCardList({ cards, counselorName, canAddPhotos }: BlueCardListProps) {
   const awardName = useAwardName();
+  const { troopId } = useTroop();
   if (cards.length === 0) {
     return <Empty>No blue cards yet. Start one from the Badges page.</Empty>;
   }
@@ -74,7 +90,11 @@ export function BlueCardList({ cards, counselorName }: { cards: BlueCard[]; coun
         <li key={c.id}>
           <div className="stack" style={{ gap: 2 }}>
             <strong>{awardName(c.awardId)}</strong>
-            <span className="muted small">Counselor: {counselorName(c.counselorUid)}</span>
+            <span className="muted small">
+              Counselor: {counselorLabel(c, counselorName)}
+              {c.source === 'paper' ? ' · Recorded from a paper card' : ''}
+            </span>
+            <CardPhotos troopId={troopId} card={c} canAdd={canAddPhotos} />
           </div>
           <CardStatusPill status={c.status} />
         </li>

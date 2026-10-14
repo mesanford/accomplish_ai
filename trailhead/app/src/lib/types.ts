@@ -50,6 +50,8 @@ export interface ScoutRecord {
 export interface RequirementState {
   status: 'ready' | 'signed';
   signoffId?: string;
+  /** A leader signed for this counselor, who is outside the troop. */
+  onBehalfOf?: string;
 }
 
 export interface Progress {
@@ -72,7 +74,16 @@ export interface BlueCard {
   awardId: string;
   versionId: string;
   status: CardStatus;
+  /** A troop member who counsels. Absent when the counselor is outside the troop. */
   counselorUid?: string;
+  /** A counselor outside the troop; a leader signs for them. */
+  counselorName?: string;
+  counselorEmail?: string | null;
+  /** Photos or scans of the paper card, as Cloud Storage paths. */
+  photoPaths?: string[];
+  /** 'paper' for a card recorded from a paper blue card. */
+  source?: string;
+  startedOn?: string;
 }
 
 export interface PathItemDoc {

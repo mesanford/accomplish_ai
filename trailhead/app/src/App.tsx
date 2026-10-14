@@ -18,6 +18,7 @@ import { Messages } from './pages/Messages';
 import { PathEditor } from './pages/PathEditor';
 import { PathTemplates } from './pages/PathTemplates';
 import { PublicSite } from './pages/PublicSite';
+import { PaperCard } from './pages/PaperCard';
 import { PriorAdvancement } from './pages/PriorAdvancement';
 import { Recruiting } from './pages/Recruiting';
 import { Roster } from './pages/Roster';
@@ -65,6 +66,7 @@ const router = createBrowserRouter([
       { path: 'scouts/:scoutId', element: <ScoutPage /> },
       { path: 'scouts/:scoutId/path', element: <PathEditor /> },
       { path: 'scouts/:scoutId/earlier', element: <PriorAdvancement /> },
+      { path: 'scouts/:scoutId/paper-card', element: <PaperCard /> },
       { path: 'templates', element: <PathTemplates /> },
       { path: 'badges', element: <Badges /> },
       { path: 'awards', element: <CustomAwards /> },

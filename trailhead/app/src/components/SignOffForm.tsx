@@ -19,10 +19,12 @@ interface Props {
   fixedAwardId?: string;
   /** The version the Scout started on, when known. */
   versionId?: string;
+  /** A leader signing for a counselor outside the troop: the counselor's name. */
+  onBehalfOf?: string;
 }
 
 /** Record a signed requirement. The server checks permissions and applies it to the Scout's progress. */
-export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId }: Props) {
+export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId, onBehalfOf }: Props) {
   const { user } = useAuth();
   const [awardId, setAwardId] = useState(fixedAwardId ?? 'scout');
   const [reqId, setReqId] = useState('');
@@ -43,7 +45,7 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId }: Props
     setError('');
     setDone('');
     try {
-      await recordSignOff({ troopId, scoutId, awardId, versionId, reqId, signerUid: user.uid });
+      await recordSignOff({ troopId, scoutId, awardId, versionId, reqId, signerUid: user.uid, onBehalfOf });
       setDone(`Signed ${awardName(awardId)} requirement ${reqId.trim()}.`);
       setReqId('');
       setRound((n) => n + 1);

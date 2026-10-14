@@ -1,8 +1,8 @@
-import { collection, doc, query, updateDoc, where } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
-import { CardStatusPill, Empty, Notice, PageHeader } from '../components/ui';
-import { errorMessage } from '../lib/api';
-import { awardName } from '../lib/catalog';
+import { Link } from 'react-router-dom';
+import { BlueCardRow } from '../components/BlueCardRow';
+import { Empty, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
@@ -10,64 +10,33 @@ import type { BlueCard } from '../lib/types';
 
 const OPEN = ['requested', 'approved', 'counselor_assigned', 'in_progress'];
 
-function CardRow({ card }: { card: BlueCard }) {
-  const { troopId, members, memberName, uidName } = useTroop();
-  const counselors = members.filter((m) => m.uid && (m.roles ?? []).some((r) => r === 'counselor' || r === 'leader'));
-  const [counselorUid, setCounselorUid] = useState(card.counselorUid ?? '');
-  const [error, setError] = useState('');
-  const ref = doc(db, `troops/${troopId}/blueCards/${card.id}`);
-
-  async function change(patch: Partial<BlueCard>) {
-    setError('');
-    try {
-      await updateDoc(ref, patch);
-    } catch (err) {
-      setError(errorMessage(err));
-    }
-  }
-
+/** Pick a Scout, then open the form for a blue card they brought signed on paper. */
+function PaperCardStart() {
+  const { troopId, members } = useTroop();
+  const scouts = members.filter((m) => m.kind === 'scout');
+  const [scoutId, setScoutId] = useState('');
   return (
-    <li>
-      <div className="stack" style={{ gap: 2 }}>
-        <strong>
-          {memberName(card.scoutId)} · {awardName(card.awardId)}
-        </strong>
-        <span className="row small muted">
-          <CardStatusPill status={card.status} /> Counselor: {uidName(card.counselorUid)}
-        </span>
-        <Notice kind="error">{error}</Notice>
-      </div>
+    <section className="card">
+      <h2>A Scout brought a paper blue card?</h2>
+      <p className="small muted">
+        Counselors outside the troop don't need a Trailhead account. Record the card as it is signed, with a photo of it.
+      </p>
       <div className="row">
-        {card.status === 'requested' ? (
-          <button type="button" className="btn small" onClick={() => change({ status: 'approved' })}>
-            Approve
-          </button>
+        <select aria-label="Scout with a paper card" value={scoutId} onChange={(e) => setScoutId(e.target.value)} style={{ width: 'auto' }}>
+          <option value="">Choose a Scout</option>
+          {scouts.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.displayName}
+            </option>
+          ))}
+        </select>
+        {scoutId ? (
+          <Link className="btn small" to={`/t/${troopId}/scouts/${scoutId}/paper-card`}>
+            Record a paper blue card
+          </Link>
         ) : null}
-        {card.status === 'approved' || card.status === 'counselor_assigned' ? (
-          <>
-            <select aria-label="Counselor" value={counselorUid} onChange={(e) => setCounselorUid(e.target.value)} style={{ width: 'auto' }}>
-              <option value="">Choose counselor</option>
-              {counselors.map((c) => (
-                <option key={c.id} value={c.uid}>
-                  {c.displayName}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              className="btn small"
-              disabled={!counselorUid}
-              onClick={() => change({ status: 'counselor_assigned', counselorUid })}
-            >
-              Assign
-            </button>
-          </>
-        ) : null}
-        <button type="button" className="btn danger small" onClick={() => change({ status: 'cancelled' })}>
-          Cancel
-        </button>
       </div>
-    </li>
+    </section>
   );
 }
 
@@ -86,8 +55,12 @@ export function BlueCards() {
   return (
     <>
       <PageHeader eyebrow="Advancement" title="Blue cards" />
-      <p className="muted">Approve requests, then assign a merit badge counselor. Counselors sign the requirements.</p>
-      {sorted.length === 0 ? <Empty>No open blue cards.</Empty> : <ul className="list">{sorted.map((c) => <CardRow key={c.id} card={c} />)}</ul>}
+      <p className="muted">
+        Approve requests, then assign a merit badge counselor: a troop member, or someone outside the troop whom you sign
+        for.
+      </p>
+      {sorted.length === 0 ? <Empty>No open blue cards.</Empty> : <ul className="list">{sorted.map((c) => <BlueCardRow key={c.id} card={c} />)}</ul>}
+      <PaperCardStart />
     </>
   );
 }

@@ -1,6 +1,8 @@
 rules_version = '2';
 
-// Cloud Storage holds only troop website images.
+// Cloud Storage holds troop website images and photos of paper blue cards.
+//   cards/{t}/{scout}/{card}/*  a photo or PDF of a paper blue card: that troop's leaders read and write (up to
+//                       10 MB); the Scout and their parents (their access record lists the Scout) read.
 //   sites/{t}/draft/*   the leader's uploads while editing: that troop's leaders only, images up to 8 MB.
 //   sites/{t}/public/*  copies made by the publish_site function: anyone may read, no client writes.
 // Everything else is closed. Leader checks read the troop's access record from Firestore.
@@ -19,6 +21,21 @@ service firebase.storage {
         && request.resource.contentType.matches('image/(png|jpeg|gif|webp)');
     }
 
+    function actsFor(t, scoutId) {
+      return request.auth != null
+        && firestore.exists(accessPath(t))
+        && scoutId in firestore.get(accessPath(t)).data.scoutIds;
+    }
+    function isCardFile() {
+      return request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('(image/(png|jpeg|gif|webp)|application/pdf)');
+    }
+
+    match /cards/{t}/{scoutId}/{cardId}/{file} {
+      allow read: if isLeader(t) || actsFor(t, scoutId);
+      allow create, update: if isLeader(t) && isCardFile();
+      allow delete: if isLeader(t);
+    }
     match /sites/{t}/draft/{file} {
       allow read, delete: if isLeader(t);
       allow create, update: if isLeader(t) && isImageUpload();

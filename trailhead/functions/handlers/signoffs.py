@@ -51,7 +51,10 @@ def apply_signoff(
         )
 
     requirements = dict(progress.get("requirements", {}))
-    requirements[signoff["reqId"]] = {"status": "signed", "signoffId": signoff_id}
+    entry = {"status": "signed", "signoffId": signoff_id}
+    if signoff.get("onBehalfOf"):
+        entry["onBehalfOf"] = signoff["onBehalfOf"]  # a leader signed for a counselor outside the troop
+    requirements[signoff["reqId"]] = entry
     updated = {**progress, "status": "in_progress", "requirements": requirements}
     if "needsReview" in progress:
         # A new signature on a requirement flagged after a version move settles that review.

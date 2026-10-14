@@ -28,6 +28,8 @@ def on_signoff_created(event: firestore_fn.Event[firestore_fn.DocumentSnapshot |
     if event.data is None:
         return
     signoff = event.data.to_dict()
+    if signoff.get("status") != "pending":
+        return  # paper blue cards write accepted sign-offs and their progress directly
     t = troop(event.params["troopId"])
     progress_ref = t.collection("progress").document(f"{signoff['scoutId']}_{signoff['awardId']}")
 
@@ -57,6 +59,8 @@ def on_blue_card_written(event: Written) -> None:
     before, after = _before_after(event)
     if not after or after.get("status") != "complete" or (before or {}).get("status") == "complete":
         return
+    if after.get("source") == "paper":
+        return  # record_paper_blue_card wrote the progress with the card's real completion date
     ref = troop(event.params["troopId"]).collection("progress").document(event.params["cardId"])
     ref.set(
         {
