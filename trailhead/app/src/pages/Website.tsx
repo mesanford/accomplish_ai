@@ -6,6 +6,7 @@ import { CoverSection } from '../components/site/CoverSection';
 import { FaqSection } from '../components/site/FaqSection';
 import { GallerySection } from '../components/site/GallerySection';
 import { MeetingSection } from '../components/site/MeetingSection';
+import { GuideBlock } from '../components/GuideBlock';
 import { PublishPanel } from '../components/site/PublishPanel';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
@@ -95,10 +96,16 @@ export function Website() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Website" />
-      <p className="muted">
-        Build a public website for families looking for a troop. Scouts' names never appear on it, photos of Scouts
-        need a parent's media consent, and only adult leaders are listed as contacts.
-      </p>
+      <GuideBlock
+        id="website"
+        purpose="A simple public page that helps new families find your troop. Scouts' names never appear on it, photos need a parent's permission, and only adult leaders are listed as contacts."
+        steps={[
+          'Choose your web address in the first box.',
+          'Fill in each section below. Short and friendly is best.',
+          'Press Save draft. Only leaders can see a draft.',
+          'Press Publish when you are happy. You can unpublish any time.',
+        ]}
+      />
       <PublishPanel
         draft={draft}
         onChange={edit}

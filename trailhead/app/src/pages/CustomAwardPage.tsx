@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CustomAwardForm } from '../components/CustomAwardForm';
+import { HelpTip } from '../components/HelpTip';
 import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { archiveCustomAward, errorMessage } from '../lib/api';
 import { useCustomAwards, useCustomVersions } from '../lib/customAwardsContext';
@@ -101,7 +102,10 @@ export function CustomAwardPage() {
         </section>
       ) : null}
       <section className="stack">
-        <h2>Versions</h2>
+        <h2>
+          Versions
+          <HelpTip topic="awardVersion" />
+        </h2>
         <VersionHistory versions={versions.data} currentId={award.currentVersionId} />
       </section>
       {award.archived ? null : (

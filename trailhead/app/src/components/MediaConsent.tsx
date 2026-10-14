@@ -4,6 +4,7 @@ import { CONSENT_LABELS, consentState } from '../lib/site';
 import { setMediaConsent } from '../lib/siteApi';
 import { useTroop } from '../lib/troop';
 import type { Member } from '../lib/types';
+import { HelpTip } from './HelpTip';
 import { formatDate, Notice } from './ui';
 
 /** A parent (or a leader recording a paper form) allows or withdraws photos of a Scout on the public website. */
@@ -40,7 +41,10 @@ export function MediaConsent({ scout }: { scout: Member }) {
   return (
     <section className="card">
       <div className="row spread">
-        <h2>Photos on the troop website</h2>
+        <h2>
+          Photos on the troop website
+          <HelpTip topic="mediaConsent" />
+        </h2>
         <span className={`pill ${tone}`}>{label}</span>
       </div>
       <p className="small">

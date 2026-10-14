@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { HelpTip } from '../components/HelpTip';
 import { LeadCard } from '../components/LeadCard';
 import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { LEAD_STATUSES, useLeads } from '../lib/leads';
@@ -19,8 +20,9 @@ export function Recruiting() {
     <>
       <PageHeader eyebrow="Recruiting" title="Families who asked about the troop" />
       <p className="muted">
-        These came from your troop website's Join us form. Reply by email or phone, then make an invite link to bring
-        them into Trailhead.
+        These came from your troop website's Join us form. Reply by email or phone, then make an invite link on the
+        Roster to bring them into Trailhead.
+        <HelpTip topic="recruiting" />
       </p>
       <Notice kind="error">{leads.error}</Notice>
       <div className="field" style={{ maxWidth: 260 }}>

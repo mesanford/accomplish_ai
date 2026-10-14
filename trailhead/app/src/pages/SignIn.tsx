@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { HelpTip } from '../components/HelpTip';
 import { Field, Notice } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { emailSignInLink, signInWithGoogle } from '../lib/auth';
@@ -69,10 +70,11 @@ export function SignIn() {
       </div>
       <p className="muted">
         Or enter your email and we'll send you a sign-in link. There's no password to remember.
+        <HelpTip topic="signInLink" label="how sign-in links work" />
       </p>
       {sent ? (
         <div className="stack">
-          <Notice kind="ok">Check your email. The link signs you in on this device.</Notice>
+          <Notice kind="ok">Check your email. Open the link on this device and you are signed in. If you do not see it in a minute, look in your spam folder.</Notice>
           {usingEmulators ? (
             <button type="button" className="btn secondary" onClick={openDevLink}>
               Open sign-in link (local emulator)

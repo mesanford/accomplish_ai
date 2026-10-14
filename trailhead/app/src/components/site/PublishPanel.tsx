@@ -2,6 +2,7 @@ import type { EditDraft, SiteDraft } from '../../lib/site';
 import { siteAddress, slugProblem } from '../../lib/site';
 import type { PublishResult } from '../../lib/siteApi';
 import type { Troop } from '../../lib/types';
+import { HelpTip } from '../HelpTip';
 import { Field, Notice } from '../ui';
 
 interface Props {
@@ -26,8 +27,11 @@ export function PublishPanel(props: Props) {
 
   return (
     <section className="card">
-      <h2>Web address and publishing</h2>
-      <Field label="Web address" htmlFor="site-slug" hint="Lowercase letters, numbers and dashes.">
+      <h2>
+        Web address and publishing
+        <HelpTip topic="publishSite" />
+      </h2>
+      <Field label="Web address" htmlFor="site-slug" hint="Short, lowercase words with dashes, like troop-101.">
         <input
           id="site-slug"
           maxLength={40}
@@ -39,6 +43,7 @@ export function PublishPanel(props: Props) {
       </Field>
       <p className="small">
         Your site's address: <span className="mono">{siteAddress(origin, draft.slug)}</span>
+        <HelpTip topic="siteAddress" label="choosing a short link" />
       </p>
       <Notice kind="error">{problem}</Notice>
       {live ? (

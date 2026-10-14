@@ -1,6 +1,8 @@
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { RequirementsToggle } from '../components/AwardRequirements';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
 import { Notice, PageHeader, Pips } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { BADGE_VERSION, type Badge, CATEGORY_LABELS, discontinuedLabel, eagleLabel, searchBadges } from '../lib/catalog';
@@ -70,6 +72,15 @@ export function Badges() {
           Printable field guide
         </a>
       </PageHeader>
+      <GuideBlock
+        id="badges"
+        purpose="Merit badges are things a Scout learns with an approved adult called a counselor. Browse them here."
+        steps={[
+          'Search or filter to find a badge.',
+          'Read the summary and the toughest part, or open the requirements.',
+          'Press "Start a blue card" to ask for it. A leader approves and assigns a counselor.',
+        ]}
+      />
       <div className="row">
         <input type="search" placeholder="Search badges" aria-label="Search badges" value={q} onChange={(e) => setQ(e.target.value)} style={{ maxWidth: 320 }} />
         <select aria-label="Category" value={category} onChange={(e) => setCategory(e.target.value)} style={{ width: 'auto' }}>
@@ -82,8 +93,17 @@ export function Badges() {
         </select>
         <label className="check">
           <input type="checkbox" checked={eagleOnly} onChange={(e) => setEagleOnly(e.target.checked)} /> Counts toward Eagle
+          <HelpTip topic="eagleRequired" />
         </label>
         <span className="muted small">{list.length} badges</span>
+        <span className="muted small">
+          Squares = difficulty
+          <HelpTip topic="difficulty" />
+        </span>
+        <span className="muted small">
+          Blue card?
+          <HelpTip topic="blueCard" />
+        </span>
       </div>
       <div className="grid">
         {list.map((b) => (

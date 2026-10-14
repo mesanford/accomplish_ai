@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { BADGES, badge, discontinuedLabel, eagleLabel } from '../lib/catalog';
 import type { PathItemDoc } from '../lib/types';
 import { AwardRequirements } from './AwardRequirements';
+import { HelpTip } from './HelpTip';
 import { Empty, Pips } from './ui';
 
 interface Props {
@@ -37,7 +38,7 @@ export function PathItems({ items, onChange }: Props) {
 
   return (
     <div className="stack">
-      {items.length === 0 ? <Empty>No badges in the plan yet.</Empty> : null}
+      {items.length === 0 ? <Empty>No badges in the plan yet. Choose one from the list below, or add all the Eagle-required badges at once.</Empty> : null}
       {items.length > 0 ? (
         <div className="table-box">
           <table>
@@ -114,6 +115,7 @@ export function PathItems({ items, onChange }: Props) {
         <button type="button" className="btn quiet" onClick={addEagleRequired}>
           Add all Eagle-required badges
         </button>
+        <HelpTip topic="eagleRequired" />
       </div>
     </div>
   );

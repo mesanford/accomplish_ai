@@ -2,6 +2,8 @@ import { collection, doc, setDoc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { RequirementRef } from '../components/RequirementRef';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
 import { Empty, formatDate, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
@@ -47,9 +49,18 @@ export function AttendancePage() {
   return (
     <>
       <PageHeader eyebrow={event.data ? formatDate(event.data.start) : 'Event'} title={event.data?.title ?? 'Attendance'} />
+      <GuideBlock
+        id="attendance"
+        purpose="Tick each Scout who came. That is all you need to do."
+        steps={[
+          "Tick a Scout's name when they arrive. It saves right away.",
+          "Their nights, miles and service hours for this event are added to their record.",
+          'Any requirement linked to the event is marked ready for a counselor to sign off.',
+        ]}
+      />
       <p className="muted">
-        Checking a Scout in logs this event's nights, miles and service hours for them and marks any linked requirement
-        ready for sign-off. {scouts.filter((sc) => isPresent(sc.id)).length} of {scouts.length} Scouts present.
+        {scouts.filter((sc) => isPresent(sc.id)).length} of {scouts.length} Scouts present.
+        <HelpTip topic="attendanceLog" />
       </p>
       {(event.data?.linkedRequirements ?? []).length > 0 ? (
         <p className="small">

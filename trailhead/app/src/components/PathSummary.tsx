@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { awardName } from '../lib/catalog';
 import type { Feasibility, PathDoc } from '../lib/types';
+import { HelpTip } from './HelpTip';
 import { formatDate, PathStatusPill } from './ui';
 
 export function FeasibilityView({ result }: { result: Feasibility }) {
@@ -8,6 +9,7 @@ export function FeasibilityView({ result }: { result: Feasibility }) {
     <div className="stack">
       <div className="row">
         <PathStatusPill status={result.status} />
+        <HelpTip topic="pathFeasibility" label="what this status means" />
         {result.earliest_goal_date ? (
           <span>
             Earliest possible date: <strong>{formatDate(result.earliest_goal_date)}</strong>

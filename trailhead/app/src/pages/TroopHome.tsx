@@ -2,6 +2,9 @@ import { collection, query, where } from 'firebase/firestore';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
+import { GettingStarted } from '../components/GettingStarted';
+import { HelpTip } from '../components/HelpTip';
+import { NextStep } from '../components/NextStep';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
@@ -10,10 +13,16 @@ import { useTroop } from '../lib/troop';
 import type { BlueCard } from '../lib/types';
 
 function ScoutCards() {
-  const { troopId, members, visibleScoutIds } = useTroop();
+  const { troopId, members, visibleScoutIds, isLeader } = useTroop();
   const scouts = members.filter((m) => visibleScoutIds.includes(m.id));
   if (scouts.length === 0) {
-    return <Empty>No Scouts yet. Add one from the roster.</Empty>;
+    return isLeader ? (
+      <NextStep action="Add your first Scout" to={`/t/${troopId}/roster`}>
+        No Scouts yet. Add your Scouts on the Roster, then invite their parents.
+      </NextStep>
+    ) : (
+      <Empty>No Scout is linked to you yet. Add your Scout below, or ask a leader for an invite link.</Empty>
+    );
   }
   return (
     <div className="grid">
@@ -36,7 +45,7 @@ function LeadAlert() {
   return (
     <Link className="card link" to={`/t/${troopId}/recruiting`}>
       <h3>{count === 1 ? '1 family wants to hear about the troop' : `${count} families want to hear about the troop`}</h3>
-      <span className="muted small">They filled in the Join us form on your website. Reply and invite them.</span>
+      <span className="muted small">They filled in the Join us form on your website. Open this to reply and invite them.</span>
     </Link>
   );
 }
@@ -54,6 +63,7 @@ function LeaderSummary() {
       <Link className="btn" to={`/t/${troopId}/blue-cards`}>
         {count === 1 ? '1 blue card needs action' : `${count} blue cards need action`}
       </Link>
+      <HelpTip topic="blueCard" />
       <Link className="btn secondary" to={`/t/${troopId}/roster`}>
         Add Scouts and invite families
       </Link>
@@ -75,6 +85,7 @@ export function TroopHome() {
   return (
     <>
       <PageHeader eyebrow={`Unit ${troop?.unitNumber ?? ''}`} title={troop?.name ?? 'Troop'} />
+      <GettingStarted />
       {isLeader ? <LeadAlert /> : null}
       {isLeader ? <LeaderSummary /> : null}
       {has('counselor') ? (
@@ -90,7 +101,10 @@ export function TroopHome() {
       </section>
       {has('parent') && !isLeader ? (
         <section className="card">
-          <h2>Add your Scout</h2>
+          <h2>
+            Add your Scout
+            <HelpTip topic="birthMonth" label="why we ask about age" />
+          </h2>
           <p className="muted small">If your Scout isn't listed above, add them here. They'll be linked to you.</p>
           <AddScoutForm troopId={troopId} />
         </section>

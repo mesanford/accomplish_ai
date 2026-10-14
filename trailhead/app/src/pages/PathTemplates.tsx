@@ -1,7 +1,9 @@
 import { collection } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
+import { GuideBlock } from '../components/GuideBlock';
+import { NextStep } from '../components/NextStep';
 import { TemplateEditor, type TemplateDraft } from '../components/TemplateEditor';
-import { Empty, Loading, Notice, PageHeader } from '../components/ui';
+import { Loading, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
@@ -82,11 +84,22 @@ export function PathTemplates() {
           </button>
         ) : null}
       </PageHeader>
-      <p className="muted">
-        Scouts and parents can start a path from any active template. Dates count from the day it is applied.
-      </p>
+      <GuideBlock
+        id="templates"
+        title="What are path templates?"
+        purpose="A path template is a ready-made plan, like Eagle by 17, that families can start from instead of a blank page."
+        steps={[
+          'Press "Add starter templates" for a few ready-made ones, or "New template" to make your own.',
+          'Families pick a template when they plan a path. Dates count from the day they apply it.',
+          'Archive a template to hide it from families. Nothing is deleted.',
+        ]}
+      />
       <Notice kind="error">{error || templates.error || ''}</Notice>
-      {shown.length === 0 ? <Empty>No templates yet. Add the starter templates or make your own.</Empty> : null}
+      {shown.length === 0 ? (
+        <NextStep action="Make your first template" onClick={() => setEditing({ draft: BLANK })}>
+          No templates yet. Add the starter templates above, or make your own.
+        </NextStep>
+      ) : null}
       <div className="stack">
         {shown.map((t) => (
           <section className="card" key={t.id}>

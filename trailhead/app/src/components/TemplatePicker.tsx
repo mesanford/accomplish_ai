@@ -6,6 +6,7 @@ import { useQuery } from '../lib/hooks';
 import { type ApplyMode, applyTemplate } from '../lib/templates';
 import { useTroop } from '../lib/troop';
 import type { PathItemDoc, PathTemplate, Progress } from '../lib/types';
+import { HelpTip } from './HelpTip';
 import { formatDate, todayIso } from './ui';
 
 interface Props {
@@ -48,7 +49,10 @@ export function TemplatePicker({ scoutId, items, onApply }: Props) {
   const preview = chosen ? applyTemplate({ template: chosen, current: [], today, mode: 'replace', earned }) : null;
   return (
     <section className="card">
-      <h2>Start from a template</h2>
+      <h2>
+        Start from a template
+        <HelpTip topic="pathTemplate" />
+      </h2>
       <select aria-label="Start from a template" value={chosenId} onChange={(e) => setChosenId(e.target.value)} style={{ maxWidth: 420 }}>
         <option value="">Choose a template…</option>
         {active.map((t) => (

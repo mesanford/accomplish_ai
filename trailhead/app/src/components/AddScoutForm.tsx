@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { addScout, errorMessage } from '../lib/api';
 import { RANKS } from '../lib/catalog';
+import { HelpTip } from './HelpTip';
 import { Field, Notice } from './ui';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -66,7 +67,10 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
           ))}
         </select>
       </Field>
-      <p className="hint small muted">We store only birth month and year, to check age rules like finishing Eagle before 18.</p>
+      <p className="hint small muted">
+        We keep only birth month and year, never the full birthday.
+        <HelpTip topic="birthMonth" label="why we ask about age" />
+      </p>
       <Notice kind="error">{error}</Notice>
       <Notice kind="ok">{done}</Notice>
       <div>

@@ -3,6 +3,7 @@ import { draftPath, errorMessage, type DraftResult } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { draftItems, MAX_REQUEST_CHARS } from '../lib/draft';
 import type { PathItemDoc } from '../lib/types';
+import { HelpTip } from './HelpTip';
 import { FeasibilityView } from './PathSummary';
 import { Field, formatDate, Notice } from './ui';
 
@@ -63,6 +64,7 @@ export function DraftPanel({ troopId, scoutId, goal, target, onUse }: Props) {
         <button type="button" className="btn secondary" onClick={() => setOpen(true)}>
           Draft with AI
         </button>
+        <HelpTip topic="draftWithAi" label="how AI drafts are checked" />
       </div>
     );
   }

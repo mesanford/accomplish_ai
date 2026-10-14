@@ -49,7 +49,7 @@ export function FinishSignIn() {
   return (
     <section className="stack" style={{ maxWidth: 520 }}>
       <h1>Finish signing in</h1>
-      <p className="muted">Confirm the email address the link was sent to.</p>
+      <p className="muted">You opened the link on a different device or browser. Type the email address the link was sent to, and you will be signed in.</p>
       <form className="form" onSubmit={submit}>
         <Field label="Email" htmlFor="email">
           <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />

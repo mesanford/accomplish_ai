@@ -1,7 +1,10 @@
 import { collection, orderBy, query, where } from 'firebase/firestore';
 import { type FormEvent, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Empty, Field, Notice, PageHeader } from '../components/ui';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
+import { NextStep } from '../components/NextStep';
+import { Field, Notice, PageHeader } from '../components/ui';
 import { errorMessage, sendMessage } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { db } from '../lib/firebase';
@@ -48,9 +51,13 @@ function NewMessage() {
           ))}
         </div>
       </fieldset>
-      <Field label="Message" htmlFor="msg-body" hint="Parents, or a second trained adult, are added automatically when a Scout is included.">
+      <Field label="Message" htmlFor="msg-body" hint="When a Scout is included, a parent or a second trained adult is added automatically.">
         <textarea id="msg-body" required value={body} onChange={(e) => setBody(e.target.value)} />
       </Field>
+      <p className="small muted">
+        Why is a parent copied?
+        <HelpTip topic="yptMessages" />
+      </p>
       <Notice kind="error">{error}</Notice>
       <div>
         <button className="btn" type="submit" disabled={busy || to.length === 0}>
@@ -84,13 +91,24 @@ export function Messages() {
           {composing ? 'Close' : 'New message'}
         </button>
       </PageHeader>
+      <GuideBlock
+        id="messages"
+        purpose="Send messages to other people in your troop. Everyone in a conversation sees every message."
+        steps={[
+          'Press New message and tick who it is for.',
+          'Write your message and press Send.',
+          'Replies show up in the same conversation.',
+        ]}
+      />
       {composing ? (
         <section className="card">
           <NewMessage />
         </section>
       ) : null}
       {threads.data.length === 0 ? (
-        <Empty>No conversations yet.</Empty>
+        <NextStep action="Write a message" onClick={() => setComposing(true)}>
+          No conversations yet. Start one with the New message button.
+        </NextStep>
       ) : (
         <ul className="list">
           {threads.data.map((t) => (
