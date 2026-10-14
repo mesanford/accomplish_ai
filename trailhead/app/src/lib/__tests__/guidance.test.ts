@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { GLOSSARY, HELP, ROLE_GUIDES } from '../help';
+import { GLOSSARY, HELP } from '../help';
+import { ROLE_GUIDES } from '../roleGuides';
 import { leaderChecklist, parentChecklist, progress, readHidden, writeHidden } from '../guidance';
 
 function memoryStorage(): Storage {

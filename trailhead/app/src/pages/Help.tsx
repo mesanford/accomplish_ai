@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PageHeader } from '../components/ui';
-import { GLOSSARY, ROLE_GUIDES } from '../lib/help';
+import { GLOSSARY } from '../lib/help';
+import { ROLE_GUIDES } from '../lib/roleGuides';
 import { useTroop } from '../lib/troop';
 
 export function HelpPage() {
