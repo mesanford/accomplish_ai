@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Field, Notice } from '../components/ui';
 import { errorMessage } from '../lib/api';
-import { emailSignInLink } from '../lib/auth';
+import { emailSignInLink, signInWithGoogle } from '../lib/auth';
 import { usingEmulators } from '../lib/firebase';
 
 /** In local development the Auth emulator holds the emailed link; fetch it so sign-in works offline. */
@@ -36,6 +36,19 @@ export function SignIn() {
     }
   }
 
+  async function google() {
+    setError('');
+    try {
+      await signInWithGoogle();
+      navigate(next, { replace: true });
+    } catch (err) {
+      // Closing the popup isn't an error worth showing.
+      if (!String((err as { code?: string }).code ?? '').includes('popup-closed')) {
+        setError(errorMessage(err));
+      }
+    }
+  }
+
   async function openDevLink() {
     const link = await emulatorLink(email.trim());
     if (link) {
@@ -49,8 +62,13 @@ export function SignIn() {
     <section className="stack" style={{ maxWidth: 520 }}>
       <div className="eyebrow">Trailhead</div>
       <h1>Sign in</h1>
+      <div>
+        <button type="button" className="btn secondary" onClick={google}>
+          Continue with Google
+        </button>
+      </div>
       <p className="muted">
-        Enter your email and we'll send you a sign-in link. There's no password to remember.
+        Or enter your email and we'll send you a sign-in link. There's no password to remember.
       </p>
       {sent ? (
         <div className="stack">

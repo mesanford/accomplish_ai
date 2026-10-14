@@ -1,9 +1,11 @@
 import { doc } from 'firebase/firestore';
 import {
+  GoogleAuthProvider,
   isSignInWithEmailLink,
   onAuthStateChanged,
   sendSignInLinkToEmail,
   signInWithEmailLink,
+  signInWithPopup,
   signOut,
   type User,
 } from 'firebase/auth';
@@ -70,6 +72,13 @@ export async function finishSignIn(email: string, href: string): Promise<string>
   storage.remove(EMAIL_KEY);
   storage.remove(NEXT_KEY);
   return next;
+}
+
+/** Sign in with a Google account in a popup window. */
+export async function signInWithGoogle(): Promise<void> {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  await signInWithPopup(auth, provider);
 }
 
 export function signOutUser(): Promise<void> {
