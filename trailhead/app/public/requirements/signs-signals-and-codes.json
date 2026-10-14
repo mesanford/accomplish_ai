@@ -1,0 +1,382 @@
+{
+  "awardId": "signs-signals-and-codes",
+  "name": "Signs, Signals, and Codes",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/signs-signals-and-codes/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Discuss with your counselor the importance of signs, signals, and codes, and why people need these different methods of communication. Briefly discuss the history and development of signs, signals, and codes.",
+      "resources": [
+        {
+          "title": "History of Communication: From Cave Paintings to TikTok (video)",
+          "url": "https://youtu.be/rTGShWIryMQ"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Explain the importance of signaling in emergency communications. Discuss with your counselor the types of emergency or distress signals one might use to attract airborne search-and-rescue personnel if lost in the outdoors or trying to summon assistance during a disaster. Illustrate these signaling examples by the use of photos or drawings.",
+      "resources": [
+        {
+          "title": "Signaling in Emergencies—A Beginners Guide to Getting Noticed (video)",
+          "url": "https://youtu.be/Gtp-wVJR348"
+        },
+        {
+          "title": "How To Send a Rescue Signal by Semaphore (video)",
+          "url": "https://youtu.be/VGxWPZ36kFc"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Describe what Morse code is and the various means by which it can be sent. Spell your first name using Morse code. Send or receive a message of six to 10 words using Morse code.",
+          "resources": [
+            {
+              "title": "How Does Morse Code Work? (video)",
+              "url": "https://youtu.be/iy8BaMs_JuI"
+            },
+            {
+              "title": "International Morse Code (website)",
+              "url": "https://morsecode.world/international/morse2.html"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Describe what American Sign Language (ASL) is and how it is used today. Spell your first name using American Sign Language. Send or receive a message of six to 10 words using ASL.",
+          "resources": [
+            {
+              "title": "Learn ASL Alphabet (video)",
+              "url": "https://youtu.be/6_gXiBe9y9A"
+            },
+            {
+              "title": "A Few Things To Know About American Sign Language (video)",
+              "url": "https://youtu.be/wa0nxppMJ-Q"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Give your counselor a brief explanation about semaphore, why it is used, how it is used, and where it is used.",
+          "resources": [
+            {
+              "title": "Semaphore (video)",
+              "url": "https://youtu.be/FrgQV59LEHk"
+            },
+            {
+              "title": "Semaphore Chart (photo)",
+              "url": "https://s28681.pcdn.co/wp-content/uploads/2022/04/Semaphore_Chart_BlueJacketsManual_24821763802.jpg"
+            },
+            {
+              "title": "How To Use Semaphore Flags in a Treasure Hunt (video)",
+              "url": "https://youtu.be/JVBLDDpIFCA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Explain to your counselor the difference between semaphore flags and nautical flags.",
+          "resources": [
+            {
+              "title": "How To Read Signal Flags! (video)",
+              "url": "https://youtu.be/7i1tyWoKIb8"
+            },
+            {
+              "title": "Nautical Flag Word Search Activity (video)",
+              "url": "https://youtu.be/1zwUsznJMds"
+            },
+            {
+              "title": "Crack the Code of NATO's Flag Signals (video)",
+              "url": "https://youtu.be/DH8hyZUnPPs"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "After 4(a) and 4(b) have been completed, do the following:",
+          "resources": [],
+          "children": [
+            {
+              "id": "4c(1)",
+              "label": "(1)",
+              "text": "Spell your first name using semaphore. Send or receive a message of six to 10 words using semaphore.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "4c(2)",
+              "label": "(2)",
+              "text": "Using illustrations or photographs, identify 10 examples of nautical flags and discuss their importance.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Explain the braille reading technique and how it helps individuals with sight impairment to communicate. Then do the following:",
+      "resources": [
+        {
+          "title": "The Story of Reading Braille (video)",
+          "url": "https://youtu.be/eRFGNwKACY0"
+        }
+      ],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Either by sight or by touch, identify the letters of the braille alphabet that spell your name. By sight or touch, decode a braille message at least six words long.",
+          "resources": [
+            {
+              "title": "Write and Read Braille (video)",
+              "url": "https://youtu.be/IFJGr29oWso"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Create a message in braille at least six words long, and share this with your counselor.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Describe to your counselor six sound-only signals that are in use today. Discuss the pros and cons of using sound signals versus other types of signals.",
+          "resources": [
+            {
+              "title": "How To Use Sound Signaling Devices on a Boat (video)",
+              "url": "https://youtu.be/tnP9NwT_Vgk"
+            },
+            {
+              "title": "Ship Whistle Signals Explained—Fog, Anchor, Warnings (video)",
+              "url": "https://youtube.com/shorts/_1jJYPRwYxg"
+            },
+            {
+              "title": "Musical Communication in the Navy (video)",
+              "url": "https://youtu.be/jKJ0vpGRlVs"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Demonstrate to your counselor six different silent Scout signals. Use these Scout signals to direct the movements and actions of your patrol or troop.",
+          "resources": [
+            {
+              "title": "Silent Scout Signals (website)",
+              "url": "https://troopleader.scouting.org/ceremonies/silent-scout-signals/"
+            },
+            {
+              "title": "Scout Silent Hand Signals (PDF)",
+              "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Signs%2C%20Signals%2C%20and%20Codes/scout_silent_hand_signals_chart.pdf"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "On a Scout outing, lay out a trail for your patrol or troop to follow. Cover at least one mile in distance and use at least six different trail signs and markers. After the Scouts have completed the trail, follow the Leave No Trace Seven Principles and the Outdoor Code by replacing or returning trail markers to their original locations.",
+      "resources": [
+        {
+          "title": "Tracking Signs (PDF)",
+          "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Signs%2C%20Signals%2C%20and%20Codes/generic-resources-tracking-signs.pdf"
+        },
+        {
+          "title": "Understanding the Debate on Rock Cairns: Environmental Impact and Folklore Explained (video)",
+          "url": "https://www.tiktok.com/@evangoesoutside/video/7128048670083353902?is_from_webapp=1&sender_device=pc"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "For THREE of the following activities, demonstrate five signals each. Tell what the signals mean and why they are used:",
+      "resources": [],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "Sports official's hand signs/signals",
+          "resources": [
+            {
+              "title": "Soccer Referee Hand Signals (video)",
+              "url": "https://youtu.be/NMcp3rSQXs8"
+            },
+            {
+              "title": "Basketball Referee Penalties and Signals (video)",
+              "url": "https://youtu.be/RaeJ8BzOdJQ"
+            },
+            {
+              "title": "How To Know What the Referee Is Signaling While Watching Football (video)",
+              "url": "https://youtu.be/x039Ia39ZYU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Heavy-equipment operator's hand signals",
+          "resources": [
+            {
+              "title": "Basic Hand Signals for Heavy Equipment Operators (video)",
+              "url": "https://youtu.be/t4dl5zAE9oc"
+            },
+            {
+              "title": "Cascadia Tech Excavator Hand Signal (video)",
+              "url": "https://youtu.be/trBPvOC8Jts"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8c",
+          "label": "(c)",
+          "text": "Aircraft carrier catapult crew signals",
+          "resources": [
+            {
+              "title": "Aircraft Carrier's Crew Hand Signals Explained—Preflight and Launch (video)",
+              "url": "https://youtu.be/As7zQPkkv8c"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8d",
+          "label": "(d)",
+          "text": "Cyclist's hand signals",
+          "resources": [
+            {
+              "title": "How To Use Hand Signals While Cycling | Essential Group Ride Communication for Bike Riders (video)",
+              "url": "https://youtu.be/prYMM7D2qF8&t=41"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8e",
+          "label": "(e)",
+          "text": "An activity selected by you and your counselor",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Share with your counselor 10 examples of symbols used in everyday life. Design your own symbol. Share it with your counselor and explain what it means. Then do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "9a",
+          "label": "(a)",
+          "text": "Show examples of 10 traffic signs and explain their meaning.",
+          "resources": [
+            {
+              "title": "Understanding Road Signs || Traffic Signs (video)",
+              "url": "https://youtu.be/JU0PXiLPw3U"
+            },
+            {
+              "title": "Learning Traffic Signs/Road Signs With Their Meanings (video)",
+              "url": "https://youtu.be/fMIGRMVY4nQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "9b",
+          "label": "(b)",
+          "text": "Using a topographical map, explain what a map legend is and discuss its importance. Point out 10 map symbols and explain the meaning of each.",
+          "resources": [
+            {
+              "title": "How To Read a Topo Map (video)",
+              "url": "https://youtu.be/CoVcRxza8nI"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "9c",
+          "label": "(c)",
+          "text": "Discuss text-message symbols and why they are commonly used. Give examples of your favorite 10 text symbols or emoticons. Then see if your parent, guardian, or counselor can identify the meaning or usage of each symbol.",
+          "resources": [
+            {
+              "title": "What Do Emojis Mean? | Understanding Emoji Meanings and Usage (video)",
+              "url": "https://youtu.be/TKzw4Y_7f_At"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Briefly discuss the history of secret code writing (cryptography). Make up your own secret code and write a message of up to 25 words using this code. Share the message with a friend or fellow Scout. Then share the message and code key with your counselor and discuss the effectiveness of your code.",
+      "resources": [
+        {
+          "title": "A Short History of Codes (video)",
+          "url": "https://youtu.be/xNevRfldNZ0"
+        },
+        {
+          "title": "Cryptography: The Vigenere Cipher (video)",
+          "url": "https://youtu.be/J1o2zo6HleY"
+        },
+        {
+          "title": "The History of Crypto Goes Further Back Than You Think (video)",
+          "url": "https://youtu.be/vjGhiac85h4"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

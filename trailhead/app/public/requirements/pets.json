@@ -1,0 +1,108 @@
+{
+  "awardId": "pets",
+  "name": "Pets",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/pets/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Present evidence that you have cared for a pet for four months. Get approval before you start.Note: Work done for other merit badges cannot be used for this requirement.",
+      "resources": [
+        {
+          "title": "Create an Activity Log (video)",
+          "url": "https://www.youtube.com/watch?v=uh8tDZj9I_A"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Write in 200 words or more about the care, feeding, and housing of your pet. Tell some interesting facts about it. Tell why you have this kind of pet. Give local laws, if any, relating to the pet you keep.",
+      "resources": [
+        {
+          "title": "Understanding Hamsters: Care, Feeding, Housing, and More (video)",
+          "url": "https://www.youtube.com/watch?v=Pi_slxuGJUg"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Show that you have read a book or pamphlet, approved by your counselor, about your kind of pet. Discuss with your counselor what you have learned from what you read.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Show your pet in a pet show.",
+          "resources": [
+            {
+              "title": "Cat Agility Course at Cat Fanciers Cat Show (video)",
+              "url": "https://www.youtube.com/watch?v=QABTG6FldFE"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Train a pet in three or more tricks or special abilities.",
+          "resources": [
+            {
+              "title": "Train Your Cat To Do Fun Tricks (video)",
+              "url": "https://youtu.be/oX7vgQTK9fo"
+            },
+            {
+              "title": "How I Trained My Cat To Fetch (video)",
+              "url": "https://youtu.be/zrDskEObBs8"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Explore careers related to this merit badge. Research one career to learn about the training and education needed, costs, job prospects, salary, job duties, and career advancement. Your research methods may include—with your parent or guardian's permission—an internet or library search, an interview with a professional in the field, or a visit to a location where people in this career work. Discuss with your counselor both your findings and what about this profession might make it an interesting career.",
+          "resources": [
+            {
+              "title": "15 Awesome Jobs for Animal Lovers (video)",
+              "url": "https://youtu.be/k5LGDo2OwY8"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Explore how you could use knowledge and skills from this merit badge to pursue a hobby or healthy lifestyle. Research any training needed, expenses, and organizations that promote or support it. Discuss with your counselor what short-term and long-term goals you might have if you pursued this.",
+          "resources": [
+            {
+              "title": "Animal Hobbies (video)",
+              "url": "https://youtu.be/U8RImRv8HC0"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

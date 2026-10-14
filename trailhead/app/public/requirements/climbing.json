@@ -1,0 +1,540 @@
+{
+  "awardId": "climbing",
+  "name": "Climbing",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/climbing/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain to your counselor the most likely hazards you may encounter while participating in climbing and rappelling activities and what you should do to anticipate, help prevent, mitigate, and respond to these hazards.",
+          "resources": [
+            {
+              "title": "Risk Management in Rock Climbing (video)",
+              "url": "https://youtu.be/7YqZkQRSMRw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Show that you know first aid for and how to prevent injuries or illnesses that could occur during climbing activities, including heat and cold reactions, dehydration, stopped breathing, sprains, abrasions, fractures, rope burns, blisters, snakebite, concussions, and insect bites or stings.",
+          "resources": [
+            {
+              "title": "Treatment of Rope Burns (website)",
+              "url": "https://www.healthline.com/health/rope-burn"
+            },
+            {
+              "title": "Head, Neck, and Spine Injuries (video)",
+              "url": "https://youtu.be/x-YYjkokQ6U"
+            },
+            {
+              "title": "First Aid for Concussions (video)",
+              "url": "https://youtu.be/mlWaByoT24s"
+            },
+            {
+              "title": "Fracture and Dislocation (video)",
+              "url": "https://youtu.be/sPzXAVNVJr0"
+            },
+            {
+              "title": "How To Treat A Blister Correctly (First, Look At Your Blister Roof) (video)",
+              "url": "https://youtu.be/tGqXa3wujiM"
+            },
+            {
+              "title": "What Is Dehydration? Causes, Signs and Symptoms, Diagnosis and Treatment. (video)",
+              "url": "https://youtu.be/KahsIEbFROI"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Identify the conditions that must exist before performing CPR on a person.",
+          "resources": [
+            {
+              "title": "What To Do Before Starting Hands-Only CPR (video)",
+              "url": "https://youtu.be/khJ40b2TuHg"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Learn the Leave No Trace Seven Principles and the Outdoor Code and explain what they mean.",
+      "resources": [
+        {
+          "title": "Leave No Trace (video)",
+          "url": "https://vimeo.com/1115216743/63b20c0b33?share=copy"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Present yourself properly dressed for belaying, climbing, and rappelling. Explain why you are wearing each piece of gear and discuss qualities of easy movement, entanglement-free, and good weather protection and comfort.",
+      "resources": [
+        {
+          "title": "Sport Climbing Gear Checklist (video)",
+          "url": "https://youtu.be/xBS6SxlC64s"
+        },
+        {
+          "title": "How To Choose Climbing Shoes (video)",
+          "url": "https://youtu.be/jBa5TuXjHOE"
+        },
+        {
+          "title": "How To Pick Top 10 Sport Climbing Essentials (video)",
+          "url": "https://youtu.be/llSukbWw5kQ"
+        },
+        {
+          "title": "Sport Climbing Gear Checklist (PDF)",
+          "url": "https://www.rei.com/dam/sport_climbing_checklist.pdf"
+        },
+        {
+          "title": "What Gear Do You Need for Winter Climbing (video)",
+          "url": "https://youtu.be/KpxCQgL5oZw"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Location. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Explain how the difficulty of climbs is classified, and apply classifications to the rock faces or walls where you will demonstrate your climbing skills.",
+          "resources": [
+            {
+              "title": "Climbing Grades Explained (video)",
+              "url": "https://youtu.be/cD4XHKBwe3I"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Explain the following: top-rope climbing, lead climbing, and bouldering.",
+          "resources": [
+            {
+              "title": "Top Roping vs Lead Climbing vs Bouldering (video)",
+              "url": "https://youtu.be/1Wri-kqrX80"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Evaluate the safety of a particular climbing area. Consider weather, visibility, the condition of the climbing surface, and any other environmental hazards.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "Determine how to summon aid to the climbing area in case of an emergency. Discuss what medical training is needed for your group when climbing and rappelling in remote areas.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Verbal signals. Explain the importance of using verbal signals during every climb and rappel, and while bouldering. With the help of the counselor or another Scout, demonstrate the verbal signals used by each of the following:",
+      "resources": [
+        {
+          "title": "Climber Communication (website)",
+          "url": "https://americanalpineclub.org/news/2017/1/19/4xm1fcsag6b7xqf1p1w1qp7vdpp1ha"
+        }
+      ],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Climbers",
+          "resources": [
+            {
+              "title": "Rock Climbing Commands (video)",
+              "url": "https://youtu.be/gxfGI0AGEMA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Rappellers",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Belayers",
+          "resources": [
+            {
+              "title": "Gym Top Rope Climbing: Verbal Commands (video)",
+              "url": "https://youtu.be/GRLUYDGHIEI"
+            },
+            {
+              "title": "SL Climb Series: Rock Climbers Communicate How? (video)",
+              "url": "https://youtu.be/Ilmv4bsWSXcr"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5d",
+          "label": "(d)",
+          "text": "Boulderers and their spotters",
+          "resources": [
+            {
+              "title": "ABCDs of Spotting (video)",
+              "url": "https://youtu.be/YZbzT5ijJd8"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Rope. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Describe the kinds of rope acceptable for use in climbing and rappelling.",
+          "resources": [
+            {
+              "title": "The Essential Guide for Every Climber (Dynamic vs Static Ropes) (video)",
+              "url": "https://youtu.be/1AxF_0S7BTY"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Show how to examine a rope for signs of wear or damage.",
+          "resources": [
+            {
+              "title": "Rope Inspection 101: One of the Most Important Safety Steps (video)",
+              "url": "https://youtu.be/p3xFDP9G0ow"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Discuss ways to prevent a rope from being damaged.",
+          "resources": [
+            {
+              "title": "Safety First: Preventing Rope Failures and Ensuring Longevity (website)",
+              "url": "https://www.namahropes.com/rope-safety-tips-for-reliable-use/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6d",
+          "label": "(d)",
+          "text": "Explain when and how a rope should be retired.",
+          "resources": [
+            {
+              "title": "When To Retire a Climbing Rope (video)",
+              "url": "https://youtu.be/0MD83ewJFMA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6e",
+          "label": "(e)",
+          "text": "Properly coil a rope.",
+          "resources": [
+            {
+              "title": "How To Coil a Climbing Rope (video)",
+              "url": "https://youtu.be/Aqt1ntSVjJA"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Knots. Demonstrate the ability to tie each of the following knots. Give at least one example of how each knot is used in belaying, climbing, or rappelling.",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Figure eight on a bight",
+          "resources": [
+            {
+              "title": "How To Tie a Figure 8 Knot on a Bight (video)",
+              "url": "https://youtu.be/kbB85p_uJsE"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Figure eight follow-through",
+          "resources": [
+            {
+              "title": "How To Tie a Figure 8 Knot for Climbing - Everything You Need To Know (video)",
+              "url": "https://youtu.be/GFlwrvggas0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "Water knot",
+          "resources": [
+            {
+              "title": "Rock Climbing: How To Tie a Water Knot (video)",
+              "url": "https://youtu.be/mWKfGmA3M48"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7d",
+          "label": "(d)",
+          "text": "Double fisherman's knot (grapevine knot)",
+          "resources": [
+            {
+              "title": "How To Tie a Double Fisherman's Knot (Grapevine Knot) (video)",
+              "url": "https://youtu.be/iZuqOkTumSQ"
+            },
+            {
+              "title": "Rock Climbing: How To Tie a Double Fisherman's Knot (video)",
+              "url": "https://youtu.be/YHUv-oOMwRA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7e",
+          "label": "(e)",
+          "text": "Prusik hitch applied to rope",
+          "resources": [
+            {
+              "title": "Rock Climbing: How To Tie a Prusik Knot (video)",
+              "url": "https://youtu.be/EFHxQ5fiUvI"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Harness, Helmet and Gloves. Explain the purpose of each of the following and demonstrate how to put them on correctly.",
+      "resources": [],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "Commercially made climbing harness",
+          "resources": [
+            {
+              "title": "How to Choose a Climbing Harness (video)",
+              "url": "https://youtu.be/aRrLfR7rnw0"
+            },
+            {
+              "title": "How To Put On a Climbing Harness (video)",
+              "url": "https://youtu.be/v5WpeMStpf0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Climbing helmet",
+          "resources": [
+            {
+              "title": "How To Choose Climbing Helmets (video)",
+              "url": "https://youtu.be/NFzGftaJOvM"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8c",
+          "label": "(c)",
+          "text": "Climbing or rappelling gloves",
+          "resources": [
+            {
+              "title": "Things You Should Know Before Choosing Gloves for Climbing (website)",
+              "url": "https://www.gearinstant.com/things-you-should-know-before-choosing-gloves-for-climbing"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Identify the elements of the CHECK system and describe the meaning of each one to your counselor.",
+      "resources": [
+        {
+          "title": "Climbing Partner Checks—Check or Deck (video)",
+          "url": "https://youtu.be/5YC-t0cwVr0"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Belaying. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "10a",
+          "label": "(a)",
+          "text": "Explain the importance of belaying climbers and rappellers and when it is necessary.",
+          "resources": [
+            {
+              "title": "How To Top-Rope Belay (video)",
+              "url": "https://youtu.be/CFIz4cBFVro"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "10b",
+          "label": "(b)",
+          "text": "Belay three different climbers on three different routes.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "10c",
+          "label": "(c)",
+          "text": "Serve as a backup belayer on three different climbs.",
+          "resources": [
+            {
+              "title": "How To Back Up a Beginner's Belay (video)",
+              "url": "https://youtu.be/Uuv1B-C1Ziw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "10d",
+          "label": "(d)",
+          "text": "Belay three different rappellers on three different routes.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "10e",
+          "label": "(e)",
+          "text": "Serve as a backup belayer on three different rappels.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "label": "11.",
+      "text": "Climbing. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "11a",
+          "label": "(a)",
+          "text": "Show the correct way to directly tie a belay rope to your harness.",
+          "resources": [
+            {
+              "title": "How To Tie Into a Climbing Harness (With a Figure 8 Knot) (video)",
+              "url": "https://youtu.be/XQ1r7iddc1w"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11b",
+          "label": "(b)",
+          "text": "Climb at least three different routes on a rock face or climbing wall, demonstrating good technique and using verbal signals with a belayer.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "label": "12.",
+      "text": "Rappelling. Do the following:",
+      "resources": [
+        {
+          "title": "Rock Climbing: How to Rappel (video)",
+          "url": "https://youtu.be/7U6tdEevJgs"
+        }
+      ],
+      "children": [
+        {
+          "id": "12a",
+          "label": "(a)",
+          "text": "Show the correct way to directly tie a belay rope to your harness.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "12b",
+          "label": "(b)",
+          "text": "Using a carabiner and a rappel device, attach a rappel rope to your harness.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "12c",
+          "label": "(c)",
+          "text": "Rappel down three different rock faces or three rappel routes on a climbing wall. Use verbal signals to communicate with a belayer, and demonstrate good rappelling technique.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "label": "13.",
+      "text": "Demonstrate ways to store rope, hardware, and other gear used for climbing, rappelling, and belaying.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

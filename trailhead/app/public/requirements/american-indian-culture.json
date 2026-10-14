@@ -1,0 +1,150 @@
+{
+  "awardId": "american-indian-culture",
+  "name": "American Indian Culture",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/american-indian-culture/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Identify the different American Indian cultural areas. Explain what makes them each unique.",
+      "resources": [
+        {
+          "title": "Native American Cultural Regions (video)",
+          "url": "https://youtu.be/q7v3zl5tgKA"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Research an American Indian tribe, group, or nation. Tell your counselor about traditional dwellings, way of life, tribal government, religious beliefs, family and clan relationships, language, clothing styles, arts and crafts, food cultivation, foraging and preparation, means of getting around, games, customs in warfare, and where and how they live today.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Learn 10 common terms in an American Indian language and their meanings.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Identify the meaning of 10 place names of American Indian origin in the United States.",
+          "resources": [
+            {
+              "title": "75 U.S. Place Names Inspired by Native American Culture (website)",
+              "url": "https://www.today.com/life/native-american-town-names-rcna176894"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Name five well-known American Indian leaders, either from the past or people of today. Give their tribes or nations. Describe what they did or do now that makes them notable.",
+          "resources": [
+            {
+              "title": "10 Legendary Chiefs: Courageous Heroes of Native America (video)",
+              "url": "https://youtu.be/nBYtf58Vpt0"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Describe how life might have been different for the European settlers if there had been no Native Americans to meet them when they came to this continent.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Describe eight things adopted by others from American Indians.",
+          "resources": [
+            {
+              "title": "Contributions of Native Americans—Indigenous Achievements That Shaped Today (video)",
+              "url": "https://youtu.be/Stp7uQxj5lM"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Learn a game played by a group or tribe. Teach and lead it with a Scout group.",
+          "resources": [
+            {
+              "title": "Cherokee Traditional Games: Stickball (video)",
+              "url": "https://youtu.be/Btted7c6Fqc"
+            },
+            {
+              "title": "Cherokee Traditional Games: The Game of Graces (video)",
+              "url": "https://youtu.be/7ipsFFUyr00"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Visit a museum either in-person or virtually to see American Indian exhibitions and collections. Discuss with your counselor what you observed or learned from two exhibitions and identify 10 artifacts by tribe or nation, their shape, size, and use.",
+          "resources": [
+            {
+              "title": "Museums (Choose option Ethnically/Culturally/Tribally Specific) (website)",
+              "url": "https://www.aam-us.org/programs/about-museums/find-a-museum/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Attend a contemporary American Indian gathering. Discuss with your counselor proper etiquette for attending as well as what you learned and observed during your visit.",
+          "resources": [
+            {
+              "title": "Pow Wow Calendar (website)",
+              "url": "https://calendar.powwows.com/"
+            },
+            {
+              "title": "Celebration of Powwow | The Living History of Native American Gatherings (video)",
+              "url": "https://youtu.be/N2CmYbpjIz8?si=B5Ms1k8y5i2ifL_e"
+            },
+            {
+              "title": "Destination Native America—Upcoming Events (website)",
+              "url": "https://destinationnativeamerica.com/upcoming_events"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

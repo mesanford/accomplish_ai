@@ -1,0 +1,256 @@
+{
+  "awardId": "orienteering",
+  "name": "Orienteering",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/orienteering/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Show that you know first aid for the following types of injuries that could occur while orienteering: cuts, scratches, blisters, snakebite, insect stings, tick bites, heat and cold reactions (sunburn, heatstroke, heat exhaustion, hypothermia), dehydration. Explain to your counselor why you should be able to identify poisonous plants and poisonous animals that are found in your area.",
+      "resources": [
+        {
+          "title": "10 Ways to Handle Emergencies While Orienteering: Essential Tips for Adventure Safety (website)",
+          "url": "https://shopeverbeam.com/blogs/news/10-ways-to-handle-emergencies-while-orienteering-essential-tips-for-adventure-safety"
+        },
+        {
+          "title": "Tick Checks (video)",
+          "url": "https://youtu.be/mwAHhOwqeX4"
+        },
+        {
+          "title": "Heat Cramps, Heat Exhaustion, and Heat Stroke (website)",
+          "url": "https://www.weather.gov/safety/heat-illness"
+        },
+        {
+          "title": "Poisonous Plants (video)",
+          "url": "https://youtu.be/P6aBc4OAD0g"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Explain what orienteering is.",
+      "resources": [
+        {
+          "title": "Start Orienteering || A Newcomer's Guide (video)",
+          "url": "https://youtu.be/26Zc5AVkFis?si=BBTUkJ_RFGL6VdEI"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Explain how a compass works. Describe the features of an orienteering compass.",
+          "resources": [
+            {
+              "title": "Basic Orienteering (video)",
+              "url": "https://youtu.be/bzNA6-lx5n8?si=JfVYqR9vTbCwySw5"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "In the field, show how to take a compass bearing and follow it.",
+          "resources": [
+            {
+              "title": "How to Use a Compass (video)",
+              "url": "https://youtu.be/0cF0ovA3FtY?si=o6nQlPuwNkbBJhwu"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do the following:",
+      "resources": [
+        {
+          "title": "Topographic Maps (video)",
+          "url": "https://youtu.be/CoVcRxza8nI?si=CX1u3glYRomi-DV-"
+        }
+      ],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Explain how a topographic map shows terrain features. Point out and name five terrain features on a map and in the field.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Point out and name 10 symbols on a topographic map.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Explain the meaning of declination. Tell why you must consider declination when using map and compass together.",
+          "resources": [
+            {
+              "title": "Magnetic Declination (video)",
+              "url": "https://youtu.be/SStmBzQC7eI?si=Le11Br8wWTxuIj0J"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "Show a topographic map with magnetic north-south lines.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4e",
+          "label": "(e)",
+          "text": "Show how to measure distances on a map using an orienteering compass.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4f",
+          "label": "(f)",
+          "text": "Show how to orient a map using a compass.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Set up a 100-meter pace course. Determine your walking and running pace for 100 meters. Tell why it is important to pace-count.",
+      "resources": [
+        {
+          "title": "Establishing a Pace Count (video)",
+          "url": "https://youtu.be/YAS9Cc8fhO8?si=hYookKh8Yld4_auy"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Identify 20 international control description symbols. Tell the meaning of each symbol.",
+          "resources": [
+            {
+              "title": "International Orienteering Symbols (PDF)",
+              "url": "https://carolinaorienteering.com/wp-content/uploads/Orienteering-Clue-Symbols.pdf"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Show a control description sheet and explain the information provided.",
+          "resources": [
+            {
+              "title": "Control Descriptions (website)",
+              "url": "https://backwoodsok.org/control-descriptions-and-map-symbols-explained"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Explain the following terms and tell when you would use them: attack point, collecting feature, catching feature, aiming off, contouring, reading ahead, handrail, relocation, and rough versus fine orienteering.",
+          "resources": [
+            {
+              "title": "Setting Up an Orienteering Course (website)",
+              "url": "https://betterorienteering.org/intermediate-techniques"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Take part in three orienteering events. One of these must be a cross-country course. Note: While orienteering is primarily an individual sport, Scouting America Youth Protection procedures call for using the buddy system. Requirement 7(a) can be completed by pairs or groups of Scouts.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "After each event, write a report with (1) a copy of the master map and control description sheet, (2) a copy of the route you took on the course, (3) a discussion of how you could improve your time between control points, and (4) a list of your major weaknesses on this course. Describe what you could do to improve.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "Set up a cross-country course that is at least 2,000 meters long with at least five control markers. Prepare the master map and control description sheet.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Set up a score orienteering course with at least 12 control points and a time limit of at least 60 minutes. Set point values for each control. Prepare the master map and control description sheet.",
+          "resources": [
+            {
+              "title": "How To Setup a Compass Course (video)",
+              "url": "https://youtu.be/IfSaBKaau4k"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Act as an official during an orienteering event. This may be during the running of the course you set up for requirement 8.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Teach orienteering techniques to your patrol, troop, or crew.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

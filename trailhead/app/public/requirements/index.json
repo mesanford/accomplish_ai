@@ -2,6 +2,258 @@
   "fetchedAt": "2026-10-14",
   "attribution": "Requirements © Scouting America. Shown from scouting.org for troop use.",
   "awards": {
+    "american-business": {
+      "name": "American Business",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/american-business/"
+    },
+    "american-cultures": {
+      "name": "American Cultures",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/american-cultures/"
+    },
+    "american-heritage": {
+      "name": "American Heritage",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/american-heritage/"
+    },
+    "american-indian-culture": {
+      "name": "American Indian Culture",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/american-indian-culture/"
+    },
+    "american-labor": {
+      "name": "American Labor",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/american-labor/"
+    },
+    "animal-science": {
+      "name": "Animal Science",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/animal-science/"
+    },
+    "animation": {
+      "name": "Animation",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/animation/"
+    },
+    "archaeology": {
+      "name": "Archaeology",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/archaeology/"
+    },
+    "archery": {
+      "name": "Archery",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/archery/"
+    },
+    "architecture": {
+      "name": "Architecture",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/architecture/"
+    },
+    "art": {
+      "name": "Art",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/art/"
+    },
+    "artificial-intelligence": {
+      "name": "Artificial Intelligence",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/artificial-intelligence/"
+    },
+    "astronomy": {
+      "name": "Astronomy",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/astronomy/"
+    },
+    "athletics": {
+      "name": "Athletics",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/athletics/"
+    },
+    "automotive-maintenance": {
+      "name": "Automotive Maintenance",
+      "kind": "merit_badge",
+      "count": 12,
+      "sourceUrl": "https://www.scouting.org/merit-badges/automotive-maintenance/"
+    },
+    "aviation": {
+      "name": "Aviation",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/aviation/"
+    },
+    "backpacking": {
+      "name": "Backpacking",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/backpacking/"
+    },
+    "basketry": {
+      "name": "Basketry",
+      "kind": "merit_badge",
+      "count": 3,
+      "sourceUrl": "https://www.scouting.org/merit-badges/basketry/"
+    },
+    "bird-study": {
+      "name": "Bird Study",
+      "kind": "merit_badge",
+      "count": 13,
+      "sourceUrl": "https://www.scouting.org/merit-badges/bird-study/"
+    },
+    "bugling": {
+      "name": "Bugling",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/bugling/"
+    },
+    "camping": {
+      "name": "Camping",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/camping/"
+    },
+    "canoeing": {
+      "name": "Canoeing",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/canoeing/"
+    },
+    "chemistry": {
+      "name": "Chemistry",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/chemistry/"
+    },
+    "chess": {
+      "name": "Chess",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/chess/"
+    },
+    "citizenship-in-the-community": {
+      "name": "Citizenship in the Community",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/citizenship-in-the-community/"
+    },
+    "citizenship-in-the-nation": {
+      "name": "Citizenship in the Nation",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/citizenship-in-the-nation/"
+    },
+    "citizenship-in-the-world": {
+      "name": "Citizenship in the World",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/citizenship-in-the-world/"
+    },
+    "climbing": {
+      "name": "Climbing",
+      "kind": "merit_badge",
+      "count": 13,
+      "sourceUrl": "https://www.scouting.org/merit-badges/climbing/"
+    },
+    "coin-collecting": {
+      "name": "Coin Collecting",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/coin-collecting/"
+    },
+    "collections": {
+      "name": "Collections",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/collections/"
+    },
+    "communication": {
+      "name": "Communication",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/communication/"
+    },
+    "competitive-gaming": {
+      "name": "Competitive Gaming",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/competitive-gaming/"
+    },
+    "composite-materials": {
+      "name": "Composite Materials",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/composite-materials/"
+    },
+    "cooking": {
+      "name": "Cooking",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/cooking/"
+    },
+    "crime-prevention": {
+      "name": "Crime Prevention",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/crime-prevention/"
+    },
+    "cybersecurity": {
+      "name": "Cybersecurity",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/cybersecurity/"
+    },
+    "cycling": {
+      "name": "Cycling",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/cycling/"
+    },
+    "dentistry": {
+      "name": "Dentistry",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/dentistry/"
+    },
+    "digital-technology": {
+      "name": "Digital Technology",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/digital-technology/"
+    },
+    "disabilities-awareness": {
+      "name": "Disabilities Awareness",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/disabilities-awareness/"
+    },
+    "dog-care": {
+      "name": "Dog Care",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/dog-care/"
+    },
+    "drafting": {
+      "name": "Drafting",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/drafting/"
+    },
     "eagle": {
       "name": "Eagle",
       "kind": "rank",
@@ -14,11 +266,221 @@
       "count": 3,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Eagle-Palms.pdf"
     },
+    "electricity": {
+      "name": "Electricity",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/electricity/"
+    },
+    "electronics": {
+      "name": "Electronics",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/electronics/"
+    },
+    "emergency-preparedness": {
+      "name": "Emergency Preparedness",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/emergency-preparedness/"
+    },
+    "energy": {
+      "name": "Energy",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/energy/"
+    },
+    "engineering": {
+      "name": "Engineering",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/engineering/"
+    },
+    "entrepreneurship": {
+      "name": "Entrepreneurship",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/entrepreneurship/"
+    },
+    "environmental-science": {
+      "name": "Environmental Science",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/environmental-science/"
+    },
+    "exploration": {
+      "name": "Exploration",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/exploration/"
+    },
+    "family-life": {
+      "name": "Family Life",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/family-life/"
+    },
+    "farm-mechanics": {
+      "name": "Farm Mechanics",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/farm-mechanics/"
+    },
+    "fingerprinting": {
+      "name": "Fingerprinting",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/fingerprinting/"
+    },
+    "fire-safety": {
+      "name": "Fire Safety",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/fire-safety/"
+    },
+    "first-aid": {
+      "name": "First Aid",
+      "kind": "merit_badge",
+      "count": 15,
+      "sourceUrl": "https://www.scouting.org/merit-badges/first-aid/"
+    },
     "first-class": {
       "name": "First Class",
       "kind": "rank",
       "count": 13,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/First-Class.pdf"
+    },
+    "fish-and-wildlife-management": {
+      "name": "Fish and Wildlife Management",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/fish-wildlife-management/"
+    },
+    "fishing": {
+      "name": "Fishing",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/fishing/"
+    },
+    "fly-fishing": {
+      "name": "Fly Fishing",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/fly-fishing/"
+    },
+    "forestry": {
+      "name": "Forestry",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/forestry/"
+    },
+    "game-design": {
+      "name": "Game Design",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/game-design/"
+    },
+    "gardening": {
+      "name": "Gardening",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/gardening/"
+    },
+    "genealogy": {
+      "name": "Genealogy",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/genealogy/"
+    },
+    "geocaching": {
+      "name": "Geocaching",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/geocaching/"
+    },
+    "geology": {
+      "name": "Geology",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/geology/"
+    },
+    "golf": {
+      "name": "Golf",
+      "kind": "merit_badge",
+      "count": 2,
+      "sourceUrl": "https://www.scouting.org/merit-badges/golf/"
+    },
+    "graphic-arts": {
+      "name": "Graphic Arts",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/graphic-arts/"
+    },
+    "health-care-professions": {
+      "name": "Health Care Professions",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/health-care-professions/"
+    },
+    "hiking": {
+      "name": "Hiking",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/hiking/"
+    },
+    "home-repairs": {
+      "name": "Home Repairs",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/home-repairs/"
+    },
+    "horsemanship": {
+      "name": "Horsemanship",
+      "kind": "merit_badge",
+      "count": 12,
+      "sourceUrl": "https://www.scouting.org/merit-badges/horsemanship/"
+    },
+    "insect-study": {
+      "name": "Insect Study",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/insect-study/"
+    },
+    "inventing": {
+      "name": "Inventing",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/inventing/"
+    },
+    "journalism": {
+      "name": "Journalism",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/journalism/"
+    },
+    "kayaking": {
+      "name": "Kayaking",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/kayaking/"
+    },
+    "landscape-architecture": {
+      "name": "Landscape Architecture",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/landscape-architecture/"
+    },
+    "law": {
+      "name": "Law",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/law/"
+    },
+    "leatherwork": {
+      "name": "Leatherwork",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/leatherwork/"
     },
     "life": {
       "name": "Life",
@@ -26,11 +488,251 @@
       "count": 8,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Life-Rank.pdf"
     },
+    "lifesaving": {
+      "name": "Lifesaving",
+      "kind": "merit_badge",
+      "count": 17,
+      "sourceUrl": "https://www.scouting.org/merit-badges/lifesaving/"
+    },
+    "mammal-study": {
+      "name": "Mammal Study",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/mammal-study/"
+    },
+    "metalwork": {
+      "name": "Metalwork",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/metalwork/"
+    },
+    "mining-in-society": {
+      "name": "Mining in Society",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/mining-in-society/"
+    },
+    "model-design-and-building": {
+      "name": "Model Design and Building",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/model-design-and-building/"
+    },
+    "motorboating": {
+      "name": "Motorboating",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/motorboating/"
+    },
+    "moviemaking": {
+      "name": "Moviemaking",
+      "kind": "merit_badge",
+      "count": 4,
+      "sourceUrl": "https://www.scouting.org/merit-badges/moviemaking/"
+    },
+    "multisport": {
+      "name": "Multisport",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/multisport/"
+    },
+    "music": {
+      "name": "Music",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/music/"
+    },
+    "nature": {
+      "name": "Nature",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/nature/"
+    },
+    "nuclear-science": {
+      "name": "Nuclear Science",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/nuclear-science/"
+    },
+    "oceanography": {
+      "name": "Oceanography",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/oceanography/"
+    },
+    "orienteering": {
+      "name": "Orienteering",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/orienteering/"
+    },
+    "painting": {
+      "name": "Painting",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/painting/"
+    },
+    "personal-fitness": {
+      "name": "Personal Fitness",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/personal-fitness/"
+    },
+    "personal-management": {
+      "name": "Personal Management",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/personal-management/"
+    },
+    "pets": {
+      "name": "Pets",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/pets/"
+    },
+    "photography": {
+      "name": "Photography",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/photography/"
+    },
+    "pioneering": {
+      "name": "Pioneering",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/pioneering/"
+    },
+    "plant-science": {
+      "name": "Plant Science",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/plant-science/"
+    },
+    "plumbing": {
+      "name": "Plumbing",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/plumbing/"
+    },
+    "pottery": {
+      "name": "Pottery",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/pottery/"
+    },
+    "programming": {
+      "name": "Programming",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/programming/"
+    },
+    "public-health": {
+      "name": "Public Health",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/public-health/"
+    },
+    "public-speaking": {
+      "name": "Public Speaking",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/public-speaking/"
+    },
+    "pulp-and-paper": {
+      "name": "Pulp and Paper",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/pulp-and-paper/"
+    },
+    "radio": {
+      "name": "Radio",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/radio/"
+    },
+    "railroading": {
+      "name": "Railroading",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/railroading/"
+    },
+    "reading": {
+      "name": "Reading",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/reading/"
+    },
+    "reptile-and-amphibian-study": {
+      "name": "Reptile and Amphibian Study",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/reptile-and-amphibian-study/"
+    },
+    "rifle-shooting": {
+      "name": "Rifle Shooting",
+      "kind": "merit_badge",
+      "count": 3,
+      "sourceUrl": "https://www.scouting.org/merit-badges/rifle-shooting/"
+    },
+    "robotics": {
+      "name": "Robotics",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/robotics/"
+    },
+    "rowing": {
+      "name": "Rowing",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/rowing/"
+    },
+    "safety": {
+      "name": "Safety",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/safety/"
+    },
+    "salesmanship": {
+      "name": "Salesmanship",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/salesmanship/"
+    },
+    "scholarship": {
+      "name": "Scholarship",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/scholarship/"
+    },
     "scout": {
       "name": "Scout",
       "kind": "rank",
       "count": 7,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Scout-Rank.pdf"
+    },
+    "scouting-heritage": {
+      "name": "Scouting Heritage",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/scouting-heritage/"
+    },
+    "scuba-diving": {
+      "name": "Scuba Diving",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/scuba-diving/"
+    },
+    "sculpture": {
+      "name": "Sculpture",
+      "kind": "merit_badge",
+      "count": 3,
+      "sourceUrl": "https://www.scouting.org/merit-badges/sculpture/"
+    },
+    "search-and-rescue": {
+      "name": "Search and Rescue",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/search-and-rescue/"
     },
     "second-class": {
       "name": "Second Class",
@@ -38,17 +740,167 @@
       "count": 12,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Second-Class-v2.pdf"
     },
+    "shotgun-shooting": {
+      "name": "Shotgun Shooting",
+      "kind": "merit_badge",
+      "count": 3,
+      "sourceUrl": "https://www.scouting.org/merit-badges/shotgun-shooting/"
+    },
+    "signs-signals-and-codes": {
+      "name": "Signs, Signals, and Codes",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/signs-signals-and-codes/"
+    },
+    "skating": {
+      "name": "Skating",
+      "kind": "merit_badge",
+      "count": 2,
+      "sourceUrl": "https://www.scouting.org/merit-badges/skating/"
+    },
+    "small-boat-sailing": {
+      "name": "Small-Boat Sailing",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/small-boat-sailing/"
+    },
+    "snow-sports": {
+      "name": "Snow Sports",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/snow-sports/"
+    },
+    "soil-and-water-conservation": {
+      "name": "Soil and Water Conservation",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/soil-and-water-conservation/"
+    },
+    "space-exploration": {
+      "name": "Space Exploration",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/space-exploration/"
+    },
+    "sports": {
+      "name": "Sports",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/sports/"
+    },
+    "stamp-collecting": {
+      "name": "Stamp Collecting",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/stamp-collecting/"
+    },
     "star": {
       "name": "Star",
       "kind": "rank",
       "count": 8,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Star-Rank.pdf"
     },
+    "surveying": {
+      "name": "Surveying",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/surveying/"
+    },
+    "sustainability": {
+      "name": "Sustainability",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/sustainability/"
+    },
+    "swimming": {
+      "name": "Swimming",
+      "kind": "merit_badge",
+      "count": 9,
+      "sourceUrl": "https://www.scouting.org/merit-badges/swimming/"
+    },
     "tenderfoot": {
       "name": "Tenderfoot",
       "kind": "rank",
       "count": 11,
       "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Tenderfoot-Rank.pdf"
+    },
+    "textile": {
+      "name": "Textile",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/textile/"
+    },
+    "theater": {
+      "name": "Theater",
+      "kind": "merit_badge",
+      "count": 5,
+      "sourceUrl": "https://www.scouting.org/merit-badges/theater/"
+    },
+    "traffic-safety": {
+      "name": "Traffic Safety",
+      "kind": "merit_badge",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/merit-badges/traffic-safety/"
+    },
+    "truck-transportation": {
+      "name": "Truck Transportation",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/truck-transportation/"
+    },
+    "veterinary-medicine": {
+      "name": "Veterinary Medicine",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/veterinary-medicine/"
+    },
+    "water-sports": {
+      "name": "Water Sports",
+      "kind": "merit_badge",
+      "count": 6,
+      "sourceUrl": "https://www.scouting.org/merit-badges/water-sports/"
+    },
+    "weather": {
+      "name": "Weather",
+      "kind": "merit_badge",
+      "count": 12,
+      "sourceUrl": "https://www.scouting.org/merit-badges/weather/"
+    },
+    "welding": {
+      "name": "Welding",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/welding/"
+    },
+    "whitewater": {
+      "name": "Whitewater",
+      "kind": "merit_badge",
+      "count": 12,
+      "sourceUrl": "https://www.scouting.org/merit-badges/whitewater/"
+    },
+    "wilderness-survival": {
+      "name": "Wilderness Survival",
+      "kind": "merit_badge",
+      "count": 10,
+      "sourceUrl": "https://www.scouting.org/merit-badges/wilderness-survival/"
+    },
+    "wildland-fire-management": {
+      "name": "Wildland Fire Management",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/wildland-fire-management/"
+    },
+    "woodcarving": {
+      "name": "Woodcarving",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/wood-carving/"
+    },
+    "woodwork": {
+      "name": "Woodwork",
+      "kind": "merit_badge",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/merit-badges/woodwork/"
     }
   }
 }

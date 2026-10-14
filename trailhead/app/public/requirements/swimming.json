@@ -1,0 +1,282 @@
+{
+  "awardId": "swimming",
+  "name": "Swimming",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/swimming/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Review with your counselor how Scouting America's Safe Swim Defense guidelines anticipate and deal with common drowning situations such as unfenced residential pools, nonswimmers entering deep water, risky behaviors, medical impairment in the water, drop-offs, cold water, murky water, river currents, rip currents, and surf.",
+          "resources": [
+            {
+              "title": "Safe Swim Defense (website)",
+              "url": "https://www.scouting.org/health-and-safety/gss/gss02"
+            },
+            {
+              "title": "Rip Current Survival Guide (website w/ video)",
+              "url": "https://www.noaa.gov/multimedia/video/video-heading-to-beach-see-our-rip-current-survival-guide-first"
+            },
+            {
+              "title": "Safe Swimming Area (website)",
+              "url": "https://onscouting.org/2021/06/10/what-constitutes-a-safe-swimming-area/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Discuss the prevention and treatment of health concerns that could occur while swimming, including hypothermia, dehydration, sunburn, heat exhaustion, heatstroke, muscle cramps, hyperventilation, spinal injury, stings and bites, and cuts and scrapes.",
+          "resources": [
+            {
+              "title": "10 Common Summer Safety Emergencies (website)",
+              "url": "https://surefirecpr.com/emergency-tips/10-common-summer-safety-emergencies/"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Before doing the following requirements, successfully complete the Scouting America swimmer test, found in the Swimming merit badge pamphlet.",
+      "resources": [
+        {
+          "title": "Swimming Merit Badge Pamphlet (PDF)",
+          "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Pamphlets/Swimming.pdf"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Correctly perform the following strokes:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Demonstrate the front crawl or the trudgen using good form.",
+          "resources": [
+            {
+              "title": "Learn To Swim Freestyle | A Simple Step-by-Step Guide (video)",
+              "url": "https://youtu.be/6_vXycbD2TM"
+            },
+            {
+              "title": "How To Swim Front Crawl? (video)",
+              "url": "https://youtu.be/44byh2wRnAY"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Demonstrate the back crawl using good form.",
+          "resources": [
+            {
+              "title": "How To Swim Backstroke (video)",
+              "url": "https://youtu.be/MrFt6JHii8w"
+            },
+            {
+              "title": "How To Swim Backstroke (video)",
+              "url": "https://youtu.be/86S0fj6UQ8E"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Demonstrate the sidestroke using good form.",
+          "resources": [
+            {
+              "title": "How To Swim Side Stroke (video)",
+              "url": "https://youtu.be/40WQ8Q3Ximkc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3d",
+          "label": "(d)",
+          "text": "Demonstrate the breaststroke using good form.",
+          "resources": [
+            {
+              "title": "How To Swim Breaststroke Properly! (video)",
+              "url": "https://youtu.be/_l8jZbKy9KI"
+            },
+            {
+              "title": "How To Swim Breaststroke (video)",
+              "url": "https://youtu.be/XFipOtBNMkg"
+            },
+            {
+              "title": "The Elements of Breaststroke (video)",
+              "url": "https://youtu.be/HDvvSwLuCxU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3e",
+          "label": "(e)",
+          "text": "Demonstrate the elementary backstroke using good form.",
+          "resources": [
+            {
+              "title": "Learn To Swim Elementary Backstroke (video)",
+              "url": "https://youtu.be/WPgt7djgloQ"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Swim continuously for 150 yards in a strong manner using each of the following strokes in any order; front crawl or trudgen (25 yards); back crawl (25 yards); sidestroke (25 yards); breaststroke (25 yards); and elementary backstroke (50 yards).",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Demonstrate water rescue methods by reaching with your arm or leg, by reaching with a suitable object, and by throwing lines and objects. Explain why swimming rescues should not be attempted when a reaching or throwing rescue is possible, and explain why and how a rescue swimmer should avoid contact with the victim.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "With a helper and a practice victim, show a line rescue both as tender and as rescuer. The practice victim should be approximately 30 feet from shore in deep water.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Float faceup in a resting position for at least three minutes with minimal movement.",
+          "resources": [
+            {
+              "title": "How To Float on Your Back for Beginners | Watch This Before You Give Up (video)",
+              "url": "https://youtu.be/-7KZciqMEj4"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Demonstrate survival floating for at least five minutes.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "While wearing a properly fitted U.S. Coast Guard-approved life jacket, demonstrate the HELP and huddle positions. Explain their purposes.",
+          "resources": [
+            {
+              "title": "PFD's H.E.L.P. & Huddle Positions (video)",
+              "url": "https://youtu.be/Bw_mYosCHIs"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6d",
+          "label": "(d)",
+          "text": "Explain why swimming or survival floating will hasten the onset of hypothermia in cold water.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "In water over your head, but not to exceed 10 feet, do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Use the feetfirst method of surface diving and bring an object up from the bottom.",
+          "resources": [
+            {
+              "title": "How To Do a Feetfirst Surface Dive (video)",
+              "url": "https://youtu.be/viE9D6LeH6c"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Do a headfirst surface dive (pike or tuck), and bring the object up again.",
+          "resources": [
+            {
+              "title": "How To Do a Headfirst Surface Dive (video)",
+              "url": "https://youtu.be/QG5XPAUec3c"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "Do a headfirst surface dive to a depth of at least 5 feet and swim underwater for three strokes. Come to the surface, take a breath, and repeat the sequence twice.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Following the guidelines set in the Scouting America Safe Swim Defense guidelines, in water at least 7 feet deep, show a standing headfirst dive from a dock or pool deck. Show a long shallow dive, also from the dock or pool deck. Note: If your state, city, or local community requires a water depth greater than 7 feet, it is important to abide by that mandate.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Explain the health benefits of regular aerobic exercise, and discuss why swimming is favored as both fitness and therapeutic exercise.",
+      "resources": [
+        {
+          "title": "What Happens to Your Body When You Swim? (video)",
+          "url": "https://youtu.be/KMliGnl7uVo"
+        },
+        {
+          "title": "10 Health Benefits of Swimming (video)",
+          "url": "https://youtu.be/AfnwseOgxE0"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,482 @@
+{
+  "awardId": "rifle-shooting",
+  "name": "Rifle Shooting",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/rifle-shooting/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain what a projectile is, and why any device that shoots a projectile at high speed must be handled with care and respect, and used only in approved locations.",
+          "resources": [
+            {
+              "title": "High-Speed Collisions in Space—Experiments with a Carrot Gun (video)",
+              "url": "https://youtu.be/kStpU1bU-oc"
+            },
+            {
+              "title": "NRA Women—How Ammo Works (video)",
+              "url": "https://youtu.be/ExeuiLXSNTU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Explain the basic rules of safe gun handling that apply to all firearms.",
+          "resources": [
+            {
+              "title": "NRA Gun Safety Rules (website)",
+              "url": "https://gunsafetyrules.nra.org/"
+            },
+            {
+              "title": "Mechanical Safety (photo)",
+              "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/mechanical_safety.png"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Describe how you would react if a friend visiting your home asked to see your or your family's firearm.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1d",
+          "label": "(d)",
+          "text": "Explain the need for, types, and use of eye protection and hearing protection.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1e",
+          "label": "(e)",
+          "text": "Explain the main points of the laws for owning and using guns in your community and state.",
+          "resources": [
+            {
+              "title": "State Laws for Gun Ownership and Use (website)",
+              "url": "https://www.atf.gov/firearms/tools-and-services-firearms-industry/state-laws-and-published-ordinances-firearms"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1f",
+          "label": "(f)",
+          "text": "Explain how hunting is related to the wise use of renewable wildlife resources.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1g",
+          "label": "(g)",
+          "text": "Successfully complete a state hunter education course, or obtain a copy of the hunting laws for your state, then do the following:",
+          "resources": [
+            {
+              "title": "NRA Hunter Education (website)",
+              "url": "https://nra.yourlearningportal.com/Course/HuntersEdActivityInfoPage"
+            }
+          ],
+          "children": [
+            {
+              "id": "1g(1)",
+              "label": "(1)",
+              "text": "Explain the main points of hunting laws in your state, and any special laws on the use of guns and ammunition, AND",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "1g(2)",
+              "label": "(2)",
+              "text": "List the kinds of wildlife that can be legally hunted in your state.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "1h",
+          "label": "(h)",
+          "text": "Explain to your counselor the proper hygienic guidelines followed while shooting.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1i",
+          "label": "(i)",
+          "text": "Identify places in your community where you can join or be a part of range and target activities.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1j",
+          "label": "(j)",
+          "text": "Discuss with your counselor a list of sources you could contact for information on firearms and their use.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Working under the supervision of a certified National Rifle Association (NRA) rifle instructor and a certified range safety officer, at a nationally authorized camp property or at a commercial firearm range (as defined in the Scouting America National Range and Target Activities Manual), do ONE of the following options:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2-A",
+          "label": "Option A",
+          "text": "Rifle Shooting (Modern Cartridge Type). Do ALL of the following:",
+          "resources": [],
+          "children": [
+            {
+              "id": "2-A(1)",
+              "label": "(1)",
+              "text": "Identify the three main parts of a rifle, and tell how they function.",
+              "resources": [
+                {
+                  "title": "Common Types of Rifle Actions (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/common_types_rifle_action.png"
+                },
+                {
+                  "title": "Parts of a Rifle (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/parts_of_a_rifle.jpg"
+                },
+                {
+                  "title": "Sight Recticles (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/sight_reticles.jpg"
+                },
+                {
+                  "title": "Firing Sequence (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/firing_sequence.jpg"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-A(2)",
+              "label": "(2)",
+              "text": "Identify and demonstrate the rules for safely storing and handling a rifle.",
+              "resources": [
+                {
+                  "title": "Rules for Using or Storing a Gun (PDF)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/Rules%20for%20Using%20or%20Storing%20a%20Gun.pdf"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-A(3)",
+              "label": "(3)",
+              "text": "Identify the two types of cartridges, their parts, and how they function.",
+              "resources": [
+                {
+                  "title": "Rimfire Cartridge (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/rimfire_cartridge.jpg"
+                },
+                {
+                  "title": "Centerfire Cartridge (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/centerfire_cartridge.jpg"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-A(4)",
+              "label": "(4)",
+              "text": "Explain to your counselor what a misfire, hangfire, and squib fire are, and explain the procedures to follow in response to each.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(5)",
+              "label": "(5)",
+              "text": "Explain and demonstrate the five fundamentals of shooting a rifle: aiming, breath control, hold control, trigger control, and follow-through.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(6)",
+              "label": "(6)",
+              "text": "Demonstrate the knowledge, skills, and attitude necessary to safely shoot a rifle on a range, including understanding and following range procedures and commands.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(7)",
+              "label": "(7)",
+              "text": "Explain the basic safety rules for cleaning a rifle, and identify the materials needed.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(8)",
+              "label": "(8)",
+              "text": "Demonstrate how to clean a rifle properly and safely.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(9)",
+              "label": "(9)",
+              "text": "Discuss what points you would consider in selecting a rifle.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(10)",
+              "label": "(10)",
+              "text": "Using a bolt-action .22 caliber rimfire rifle, and shooting from a benchrest or supported prone position at 50 feet, fire five groups (three shots per group) that can be touched by a quarter. Using these targets, explain how to adjust sights to zero a rifle.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-A(11)",
+              "label": "(11)",
+              "text": "Adjust sights to center the group on the target and fire five groups (five shots per group). In the event that your instructor determines it is not practical to adjust the sights—for instance, on a borrowed rifle—you may explain (rather than doing) how to adjust the sights, and then fire five groups (five shots per group) in which all shots can be touched by a quarter. According to the target used, each shot in the group must meet the following minimum score: A-32 targets: 9; A-17 or TQ-1 targets: 7; A-36 targets: 5.Note: Other suitable NRA targets may be used if the specified targets are unavailable.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "2-B",
+          "label": "Option B",
+          "text": "Air Rifle Shooting (BB or Pellet). Do ALL of the following:",
+          "resources": [],
+          "children": [
+            {
+              "id": "2-B(1)",
+              "label": "(1)",
+              "text": "Identify the three main parts of an air rifle, and explain how they function.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(2)",
+              "label": "(2)",
+              "text": "Identify and demonstrate the rules for safely storing and handling an air rifle.",
+              "resources": [
+                {
+                  "title": "Rules for Using or Storing a Gun (PDF)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/Rules%20for%20Using%20or%20Storing%20a%20Gun.pdf"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-B(3)",
+              "label": "(3)",
+              "text": "Identify the two most common types of air rifle ammunition.",
+              "resources": [
+                {
+                  "title": "Types of Air Rifle Ammunition (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/types_of_air_rifle_ammunition.jpg"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-B(4)",
+              "label": "(4)",
+              "text": "Explain and demonstrate the five fundamentals of shooting an air rifle: aiming, breath control, hold control, trigger control, and follow-through.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(5)",
+              "label": "(5)",
+              "text": "Demonstrate the knowledge, skills, and attitude necessary to safely shoot on a range, including understanding and following range procedures and commands.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(6)",
+              "label": "(6)",
+              "text": "Explain the basic safety rules for cleaning an air rifle, and identify the materials needed.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(7)",
+              "label": "(7)",
+              "text": "Demonstrate how to clean an air rifle properly and safely.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(8)",
+              "label": "(8)",
+              "text": "Discuss what points you would consider in selecting an air rifle.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(9)",
+              "label": "(9)",
+              "text": "Using a BB gun or pellet rifle and shooting from a benchrest or supported prone position at 15 feet for BB guns or 33 feet for pellet rifles, fire five groups (three shots per group) that can be touched by a quarter.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-B(10)",
+              "label": "(10)",
+              "text": "Adjust sights to center the group on the target and fire five groups (five shots per group). In the event that your instructor determines it is not practical to adjust the sights—for instance, on a borrowed air rifle—you may explain (rather than doing) how to adjust the sights, and then fire five groups (five shots per group) in which all shots can be touched by a quarter. According to the target used, each shot in the group must meet the following minimum score: BB rifle at 15 feet (or 5 meters) using TQ-5 targets: 8; Pellet rifle at 25 feet using TQ-5 targets: 8; Pellet rifle at 33 feet (or 10 meters) using AR-1 targets: 6.Note: Other suitable NRA targets may be used if the specified targets are unavailable.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "2-C",
+          "label": "Option C",
+          "text": "Muzzleloading Rifle Shooting. Do ALL of the following:",
+          "resources": [],
+          "children": [
+            {
+              "id": "2-C(1)",
+              "label": "(1)",
+              "text": "Discuss with your counselor a brief history of the development of muzzleloading rifles.",
+              "resources": [
+                {
+                  "title": "A Quick History of Muzzleloading Rifles (video)",
+                  "url": "https://www.youtube.com/shorts/E1SE_f9tSmk"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-C(2)",
+              "label": "(2)",
+              "text": "Identify principal parts of muzzleloading rifles and discuss how they function.",
+              "resources": [
+                {
+                  "title": "Cap Lock Action (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/cap_lock_action.jpg"
+                },
+                {
+                  "title": "Flintlock Action (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/flintlock_action.jpg"
+                },
+                {
+                  "title": "Matchlock Action (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/matchlock_action.jpg"
+                },
+                {
+                  "title": "Wheel Lock Action (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/wheel_lock_action.jpg"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-C(3)",
+              "label": "(3)",
+              "text": "Identify and demonstrate the rules for safely storing and handling a muzzleloading rifle.",
+              "resources": [
+                {
+                  "title": "Rules for Using and Storing a Gun (photo)",
+                  "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Rifle%20Shooting/Rules%20for%20Using%20or%20Storing%20a%20Gun.pdf"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "2-C(4)",
+              "label": "(4)",
+              "text": "Identify the various grades of black powder and explain their proper and safe use.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(5)",
+              "label": "(5)",
+              "text": "Discuss proper safety procedures pertaining to black powder storage.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(6)",
+              "label": "(6)",
+              "text": "Discuss proper components of a load.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(7)",
+              "label": "(7)",
+              "text": "Identify proper procedures and accessories used for safely loading a muzzleloading rifle.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(8)",
+              "label": "(8)",
+              "text": "Identify the causes of a muzzleloading rifle's failure to fire, and explain what a misfire, hangfire, and squib fire are. Explain and demonstrate proper preventive measures, and the procedures to follow in response to each.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(9)",
+              "label": "(9)",
+              "text": "Demonstrate the knowledge, skills, and attitude necessary to safely shoot a muzzleloading rifle on a range, including understanding and following range procedures and commands.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(10)",
+              "label": "(10)",
+              "text": "Explain the basic safety rules for cleaning a muzzleloading rifle, and identify the materials needed.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(11)",
+              "label": "(11)",
+              "text": "Demonstrate how to clean a muzzleloading rifle properly and safely.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(12)",
+              "label": "(12)",
+              "text": "Discuss what points you would consider in selecting a muzzleloading rifle.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(13)",
+              "label": "(13)",
+              "text": "Using a muzzleloading rifle of .45 or .50 caliber and shooting from a benchrest or supported prone position, fire three groups (three shots per group) at 50 feet that can be covered by the base of a standard-size soft drink can.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2-C(14)",
+              "label": "(14)",
+              "text": "Adjust the sights to center the group on the target and fire three groups (five shots per group). In the event that your instructor determines it is not practical to adjust the sights—for instance, on a borrowed muzzleloading rifle—you may explain (rather than doing) how to adjust the sights, and then fire three groups (five shots per group) in which all shots can be covered by the base of a standard-size soft drink can. According to the target used, each shot in the group must meet the following minimum score: at 25 yards using NRA A-23 or NMLRA 50-yard targets: 7; at 50 yards using NRA A-25 or NMLRA 100-yard targets: 7. Note: Other suitable NRA targets may be used if the specified targets are unavailable.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Identify how you could apply the skills and knowledge of safe and responsible use of firearms you learned in this merit badge to pursue a career or personal hobby. Research the additional training and experience you would need, expenses you may incur, and the affiliation with organizations that could help you maximize the positive impact and enjoyment you gain from it. Discuss what you learned with your counselor, and share what short-term and long-term goals you might have if you pursued this.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

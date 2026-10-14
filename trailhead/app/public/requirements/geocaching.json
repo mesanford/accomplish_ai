@@ -1,0 +1,290 @@
+{
+  "awardId": "geocaching",
+  "name": "Geocaching",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/geocaching/",
+  "fetchedAt": "2026-10-14",
+  "note": "Additional educational resources are available on our Counselor Information Page.",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain to your counselor the most likely hazards you may encounter while participating in geocaching activities, and what you should do to anticipate, help prevent, mitigate, and respond to these hazards.",
+          "resources": [
+            {
+              "title": "GeoCaching Safety: 12 Critical Tips to Stay Safe While Treasure Hunting (website)",
+              "url": "https://geocachingtoday.com/geocaching-safety-tips-to-stay-safe-while-treasure-hunting/"
+            },
+            {
+              "title": "Surviving the Wild—Essential Hiking Safety Tips (video)",
+              "url": "https://youtu.be/YGQG0C0HBGw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Discuss first aid and prevention for the types of injuries or illnesses that could occur while participating in geocaching activities, including cuts, scrapes, snakebite, insect stings, tick bites, exposure to poisonous plants, heat and cold reactions (sunburn, heatstroke, heat exhaustion, hypothermia), and dehydration.",
+          "resources": [
+            {
+              "title": "How to Treat Cuts and Grazes (video)",
+              "url": "https://youtu.be/4e7evinsfm0"
+            },
+            {
+              "title": "Poisonous Plants (video)",
+              "url": "https://youtu.be/P6aBc4OAD0g"
+            },
+            {
+              "title": "First Aid for Spider Bites, Tick Bites, and Scorpion Stings (video)",
+              "url": "https://youtu.be/HZy4pLvW1-8"
+            },
+            {
+              "title": "Heat Cramps, Heat Exhaustion, and Heat Stroke (video)",
+              "url": "https://youtu.be/KOQJB3jlln4"
+            },
+            {
+              "title": "How To Recognize and Avoid Hypothermia (video)",
+              "url": "https://youtu.be/aDAqWLpHXXU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Discuss how to properly plan an activity that uses GPS, including using the buddy system, sharing your plan with others, and considering the weather, route, and proper attire.",
+          "resources": [
+            {
+              "title": "Geocaching Tips and Tricks (video)",
+              "url": "https://youtu.be/0_wubfWGADo"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Discuss the following with your counselor:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Why you should never bury a cache",
+          "resources": [
+            {
+              "title": "Don't Bury Your Cache or Attach It to a Tree (website)",
+              "url": "https://www.geocaching.com/help/index.php?pg=kb.chapter&id=128&pgid=905"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "How to use proper geocaching etiquette when hiding or seeking a cache, and how to properly hide, post, maintain, and dismantle a geocache",
+          "resources": [
+            {
+              "title": "Geocaching Etiquette (video)",
+              "url": "https://youtu.be/GXzIu7p82jg"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "The Leave No Trace Seven Principles and the Outdoor Code as they apply to geocaching",
+          "resources": [
+            {
+              "title": "How To Geocache the Leave No Trace Way (video)",
+              "url": "https://youtu.be/-OBCyHbYmmA"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Explain the following terms used in geocaching: waypoint, log, cache, accuracy, difficulty and terrain ratings, attributes, and trackable. Choose five additional terms to explain to your counselor.",
+      "resources": [
+        {
+          "title": "Geocaching Acronyms and Terms (website)",
+          "url": "https://www.hoagiesgifted.org/geocaching_acronyms.htm"
+        },
+        {
+          "title": "Geocaching Terms (website)",
+          "url": "https://www.geocaching.com/about/glossary.aspx"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Explain how the Global Positioning System (GPS) works. Then, using Scouting's EDGE, demonstrate to your counselor the use of a GPS unit. Include marking and editing a waypoint, changing field functions, and changing the coordinate system in the unit.",
+      "resources": [
+        {
+          "title": "How Does GPS Find Your Location (video)",
+          "url": "https://youtu.be/jl2xQk-z4To"
+        },
+        {
+          "title": "How To Use a Garmin eTrex 10 GPS Receiver (video)",
+          "url": "https://youtu.be/RNhtn71k-wA"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Show you know how to use a map and compass and explain why this is important for geocaching.",
+          "resources": [
+            {
+              "title": "Compass 101 (video)",
+              "url": "https://youtu.be/7MQUIYsmQhc"
+            },
+            {
+              "title": "THIS Is How To Use a Compass and Map (video)",
+              "url": "https://youtu.be/qGqLuqnvROg"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Explain the similarities and differences between GPS navigation and standard map-reading skills and describe the benefits of each.",
+          "resources": [
+            {
+              "title": "Using a GPS with a Map and Compass (video)",
+              "url": "https://youtu.be/mK3pOU_x4jQ"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Describe to your counselor the four steps to finding your first cache. Then mark and edit a waypoint.",
+      "resources": [
+        {
+          "title": "10 Things To Do When Playing Geocaching (video)",
+          "url": "https://youtu.be/7LvnVdaw5sM"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "With your parent or guardian's permission, go to www.geocaching.com. Type in your city and state to locate public geocaches in your area. Share with your counselor the posted information about three of those geocaches. Then, pick one of the three and find the cache.Note: To fulfill this requirement, you will need to set up a free user account with www.Geocaching.com. Before doing so, ask your parent or guardian for permission and help.",
+      "resources": [
+        {
+          "title": "Geocaching.com (website)",
+          "url": "https://www.geocaching.com/play"
+        },
+        {
+          "title": "How To Find Your First Geocache! (video)",
+          "url": "https://youtu.be/-ddhwGsGDjs"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "If a Cache to Eagle® series exists in your council, visit at least three of the locations in the series. Describe the projects that each cache you visit highlights, and explain how the Cache to Eagle® program helps share our Scouting service with the public.",
+          "resources": [
+            {
+              "title": "She Created a Geocaching Trail That Links Together 14 Eagle Scout Service Projects (website)",
+              "url": "https://blog.scoutingmagazine.org/2021/02/12/she-created-a-geocaching-trail-that-links-together-14-eagle-scout-service-projects"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Create a Scouting-related Travel Bug® that promotes one of the values of Scouting. Release your Travel Bug into a public geocache and, with your parent or guardian's permission, monitor its progress at www.geocaching.com for 30 days. Keep a log, and share this with your counselor at the end of the 30-day period.",
+          "resources": [
+            {
+              "title": "What Is a Travel Bug in Geocaching (video)",
+              "url": "https://youtu.be/Fwl8-pvwHJQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8c",
+          "label": "(c)",
+          "text": "Set up and hide a public geocache, following the guidelines in the Geocaching merit badge pamphlet. Before doing so, share with your counselor a three-month maintenance plan for the geocache where you are personally responsible for those three months. After setting up the geocache, with your parent or guardian's permission, follow the logs online for 30 days and share them with your counselor. You must archive the geocache when you are no longer maintaining it.",
+          "resources": [
+            {
+              "title": "What To Do (and NOT Do) When Hiding a Geocache (video)",
+              "url": "https://youtu.be/0018rkb_knA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8d",
+          "label": "(d)",
+          "text": "Explain what Cache In Trash Out (CITO) means, and describe how you have practiced CITO at public geocaches or at a CITO event. Then, either create CITO containers to leave at public caches, or host a CITO event for your unit or for the public.",
+          "resources": [
+            {
+              "title": "Cache In Cache Out Geocaching Events (video)",
+              "url": "https://youtu.be/5eIwxTAaxKw"
+            },
+            {
+              "title": "Geocaching Capital of Canada Cleanup (video)",
+              "url": "https://youtu.be/Brhs9gpCszE"
+            },
+            {
+              "title": "Event Caches (website)",
+              "url": "https://www.geocaching.com/help/index.php?pg=kb.chapter&id=23&pgid=799"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Plan a geohunt for a youth group such as your troop or a neighboring pack, at school, or your place of worship. Choose a theme, set up a course with at least four waypoints, teach the players how to use a GPS unit, and play the game. Tell your counselor about your experience, and share the materials you used and developed for this event.",
+      "resources": [
+        {
+          "title": "Geocaching—Setting up the Experience (video)",
+          "url": "https://youtu.be/y69n3o3SAEA"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,455 @@
+{
+  "awardId": "kayaking",
+  "name": "Kayaking",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/kayaking/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain to your counselor the hazards you are most likely to encounter while participating in kayaking activities, including weather and water-related hazards, and what you should do to anticipate, help prevent, mitigate, and respond to these hazards.",
+          "resources": [
+            {
+              "title": "Kayaking Tips—Cold Water and Winter Paddling (Wear, Gear, and Risks) (video)",
+              "url": "https://youtu.be/xUUX1VI7i1I"
+            },
+            {
+              "title": "Top 5 Kayak Safety Rules for Beginners (video)",
+              "url": "https://youtu.be/WMU4jNmlCQA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Review prevention, symptoms, and first-aid treatment for the following injuries or illnesses that can occur while kayaking: blisters, cold-water shock and hypothermia, heat-related illnesses, dehydration, sunburn, sprains, and strains.",
+          "resources": [
+            {
+              "title": "OSHA Heat Illness Prevention Campaign (video)",
+              "url": "https://youtu.be/Kr2ouLj1oW0"
+            },
+            {
+              "title": "How To Treat a Sunburn (video)",
+              "url": "https://youtu.be/u0sLzfq_w9s"
+            },
+            {
+              "title": "First Aid Kit for Kayaking—What's in It? (video)",
+              "url": "https://youtu.be/iLbL7fffGAk"
+            },
+            {
+              "title": "Cold Water Shock—How To Deal With Cold Water Shock (video)",
+              "url": "https://youtu.be/rH3gZuSr6Y8"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Review the Scouting America Safety Afloat policy. Explain to your counselor how this applies to kayaking.",
+          "resources": [
+            {
+              "title": "Safety Afloat (website)",
+              "url": "https://www.scouting.org/health-and-safety/safety-moments/safety-afloat/"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Before doing requirements 3 through 8, successfully complete the Scouting America swimmer test. Note: See the Swimming merit badge pamphlet for details about the Scouting America swimmer test.",
+      "resources": [
+        {
+          "title": "Swimming Merit Badge Pamphlet (PDF)",
+          "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Pamphlets/Swimming.pdf"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Review the characteristics of life jackets most appropriate for kayaking and understand why one must always be worn while paddling. Then demonstrate how to select and fit a life jacket for kayaking.",
+          "resources": [
+            {
+              "title": "How To Choose the Right Life Jacket (video)",
+              "url": "https://youtu.be/4y9XPNy1L1U"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Review the importance of safety equipment such as a signal device, extra paddle, sponge, bilge pump, flotation bags, and throw bag.",
+          "resources": [
+            {
+              "title": "Essential Gear That All Paddlers Need To Carry On the Water (video)",
+              "url": "https://youtu.be/L7DkmwqfcLI"
+            },
+            {
+              "title": "Kayak Safety: How To Use a Kayak Bilge Pump (How To Get Water out of Your Kayak) (video)",
+              "url": "https://youtu.be/-z_h6ShvsHU"
+            },
+            {
+              "title": "Must Have Paddling Safety Gear | How To Kayak or Canoe (video)",
+              "url": "https://youtu.be/xcl4I8V2Pfg"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Name and point out the major parts of a kayak.",
+          "resources": [
+            {
+              "title": "Kayak Overview (video)",
+              "url": "https://youtu.be/JJGYUG8Bfxc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Review the differences in the design between recreational, whitewater, and sea or touring kayaks. Include how length, width, stability, and rocker are involved in the design of each type.",
+          "resources": [
+            {
+              "title": "How To Choose the Right Kayak for All Types of Flatwater Paddlers (video)",
+              "url": "https://youtu.be/2xlCx8ckfR8"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Explain the care, maintenance, and storage of a kayak.",
+          "resources": [
+            {
+              "title": "How To Clean and Maintain Your Kayak (video)",
+              "url": "https://youtu.be/DThGAXJ8hM8"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Discuss the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Correct methods for the use of a kayak paddle",
+          "resources": [
+            {
+              "title": "How To Hold a Kayak Paddle (video)",
+              "url": "https://youtu.be/RZLtB7BmNAc"
+            },
+            {
+              "title": "Proper Technique for Paddling a Kayak (video)",
+              "url": "https://youtu.be/v0-efrwppWQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Parts of a paddle",
+          "resources": [
+            {
+              "title": "Kayak Paddles (website)",
+              "url": "https://www.boat-ed.com/paddlesports/paddlesports/studyGuide/Kayak-Paddles/11109901_52043/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "The care and maintenance of a paddle",
+          "resources": [
+            {
+              "title": "Kayak Paddle Maintenance (website)",
+              "url": "https://floridasplendors.com/kayak-paddle-maintenance-essential-tips/"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Using a properly equipped kayak with an open cockpit, a sit-on-top, or an inflatable kayak, do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Safely capsize and perform a wet exit.",
+          "resources": [
+            {
+              "title": "Kayak Wet Exit—How To Get Out of Your Kayak (video)",
+              "url": "https://youtu.be/blJFzirv3-E"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Reenter the kayak with assistance from a buddy boat.",
+          "resources": [
+            {
+              "title": "How To Re-Enter a Sit Inside Kayak for Beginners (video)",
+              "url": "https://youtu.be/O_-a5ngnRew"
+            },
+            {
+              "title": "Sea Kayak T-Rescue: Deep Water Rescue / How To Get Back in Your Kayak With Help (video)",
+              "url": "https://youtu.be/YSRCAdCSj8Q"
+            },
+            {
+              "title": "Master the Sea Kayak Scoop Rescue for Injured Paddlers (video)",
+              "url": "https://youtu.be/wE5y_DW2h04"
+            },
+            {
+              "title": "Heel Hook—Kayak Rescue (video)",
+              "url": "https://youtu.be/j-zpJQeiaNc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Demonstrate a kayak-over-kayak rescue.",
+          "resources": [
+            {
+              "title": "Sea Kayak T-Rescue: Deep Water Rescue / How To Get Back in Your Kayak With Help (video)",
+              "url": "https://youtu.be/YSRCAdCSj8Q"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6d",
+          "label": "(d)",
+          "text": "Demonstrate the HELP position.",
+          "resources": [
+            {
+              "title": "Help/Huddle Position (video)",
+              "url": "https://youtu.be/Z5X1K1I8xEc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6e",
+          "label": "(e)",
+          "text": "Capsize the kayak, swim it and the paddle to shore, and empty water from the kayak with assistance if needed.",
+          "resources": [
+            {
+              "title": "White Water Kayak—Swim to Shore (video)",
+              "url": "https://youtu.be/ykvS7iHeC_g"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "As a solo paddler, use a properly equipped kayak to demonstrate the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Forward stroke",
+          "resources": [
+            {
+              "title": "Kayak Forward Stroke (video)",
+              "url": "https://youtu.be/yz00070X04o"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Backstroke",
+          "resources": [
+            {
+              "title": "Kayak Reverse Stroke (video)",
+              "url": "https://youtu.be/O-feCLPf-qw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "Forward sweep",
+          "resources": [
+            {
+              "title": "Kayak Sweep Strokes (video)",
+              "url": "https://youtu.be/GWpaWh8AcZw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7d",
+          "label": "(d)",
+          "text": "Reverse sweep",
+          "resources": [
+            {
+              "title": "Kayak Reverse Stroke (video)",
+              "url": "https://youtu.be/O-feCLPf-qw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7e",
+          "label": "(e)",
+          "text": "Draw stroke",
+          "resources": [
+            {
+              "title": "Kayak Draw Stroke—In Water Recovery (video)",
+              "url": "https://youtu.be/H3G8Viju93I"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7f",
+          "label": "(f)",
+          "text": "Stern draw",
+          "resources": [
+            {
+              "title": "Stern Draw (video)",
+              "url": "https://youtu.be/0bWe37-jaD8"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "As a solo paddler, use a properly equipped kayak to demonstrate the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "Paddle a straight line for 15 to 20 boat lengths using appropriate strokes while maintaining trim and balance of the kayak.",
+          "resources": [
+            {
+              "title": "Paddling a Kayak in a Straight Line (video)",
+              "url": "https://youtu.be/7CThukQ8b0s"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Spin or pivot from a stationary position 180 degrees (half circle) to the right and left within two boat lengths.",
+          "resources": [
+            {
+              "title": "Fast Sea Kayak Turn—Turning a Sea Kayak 180 Degrees Efficiently (video)",
+              "url": "https://youtu.be/eKGsnIat1NQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8c",
+          "label": "(c)",
+          "text": "Move abeam to the right 10 feet and to the left 10 feet.",
+          "resources": [
+            {
+              "title": "How To Turn a Kayak (video)",
+              "url": "https://youtu.be/1j1DuKmZk1o"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8d",
+          "label": "(d)",
+          "text": "Stop the boat in one boat length.",
+          "resources": [
+            {
+              "title": "Paddle Strokes, the Emergency Stopping Procedure (video)",
+              "url": "https://youtu.be/kRUpSLUFMII"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8e",
+          "label": "(e)",
+          "text": "While maintaining forward motion, turn the kayak 90 degrees to the right and left.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "8f",
+          "label": "(f)",
+          "text": "Move the kayak backward three to four boat lengths using appropriate and effective reverse strokes.",
+          "resources": [
+            {
+              "title": "Reverse Stroke (video)",
+              "url": "https://youtu.be/O-feCLPf-qw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8g",
+          "label": "(g)",
+          "text": "Paddle the kayak in a buoyed figure 8 course around markers three to four boat lengths apart.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

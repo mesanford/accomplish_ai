@@ -1,0 +1,278 @@
+{
+  "awardId": "electronics",
+  "name": "Electronics",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/electronics/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Describe the safety precautions you must exercise when using, building, altering, or repairing electronic devices.",
+      "resources": [
+        {
+          "title": "Computer Safety Procedures (video)",
+          "url": "https://youtu.be/aaE0ePh7zSo"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Draw a simple schematic diagram. It must show resistors, capacitors, and transistors or integrated circuits. Use the correct symbols. Label all parts.",
+          "resources": [
+            {
+              "title": "Schematics (video)",
+              "url": "https://youtu.be/9cps7Q_IrX0"
+            },
+            {
+              "title": "How to Read a Schematic (video)",
+              "url": "https://youtu.be/_HZ-EQ8Hc8E"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Tell the purpose of each part.",
+          "resources": [
+            {
+              "title": "Electronic Components Guide (video)",
+              "url": "https://youtu.be/N8_1wb0r0DQ"
+            },
+            {
+              "title": "10 Common Electronic Components (video)",
+              "url": "https://www.tiktok.com/@jyhhsuelectronics/video/7457467056598977838"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Show the right way to solder and desolder.",
+          "resources": [
+            {
+              "title": "Using Solder | Soldering Basics | Soldering for Beginners (video)",
+              "url": "https://youtu.be/-qk-ulz05J8"
+            },
+            {
+              "title": "How to Desolder (video)",
+              "url": "https://youtu.be/bG7yW9FigJA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Show how to avoid heat damage to electronic components.",
+          "resources": [
+            {
+              "title": "Applying Heat to your Parts (video)",
+              "url": "https://www.youtube.com/shorts/fYk07LcnkPA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Tell about the function of a printed circuit board. Tell what precautions should be observed when soldering printed circuit boards.",
+          "resources": [
+            {
+              "title": "What Are Printed Circuit Boards (PCBs)? (video)",
+              "url": "https://youtu.be/BJ3N8gURA1c?si=5Oew7Ys1qIhVBUlP"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Discuss each of the following with your counselor:",
+          "resources": [],
+          "children": [
+            {
+              "id": "4a(1)",
+              "label": "(1)",
+              "text": "How to use electronics for a control purpose.",
+              "resources": [
+                {
+                  "title": "Inputs, Outputs and Controllers (video)",
+                  "url": "https://www.youtube.com/shorts/oxNmKS6etGM"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "4a(2)",
+              "label": "(2)",
+              "text": "Explain the basic principles of digital logic.",
+              "resources": [
+                {
+                  "title": "Understanding Logic Gates (video)",
+                  "url": "https://youtu.be/INEtYZqtjTo"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "4a(3)",
+              "label": "(3)",
+              "text": "How to use electronics for three different analog applications.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Show how to change three decimal numbers into binary numbers and three binary numbers into decimal numbers.",
+          "resources": [
+            {
+              "title": "How to Convert Binary to Decimal (video)",
+              "url": "https://youtu.be/a2FpnU9Mm3E"
+            },
+            {
+              "title": "Convert Decimal to Binary (video)",
+              "url": "https://www.youtube.com/shorts/OYP0pa50a0Q"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Choose ONE of the following THREE projects. For your project, find or create a schematic diagram. To the best of your ability, explain to your counselor how the circuit you built operates.",
+          "resources": [
+            {
+              "title": "How to Read an Electronic Schematic (video)",
+              "url": "https://youtu.be/MxRGXIe1qPo"
+            }
+          ],
+          "children": [
+            {
+              "id": "4c(1)",
+              "label": "(1)",
+              "text": "A control device",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "4c(2)",
+              "label": "(2)",
+              "text": "A digital circuit",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "4c(3)",
+              "label": "(3)",
+              "text": "An analog circuit",
+              "resources": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Show how to solve a simple problem involving current, voltage, and resistance using Ohm's law.",
+          "resources": [
+            {
+              "title": "Ohm's Law Formula (video)",
+              "url": "https://youtu.be/KMaQYdTJul0"
+            },
+            {
+              "title": "What is OHM'S Law? (video)",
+              "url": "https://youtu.be/uZ-m91IEkjQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Tell about the need for and the use of test equipment in electronics. Name three types of test equipment. Tell how they operate.",
+          "resources": [
+            {
+              "title": "Circuits & Electronics - Electronics Lab Introduction (video)",
+              "url": "https://youtu.be/ZuFlJ1IZyPs"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Demonstrate to your counselor how to read the colored bands of a resistor to determine its resistance value.",
+          "resources": [
+            {
+              "title": "How to Read a Resistor (video)",
+              "url": "https://youtu.be/GLD7AgAYqwA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5d",
+          "label": "(d)",
+          "text": "Explain the differences between Through Hole and Surface Mount assembly technologies and give three advantages of each.",
+          "resources": [
+            {
+              "title": "Through Hole vs Surface Mount Method? (video)",
+              "url": "https://youtu.be/RW9NO6H62oY"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Identify three career opportunities that would use skills and knowledge in electronics. Pick one and research the training, education, certification requirements, experience, and expenses associated with entering the field. Research the prospects for employment, starting salary, advancement opportunities and career goals associated with this career. Discuss what you learned with your counselor and whether you might be interested in this career.",
+      "resources": [
+        {
+          "title": "Careers in Electronics Engineering (video)",
+          "url": "https://youtu.be/paEw8Y8WlNA"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

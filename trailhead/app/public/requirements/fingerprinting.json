@@ -1,0 +1,173 @@
+{
+  "awardId": "fingerprinting",
+  "name": "Fingerprinting",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/fingerprinting/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Give a short history of fingerprinting. Tell the difference between civil and criminal identification.",
+      "resources": [
+        {
+          "title": "How Did Detectives Solve the Case of the Bloody Fingerprints? (video)",
+          "url": "https://youtu.be/__nlupHISg0"
+        },
+        {
+          "title": "History of Fingerprinting (video)",
+          "url": "https://youtu.be/wg-lgiPV4rw"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Explain the difference between the automated fingerprint identification systems (AFIS) now used by law enforcement agencies and the biometric fingerprint systems used to control access to computers and places like buildings and airports.",
+          "resources": [
+            {
+              "title": "AFIS - Automated Fingerprint Identification System (video)",
+              "url": "https://www.youtube.com/watch?v=VRdGtGYQ7WE"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Discuss how our society uses identification systems based on tokens, passwords, and biometrics.",
+          "resources": [
+            {
+              "title": "What Is Multifactor Authentication (video)",
+              "url": "https://youtu.be/L3alw3iXaio?si=JYHojryXMcsBnHmz"
+            },
+            {
+              "title": "Token Authentication (video)",
+              "url": "https://www.youtube.com/watch?v=UBUNrFtufWo"
+            },
+            {
+              "title": "Biometric Authentication Technology (video)",
+              "url": "https://youtu.be/uRwh0t7RabA?si=mm9nKjMZX-eSkGtc"
+            },
+            {
+              "title": "Science of Innovation—Biometrics (video)",
+              "url": "https://www.youtube.com/watch?v=IlThIvXn2Hk"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Name the surfaces of the body where friction or papillary ridges are found.",
+          "resources": [
+            {
+              "title": "Fingerprint Ridge Patterns (video)",
+              "url": "https://www.youtube.com/watch?v=FPHOJ-0ljV8"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Name the two basic principles supporting the science of fingerprints and give a brief explanation of each principle.",
+          "resources": [
+            {
+              "title": "Principles of Fingerprint Science (video)",
+              "url": "https://www.youtube.com/watch?v=qX6hFXHDmk4"
+            },
+            {
+              "title": "Why Are Your Fingerprints Unique? (video)",
+              "url": "https://www.youtube.com/watch?v=iCRy8voU5dE"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Explain what it takes to positively identify a person using fingerprints.",
+          "resources": [
+            {
+              "title": "Fingerprint Evidence (video)",
+              "url": "https://youtu.be/t3ppAEvI2kI?si=vSffPDpu6oJrYJZa"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Take a clear set of prints using ONE of the following methods:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Make both rolled and plain impressions. Make these on an 8-by-8-inch fingerprint identification card, available from your local police department or your counselor.",
+          "resources": [
+            {
+              "title": "How to Roll Fingerprints (video)",
+              "url": "https://www.youtube.com/watch?v=d7N-4UNAzsw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Using clear adhesive tape, a pencil, and plain paper, record your own fingerprints or those of another person.",
+          "resources": [
+            {
+              "title": "Developing Latent Fingerprints With Black Powder (video)",
+              "url": "https://www.youtube.com/watch?v=tqFzVfPRd5s"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Show your counselor you can identify the three basic types of fingerprint patterns and their subcategories. Using your own hand, identify the types of patterns you see.",
+      "resources": [
+        {
+          "title": "Fingerprint Patterns: Arch, Loop, and Whorl (video)",
+          "url": "https://www.youtube.com/watch?v=FM8NE4VVYGk"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Identify three career opportunities that would use skills and knowledge in the areas of biometrics and/or fingerprinting. Pick one and research the training, education, certification requirements, experience, and expenses associated with entering the field. Research the prospects for employment, starting salary, advancement opportunities, and career goals associated with this career. Discuss what you learned with your counselor and whether you might be interested in this career.",
+      "resources": [
+        {
+          "title": "Latent Fingerprinting Examiner (video)",
+          "url": "https://youtu.be/aJaNnqnje-4?si=gpxvbC4fTZDtEFhg"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

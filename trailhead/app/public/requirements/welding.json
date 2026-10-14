@@ -1,0 +1,252 @@
+{
+  "awardId": "welding",
+  "name": "Welding",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/welding/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain to your counselor the hazards you are most likely to encounter while welding, and what you should do to anticipate, help prevent, mitigate, or lessen these hazards.",
+          "resources": [
+            {
+              "title": "Keep Yourself Safe: 6 Welding Safety Hazards & How To Avoid Them (video)",
+              "url": "https://youtu.be/-oq3mS7EBX8?si=ePEbVQwTrMP92s8X"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Show that you know first aid for, and the prevention of, injuries or illnesses that could occur while welding, including electrical shock, eye injuries, burns, fume inhalation, dizziness, skin irritation, and exposure to hazardous chemicals, including filler metals and welding gases.",
+          "resources": [
+            {
+              "title": "How To Treat Welding Burns (website)",
+              "url": "https://weldingheadquarters.com/how-to-treat-welding-burns/"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "With your counselor, discuss general safety precautions and safety data sheets (SDS) related to welding. Explain the importance of the SDS.",
+          "resources": [
+            {
+              "title": "Safety Data Sheets (video)",
+              "url": "https://youtu.be/_yWF-w3CwmU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Describe the appropriate safety gear and clothing that must be worn when welding. Then, present yourself properly dressed for welding—in protective equipment, clothing, and footwear.",
+          "resources": [
+            {
+              "title": "Welding Safety PPE Guide | Must-Have Essentials for Safe Welding Practices (video)",
+              "url": "https://youtu.be/YsAmLFF03jI?si=llTGf61a3qyktawl"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "Explain and demonstrate the proper care and storage of welding equipment, tools, and protective clothing and footwear.",
+          "resources": [
+            {
+              "title": "A DIY Guide to Maintaining and Storing your Welding Equipment (video)",
+              "url": "https://youtu.be/roCt2U2ccaI?si=wpUZM8xiPDdeXA1H"
+            },
+            {
+              "title": "Safely Use and Care of PPE | ACSA Training | CSTS Clip (video)",
+              "url": "https://youtu.be/HrjpCHfbYJE?si=NeeiVkfW-8XJlOKe"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Explain the terms welding, electrode, slag, and oxidation. Describe the welding process, how heat is generated, what kind of filler metal is added (if any), and what protects the molten metal from the atmosphere.",
+      "resources": [
+        {
+          "title": "Understanding Common Welding Terms—A Guide for Beginners (website)",
+          "url": "https://www.millerwelds.com/resources/article-library/understanding-common-welding-terms-a-guide-for-beginners"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Name the different mechanical and thermal cutting methods. Choose one method and describe how to use the process. Discuss one advantage and one limitation of this process.",
+      "resources": [
+        {
+          "title": "Types of Cutting Methods: Mechanical, Thermal & More (website)",
+          "url": "https://engineerfix.com/types-of-cutting-methods-mechanical-thermal-more/"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Select two welding processes, and make a list of the different components of the equipment required for each process. Discuss one advantage and one limitation for each process.",
+          "resources": [
+            {
+              "title": "4 Types of Welding Explained: MIG vs TIG vs Stick vs Flux Core (video)",
+              "url": "https://youtu.be/y-OKi8oSNQ4?si=sTy6oV_X2gC7tqr3"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Choose one welding process. Set up the process you have chosen, including gas regulators, work clamps, cables, filler materials, and equipment settings. Have your counselor inspect and approve the area for the welding process you have chosen.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "After successfully completing requirements 1 through 5, use the equipment you prepared for the welding process in 5(b) to do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Using a metal scribe or soapstone, sketch your initial onto a metal plate, and weld a bead on the plate following the pattern of your initial.",
+          "resources": [
+            {
+              "title": "Welding Letters and Numbers for a Casting Form (video)",
+              "url": "https://youtu.be/UBbdcviujmM"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Cover a small plate (approximately 3\" x 3\" x 1/4\") with weld beads side by side.",
+          "resources": [
+            {
+              "title": "The First Lesson of Welding | Learning To Run Beads (video)",
+              "url": "https://youtu.be/g7qgPldYDuY"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Tack two plates together in a square groove butt joint.",
+          "resources": [
+            {
+              "title": "How To Weld a Butt Joint (video)",
+              "url": "https://youtu.be/3-ebx3hWu0Q"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6d",
+          "label": "(d)",
+          "text": "Weld the two plates together from 6(c) on both sides.",
+          "resources": [
+            {
+              "title": "How To Weld a Butt Joint (video)",
+              "url": "https://youtu.be/3-ebx3hWu0Q"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6e",
+          "label": "(e)",
+          "text": "Tack two plates together in a T joint, have your counselor inspect it, then weld a T joint with fillet weld on both sides.",
+          "resources": [
+            {
+              "title": "Helpful Tips for Tacking and MIG Welding Fillet Joints (video)",
+              "url": "https://youtu.be/zFIdiTJxii4?si=5gysckooa-vsCXmT"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6f",
+          "label": "(f)",
+          "text": "Tack two plates together in a lap joint, have your counselor inspect it, then weld a lap joint with fillet weld on both sides.",
+          "resources": [
+            {
+              "title": "TIG Welding Basics: Lap Joints (video)",
+              "url": "https://youtu.be/0AxiCSe-dCQ?si=uoHqPtfJj9LIGrue"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Find out about three career opportunities in the welding industry. Pick one and find out the education, training, and experience required for this profession. Discuss this with your counselor, and explain why the profession might interest you.",
+          "resources": [
+            {
+              "title": "Should You Become a Welder?—Everything You Need to Know About The Welding Profession (video)",
+              "url": "https://youtu.be/tVOvC_e9spA?si=twqMhlBcM9FL64iJ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Discuss the role of the American Welding Society in the welding profession.",
+          "resources": [
+            {
+              "title": "What Does the American Welding Society Do For Welders? (video)",
+              "url": "https://youtu.be/tZaEMO4bPHg?si=deNNIvCoSNCICh4S"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

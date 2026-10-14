@@ -1,0 +1,259 @@
+{
+  "awardId": "engineering",
+  "name": "Engineering",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/engineering/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Select a manufactured item in your home (such as a toy or an appliance) and, under adult supervision and with the approval of your counselor, investigate how and why it works as it does. Find out what sort of engineering activities were needed to create it. Discuss with your counselor what you learned and how you got the information.",
+      "resources": [
+        {
+          "title": "How to Fix Small Appliances (video)",
+          "url": "https://youtu.be/pa9EO7GKt5Q?si=62hF_Zwm6WU8MDLA"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Select an engineering achievement that has had a major impact on society. Using resources such as the internet (with your parent or guardian's permission), books, and magazines, find out about the engineers who made this engineering feat possible, the special obstacles they had to overcome, and how this achievement has influenced the world today. Tell your counselor what you learned.",
+      "resources": [
+        {
+          "title": "Engineering the Brooklyn Bridge in 1883 (video)",
+          "url": "https://youtu.be/dyckL6HuLRU?si=9yxhxhYxVAw_kgyN"
+        },
+        {
+          "title": "Engineering America (website)",
+          "url": "https://www.popularmechanics.com/technology/infrastructure/g35589790/most-impressive-feats-of-engineering-in-america/"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Explain the work of six types of engineers. Pick two of the six types and explain how their work is related to engineering.",
+      "resources": [
+        {
+          "title": "Solve Problems: Be an Engineer (video)",
+          "url": "https://youtu.be/D9I35Rqo04E?si=LWsUw9GGXaJiqgT4"
+        },
+        {
+          "title": "What is Engineering? (video)",
+          "url": "https://youtu.be/WcD8ii2ftAw?si=LoM2V67R25_hZgGG"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Visit with an engineer (who may be your counselor, parent or guardian) and do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Discuss the work this engineer does and the tools the engineer uses.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Discuss with the engineer a current project and the engineer's particular role in it.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Find out how the engineer's work is done and how results are achieved.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "Ask to see the reports that the engineer writes concerning the project.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4e",
+          "label": "(e)",
+          "text": "Discuss with your counselor what you learned about engineering from this visit.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Use the systems engineering approach to design an original piece of patrol equipment, a toy, or a useful device for the home, office, or garage.",
+      "resources": [
+        {
+          "title": "The Engineering Process (video)",
+          "url": "https://youtu.be/fxJWin195kU?si=oNshjNfLvbcZl-mg"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do TWO of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Transforming Motion. Using common materials or a construction set, make a simple model that will demonstrate motion. Explain how the model uses basic mechanical elements like levers and inclined planes to demonstrate motion. Describe an example where this mechanism is used in a real product.",
+          "resources": [
+            {
+              "title": "Transforming Motion - Rube Goldberg Machines (video)",
+              "url": "https://youtu.be/9_6TUgWmP6I?si=p3-RxRPDUsmow5VY"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Using Electricity. Make a list of 10 electrical appliances in your home. Find out approximately how much electricity each uses in one month. Learn how to find out the amount and cost of electricity used in your home during periods of light and heavy use. List five ways to conserve electricity.",
+          "resources": [
+            {
+              "title": "AMAZING Ways to Save Electricity at Home (video)",
+              "url": "https://youtu.be/37kLS0uW16I?si=EI9d_Hv_X07lnzGz"
+            },
+            {
+              "title": "Understanding Home Energy Electric Use (video)",
+              "url": "https://youtu.be/zRYESRObKqA?si=dnJOPUp_Cb4LhVpp"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Understanding Electronics. Using an electronic device such as a smartphone or tablet computer, find out how sound, video, text or images travel from one location to another. Explain how the device was designed for ease of use, function, and durability.",
+          "resources": [
+            {
+              "title": "How Does Your Mobile Phone Work? (video)",
+              "url": "https://youtu.be/1JZG9x_VOwA?si=lk5rLp6spECckVag"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6d",
+          "label": "(d)",
+          "text": "Using Materials. Do experiments to show the differences in strength and heat conductivity in wood, metal, and plastic. Discuss with your counselor what you have learned.",
+          "resources": [
+            {
+              "title": "Engineering Material Properties (video)",
+              "url": "https://youtu.be/tGfLhPslEjQ?si=o7MiNTtvYjIKf9m4"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6e",
+          "label": "(e)",
+          "text": "Converting Energy. Do an experiment to show how mechanical, heat, chemical, solar, and/or electrical energy may be converted from one or more types of energy to another. Explain your results. Describe to your counselor what energy is and how energy is converted and used in your surroundings.",
+          "resources": [
+            {
+              "title": "STEM Experiment: Energy Conversion (video)",
+              "url": "https://youtu.be/Z_DXxUbOkSk?si=r7ZuOV99AW1jzPdB"
+            },
+            {
+              "title": "1st Place Mousetrap Car Ideas (video)",
+              "url": "https://youtu.be/b7zWwo9dbiU"
+            },
+            {
+              "title": "Chemical Powered Cars (video)",
+              "url": "https://youtu.be/brIzBE6bzFc"
+            },
+            {
+              "title": "2018 Official Chem-E-Car Competition® (video)",
+              "url": "https://youtu.be/uQCmr1DlUqk"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6f",
+          "label": "(f)",
+          "text": "Moving People. Find out the different ways people in your community get to work. Make a study of traffic flow (number of vehicles and relative speed) in both heavy and light traffic periods. Discuss with your counselor what might be improved to make it easier for people in your community to get where they need to go.",
+          "resources": [
+            {
+              "title": "Moving People Can Be Complicated (video)",
+              "url": "https://youtu.be/erYf6NNw8Ec?si=WJWYMhjisgEdtpWp"
+            },
+            {
+              "title": "Engineering Traffic (video)",
+              "url": "https://youtu.be/iHzzSao6ypE?si=XdiQikXkWIX8rj-5"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6g",
+          "label": "(g)",
+          "text": "Building an Engineering Project. Enter a project in a science or engineering fair or similar competition. (This requirement may be met by participation on an engineering competition project team.) Discuss with your counselor what your project demonstrates, the kinds of questions visitors to the fair asked you, and how well you were able to answer their questions.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Explain what it means to be a registered Professional Engineer (P.E.). Name the types of engineering work for which registration is most important.",
+      "resources": [
+        {
+          "title": "How To Become an Engineer & Types of Engineering Careers (video)",
+          "url": "https://youtu.be/PUBAxUkMcr8"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Study the Engineer's Code of Ethics. Explain how it is like the Scout Oath and Law.",
+      "resources": [
+        {
+          "title": "Ethics and Conduct for Professional Engineers (video)",
+          "url": "https://youtu.be/qVV684jvJV4?si=3_ZOiqnCPOeJZm1d"
+        },
+        {
+          "title": "Engineering Code of Ethics (website)",
+          "url": "https://www.nspe.org/career-growth/nspe-code-ethics-engineers"
+        },
+        {
+          "title": "Engineering Ethics (video)",
+          "url": "https://youtu.be/5KZx81crb48?si=F4ufLBrtg09FTAFM"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Explore careers related to this merit badge. Research one career to learn about the training and education needed, costs, job prospects, salary, job duties, and career advancement. Your research methods may include—with your parent or guardian's permission—an internet or library search, an interview with a professional in the field, or a visit to a location where people in this career work. Discuss with your counselor both your findings and what about this profession might make it an interesting career.",
+      "resources": [
+        {
+          "title": "How To Become an Engineer (video)",
+          "url": "https://youtu.be/77xMVKOEZ5g"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

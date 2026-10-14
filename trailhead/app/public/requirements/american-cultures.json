@@ -1,0 +1,121 @@
+{
+  "awardId": "american-cultures",
+  "name": "American Cultures",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/american-cultures/",
+  "fetchedAt": "2026-10-14",
+  "note": "Choose THREE groups that have different racial, cultural, national, or ethnic backgrounds, one of which comes from your own background. Use these groups to meet requirements 1, 2, and 3.",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do TWO of the following, choosing a different group for each:",
+      "resources": [
+        {
+          "title": "Race, Ethnicity, and Culture (video)",
+          "url": "https://youtu.be/N8Yb_4dFTEg"
+        },
+        {
+          "title": "Jellybean—Defining Race, Ethnicity, and Nationality (video)",
+          "url": "https://youtu.be/cKsqfn8aH8k"
+        },
+        {
+          "title": "Learn a New Culture (video)",
+          "url": "https://youtu.be/GhA9eypocE0"
+        }
+      ],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Go to a festival, celebration, or other event identified with one of the groups. Report on what you see and learn.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Go to a place of worship, school, or other institution identified with one of the groups. Report on what you see and learn.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Talk with a person from one of the groups about the heritage and traditions of the group. Report on what you learn.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1d",
+          "label": "(d)",
+          "text": "Learn a song, dance, poem, or story that is traditional to one group, and teach it to a group of your friends.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1e",
+          "label": "(e)",
+          "text": "Go to a library or museum to see a program or exhibit featuring one group's traditions. Report on what you see and learn.",
+          "resources": [
+            {
+              "title": "Find a Museum (website)",
+              "url": "https://whichmuseum.com/place/united-states-2682"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Imagine that one of the groups had always lived alone in a city or country to which no other groups ever came. Tell what you think the city or country might be like today. Now tell what you think it might be like if the three groups you chose lived there at the same time.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Tell about some differences between the religious and social customs of the three groups. Tell about some ideas or ways of doing things that are similar in the three groups.",
+      "resources": [
+        {
+          "title": "Cultural Diversity in Communication (video)",
+          "url": "https://youtu.be/TyqSdmJeCro"
+        },
+        {
+          "title": "What Is Cross-Cultural Communication? (video)",
+          "url": "https://youtu.be/45BRrYjsBfc"
+        },
+        {
+          "title": "How To Master Cross-Cultural Communication? (video)",
+          "url": "https://youtu.be/APVZn8u0S-0"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Tell about a contribution made to our country by three different people, each from a different racial, ethnic, or religious background.",
+      "resources": [
+        {
+          "title": "Black History Heroes (video)",
+          "url": "https://youtu.be/Hgu67o9AOAE"
+        },
+        {
+          "title": "Famous Americans for Kids | Pioneers, Artists, Authors, and Inventors (video)",
+          "url": "https://youtu.be/vvm7nFwuCHA"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Give a talk to your Scout unit or class at school on how people from different groups have gotten along together. Lead a discussion on what can be done to help various groups understand one another better.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,299 @@
+{
+  "awardId": "veterinary-medicine",
+  "name": "Veterinary Medicine",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/veterinary-medicine/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Discuss with your counselor the roles a veterinarian plays in the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Companion or small animal medicine, and equine medicine",
+          "resources": [
+            {
+              "title": "Equine Veterinarian | Future Jobs L Explore a Career as a Horse Doctor (video)",
+              "url": "https://youtu.be/BCnueH9iemg"
+            },
+            {
+              "title": "A Day in the Life of a Vet | If You See It, You Can Be It (video)",
+              "url": "https://youtu.be/5XrzUiCLw3A"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Food animal or large animal medicine",
+          "resources": [
+            {
+              "title": "Working the Land: Large Animal Veterinarian (video)",
+              "url": "https://youtu.be/bUCUCgVStB8"
+            },
+            {
+              "title": "Cattle Caretakers: Large Animal Veterinarian (video)",
+              "url": "https://youtu.be/QGGDyQj8rx0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Exotic animal medicine",
+          "resources": [
+            {
+              "title": "Caring for Exotic Animals (website/video)",
+              "url": "https://www.dvm360.com/view/caring-for-exotic-animals"
+            },
+            {
+              "title": "A Day in the Life of an Exotic Bird Veterinarian (video)",
+              "url": "https://youtu.be/H9Q7ItFXH3c"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1d",
+          "label": "(d)",
+          "text": "Marine animal medicine (mammal and fish)",
+          "resources": [
+            {
+              "title": "Why Science? Marine Animal Veterinarian (video)",
+              "url": "https://youtu.be/SK6DcOaxaz0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1e",
+          "label": "(e)",
+          "text": "Poultry medicine",
+          "resources": [
+            {
+              "title": "VetsOnCall - Us Chicken Farms Are Humane + Family-Run, Vets Show (video)",
+              "url": "https://youtu.be/GdQgnsoZf-U"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1f",
+          "label": "(f)",
+          "text": "Wildlife medicine and aquaculture medicine",
+          "resources": [
+            {
+              "title": "A Career in Aquatic Animal Medicine (video)",
+              "url": "https://youtu.be/UzxMrfHOEE0"
+            },
+            {
+              "title": "How Does a Wildlife Veterinarian Do It?! (video)",
+              "url": "https://youtu.be/C4g2v08D2gY"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Discuss with your counselor the roles a veterinarian plays in the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Public health medicine and zoonotic disease surveillance and control",
+          "resources": [
+            {
+              "title": "Career Connections: Public Health Veterinarian (video)",
+              "url": "https://youtu.be/OeZDZofWjl4"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "The military",
+          "resources": [
+            {
+              "title": "Cool Jobs: Army Veterinarian (video)",
+              "url": "https://youtu.be/NsGMXjfnHXQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "Food safety and inspection",
+          "resources": [
+            {
+              "title": "USFDA Public Health Veterinarian (video)",
+              "url": "https://youtu.be/PUq9PjfmCJw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2d",
+          "label": "(d)",
+          "text": "Laboratory animal medicine and research",
+          "resources": [
+            {
+              "title": "Laboratory Animal Veterinarian (video)",
+              "url": "https://youtu.be/iqZ_JhXAFnQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2e",
+          "label": "(e)",
+          "text": "Teaching and government",
+          "resources": [
+            {
+              "title": "Veterinary Medicine Teacher Overview (website)",
+              "url": "https://jobs.wsma.org/career/veterinary-medicine-teacher"
+            },
+            {
+              "title": "Veterinarian for Working Dogs - Government (video)",
+              "url": "https://youtu.be/cwohn5eJsnU"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Describe the training required to become a veterinarian. Where is the veterinary medical college in your state or nearest to you? Describe the prerequisites for applying to veterinary school.",
+      "resources": [
+        {
+          "title": "How Long Does It Take to Become a Veterinarian and Board Certified? (video)",
+          "url": "https://youtu.be/nzIUfwonJlk"
+        },
+        {
+          "title": "Accredited Veterinary Colleges (website)",
+          "url": "https://www.avma.org/education/center-for-veterinary-accreditation/accredited-veterinary-colleges"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Tell your counselor what a registered veterinary technician (R.V.T.) or animal health technician (A.H.T.) is. Describe the training required to become an R.V.T. or A.H.T. Where is the school or training facility for R.V.T. or A.H.T. in your state or nearest to you? Describe the role an R.V.T. or A.H.T. would play in assisting a veterinarian working in three of the practice types listed in requirement 1.",
+      "resources": [
+        {
+          "title": "What Is an RVT? (video)",
+          "url": "https://youtu.be/7dNnOGMxiLs"
+        },
+        {
+          "title": "How To Become a Registered Veterinary Technician (RVT) (video)",
+          "url": "https://youtu.be/UFkLQmM3Aew"
+        },
+        {
+          "title": "Registered Animal Health Technician (video)",
+          "url": "https://youtu.be/qu-lmIlWJfE"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Discuss with your counselor the role a veterinarian plays in the human-animal bond.",
+      "resources": [
+        {
+          "title": "The Center for the Human-Animal Bond (video)",
+          "url": "https://youtu.be/7tVGEzh-JHs"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Visit a veterinary clinic, hospital, or veterinary referral teaching hospital that does work in one of the practices listed in requirement 1. Spend as much time as you can observing the veterinarians and their staff. Prepare a presentation on what you observed and learned at the facility and share with your counselor.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Spend as much time as possible with a veterinarian who works in one of the fields listed in requirement 2. Learn what special training beyond veterinary medical school may have been required for that position. Learn about any special or unusual activities required of this position. Prepare a presentation and share what you have learned about this field of veterinary medicine with your counselor. Include how this field serves the needs of the general public.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Select one career from any of the lists in requirements 1 or 2. Discuss the following with your counselor:",
+      "resources": [
+        {
+          "title": "How To Become a Veterinarian (video)",
+          "url": "https://youtu.be/DHdVl3OV_YY"
+        },
+        {
+          "title": "The Many Career Paths in Veterinary Medicine (video)",
+          "url": "https://youtu.be/dAISdyqNHlo"
+        }
+      ],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Why would one choose this particular career field?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "What would you like about this job?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "What would be the biggest challenges in doing this job?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7d",
+          "label": "(d)",
+          "text": "What to you has been the most surprising aspect of this job?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7e",
+          "label": "(e)",
+          "text": "What continuing education requirements are required to maintain certification for this job?",
+          "resources": [],
+          "children": []
+        }
+      ]
+    }
+  ]
+}
