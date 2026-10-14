@@ -1,4 +1,4 @@
-import { awardName } from '../lib/catalog';
+import { useAwardName } from '../lib/customAwardsContext';
 import type { BlueCard, Progress } from '../lib/types';
 import { CardStatusPill, Empty, formatDate } from './ui';
 
@@ -16,6 +16,7 @@ function readyLabels(p: Progress): string[] {
 }
 
 export function ProgressList({ progress }: { progress: Progress[] }) {
+  const awardName = useAwardName();
   if (progress.length === 0) {
     return <Empty>No requirements signed yet.</Empty>;
   }
@@ -47,6 +48,7 @@ export function ProgressList({ progress }: { progress: Progress[] }) {
 }
 
 export function BlueCardList({ cards, counselorName }: { cards: BlueCard[]; counselorName: (uid?: string) => string }) {
+  const awardName = useAwardName();
   if (cards.length === 0) {
     return <Empty>No blue cards yet. Start one from the Badges page.</Empty>;
   }

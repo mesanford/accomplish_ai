@@ -8,6 +8,13 @@ from functools import lru_cache
 from pathlib import Path
 
 CONTENT_DIR = Path(__file__).parent / "content"
+# Troops create their own awards. Their ids carry this prefix so they never collide with catalog ids.
+CUSTOM_AWARD_PREFIX = "custom-"
+
+
+def is_custom_award(award_id: str) -> bool:
+    """A troop-made award: a known item, but not a merit badge, so it never counts toward rank totals."""
+    return award_id.startswith(CUSTOM_AWARD_PREFIX)
 
 
 @dataclass(frozen=True)

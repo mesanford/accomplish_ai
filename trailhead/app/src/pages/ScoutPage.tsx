@@ -1,12 +1,15 @@
 import { collection, doc, query, where } from 'firebase/firestore';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { CustomProgress } from '../components/CustomProgress';
+import { CustomSignOff } from '../components/CustomSignOff';
 import { PathSummary } from '../components/PathSummary';
 import { BlueCardList, ProgressList } from '../components/ProgressList';
 import { RankForm } from '../components/RankForm';
 import { SignOffForm } from '../components/SignOffForm';
 import { Empty, formatDate, Loading, PageHeader } from '../components/ui';
 import { RANKS, rank } from '../lib/catalog';
+import { isCustomAward } from '../lib/customAwards';
 import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
@@ -41,6 +44,8 @@ export function ScoutPage() {
   }
   const current = record.data ? rank(record.data.currentRankId) : undefined;
   const earned = RANKS.filter((r) => record.data?.rankDates?.[r.id]);
+  const custom = progress.data.filter((p) => isCustomAward(p.awardId));
+  const official = progress.data.filter((p) => !isCustomAward(p.awardId));
 
   return (
     <>
@@ -53,8 +58,14 @@ export function ScoutPage() {
       <PathSummary path={path.data} editTo={`/t/${troopId}/scouts/${scoutId}/path`} />
       <section className="stack">
         <h2>Ranks and badges in progress</h2>
-        <ProgressList progress={progress.data} />
+        <ProgressList progress={official} />
       </section>
+      {custom.length > 0 || isLeader ? (
+        <section className="stack">
+          <h2>Troop awards</h2>
+          <CustomProgress progress={custom} scoutName={scout.displayName} />
+        </section>
+      ) : null}
       <section className="stack">
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} />
@@ -64,6 +75,10 @@ export function ScoutPage() {
           <section className="card">
             <h2>Sign off a requirement</h2>
             <SignOffForm troopId={troopId} scoutId={scoutId} />
+          </section>
+          <section className="card">
+            <h2>Sign off a troop award</h2>
+            <CustomSignOff troopId={troopId} scoutId={scoutId} progress={custom} />
           </section>
           <section className="card">
             <h2>Record a rank</h2>

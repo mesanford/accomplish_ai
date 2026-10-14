@@ -7,6 +7,8 @@ import { AttendancePage } from './pages/Attendance';
 import { Badges } from './pages/Badges';
 import { BlueCards } from './pages/BlueCards';
 import { Counseling } from './pages/Counseling';
+import { CustomAwardPage } from './pages/CustomAwardPage';
+import { CustomAwards } from './pages/CustomAwards';
 import { CreateTroop } from './pages/CreateTroop';
 import { Events } from './pages/Events';
 import { FinishSignIn } from './pages/FinishSignIn';
@@ -55,6 +57,8 @@ const router = createBrowserRouter([
       { path: 'scouts/:scoutId', element: <ScoutPage /> },
       { path: 'scouts/:scoutId/path', element: <PathEditor /> },
       { path: 'badges', element: <Badges /> },
+      { path: 'awards', element: <CustomAwards /> },
+      { path: 'awards/:awardId', element: <CustomAwardPage /> },
       { path: 'blue-cards', element: <BlueCards /> },
       { path: 'counseling', element: <Counseling /> },
       { path: 'events', element: <Events /> },

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from .catalog import Catalog, Rank
+from .catalog import Catalog, Rank, is_custom_award
 from .dates import add_months, age_deadline
 from .eagle import eagle_slots_filled, missing_eagle_required
 from .models import Issue, PathItem, ScoutRecord, Severity
@@ -12,7 +12,7 @@ from .models import Issue, PathItem, ScoutRecord, Severity
 
 def badge_finish_dates(items: list[PathItem], scout: ScoutRecord, catalog: Catalog) -> dict[str, date]:
     """Earned badges at their earned date, plus planned badges at their planned finish."""
-    dates = dict(scout.earned_badges)
+    dates = {k: v for k, v in scout.earned_badges.items() if not is_custom_award(k)}
     for item in items:
         if item.award_id in catalog.badges and item.award_id not in dates and item.planned_end:
             dates[item.award_id] = item.planned_end

@@ -11,18 +11,22 @@ from endpoints.advancement import (
     on_path_written,
     on_signoff_created,
 )
+from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
 from endpoints.messaging import send_message
 
 __all__ = [
     "accept_invite",
     "add_scout",
+    "archive_custom_award",
     "check_path_preview",
     "create_invite",
     "create_troop",
+    "move_to_custom_version",
     "on_attendance_written",
     "on_blue_card_written",
     "on_path_written",
     "on_signoff_created",
+    "save_custom_award",
     "send_message",
 ]

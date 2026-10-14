@@ -38,8 +38,8 @@ def apply_signoff(signoff_id: str, signoff: dict, progress: dict | None) -> Sign
 
     requirements = dict(progress.get("requirements", {}))
     requirements[signoff["reqId"]] = {"status": "signed", "signoffId": signoff_id}
-    return SignoffOutcome(
-        accepted=True,
-        reason=None,
-        progress={**progress, "status": "in_progress", "requirements": requirements},
-    )
+    updated = {**progress, "status": "in_progress", "requirements": requirements}
+    if "needsReview" in progress:
+        # A new signature on a requirement flagged after a version move settles that review.
+        updated["needsReview"] = [r for r in progress["needsReview"] if r != signoff["reqId"]]
+    return SignoffOutcome(accepted=True, reason=None, progress=updated)
