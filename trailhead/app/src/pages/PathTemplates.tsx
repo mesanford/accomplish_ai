@@ -19,7 +19,7 @@ export function PathTemplates() {
   const memberId = access?.memberId ?? '';
   const q = useMemo(() => collection(db, `troops/${troopId}/pathTemplates`), [troopId]);
   const templates = useQuery<PathTemplate>(q, `${troopId}/templates`);
-  const [editing, setEditing] = useState<{ id?: string; draft: TemplateDraft } | null>(null);
+  const [editing, setEditing] = useState<{ id?: string; authorId?: string; draft: TemplateDraft } | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -39,7 +39,7 @@ export function PathTemplates() {
   }
 
   async function save(draft: TemplateDraft) {
-    if (await run(() => saveTemplate(troopId, memberId, draft, editing?.id))) {
+    if (await run(() => saveTemplate(troopId, editing?.authorId ?? memberId, draft, editing?.id))) {
       setEditing(null);
     }
   }
@@ -100,7 +100,7 @@ export function PathTemplates() {
               {daysToWeeks(Math.max(0, ...t.items.map((i) => i.startOffsetDays + i.durationDays)))} weeks
             </p>
             <div className="row">
-              <button type="button" className="btn quiet small" onClick={() => setEditing({ id: t.id, draft: t })}>
+              <button type="button" className="btn quiet small" onClick={() => setEditing({ id: t.id, authorId: t.createdByMemberId, draft: t })}>
                 Edit
               </button>
               <button

@@ -13,7 +13,7 @@ export async function setArchived(troopId: string, id: string, archived: boolean
   await setDoc(templateRef(troopId, id), { archived, updatedAt: serverTimestamp() }, { merge: true });
 }
 
-/** Creates a template, or overwrites the one with this id. */
+/** Creates a template, or overwrites the one with this id. Pass the original author when editing. */
 export async function saveTemplate(
   troopId: string,
   memberId: string,
