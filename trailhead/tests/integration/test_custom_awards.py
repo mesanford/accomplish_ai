@@ -53,23 +53,28 @@ def test_only_leaders_save_and_input_is_checked():
 
 
 def test_edit_versions_sign_and_move():
-    created = save(requirements=REQS, description="For new Scouts")
+    created = save(requirements=[*REQS, {"label": "3", "text": "Lead a game."}], description="For new Scouts")
     award_id = created["awardId"]
     assert award_id.startswith("custom-") and created["versionId"] == "v1"
     v1 = read(f"{T}/customAwards/{award_id}/versions/v1")["requirements"]
-    assert [r["label"] for r in v1] == ["1", "2"]
+    assert [r["label"] for r in v1] == ["1", "2", "3"]
 
     # Renaming keeps the version.
     renamed = save(awardId=award_id, name="First-Year Trail Award", requirements=v1)
     assert renamed == {"awardId": award_id, "versionId": "v1", "newVersion": False}
 
-    # A leader signs both requirements on version 1.
+    # A leader signs two of the three requirements on version 1, so the award stays open.
     assert sign("a", award_id, "v1", v1[0]["id"])
     assert sign("b", award_id, "v1", v1[1]["id"])
     assert read(f"{T}/signoffs/b")["status"] == "accepted"
 
-    # Rewording requirement 2 and adding 3 makes version 2; the Scout stays on version 1.
-    v2_form = [v1[0], {**v1[1], "text": "Plan and cook a campout menu."}, {"label": "3", "text": "Lead a game."}]
+    # Rewording requirement 2 and adding 4 makes version 2; the Scout stays on version 1.
+    v2_form = [
+        v1[0],
+        {**v1[1], "text": "Plan and cook a campout menu."},
+        v1[2],
+        {"label": "4", "text": "Teach a knot."},
+    ]
     edited = save(awardId=award_id, requirements=v2_form, note="Cooking added")
     assert edited["versionId"] == "v2" and edited["newVersion"]
     assert read(f"{T}/progress/s1_{award_id}")["versionId"] == "v1"
@@ -90,6 +95,14 @@ def test_edit_versions_sign_and_move():
     # Signing the flagged requirement on the new version settles the review.
     sign("c", award_id, "v2", v1[1]["id"])
     assert read(f"{T}/progress/s1_{award_id}")["needsReview"] == []
+
+    # A requirement that isn't in the version is refused; signing the last real one completes the award.
+    sign("x", award_id, "v2", "not-a-requirement")
+    assert read(f"{T}/signoffs/x")["status"] == "rejected"
+    v2 = read(f"{T}/customAwards/{award_id}/versions/v2")["requirements"]
+    sign("d", award_id, "v2", v2[2]["id"])
+    sign("e", award_id, "v2", v2[3]["id"])
+    assert read(f"{T}/progress/s1_{award_id}")["status"] == "complete"
 
 
 def test_archive_and_restore():

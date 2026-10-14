@@ -77,3 +77,18 @@ def test_guardians_without_logins_are_not_counted():
     people = people_from_members(members)
     assert people["s1"].guardian_ids == ("p1",)
     assert participant_uids(["s1", "p1", "p2"], members) == ["u-p1"]
+
+
+def test_custom_award_rejects_unknown_requirement():
+    custom = {**SIGNOFF, "awardId": "custom-abc", "reqId": "zz"}
+    assert not apply_signoff("so1", custom, None, ["r1", "r2"]).accepted
+
+
+def test_signing_the_last_custom_requirement_completes_the_award():
+    custom = {**SIGNOFF, "awardId": "custom-abc", "reqId": "r2"}
+    progress = {"versionId": "v1", "status": "in_progress", "requirements": {"r1": {"status": "signed"}}}
+    out = apply_signoff("so2", custom, progress, ["r1", "r2"], date(2026, 10, 14))
+    assert out.progress["status"] == "complete"
+    assert out.progress["completedAt"] == "2026-10-14"
+    first = apply_signoff("so1", {**custom, "reqId": "r1"}, None, ["r1", "r2"])
+    assert first.progress["status"] == "in_progress"

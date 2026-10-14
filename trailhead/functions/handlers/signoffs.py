@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 
 
 @dataclass
@@ -12,11 +13,20 @@ class SignoffOutcome:
     progress: dict | None  # the new progress document, when accepted
 
 
-def apply_signoff(signoff_id: str, signoff: dict, progress: dict | None) -> SignoffOutcome:
+def apply_signoff(
+    signoff_id: str,
+    signoff: dict,
+    progress: dict | None,
+    custom_requirement_ids: list[str] | None = None,
+    today: date | None = None,
+) -> SignoffOutcome:
     """Record a signature on the matching requirement.
 
     A Scout stays on the requirement version they started. A sign-off made against a
     different version is rejected so a leader can move the Scout deliberately.
+
+    For troop-made awards, pass that version's requirement ids: a sign-off for an id not in
+    the version is rejected, and signing the last one completes the award.
     """
     scout_id, award_id, version_id = signoff["scoutId"], signoff["awardId"], signoff["versionId"]
     if progress is None:
@@ -35,6 +45,10 @@ def apply_signoff(signoff_id: str, signoff: dict, progress: dict | None) -> Sign
         )
     if progress.get("status") == "complete":
         return SignoffOutcome(accepted=False, reason="This award is already complete.", progress=None)
+    if custom_requirement_ids is not None and signoff["reqId"] not in custom_requirement_ids:
+        return SignoffOutcome(
+            accepted=False, reason="That requirement isn't part of this award version.", progress=None
+        )
 
     requirements = dict(progress.get("requirements", {}))
     requirements[signoff["reqId"]] = {"status": "signed", "signoffId": signoff_id}
@@ -42,4 +56,9 @@ def apply_signoff(signoff_id: str, signoff: dict, progress: dict | None) -> Sign
     if "needsReview" in progress:
         # A new signature on a requirement flagged after a version move settles that review.
         updated["needsReview"] = [r for r in progress["needsReview"] if r != signoff["reqId"]]
+    if custom_requirement_ids and all(
+        requirements.get(r, {}).get("status") == "signed" for r in custom_requirement_ids
+    ):
+        updated["status"] = "complete"
+        updated["completedAt"] = str(today or date.today())
     return SignoffOutcome(accepted=True, reason=None, progress=updated)

@@ -12,6 +12,7 @@ from handlers.attendance import attendance_effects, mark_ready
 from handlers.paths import feasibility_doc, needs_recheck, path_from_doc, scout_from_docs
 from handlers.signoffs import apply_signoff
 from trailhead_core import check_path
+from trailhead_core.catalog import is_custom_award
 
 Written = firestore_fn.Event[firestore_fn.Change[firestore_fn.DocumentSnapshot | None]]
 
@@ -30,10 +31,17 @@ def on_signoff_created(event: firestore_fn.Event[firestore_fn.DocumentSnapshot |
     t = troop(event.params["troopId"])
     progress_ref = t.collection("progress").document(f"{signoff['scoutId']}_{signoff['awardId']}")
 
+    custom_ids = None
+    if is_custom_award(signoff["awardId"]):
+        version = t.collection("customAwards").document(signoff["awardId"]).collection("versions")
+        version_doc = version.document(signoff["versionId"]).get().to_dict() or {}
+        custom_ids = [r["id"] for r in version_doc.get("requirements", [])]
+
     @firestore.transactional
     def apply(tx):
         snap = progress_ref.get(transaction=tx)
-        outcome = apply_signoff(event.params["signoffId"], signoff, snap.to_dict() if snap.exists else None)
+        current = snap.to_dict() if snap.exists else None
+        outcome = apply_signoff(event.params["signoffId"], signoff, current, custom_ids, date.today())
         if outcome.accepted:
             tx.set(progress_ref, outcome.progress)
             tx.update(event.data.reference, {"status": "accepted"})
