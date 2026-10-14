@@ -50,3 +50,14 @@ def test_two_adults_already_present_need_no_extra():
 def test_adults_only_is_unchanged():
     d = plan_delivery(leader, [asm, parent], PEOPLE, [], TODAY)
     assert d.recipient_ids == ["asm", "parent"]
+
+
+def test_parent_with_own_child_needs_no_training():
+    d = plan_delivery(parent, [leader, scout], PEOPLE, [], TODAY)
+    assert set(d.recipient_ids) == {"leader", "scout"}
+
+
+def test_parent_messaging_another_scout_needs_training():
+    with pytest.raises(YPTViolation) as err:
+        plan_delivery(parent, [leader, orphan], PEOPLE, ["asm"], TODAY)
+    assert err.value.person_id == "parent"

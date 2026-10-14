@@ -78,8 +78,8 @@ def test_signoff_updates_progress():
 
 def test_path_gets_feasibility():
     item = {"awardId": "chess", "plannedStart": "2026-11-01", "plannedEnd": "2026-12-01"}
-    owner.set(f"{T}/paths/p1", {"scoutId": "s1", "goalAwardId": "eagle", "targetDate": "2027-06-01", "items": [item]})
-    path = wait_for(lambda: (read(f"{T}/paths/p1") or {}).get("feasibility") and read(f"{T}/paths/p1"))
+    owner.set(f"{T}/paths/s1", {"scoutId": "s1", "goalAwardId": "eagle", "targetDate": "2027-06-01", "items": [item]})
+    path = wait_for(lambda: (read(f"{T}/paths/s1") or {}).get("feasibility") and read(f"{T}/paths/s1"))
     assert path["feasibility"]["status"] == "infeasible"
     assert any(i["code"] == "not_enough_badges" for i in path["feasibility"]["issues"])
 

@@ -73,10 +73,12 @@ def test_scouts_cannot_sign_their_own_work():
 
 def test_paths_are_editable_by_family_but_feasibility_is_server_only():
     path = {"scoutId": "s1", "goalAwardId": "eagle", "items": []}
-    assert parent.create(f"{T}/paths/p1", path) == OK
-    assert scout1.set(f"{T}/paths/p1", {**path, "targetDate": "2028-06-01"}) == OK
-    assert scout1.set(f"{T}/paths/p1", {**path, "feasibility": {"status": "ok"}}) == DENIED
-    assert parent.create(f"{T}/paths/p2", {**path, "scoutId": "s2"}) == DENIED
+    assert parent.get(f"{T}/paths/s1") == 404  # readable before it exists, so the app can show "no plan yet"
+    assert parent.create(f"{T}/paths/s1", path) == OK
+    assert scout1.set(f"{T}/paths/s1", {**path, "targetDate": "2028-06-01"}) == OK
+    assert scout1.set(f"{T}/paths/s1", {**path, "feasibility": {"status": "ok"}}) == DENIED
+    assert parent.create(f"{T}/paths/s2", {**path, "scoutId": "s2"}) == DENIED
+    assert parent.create(f"{T}/paths/other", path) == DENIED
 
 
 def test_blue_card_flow():
@@ -98,3 +100,16 @@ def test_messages_are_server_only_and_participant_read():
     assert scout1.get(f"{T}/threads/th1") == DENIED
     assert leader.create(f"{T}/threads/th2", {"participantUids": ["leader", "scout1"]}) == DENIED
     assert leader.create(f"{T}/threads/th1/messages/m1", {"body": "hi"}) == DENIED
+
+
+def test_invites_are_leader_read_and_server_written():
+    assert Client("owner").set(f"{T}/invites/abc", {"role": "parent"}) == OK
+    assert leader.get(f"{T}/invites/abc") == OK
+    assert parent.get(f"{T}/invites/abc") == DENIED
+    assert leader.set(f"{T}/invites/xyz", {"role": "leader"}) == DENIED
+
+
+def test_leader_can_start_a_blue_card_for_a_scout():
+    card = {"scoutId": "s2", "awardId": "art", "versionId": "v1", "status": "requested", "requestedAt": NOW}
+    assert leader.create(f"{T}/blueCards/s2_art", card) == OK
+    assert parent.create(f"{T}/blueCards/s2_cooking", {**card, "awardId": "cooking"}) == DENIED

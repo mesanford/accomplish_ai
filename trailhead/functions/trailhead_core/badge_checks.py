@@ -13,6 +13,7 @@ MAX_CONCURRENT_DIFFICULTY = 10
 
 def check_badges(items: list[PathItem], scout: ScoutRecord, catalog: Catalog) -> list[Issue]:
     issues: list[Issue] = []
+    unscheduled: list[str] = []
     for item in items:
         badge = catalog.badges.get(item.award_id)
         if badge is None:
@@ -20,14 +21,7 @@ def check_badges(items: list[PathItem], scout: ScoutRecord, catalog: Catalog) ->
         if item.award_id in scout.earned_badges:
             continue
         if item.planned_end is None:
-            issues.append(
-                Issue(
-                    code="unscheduled",
-                    severity=Severity.WARNING,
-                    message=f"{badge.name} has no planned finish date.",
-                    award_id=badge.id,
-                )
-            )
+            unscheduled.append(badge.name)
         elif badge.min_days and item.planned_start:
             days = (item.planned_end - item.planned_start).days
             if days < badge.min_days:
@@ -51,8 +45,20 @@ def check_badges(items: list[PathItem], scout: ScoutRecord, catalog: Catalog) ->
                     award_id=badge.id,
                 )
             )
+    if unscheduled:
+        issues.insert(0, _unscheduled_issue(unscheduled))
     issues.extend(_workload(items, scout, catalog))
     return issues
+
+
+def _unscheduled_issue(names: list[str]) -> Issue:
+    """One warning for every badge without a finish date, so the real problems stay visible."""
+    if len(names) == 1:
+        message = f"{names[0]} has no planned finish date, so it can't count toward a rank yet."
+    else:
+        listed = ", ".join(names)
+        message = f"{len(names)} badges have no planned finish date, so they can't count toward a rank yet: {listed}."
+    return Issue(code="unscheduled", severity=Severity.WARNING, message=message)
 
 
 def _prereq_met(item: PathItem, prereqs: tuple[str, ...], items: list[PathItem], scout: ScoutRecord) -> bool:

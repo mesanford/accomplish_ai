@@ -18,4 +18,4 @@ extend-exclude = [".venv", "functions/venv"]
 select = ["E", "F", "I", "B", "UP", "SIM"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["trailhead_core", "handlers"]
+known-first-party = ["trailhead_core", "handlers", "endpoints", "fb"]

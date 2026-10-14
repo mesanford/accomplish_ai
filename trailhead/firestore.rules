@@ -44,6 +44,11 @@ service cloud.firestore {
       allow read: if isMember(t);
       allow write: if false;
 
+      // Invite codes are secrets: only leaders list them, and only the server creates or redeems them.
+      match /invites/{code} {
+        allow read: if isLeader(t);
+        allow write: if false;
+      }
       match /access/{uid} {
         allow read: if signedIn() && (request.auth.uid == uid || isLeader(t));
         allow write: if false;
@@ -79,21 +84,22 @@ service cloud.firestore {
                      in ['counselor_assigned', 'in_progress']));
         allow update, delete: if false;
       }
-      // Paths: the Scout, their parents and leaders edit; only the server writes feasibility.
-      match /paths/{id} {
-        allow read: if canSeeScout(t, resource.data.scoutId);
-        allow create: if canSeeScout(t, request.resource.data.scoutId)
+      // One path per Scout, stored under the Scout's id. The family and leaders edit it; only the
+      // server writes feasibility.
+      match /paths/{scoutId} {
+        allow read, delete: if canSeeScout(t, scoutId);
+        allow create: if canSeeScout(t, scoutId)
+          && request.resource.data.scoutId == scoutId
           && !('feasibility' in request.resource.data);
-        allow update: if canSeeScout(t, resource.data.scoutId)
-          && request.resource.data.scoutId == resource.data.scoutId
+        allow update: if canSeeScout(t, scoutId)
+          && request.resource.data.scoutId == scoutId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['feasibility']);
-        allow delete: if canSeeScout(t, resource.data.scoutId);
       }
       // Blue card id = {scoutId}_{awardId}.
       // requested -> approved -> counselor_assigned -> in_progress -> complete; leaders may cancel.
       match /blueCards/{id} {
         allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.counselorUid == request.auth.uid;
-        allow create: if actsFor(t, request.resource.data.scoutId)
+        allow create: if (actsFor(t, request.resource.data.scoutId) || isLeader(t))
           && id == request.resource.data.scoutId + '_' + request.resource.data.awardId
           && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'status', 'requestedAt'])
           && request.resource.data.status == 'requested';

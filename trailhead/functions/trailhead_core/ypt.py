@@ -11,7 +11,14 @@ from datetime import date
 
 
 class YPTViolation(Exception):
-    """The message cannot be sent without breaking Youth Protection rules."""
+    """The message cannot be sent without breaking Youth Protection rules.
+
+    `person_id` names the adult whose training is missing, so callers can show their name.
+    """
+
+    def __init__(self, message: str, person_id: str | None = None):
+        super().__init__(message)
+        self.person_id = person_id
 
 
 @dataclass(frozen=True)
@@ -50,8 +57,10 @@ def plan_delivery(
     if not adults or not youth:
         return Delivery(recipient_ids=_unique(r.id for r in recipients))
     for adult in adults:
-        if not has_current_ypt(adult, today):
-            raise YPTViolation(f"{adult.id} needs current Youth Protection training to message Scouts.")
+        # A parent talking with their own children needs no training; anyone else in the conversation does.
+        own_children_only = all(adult.id in y.guardian_ids for y in youth)
+        if not own_children_only and not has_current_ypt(adult, today):
+            raise YPTViolation("needs current Youth Protection training to message Scouts.", person_id=adult.id)
 
     ids = [r.id for r in recipients]
     added: list[str] = []

@@ -128,3 +128,15 @@ def test_next_steps_mention_soon_badges():
 def test_unknown_goal():
     result = check_path(Path(scout_id="s1", goal_award_id="wizard"), first_class_scout(), TODAY, load_catalog())
     assert result.status == PathStatus.INFEASIBLE
+
+
+def test_undated_badges_are_planned_not_missing():
+    items = [PathItem(award_id=b) for b in EAGLE_REQUIRED]
+    result = check_path(Path(scout_id="s1", goal_award_id="eagle", items=items), first_class_scout(), TODAY)
+    unscheduled = [i for i in result.issues if i.code == "unscheduled"]
+    assert len(unscheduled) == 1
+    assert unscheduled[0].message.startswith("13 badges have no planned finish date")
+    short = next(i for i in result.issues if i.code == "not_enough_badges")
+    assert "the plan has 13." in short.message
+    assert "Missing" not in short.message
+    assert "Add finish dates" in short.message

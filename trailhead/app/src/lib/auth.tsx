@@ -1,0 +1,77 @@
+import { doc } from 'firebase/firestore';
+import {
+  isSignInWithEmailLink,
+  onAuthStateChanged,
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
+  signOut,
+  type User,
+} from 'firebase/auth';
+import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { auth, db } from './firebase';
+import { useDoc } from './hooks';
+import { storage } from './storage';
+import type { UserDoc } from './types';
+
+interface AuthState {
+  user: User | null;
+  ready: boolean;
+  profile: UserDoc | null;
+}
+
+const AuthContext = createContext<AuthState>({ user: null, ready: false, profile: null });
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(
+    () =>
+      onAuthStateChanged(auth, (u) => {
+        setUser(u);
+        setReady(true);
+      }),
+    [],
+  );
+  const profileRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user]);
+  const profile = useDoc<UserDoc>(profileRef);
+  const value = useMemo(() => ({ user, ready, profile: profile.data }), [user, ready, profile.data]);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth(): AuthState {
+  return useContext(AuthContext);
+}
+
+const EMAIL_KEY = 'trailhead.signInEmail';
+const NEXT_KEY = 'trailhead.afterSignIn';
+
+/** Email a one-time sign-in link. `next` is where to go once signed in (for invite links). */
+export async function emailSignInLink(email: string, next: string): Promise<void> {
+  await sendSignInLinkToEmail(auth, email, {
+    url: `${window.location.origin}/signin/finish`,
+    handleCodeInApp: true,
+  });
+  storage.set(EMAIL_KEY, email);
+  storage.set(NEXT_KEY, next);
+}
+
+export function isSignInLink(href: string): boolean {
+  return isSignInWithEmailLink(auth, href);
+}
+
+export function rememberedEmail(): string {
+  return storage.get(EMAIL_KEY) ?? '';
+}
+
+/** Finish signing in from the emailed link. Returns where to go next. */
+export async function finishSignIn(email: string, href: string): Promise<string> {
+  await signInWithEmailLink(auth, email, href);
+  const next = storage.get(NEXT_KEY) || '/';
+  storage.remove(EMAIL_KEY);
+  storage.remove(NEXT_KEY);
+  return next;
+}
+
+export function signOutUser(): Promise<void> {
+  return signOut(auth);
+}

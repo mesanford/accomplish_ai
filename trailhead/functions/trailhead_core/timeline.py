@@ -55,7 +55,8 @@ def rank_timeline(
         ready = _badges_ready_on(rank, finishes, catalog)
         if ready is None:
             # Report against the goal, so the Scout sees everything still missing, not just the next rank.
-            issues.append(_short_on_badges(catalog.ranks[goal_id], finishes, catalog))
+            planned = {i.award_id for i in items if i.award_id in catalog.badges}
+            issues.append(_short_on_badges(catalog.ranks[goal_id], finishes, planned, catalog))
             return timeline, issues
         earliest = max(earliest, ready)
         if rank.before_age:
@@ -65,16 +66,22 @@ def rank_timeline(
     return timeline, issues
 
 
-def _short_on_badges(rank: Rank, finishes: dict[str, date], catalog: Catalog) -> Issue:
-    have = len(finishes)
-    slots = eagle_slots_filled(finishes, catalog)
+def _short_on_badges(rank: Rank, finishes: dict[str, date], planned: set[str], catalog: Catalog) -> Issue:
+    """Explain what the goal still needs. Badges in the plan without dates count as planned, not missing."""
+    held = set(finishes) | planned
     parts = []
-    if have < rank.total_badges:
-        parts.append(f"{rank.name} needs {rank.total_badges} merit badges; the plan has {have}.")
+    if len(held) < rank.total_badges:
+        parts.append(f"{rank.name} needs {rank.total_badges} merit badges; the plan has {len(held)}.")
+    slots = eagle_slots_filled(held, catalog)
     if slots < rank.total_eagle_required:
         parts.append(f"It needs {rank.total_eagle_required} Eagle-required badges; the plan has {slots}.")
         if rank.total_eagle_required == catalog.eagle_required_slots:
-            parts.append("Missing: " + ", ".join(missing_eagle_required(finishes, catalog)) + ".")
+            parts.append("Missing: " + ", ".join(missing_eagle_required(held, catalog)) + ".")
+    undated = planned - set(finishes)
+    if undated and not parts:
+        parts.append(f"{rank.name} has enough badges planned. Add finish dates to see the earliest date.")
+    elif undated:
+        parts.append("Add finish dates to the planned badges so they count.")
     return Issue(code="not_enough_badges", severity=Severity.ERROR, message=" ".join(parts), award_id=rank.id)
 
 

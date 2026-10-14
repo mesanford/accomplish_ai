@@ -9,3 +9,8 @@ firestore-debug*.log
 ui-debug*.log
 .firebase/
 *.local
+app/node_modules/
+app/dist/
+app/.env.local
+app/test-results/
+app/playwright-report/
