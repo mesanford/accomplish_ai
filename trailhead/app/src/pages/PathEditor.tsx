@@ -1,11 +1,13 @@
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DraftPanel } from '../components/DraftPanel';
 import { PathItems } from '../components/PathItems';
 import { FeasibilityView } from '../components/PathSummary';
 import { Field, Loading, Notice, PageHeader } from '../components/ui';
 import { errorMessage, previewPath } from '../lib/api';
 import { RANKS } from '../lib/catalog';
+import { addDraftItems } from '../lib/draft';
 import { db } from '../lib/firebase';
 import { useTroop } from '../lib/troop';
 import type { Feasibility, PathDoc, PathItemDoc } from '../lib/types';
@@ -88,6 +90,17 @@ export function PathEditor() {
             <input id="target" type="date" value={target} onChange={(e) => setTarget(e.target.value)} />
           </Field>
         </div>
+        <DraftPanel
+          troopId={troopId}
+          scoutId={scoutId}
+          goal={goal}
+          target={target}
+          onUse={(draft, replace) => {
+            setGoal(draft.goal);
+            setTarget(draft.target);
+            setItems((current) => (replace ? draft.items : addDraftItems(current, draft.items)));
+          }}
+        />
         <PathItems items={items} onChange={setItems} />
         <section className="card">
           <h2>Will this plan work?</h2>

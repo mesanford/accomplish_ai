@@ -33,6 +33,14 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await parent.getByLabel('Add a merit badge').selectOption('chess');
   await expect(parent.getByText("Won't work as planned")).toBeVisible();
   await expect(parent.getByText(/Star needs 6 merit badges/)).toBeVisible();
+  // The AI draft (the emulator uses the fake planner) shows a checked preview; discarding leaves the plan alone.
+  await parent.getByRole('button', { name: 'Draft with AI' }).click();
+  await parent.getByLabel('What do you want to work toward?').fill('Get me to Star by spring');
+  await parent.getByRole('button', { name: 'Draft a plan' }).click();
+  await expect(parent.getByRole('heading', { name: 'Your draft' })).toBeVisible();
+  await expect(parent.getByText(/Practice plan/)).toBeVisible();
+  await parent.getByRole('button', { name: 'Discard' }).click();
+  await expect(parent.getByRole('heading', { name: 'Your draft' })).toBeHidden();
   await parent.getByRole('button', { name: 'Save plan' }).click();
   await expect(parent.getByRole('heading', { name: 'Path to Star' })).toBeVisible();
   await expect(parent.getByText("Won't work as planned")).toBeVisible();
