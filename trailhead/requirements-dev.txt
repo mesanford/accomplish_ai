@@ -3,3 +3,4 @@ google-cloud-firestore
 pytest==8.3.4
 requests==2.32.3
 ruff==0.9.6
+pypdf==6.20.1

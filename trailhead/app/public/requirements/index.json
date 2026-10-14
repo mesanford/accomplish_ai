@@ -1,0 +1,54 @@
+{
+  "fetchedAt": "2026-10-14",
+  "attribution": "Requirements © Scouting America. Shown from scouting.org for troop use.",
+  "awards": {
+    "eagle": {
+      "name": "Eagle",
+      "kind": "rank",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Scouts-BSA-Rank-Requirements.pdf"
+    },
+    "eagle-palm": {
+      "name": "Eagle Palm",
+      "kind": "rank",
+      "count": 3,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Eagle-Palms.pdf"
+    },
+    "first-class": {
+      "name": "First Class",
+      "kind": "rank",
+      "count": 13,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/First-Class.pdf"
+    },
+    "life": {
+      "name": "Life",
+      "kind": "rank",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Life-Rank.pdf"
+    },
+    "scout": {
+      "name": "Scout",
+      "kind": "rank",
+      "count": 7,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Scout-Rank.pdf"
+    },
+    "second-class": {
+      "name": "Second Class",
+      "kind": "rank",
+      "count": 12,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Second-Class-v2.pdf"
+    },
+    "star": {
+      "name": "Star",
+      "kind": "rank",
+      "count": 8,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Star-Rank.pdf"
+    },
+    "tenderfoot": {
+      "name": "Tenderfoot",
+      "kind": "rank",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/wp-content/uploads/2025/12/Tenderfoot-Rank.pdf"
+    }
+  }
+}
