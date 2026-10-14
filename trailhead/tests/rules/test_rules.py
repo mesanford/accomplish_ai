@@ -81,6 +81,42 @@ def test_paths_are_editable_by_family_but_feasibility_is_server_only():
     assert parent.create(f"{T}/paths/other", path) == DENIED
 
 
+def template(**changes) -> dict:
+    base = {
+        "name": "First summer",
+        "description": "Camp badges",
+        "goalAwardId": "first-class",
+        "items": [{"awardId": "swimming", "startOffsetDays": 0, "durationDays": 28}],
+        "createdByMemberId": "m-leader",
+        "updatedAt": NOW,
+        "archived": False,
+    }
+    return {**base, **changes}
+
+
+def test_path_templates_are_leader_written_and_troop_read():
+    path = f"{T}/pathTemplates/tpl1"
+    assert leader.create(path, template()) == OK
+    assert parent.get(path) == OK
+    assert stranger.get(path) == DENIED
+    assert parent.create(f"{T}/pathTemplates/tpl2", template()) == DENIED
+    assert scout1.set(path, template(name="Mine")) == DENIED
+    assert leader.set(path, template(archived=True)) == OK
+
+
+def test_path_templates_check_their_shape_and_cannot_be_deleted():
+    path = f"{T}/pathTemplates/tpl1"
+    assert leader.create(path, template(items="swimming")) == DENIED
+    assert leader.create(path, template(goalAwardId=5)) == DENIED
+    assert leader.create(path, template(name="")) == DENIED
+    assert leader.create(path, template(extra="x")) == DENIED
+    missing = template()
+    del missing["archived"]
+    assert leader.create(path, missing) == DENIED
+    assert leader.create(path, template()) == OK
+    assert leader.delete(path) == DENIED
+
+
 def test_blue_card_flow():
     card = {"scoutId": "s1", "awardId": "archery", "versionId": "v1", "status": "requested", "requestedAt": NOW}
     assert parent.create(f"{T}/blueCards/s1_archery", {**card, "status": "approved"}) == DENIED

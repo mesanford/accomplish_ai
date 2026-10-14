@@ -14,6 +14,7 @@ import { Home } from './pages/Home';
 import { Join } from './pages/Join';
 import { Messages } from './pages/Messages';
 import { PathEditor } from './pages/PathEditor';
+import { PathTemplates } from './pages/PathTemplates';
 import { Roster } from './pages/Roster';
 import { ScoutPage } from './pages/ScoutPage';
 import { SignIn } from './pages/SignIn';
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: 'roster', element: <Roster /> },
       { path: 'scouts/:scoutId', element: <ScoutPage /> },
       { path: 'scouts/:scoutId/path', element: <PathEditor /> },
+      { path: 'templates', element: <PathTemplates /> },
       { path: 'badges', element: <Badges /> },
       { path: 'blue-cards', element: <BlueCards /> },
       { path: 'counseling', element: <Counseling /> },

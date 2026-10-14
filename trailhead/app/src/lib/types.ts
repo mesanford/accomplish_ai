@@ -97,6 +97,24 @@ export interface PathDoc {
   feasibility?: Feasibility;
 }
 
+export interface TemplateItem {
+  awardId: string;
+  /** Days after the day a Scout applies the template. */
+  startOffsetDays: number;
+  durationDays: number;
+}
+
+export interface PathTemplate {
+  id: string;
+  name: string;
+  description: string;
+  goalAwardId: string;
+  items: TemplateItem[];
+  createdByMemberId: string;
+  updatedAt?: Timestamp;
+  archived: boolean;
+}
+
 export interface TroopEvent {
   id: string;
   title: string;
