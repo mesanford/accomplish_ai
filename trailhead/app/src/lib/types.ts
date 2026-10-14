@@ -138,3 +138,24 @@ export interface Message {
   body: string;
   createdAt?: Timestamp;
 }
+
+export interface ScoutbookRow {
+  scoutId: string;
+  scoutName: string;
+  kind: 'rank' | 'merit_badge' | 'requirement';
+  awardId: string;
+  awardName: string;
+  requirement?: string;
+  date: string;
+  signedBy?: string;
+}
+
+export interface ScoutbookReport {
+  id: string;
+  createdAt?: Timestamp;
+  since?: Timestamp | null;
+  until: Timestamp;
+  rows: ScoutbookRow[];
+  rowCount: number;
+  enteredScoutIds: string[];
+}

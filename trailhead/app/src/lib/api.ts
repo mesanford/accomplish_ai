@@ -92,3 +92,18 @@ export interface DraftResult {
 }
 
 export const draftPath = (form: DraftForm) => call<DraftForm, DraftResult>('draft_path', form);
+
+export const createScoutbookReport = (troopId: string) =>
+  call<{ troopId: string }, { created: boolean; reportId?: string; rowCount?: number; message?: string }>(
+    'create_scoutbook_report',
+    { troopId },
+  );
+
+export interface EnteredForm {
+  troopId: string;
+  reportId: string;
+  scoutId: string;
+  entered: boolean;
+}
+
+export const setScoutbookEntered = (form: EnteredForm) => call<EnteredForm, { ok: boolean }>('set_scoutbook_entered', form);
