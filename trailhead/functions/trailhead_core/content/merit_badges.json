@@ -324,6 +324,20 @@
    "officialUrl": "https://www.scouting.org/merit-badges/chess/"
   },
   {
+   "id": "citizenship-in-society",
+   "type": "merit_badge",
+   "name": "Citizenship in Society",
+   "category": "citizenship",
+   "eagleRequired": false,
+   "eagleGroup": null,
+   "difficulty": 3,
+   "typicalTime": "1–2 months",
+   "summary": "Explore what leadership and ethical decision-making mean, discuss how to make others feel welcome and included, connect with a Scout whose background differs from yours, interview someone who has made their community more welcoming, and study an event that changed how society viewed a group of people. Discontinued February 27, 2026: Scouts who already started may finish by December 31, 2026.",
+   "toughestPart": "Finishing all eleven discussion requirements by December 31, 2026",
+   "officialUrl": "https://www.scouting.org/merit-badges/citizenship-in-society/",
+   "finishBy": "2026-12-31"
+  },
+  {
    "id": "citizenship-in-the-community",
    "type": "merit_badge",
    "name": "Citizenship in the Community",

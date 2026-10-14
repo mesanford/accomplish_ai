@@ -35,6 +35,19 @@ def check_badges(items: list[PathItem], scout: ScoutRecord, catalog: Catalog) ->
                         award_id=badge.id,
                     )
                 )
+        if badge.finish_by and item.planned_end and item.planned_end > badge.finish_by:
+            deadline = f"{badge.finish_by:%B} {badge.finish_by.day}, {badge.finish_by.year}"
+            issues.append(
+                Issue(
+                    code="discontinued",
+                    severity=Severity.ERROR,
+                    message=(
+                        f"{badge.name} was discontinued. Scouts who already started it must finish by "
+                        f"{deadline}; the plan finishes {item.planned_end.isoformat()}."
+                    ),
+                    award_id=badge.id,
+                )
+            )
         if badge.prereq_any_of and not _prereq_met(item, badge.prereq_any_of, items, scout):
             names = " or ".join(catalog.badges[p].name for p in badge.prereq_any_of)
             issues.append(

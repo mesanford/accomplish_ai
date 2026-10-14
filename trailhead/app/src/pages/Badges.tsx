@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { RequirementsToggle } from '../components/AwardRequirements';
 import { Notice, PageHeader, Pips } from '../components/ui';
 import { errorMessage } from '../lib/api';
-import { BADGE_VERSION, type Badge, CATEGORY_LABELS, eagleLabel, searchBadges } from '../lib/catalog';
+import { BADGE_VERSION, type Badge, CATEGORY_LABELS, discontinuedLabel, eagleLabel, searchBadges } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useTroop } from '../lib/troop';
 
@@ -94,6 +94,7 @@ export function Badges() {
                 <Pips level={b.difficulty} /> {b.typicalTime} · {CATEGORY_LABELS[b.category]}
               </span>
               {eagleLabel(b) ? <span><span className="pill eagle">{eagleLabel(b)}</span></span> : null}
+              {discontinuedLabel(b) ? <span><span className="pill warn">{discontinuedLabel(b)}</span></span> : null}
             </div>
             <p className="small">{b.summary}</p>
             <p className="small muted">

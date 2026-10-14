@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 
@@ -29,6 +30,7 @@ class Badge:
     count_target: int | None = None
     count_unit: str | None = None
     prereq_any_of: tuple[str, ...] = ()
+    finish_by: date | None = None  # discontinued badges: last day a Scout who started may finish
 
     @property
     def counts_toward_eagle(self) -> bool:
@@ -76,6 +78,7 @@ def _badge(raw: dict) -> Badge:
         count_target=raw.get("countTarget"),
         count_unit=raw.get("countUnit"),
         prereq_any_of=tuple(raw.get("prereqAnyOf", ())),
+        finish_by=date.fromisoformat(raw["finishBy"]) if raw.get("finishBy") else None,
     )
 
 

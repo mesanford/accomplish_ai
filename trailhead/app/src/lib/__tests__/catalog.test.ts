@@ -3,7 +3,7 @@ import { awardName, BADGES, eagleLabel, RANKS, searchBadges, versionFor } from '
 
 describe('catalog', () => {
   it('loads every current merit badge and the ranks in order', () => {
-    expect(BADGES).toHaveLength(142);
+    expect(BADGES).toHaveLength(143);
     expect(RANKS.map((r) => r.id)).toEqual(['scout', 'tenderfoot', 'second-class', 'first-class', 'star', 'life', 'eagle']);
   });
 
@@ -29,6 +29,13 @@ describe('catalog', () => {
   it('searches names, summaries and categories', () => {
     expect(searchBadges('bugle').map((b) => b.id)).toContain('bugling');
     expect(searchBadges('Aquatics').length).toBeGreaterThan(5);
-    expect(searchBadges('')).toHaveLength(142);
+    expect(searchBadges('')).toHaveLength(143);
+  });
+
+  it('labels the discontinued Citizenship in Society badge with its deadline', async () => {
+    const { discontinuedLabel } = await import('../catalog');
+    const society = BADGES.find((b) => b.id === 'citizenship-in-society');
+    expect(society && discontinuedLabel(society)).toBe('Discontinued: finish by Dec 31, 2026');
+    expect(society && eagleLabel(society)).toBeNull();
   });
 });

@@ -4,8 +4,10 @@ from trailhead_core.eagle import eagle_slots_filled, missing_eagle_required
 
 def test_catalog_has_all_current_badges():
     catalog = load_catalog()
-    assert len(catalog.badges) == 142
-    assert "citizenship-in-society" not in catalog.badges
+    assert len(catalog.badges) == 143
+    # Discontinued in 2026 but kept for Scouts finishing it; it no longer fills an Eagle-required slot.
+    society = catalog.badges["citizenship-in-society"]
+    assert society.finish_by is not None and not society.counts_toward_eagle
     assert "american-indian-culture" in catalog.badges
 
 

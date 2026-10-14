@@ -140,3 +140,13 @@ def test_undated_badges_are_planned_not_missing():
     assert "the plan has 13." in short.message
     assert "Missing" not in short.message
     assert "Add finish dates" in short.message
+
+
+def test_discontinued_badge_must_finish_by_its_deadline():
+    late = PathItem(award_id="citizenship-in-society", planned_start=date(2026, 11, 1), planned_end=date(2027, 1, 15))
+    result = check_path(Path(scout_id="s1", goal_award_id="star", items=[late]), first_class_scout(), TODAY)
+    issue = next(i for i in result.issues if i.code == "discontinued")
+    assert "December 31, 2026" in issue.message
+    ok = late.model_copy(update={"planned_end": date(2026, 12, 20)})
+    result = check_path(Path(scout_id="s1", goal_award_id="star", items=[ok]), first_class_scout(), TODAY)
+    assert "discontinued" not in codes(result)

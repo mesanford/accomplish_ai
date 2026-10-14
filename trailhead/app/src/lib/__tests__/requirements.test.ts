@@ -129,3 +129,14 @@ describe('isSignable', () => {
     expect(isSignable({ ...leaf, id: '1', children: [leaf] })).toBe(false);
   });
 });
+
+
+describe('bullet prompts', () => {
+  it('signs the requirement, not its bullet prompts', async () => {
+    const { isSignable } = await import('../requirements');
+    const bullet = { id: '3a-h1', label: '', text: 'How did it make you feel?', resources: [], children: [] };
+    const parent = { id: '3a', label: '(a)', text: 'Think about a time…', resources: [], children: [bullet] };
+    expect(isSignable(bullet)).toBe(false);
+    expect(isSignable(parent)).toBe(true);
+  });
+});

@@ -146,6 +146,12 @@
       "count": 7,
       "sourceUrl": "https://www.scouting.org/merit-badges/chess/"
     },
+    "citizenship-in-society": {
+      "name": "Citizenship in Society",
+      "kind": "merit_badge",
+      "count": 11,
+      "sourceUrl": "https://www.scouting.org/merit-badges/citizenship-in-society/"
+    },
     "citizenship-in-the-community": {
       "name": "Citizenship in the Community",
       "kind": "merit_badge",

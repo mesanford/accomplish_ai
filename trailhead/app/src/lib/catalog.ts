@@ -13,6 +13,8 @@ export interface Badge {
   summary: string;
   toughestPart: string;
   officialUrl: string;
+  /** Discontinued badges: the last day a Scout who already started may finish. */
+  finishBy?: string;
 }
 
 export interface Rank {
@@ -80,4 +82,14 @@ export function searchBadges(query: string, list: Badge[] = BADGES): Badge[] {
     return list;
   }
   return list.filter((b) => `${b.name} ${b.summary} ${CATEGORY_LABELS[b.category]}`.toLowerCase().includes(q));
+}
+
+/** "Discontinued: finish by Dec 31, 2026" for discontinued badges, otherwise null. */
+export function discontinuedLabel(b: Badge): string | null {
+  if (!b.finishBy) {
+    return null;
+  }
+  const [y, m, d] = b.finishBy.split('-').map(Number);
+  const when = new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return `Discontinued: finish by ${when}`;
 }

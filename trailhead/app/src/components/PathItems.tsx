@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { BADGES, badge, eagleLabel } from '../lib/catalog';
+import { BADGES, badge, discontinuedLabel, eagleLabel } from '../lib/catalog';
 import type { PathItemDoc } from '../lib/types';
 import { AwardRequirements } from './AwardRequirements';
 import { Empty, Pips } from './ui';
@@ -61,6 +61,7 @@ export function PathItems({ items, onChange }: Props) {
                         <span className="row small muted" style={{ gap: 6 }}>
                           <Pips level={b?.difficulty ?? 1} /> {b?.typicalTime}
                           {b && eagleLabel(b) ? <span className="pill eagle">{eagleLabel(b)}</span> : null}
+                          {b && discontinuedLabel(b) ? <span className="pill warn">{discontinuedLabel(b)}</span> : null}
                         </span>
                         <span>
                           <button

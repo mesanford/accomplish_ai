@@ -1,0 +1,388 @@
+{
+  "awardId": "citizenship-in-society",
+  "name": "Citizenship in Society",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/citizenship-in-society/",
+  "fetchedAt": "2026-10-14",
+  "note": "\"Discussion\" requirements will be either with a counselor and another individual (in accordance with Safeguarding Youth Guidelines https://www.scouting.org/health-and-safety/gss/gss01/), or with your counselor and a small group (of Scouts), depending upon your preference.",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Before beginning work on other requirements for this merit badge, research the following terms and explain to your counselor how you feel they relate to the Scout Oath and Scout Law: identities, diversity, equality, equity, inclusion, discrimination, ethical leadership, and upstander.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Document and discuss with your counselor what leadership means to you. Share what it means to make ethical decisions.",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Research and share with your counselor an individual you feel has demonstrated positive leadership while having to make an ethical decision. (It could be someone in history, a family member, a teacher, a coach, a counselor, a clergy member, a Scoutmaster, etc.)",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Explain what decision and/or options that leader had, why you believe they chose their final course of action, and the outcome of that action",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Consider ethical decision-making.",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Think about a time you faced an ethical decision.",
+          "resources": [],
+          "children": [
+            {
+              "id": "3a-h1",
+              "label": "",
+              "text": "Discuss the situation, what you did, and how it made you feel.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "3a-h2",
+              "label": "",
+              "text": "Share if you would do anything differently in the future and if so, what that would be.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "List three examples of ethical decisions you might have to make in the future at school, at home, in the workplace, or in your community, and what you would do.",
+          "resources": [],
+          "children": [
+            {
+              "id": "3b-h1",
+              "label": "",
+              "text": "Share how your actions represent alignment with the Scout Oath and Scout Law.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Explain to your counselor how you plan to use what you have learned to assist you when that time comes, and what action(s) you can take to serve as an upstander and help other people at all times.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Repeat the Scout Oath and Scout Law for your counselor. Choose TWO of the following scenarios and discuss what you could do as a Scout to demonstrate leadership and your understanding of what it means to help others who may seem different from you:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Scenario 1: While at camp, a youth accidentally spills food on another camper. The camper who gets spilled on gets angry and says something that is offensive to people with disabilities; their friends laugh. What could/should you do?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Scenario 2: Your friend confides in you that some students in school are making insulting comments about one of their identities, and that those same students created a fake social media account to impersonate your friend online and post messages. What could/should you do?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Scenario 3: A new student in your class was born in another country (or has a parent who was born in another country). Your friends make rude comments to the student about their speech or clothes and tell the student to \"go back home where you came from.\" What could/should you do?",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Document and discuss:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Ideas on what you personally can do to create a welcoming environment in your Scouting unit.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "An experience you had in which you went out of your way to include another Scout(s) and what you did to make them feel included and welcomed.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Things you can do to help ensure all Scouts in your unit are given an opportunity to be heard and included in decision-making and planning.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "With your parent or guardian's approval, connect with another Scout or youth your own age who has an identity that's different from yours. (This means a trait, belief, or characteristic different from you.)",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Share with each other what makes the different aspects of your identity meaningful/special to you",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Share with each other ONE of the following options:",
+          "resources": [],
+          "children": [
+            {
+              "id": "6b(1)",
+              "label": "(1)",
+              "text": "Option 1—A time you felt excluded from a group:",
+              "resources": [],
+              "children": [
+                {
+                  "id": "6b(1)-h1",
+                  "label": "",
+                  "text": "What was the situation?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(1)-h2",
+                  "label": "",
+                  "text": "How did it make you feel?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(1)-h3",
+                  "label": "",
+                  "text": "What did you do?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(1)-h4",
+                  "label": "",
+                  "text": "Did anyone stand up for you?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(1)-h5",
+                  "label": "",
+                  "text": "What did you learn?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(1)-h6",
+                  "label": "",
+                  "text": "Would you do anything differently today?",
+                  "resources": [],
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "6b(2)",
+              "label": "(2)",
+              "text": "Option 2—This imaginary situation: You're attending a new school and don't know anyone there yet. You notice they dress very differently than you do. At lunchtime, you decide you'll try to sit with a group to get to know other students. People at two tables tell you there is someone sitting at the currently empty seat at their table, so you end up eating by yourself. Discuss:",
+              "resources": [],
+              "children": [
+                {
+                  "id": "6b(2)-h1",
+                  "label": "",
+                  "text": "How would that make you feel?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(2)-h2",
+                  "label": "",
+                  "text": "What could the students have done?",
+                  "resources": [],
+                  "children": []
+                },
+                {
+                  "id": "6b(2)-h3",
+                  "label": "",
+                  "text": "If that happened at your school, what would you do?",
+                  "resources": [],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Discuss with your counselor what you learned from the discussion with the other Scout or youth.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Identify and interview an individual in your community, school, and/or Scouting who has had a significant positive impact in promoting diversity, equity, and inclusion. If you feel your community, school, or local Scouting group does not have such an individual, then research a historical figure who meets these criteria, and discuss that person with your counselor.",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Discover what inspired the individual, learn about the challenges they faced, and share what you feel attributed to their success",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Discuss with your counselor what you learned and how you can apply it in your life.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "With the help of your parent or guardian, study an event that had a positive outcome on how society viewed a group of people and made them feel more welcome. Describe to your counselor the event and what you learned.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Document and discuss with your counselor three or more areas in your life outside of Scouting where you feel you can actively provide stronger leadership in:",
+      "resources": [],
+      "children": [
+        {
+          "id": "9a",
+          "label": "(a)",
+          "text": "Making others feel included.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9b",
+          "label": "(b)",
+          "text": "Practicing active listening.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9c",
+          "label": "(c)",
+          "text": "Creating an environment where others feel comfortable to share their ideas and perspectives.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9d",
+          "label": "(d)",
+          "text": "Helping others feel valued for their input and suggestions.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9e",
+          "label": "(e)",
+          "text": "Standing up for others.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Discuss with your counselor how stereotyping people can be harmful, and how stereotypes can lead to prejudice and discrimination. Share ideas you have for challenging assumptions and celebrating individuality.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "11",
+      "label": "11.",
+      "text": "Scouting strives to develop young people to be future leaders in their workplaces, schools, and community environments. As you look at your current involvement in school, your family, Scouting, your job, and/or community, think about how you can have a positive impact in diversity, equity, and inclusion.",
+      "resources": [],
+      "children": [
+        {
+          "id": "11a",
+          "label": "(a)",
+          "text": "Describe your ideas on how you can and will support others with different identities to feel included and heard at your school, workplace, and/or social settings in your community.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "11b",
+          "label": "(b)",
+          "text": "Explain how including diverse thoughts and opinions from others with different identities can:",
+          "resources": [],
+          "children": [
+            {
+              "id": "11b-h1",
+              "label": "",
+              "text": "Make your interactions more positive.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "11b-h2",
+              "label": "",
+              "text": "Help everyone benefit by considering different opinions.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "11c",
+          "label": "(c)",
+          "text": "Give three examples of how limiting diverse input can be harmful.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "11d",
+          "label": "(d)",
+          "text": "Give three examples of how considering diverse opinions can lead to innovation and success.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

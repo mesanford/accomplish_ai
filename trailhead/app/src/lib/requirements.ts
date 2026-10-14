@@ -28,9 +28,20 @@ export interface FlatRequirement extends Requirement {
   depth: number;
 }
 
-/** Requirements with lettered or numbered parts are headings; Scouts complete and sign the parts. */
+/** Unlabeled bullet points under a requirement (ids ending -h1, -h2…) are prompts within it, not requirements. */
+export function isBulletPrompt(req: Requirement): boolean {
+  return /-h\d+$/.test(req.id);
+}
+
+/**
+ * Requirements with lettered or numbered parts are headings; Scouts complete and sign the parts.
+ * A requirement whose only parts are bullet prompts is signed as a whole.
+ */
 export function isSignable(req: Requirement): boolean {
-  return req.children.length === 0;
+  if (isBulletPrompt(req)) {
+    return false;
+  }
+  return req.children.every(isBulletPrompt);
 }
 
 export const REQUIREMENTS_ATTRIBUTION = 'Requirements © Scouting America. Shown from scouting.org for troop use.';
