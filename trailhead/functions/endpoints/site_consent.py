@@ -9,7 +9,7 @@ from firebase_functions import https_fn
 
 from endpoints.site import site_urls
 from endpoints.site_files import delete_public_files
-from fb import db, fail, is_leader, require_access, troop
+from fb import db, fail, is_leader, require_access, require_uid, troop
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -39,6 +39,7 @@ def _take_down_photos(troop_id: str, scout_id: str) -> int:
 @https_fn.on_call()
 def set_media_consent(req: https_fn.CallableRequest) -> dict:
     """Record whether photos showing this Scout may appear on the troop's public website."""
+    require_uid(req)  # sign-in comes before any other check, as in every function
     data = req.data or {}
     troop_id, scout_id, granted = data.get("troopId"), data.get("scoutId"), data.get("granted")
     if not isinstance(granted, bool) or not isinstance(scout_id, str) or not scout_id:
