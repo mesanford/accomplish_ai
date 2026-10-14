@@ -289,6 +289,16 @@ def fixups(award: str, tops: list[Req]) -> None:
         r7.paras = [r7.paras[0].replace("age 1 8", "age 18"), "In preparation for your board of review" + para]
 
 
+# Official changes announced after a PDF was published. Shown as a note; the printed text is left as it is.
+LATER_CHANGES = {
+    "eagle": (
+        "Update: Citizenship in Society was discontinued on February 27, 2026, so Eagle now requires 13 of the "
+        "badges listed in requirement 3 (21 merit badges in total). Scouts who had already started Citizenship in "
+        "Society may finish it and count it for Eagle through December 31, 2026."
+    ),
+}
+
+
 def build(award: str, pages: list[str], fetched: str, source_url: str) -> tuple[dict, list[Req]]:
     tops, note, foots = parse_award(pages)
     fixups(award, tops)
@@ -300,6 +310,7 @@ def build(award: str, pages: list[str], fetched: str, source_url: str) -> tuple[
         "sourceUrl": source_url,
         "fetchedAt": fetched,
     }
+    note = " ".join(part for part in (LATER_CHANGES.get(award), note) if part)
     if note:
         doc["note"] = note
     doc["requirements"] = [t.to_json() for t in tops]
