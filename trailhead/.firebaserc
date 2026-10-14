@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "demo-trailhead",
-    "staging": "REPLACE-with-staging-project-id",
+    "staging": "scout-app-d2282",
     "production": "REPLACE-with-production-project-id"
   }
 }
