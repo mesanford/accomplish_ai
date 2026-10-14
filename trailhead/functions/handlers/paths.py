@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
+from trailhead_core.catalog import is_custom_award
 from trailhead_core.models import Path, PathItem, ScoutRecord
 
 # Fields that change what the engine would say. Anything else (like a title) needs no recheck.
@@ -50,7 +51,9 @@ def scout_from_docs(scout_id: str, record: dict, progress_docs: list[dict]) -> S
     earned = {
         p["awardId"]: _as_date(p.get("completedAt")) or date.min
         for p in progress_docs
-        if p.get("status") == "complete" and p.get("awardType", "merit_badge") == "merit_badge"
+        if p.get("status") == "complete"
+        and p.get("awardType", "merit_badge") == "merit_badge"
+        and not is_custom_award(p["awardId"])
     }
     return ScoutRecord(
         scout_id=scout_id,

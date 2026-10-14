@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { signOutUser, useAuth } from '../lib/auth';
+import { CustomAwardsProvider } from '../lib/customAwardsContext';
 import { TroopProvider, useTroop } from '../lib/troop';
 
 function TroopNav() {
@@ -14,6 +15,7 @@ function TroopNav() {
     [`${base}/events`, 'Events', true],
     [`${base}/badges`, 'Badges', true],
     [`${base}/templates`, 'Path templates', isLeader],
+    [`${base}/awards`, 'Troop awards', isLeader],
     [`${base}/messages`, 'Messages', true],
   ];
   return (
@@ -69,7 +71,9 @@ export function TroopLayout() {
   const { troopId = '' } = useParams();
   return (
     <TroopProvider troopId={troopId}>
-      <Shell troopNav />
+      <CustomAwardsProvider>
+        <Shell troopNav />
+      </CustomAwardsProvider>
     </TroopProvider>
   );
 }

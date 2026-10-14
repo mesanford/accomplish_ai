@@ -143,6 +143,16 @@ service cloud.firestore {
               || (from == 'in_progress' && to == 'complete'));
         }
       }
+      // Troop-made awards and their requirement versions. Only the server writes them, so every edit
+      // is validated and creates a new version instead of changing requirements Scouts already started.
+      match /customAwards/{awardId} {
+        allow read: if isMember(t);
+        allow write: if false;
+        match /versions/{versionId} {
+          allow read: if isMember(t);
+          allow write: if false;
+        }
+      }
       match /counselors/{c} {
         allow read: if isMember(t);
         allow write: if isLeader(t);

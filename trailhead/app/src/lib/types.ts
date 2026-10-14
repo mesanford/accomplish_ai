@@ -56,6 +56,8 @@ export interface Progress {
   status: 'in_progress' | 'complete';
   completedAt?: string;
   requirements?: Record<string, RequirementState>;
+  /** Custom awards: requirement ids a leader should re-check after moving the Scout to a newer version. */
+  needsReview?: string[];
 }
 
 export type CardStatus = 'requested' | 'approved' | 'counselor_assigned' | 'in_progress' | 'complete' | 'cancelled';
@@ -158,4 +160,29 @@ export interface ScoutbookReport {
   rows: ScoutbookRow[];
   rowCount: number;
   enteredScoutIds: string[];
+}
+
+export interface CustomRequirement {
+  id: string;
+  label: string;
+  text: string;
+}
+
+/** A troop-made award. Ids start with "custom-". Requirements live in its versions. */
+export interface CustomAward {
+  id: string;
+  name: string;
+  description?: string;
+  currentVersionId: string;
+  archived?: boolean;
+  createdByMemberId?: string;
+  createdAt?: Timestamp;
+}
+
+export interface CustomAwardVersion {
+  id: string;
+  requirements: CustomRequirement[];
+  note?: string;
+  createdByMemberId?: string;
+  createdAt?: Timestamp;
 }

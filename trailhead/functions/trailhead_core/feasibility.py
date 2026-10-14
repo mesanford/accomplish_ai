@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 
 from .badge_checks import check_badges
-from .catalog import Catalog, load_catalog
+from .catalog import Catalog, is_custom_award, load_catalog
 from .models import FeasibilityResult, Issue, Path, PathStatus, ScoutRecord, Severity
 from .timeline import rank_timeline
 
@@ -21,7 +21,11 @@ def check_path(path: Path, scout: ScoutRecord, today: date, catalog: Catalog | N
             Issue(code="unknown_goal", severity=Severity.ERROR, message=f"Unknown goal: {path.goal_award_id}.")
         )
         return _result(issues, None, [])
-    unknown = [i.award_id for i in path.items if i.award_id not in catalog.badges and i.award_id not in catalog.ranks]
+    unknown = [
+        i.award_id
+        for i in path.items
+        if i.award_id not in catalog.badges and i.award_id not in catalog.ranks and not is_custom_award(i.award_id)
+    ]
     issues += [
         Issue(code="unknown_award", severity=Severity.ERROR, message=f"Unknown award: {a}.", award_id=a)
         for a in unknown

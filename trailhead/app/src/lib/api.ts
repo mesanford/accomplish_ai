@@ -1,7 +1,7 @@
 import { FirebaseError } from 'firebase/app';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
-import type { Feasibility, PathItemDoc } from './types';
+import type { CustomRequirement, Feasibility, PathItemDoc } from './types';
 
 async function call<In, Out>(name: string, data: In): Promise<Out> {
   const result = await httpsCallable<In, Out>(functions, name)(data);
@@ -107,3 +107,35 @@ export interface EnteredForm {
 }
 
 export const setScoutbookEntered = (form: EnteredForm) => call<EnteredForm, { ok: boolean }>('set_scoutbook_entered', form);
+export interface CustomAwardForm {
+  troopId: string;
+  awardId?: string;
+  name: string;
+  description: string;
+  note?: string;
+  /** New rows have no id yet; the server assigns one. */
+  requirements: (Omit<CustomRequirement, 'id'> & { id?: string })[];
+}
+
+export const saveCustomAward = (form: CustomAwardForm) =>
+  call<CustomAwardForm, { awardId: string; versionId: string; newVersion: boolean }>('save_custom_award', form);
+
+export const archiveCustomAward = (form: { troopId: string; awardId: string; archived: boolean }) =>
+  call<typeof form, { archived: boolean }>('archive_custom_award', form);
+
+export interface MoveSummary {
+  fromVersionId: string;
+  toVersionId: string;
+  carried: string[];
+  needsReview: string[];
+  dropped: string[];
+}
+
+export interface MoveForm {
+  troopId: string;
+  scoutId: string;
+  awardId: string;
+  versionId: string;
+}
+
+export const moveToCustomVersion = (form: MoveForm) => call<MoveForm, MoveSummary>('move_to_custom_version', form);
