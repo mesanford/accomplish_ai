@@ -186,3 +186,36 @@ export interface CustomAwardVersion {
   createdByMemberId?: string;
   createdAt?: Timestamp;
 }
+
+/** The published troop website, written by the server and readable by anyone. */
+export interface PublicSite {
+  slug: string;
+  troopName: string;
+  unitNumber: string;
+  council?: string;
+  theme?: { color?: string; logoUrl?: string | null };
+  cover?: { heading?: string; tagline?: string; photoUrl?: string | null };
+  about?: string;
+  meeting?: { schedule?: string; place?: string; address?: string | null; mapUrl?: string | null };
+  faq?: { q: string; a: string }[];
+  contacts?: { name: string; role: string; email?: string | null }[];
+  gallery?: { url: string; caption?: string }[];
+  events?: { title: string; start: string; place?: string | null }[];
+  recruiting?: { open: boolean; intro?: string };
+}
+
+export type LeadStatus = 'new' | 'contacted' | 'invited' | 'joined' | 'not_interested';
+
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  scoutAge: number | null;
+  grade: string | null;
+  message: string;
+  status: LeadStatus;
+  notes: string;
+  invitePath?: string;
+  createdAt?: Timestamp;
+}

@@ -5,6 +5,7 @@ import { AddScoutForm } from '../components/AddScoutForm';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { useNewLeadCount } from '../lib/leads';
 import { useTroop } from '../lib/troop';
 import type { BlueCard } from '../lib/types';
 
@@ -23,6 +24,20 @@ function ScoutCards() {
         </Link>
       ))}
     </div>
+  );
+}
+
+function LeadAlert() {
+  const { troopId } = useTroop();
+  const count = useNewLeadCount();
+  if (count === 0) {
+    return null;
+  }
+  return (
+    <Link className="card link" to={`/t/${troopId}/recruiting`}>
+      <h3>{count === 1 ? '1 family wants to hear about the troop' : `${count} families want to hear about the troop`}</h3>
+      <span className="muted small">They filled in the Join us form on your website. Reply and invite them.</span>
+    </Link>
   );
 }
 
@@ -60,6 +75,7 @@ export function TroopHome() {
   return (
     <>
       <PageHeader eyebrow={`Unit ${troop?.unitNumber ?? ''}`} title={troop?.name ?? 'Troop'} />
+      {isLeader ? <LeadAlert /> : null}
       {isLeader ? <LeaderSummary /> : null}
       {has('counselor') ? (
         <div className="row">

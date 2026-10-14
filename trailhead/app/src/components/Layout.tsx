@@ -1,10 +1,12 @@
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { signOutUser, useAuth } from '../lib/auth';
 import { CustomAwardsProvider } from '../lib/customAwardsContext';
+import { useNewLeadCount } from '../lib/leads';
 import { TroopProvider, useTroop } from '../lib/troop';
 
 function TroopNav() {
   const { troopId, troop, has, isLeader } = useTroop();
+  const newLeads = useNewLeadCount();
   const base = `/t/${troopId}`;
   const links: [string, string, boolean][] = [
     [base, 'Home', true],
@@ -16,6 +18,7 @@ function TroopNav() {
     [`${base}/badges`, 'Badges', true],
     [`${base}/templates`, 'Path templates', isLeader],
     [`${base}/awards`, 'Troop awards', isLeader],
+    [`${base}/recruiting`, newLeads > 0 ? `Recruiting (${newLeads})` : 'Recruiting', isLeader],
     [`${base}/messages`, 'Messages', true],
   ];
   return (

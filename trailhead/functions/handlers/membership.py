@@ -71,7 +71,8 @@ def new_invite(data: dict, scout_ids: set[str], unlinked_scout_ids: set[str], no
     invite = {"role": role, "note": (data.get("note") or "").strip()[:120], "expiresAt": now + timedelta(INVITE_DAYS)}
     if role == "parent":
         chosen = list(dict.fromkeys(data.get("scoutIds") or []))
-        if not chosen or not set(chosen) <= scout_ids:
+        # A family from the website has no Scout on the roster yet; they add their own after joining.
+        if not (data.get("leadId") and not chosen) and (not chosen or not set(chosen) <= scout_ids):
             raise InvalidInput("Choose which Scouts this parent is linked to.")
         invite["scoutIds"] = chosen
     if role == "scout":

@@ -35,6 +35,8 @@ export interface InviteForm {
   note?: string;
   scoutIds?: string[];
   scoutMemberId?: string;
+  /** A website family (see Recruiting): the parent may have no Scouts on the roster yet. */
+  leadId?: string;
 }
 
 export const createInvite = (form: InviteForm) =>
@@ -150,3 +152,16 @@ export interface PriorForm {
 
 export const recordPriorAdvancement = (form: PriorForm) =>
   call<PriorForm, { ranks: number; badges: number; skipped: string[] }>('record_prior_advancement', form);
+
+export interface InterestForm {
+  name: string;
+  email: string;
+  phone: string;
+  scoutAge: string;
+  message: string;
+  /** Hidden field that people leave empty; bots fill it in. */
+  website: string;
+}
+
+export const submitInterest = (slug: string, form: InterestForm) =>
+  call<{ slug: string; form: InterestForm }, { ok: boolean }>('submit_interest', { slug, form });

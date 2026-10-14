@@ -17,7 +17,9 @@ import { Join } from './pages/Join';
 import { Messages } from './pages/Messages';
 import { PathEditor } from './pages/PathEditor';
 import { PathTemplates } from './pages/PathTemplates';
+import { PublicSite } from './pages/PublicSite';
 import { PriorAdvancement } from './pages/PriorAdvancement';
+import { Recruiting } from './pages/Recruiting';
 import { Roster } from './pages/Roster';
 import { ScoutPage } from './pages/ScoutPage';
 import { Scoutbook } from './pages/Scoutbook';
@@ -41,6 +43,8 @@ function RequireAuth({ children }: { children: ReactNode }) {
 const authed = (page: ReactNode) => <RequireAuth>{page}</RequireAuth>;
 
 const router = createBrowserRouter([
+  // The public troop website has its own look and needs no sign-in, so it sits outside the app layout.
+  { path: '/s/:slug', element: <PublicSite /> },
   {
     element: <AppLayout />,
     children: [
@@ -69,6 +73,7 @@ const router = createBrowserRouter([
       { path: 'counseling', element: <Counseling /> },
       { path: 'events', element: <Events /> },
       { path: 'events/:eventId', element: <AttendancePage /> },
+      { path: 'recruiting', element: <Recruiting /> },
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
     ],

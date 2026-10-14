@@ -16,6 +16,7 @@ from endpoints.custom_awards import archive_custom_award, move_to_custom_version
 from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
 from endpoints.messaging import send_message
 from endpoints.prior import record_prior_advancement
+from endpoints.recruiting import submit_interest
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
 
 __all__ = [
@@ -36,4 +37,5 @@ __all__ = [
     "save_custom_award",
     "send_message",
     "set_scoutbook_entered",
+    "submit_interest",
 ]

@@ -187,6 +187,17 @@ service cloud.firestore {
       match /usage/{u} {
         allow read, write: if false;
       }
+      // Families who asked about the troop through its public page. The submit_interest function
+      // creates them; leaders may only change the status and their own notes.
+      match /leads/{id} {
+        allow read: if isLeader(t);
+        allow create, delete: if false;
+        allow update: if isLeader(t)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes'])
+          && request.resource.data.status in ['new', 'contacted', 'invited', 'joined', 'not_interested']
+          && request.resource.data.notes is string
+          && request.resource.data.notes.size() <= 2000;
+      }
       match /exports/{x} {
         allow read: if isLeader(t);
         allow write: if false;

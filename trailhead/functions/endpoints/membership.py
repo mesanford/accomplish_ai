@@ -69,9 +69,20 @@ def create_invite(req: https_fn.CallableRequest) -> dict:
                 raise InvalidInput("Scouts under 13 can't have their own login. Invite a parent instead.")
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
+    lead_ref = None
+    if data.get("leadId"):
+        if invite["role"] != "parent":
+            raise fail(BAD, "A website family can only be invited as a parent.")
+        lead_ref = t.collection("leads").document(str(data["leadId"]))
+        if not lead_ref.get().exists:
+            raise fail(BAD, "That family isn't in your recruiting list.")
+        invite["leadId"] = lead_ref.id
     code = secrets.token_urlsafe(16)
+    path = f"/join/{troop_id}/{code}"
     t.collection("invites").document(code).set({**invite, "createdBy": access["memberId"], "createdAt": now})
-    return {"code": code, "path": f"/join/{troop_id}/{code}", "expiresAt": invite["expiresAt"].isoformat()}
+    if lead_ref is not None:
+        lead_ref.update({"status": "invited", "invitePath": path, "invitedAt": now})
+    return {"code": code, "path": path, "expiresAt": invite["expiresAt"].isoformat()}
 
 
 @https_fn.on_call()
@@ -113,6 +124,8 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
         user = {"troops": {troop_id: _membership(troop_doc, member_id, [role])}}
         tx.set(db().collection("users").document(uid), user, merge=True)
         tx.update(invite_ref, {"usedBy": uid, "usedAt": datetime.now(UTC)})
+        if invite.get("leadId"):
+            tx.update(t.collection("leads").document(invite["leadId"]), {"status": "joined"})
         return member_id
 
     try:
