@@ -1,0 +1,444 @@
+{
+  "awardId": "space-exploration",
+  "name": "Space Exploration",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/space-exploration/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Tell the purpose of space exploration and include the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Historical reasons",
+          "resources": [
+            {
+              "title": "The History of Space Exploration (video)",
+              "url": "https://youtu.be/TL__l9gC1Ss?si=BXoLcRCoNZXPEALe"
+            },
+            {
+              "title": "The History of Space Exploration: A Timeline (video)",
+              "url": "https://youtu.be/3JuKR7jf46o"
+            },
+            {
+              "title": "The History of the Space Race (website)",
+              "url": "https://education.nationalgeographic.org/resource/history-space-exploration/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Immediate goals in terms of specific knowledge",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Benefits related to Earth resources, technology, and new products",
+          "resources": [
+            {
+              "title": "How Space Benefits Earth (video)",
+              "url": "https://youtube.com/shorts/i3D4pCq_lyg?si=S_3HJWJ9TrvcHvry"
+            },
+            {
+              "title": "Space Exploration, Is It Really Worth It? Yes. (video)",
+              "url": "https://youtube.com/shorts/jPuqA136SfA?si=EgcAXSXcMBJmVLw4"
+            },
+            {
+              "title": "10 Surprising Ways Space Exploration Benefits Life on Earth (video)",
+              "url": "https://youtube.com/shorts/_2uSv1C-FDw?si=JCFVs8xAXqeJvozN"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1d",
+          "label": "(d)",
+          "text": "International relations and cooperation",
+          "resources": [
+            {
+              "title": "The Power of International Collaboration in Space Exploration (video)",
+              "url": "https://youtu.be/HvH8fmT9r6U"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Design a collector's card, with a picture on the front and information on the back, about your favorite space pioneer. Share your card and discuss four other space pioneers with your counselor.",
+      "resources": [
+        {
+          "title": "Here's How I Make Custom Trading Cards (video)",
+          "url": "https://youtu.be/PkCCLH_f1us?si=fw5ZdX03GwDyn_eo"
+        },
+        {
+          "title": "How to Make Trading Cards By Hand (video)",
+          "url": "https://youtu.be/vYbeo4iS1Pc"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Build, launch, and recover a model rocket under the supervision of an experienced or qualified person approved by your counselor. Make a second launch to accomplish a specific objective. Identify and explain the following rocket parts: Safety Note: All scouting activities involving rocket launches should follow the Scouting rocket safety guidelines Alternative Requirement: If local laws prohibit launching model rockets, do the following activity: Make a model of a NASA rocket. Explain the functions of the parts. Give the history of the rocket.",
+      "resources": [
+        {
+          "title": "Scouting America Rocket Safety Guidelines (website w/ video)",
+          "url": "https://www.scouting.org/health-and-safety/safety-moments/rocket-safety/"
+        },
+        {
+          "title": "NASA Rocket Parts—Beginner's Guide (website)",
+          "url": "https://www.grc.nasa.gov/www/k-12/VirtualAero/BottleRocket/airplane/bgmr.html"
+        },
+        {
+          "title": "National Association of Rocketry Educational video on model rocketry (website)",
+          "url": "https://www.nar.org/content.aspx?page_id=22&club_id=114127&module_id=669619"
+        },
+        {
+          "title": "(website)",
+          "url": "https://www.scouting.org/health-and-safety/safety-moments/rocket-safety/"
+        }
+      ],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Body tube",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Engine mount",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Fins",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3d",
+          "label": "(d)",
+          "text": "Igniter",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3e",
+          "label": "(e)",
+          "text": "Launch lug",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3f",
+          "label": "(f)",
+          "text": "Nose cone",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3g",
+          "label": "(g)",
+          "text": "Payload",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3h",
+          "label": "(h)",
+          "text": "Recovery system",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3i",
+          "label": "(i)",
+          "text": "Rocket engine",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Discuss and demonstrate each of the following:",
+      "resources": [
+        {
+          "title": "NASA \"Basics of Space Flight\" (website)",
+          "url": "https://science.nasa.gov/learn/basics-of-space-flight/"
+        }
+      ],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "The law of action-reaction",
+          "resources": [
+            {
+              "title": "Newton's Law of Motion (website)",
+              "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "How rocket engines work",
+          "resources": [
+            {
+              "title": "How Rocket Engines Work (website)",
+              "url": "https://science.howstuffworks.com/rocket.htm"
+            },
+            {
+              "title": "Rocket Engines Explained (website)",
+              "url": "https://youtu.be/gz8L1i0ODeA"
+            },
+            {
+              "title": "How Do We Launch Things Into Space (video)",
+              "url": "https://plus.nasa.gov/video/how-do-we-launch-things-into-space/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "How satellites stay in orbit",
+          "resources": [
+            {
+              "title": "How Do Satellites Get & Stay in Orbit? (video)",
+              "url": "https://youtu.be/IC1JQu9xGHQ"
+            },
+            {
+              "title": "How Do Satellites Stay in Orbit Around the Earth (video)",
+              "url": "https://www.youtube.com/shorts/V08iOHrNyMU?t=46"
+            },
+            {
+              "title": "How Orbit Works: Perpetual Free Fall Explained (video)",
+              "url": "https://www.youtube.com/shorts/Ieyn5Xzg_nA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "How satellite pictures of Earth and pictures of other planets are made and transmitted",
+          "resources": [
+            {
+              "title": "What Is The Deep Space Network & How Does It Work? (video)",
+              "url": "https://youtu.be/dZRC6Tf2YEo"
+            },
+            {
+              "title": "How Do We Communicate with Faraway Spacecraft? (video)",
+              "url": "https://youtu.be/6WFj-CKldv4"
+            },
+            {
+              "title": "How do Spacecraft Photograph the Planets & get the Images Back to Earth? (video)",
+              "url": "https://youtu.be/rrD1oe5_zvw"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do TWO of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Discuss with your counselor a robotic space exploration mission and a historic crewed mission. Tell about each mission's major discoveries, its importance, and what was learned from it about the planets, moons, or regions of space explored.",
+          "resources": [
+            {
+              "title": "Voyager (video)",
+              "url": "https://youtu.be/uJpJ79AxrzI?list=PLTiv_XWHnOZq5bv1w9Db2uNJVFiVCkWW5"
+            },
+            {
+              "title": "Putting Man on The Moon in 11 Years | The Apollo Program (video)",
+              "url": "https://youtu.be/jUW_1XlrWmg"
+            },
+            {
+              "title": "NASA SpaceX Crew Dragon Launch (video)",
+              "url": "https://youtu.be/1gmvUPTdoP4"
+            },
+            {
+              "title": "Mars Perseverance Rover (video)",
+              "url": "https://www.youtube.com/watch?v=0-oQRSViZQE&pp=ygUUcGVyc2VydmVyYW5jZSByb3ZlciA%3D"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Using articles from the internet, photographs and text, create a blog, website, or slide show about a current planetary mission or use magazine photographs, news clippings, and articles from the internet to make a scrapbook about a current planetary mission.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Design a robotic mission to another planet, moon, comet, or asteroid that will return samples of its surface to Earth. Name the planet, moon, comet, or asteroid your spacecraft will visit. Show how your design will cope with the conditions of the environments of the planet, moon, comet, or asteroid.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Describe the purpose, operation, and components of ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Space shuttle or any other crewed orbital vehicle, whether government-owned (U.S. or foreign) or commercial",
+          "resources": [
+            {
+              "title": "First Space Shuttle (video)",
+              "url": "https://youtu.be/9zu6gReRV98"
+            },
+            {
+              "title": "How the Space Shuttle Worked (video)",
+              "url": "https://www.youtube.com/watch?v=w4FCkbPykdQ"
+            },
+            {
+              "title": "NASA SpaceX Crew Dragon Launch (video)",
+              "url": "https://youtu.be/1gmvUPTdoP4"
+            },
+            {
+              "title": "Soyuz (video)",
+              "url": "https://youtu.be/_v7YgDum2Sg"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "International Space Station",
+          "resources": [
+            {
+              "title": "What is the International Space Station? (website)",
+              "url": "https://www.nasa.gov/learning-resources/for-kids-and-students/what-is-the-international-space-station-grades-5-8/"
+            },
+            {
+              "title": "How to Spot the International Space Station (ISS) (website)",
+              "url": "https://www.nasa.gov/spot-the-station/"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Design an inhabited base located within our solar system, such as Titan, asteroids, or other locations that humans might want to explore in person. Make drawings or a model of your base. In your design, consider and plan for the following:",
+      "resources": [
+        {
+          "title": "How NASA Will Build a City on the Moon (video)",
+          "url": "https://youtu.be/ATgwz_hS3Qg"
+        }
+      ],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Source of energy",
+          "resources": [
+            {
+              "title": "You Can't Take It All With You (PDF)",
+              "url": "https://www.nasa.gov/wp-content/uploads/2023/05/you-cant-take-it-all-with-you-grades-6-12-students-tagged.pdf"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "How it will be constructed",
+          "resources": [
+            {
+              "title": "How NASA Plans to Build the First Moon Base (video)",
+              "url": "https://youtu.be/ajP0AlYxhug?si=lKaqYRoM8V4LiXSg"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "Life-support system",
+          "resources": [
+            {
+              "title": "Robots Building a Mars Base (video)",
+              "url": "https://youtu.be/2tr6rJrv8hs?si=dm1LYgNqLCH7smpr"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7d",
+          "label": "(d)",
+          "text": "Purpose and function",
+          "resources": [
+            {
+              "title": "How Robots Will Build on Mars (video)",
+              "url": "https://youtu.be/ZbOg_cC1_Eo"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Explore careers related to this merit badge. Research one career to learn about the training and education needed, costs, job prospects, salary, job duties, and career advancement. Your research methods may include—with your parent or guardian's permission—an internet or library search, an interview with a professional in the field, or a visit to a location where people in this career work. Discuss with your counselor both your findings and what about this profession might make it an interesting career.",
+      "resources": [
+        {
+          "title": "Astronaut Requirements (website)",
+          "url": "https://www.nasa.gov/humans-in-space/astronauts/astronaut-requirements/"
+        },
+        {
+          "title": "So You Want to Be an Aerospace Engineer (video)",
+          "url": "https://youtu.be/uTreDAUe7w4"
+        },
+        {
+          "title": "Should I Become an Aerospace Engineer? (video)",
+          "url": "https://youtu.be/2Y2fNtYnsFQ"
+        },
+        {
+          "title": "Becoming an Astrobiologist (website)",
+          "url": "https://astrobiology.nasa.gov/resources/graphic-histories/"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

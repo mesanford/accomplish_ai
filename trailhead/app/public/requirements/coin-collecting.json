@@ -1,0 +1,260 @@
+{
+  "awardId": "coin-collecting",
+  "name": "Coin Collecting",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/coin-collecting/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Understand how coins are made and where the active U.S. Mint facilities are located.",
+      "resources": [
+        {
+          "title": "How Coins Are Made—Inside U.S. Coin Factory (video)",
+          "url": "https://youtu.be/PIwUqiedeRo"
+        },
+        {
+          "title": "US Mint Locations in the US (website)",
+          "url": "https://www.usmint.gov/about/tours-and-locations"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Explain the following terms: obverse, reverse, reeding, clad, type set, and date set.",
+      "resources": [
+        {
+          "title": "Coin Term Glossary (website)",
+          "url": "https://www.usmint.gov/learn/collecting-basics/glossary"
+        },
+        {
+          "title": "Coin Collecting for Beginners; Coin Terminology and Coin Anatomy (video)",
+          "url": "https://youtu.be/-tWMpOVGyOU"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Describe three different ways to store a collection, and the benefits, drawbacks, and cost of each method.",
+      "resources": [
+        {
+          "title": "Coin Storage Tips | How and Where to Keep Your Collection Safe (video)",
+          "url": "https://youtu.be/hlrjZhNcaUk"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do the following and explain to your counselor the design features, designer name, designer initials, and where to find them for each item:",
+      "resources": [
+        {
+          "title": "Coin Collecting 101 for Beginners: What You Need to Know to Start Coin Collecting (video)",
+          "url": "https://youtu.be/cdeGZ8yJyZQ"
+        }
+      ],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Collect a one-cent coin from the year group: 1959-2008 (that is, dated between 1959 and 2008) and a one-cent coin from the year group 2010-present. Explain how and why the one-cent coins issued in 2009 were different from either of the other two year groups.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Collect two five-cent coins, one from each of these year groups: 1959-2003 and 2006-present. Explain how and why the five-cent coins issued in 2004-2005 were different from either of the other two year groups.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "Collect a ten-cent coin from 1965-present.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "Collect a twenty-five-cent coin from 1965-1998, two examples from the 50-State Quarter®/territories Program 1999-2009, two designs from the America the Beautiful® program 2010-2021 and two designs from the American Women Quarter® program (2022-2024). Explain the purpose of each of those programs.",
+          "resources": [
+            {
+              "title": "Collecting State Quarters (video)",
+              "url": "https://youtu.be/aT93UvK8GKs"
+            },
+            {
+              "title": "America the Beautiful Quarters® Program (video)",
+              "url": "https://youtu.be/EhT0DuFrWgY"
+            },
+            {
+              "title": "American Women Quarters® Program (video)",
+              "url": "https://youtu.be/F9vlvwHOQWQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4e",
+          "label": "(e)",
+          "text": "Collect a half dollar coin from 1965-present.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "4f",
+          "label": "(f)",
+          "text": "Collect a dollar coin from each of the following design groups: Susan B. Anthony (1979-1981, 1999); Sacagawea (2000-2008); and U.S. Presidents (2007-2016, 2020).",
+          "resources": [
+            {
+              "title": "Susan B. Anthony Coins (website)",
+              "url": "https://susanbanthonycoin.com/"
+            },
+            {
+              "title": "Sacagawea Coins (website)",
+              "url": "https://sacagawea-coin.com/"
+            },
+            {
+              "title": "Presidential Dollar Coins (website)",
+              "url": "https://www.usmint.gov/learn/coins-and-medals/collectible-coins/presidential-dollar-coins"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Describe and discuss with your counselor the special reverse designs of the quarters, half dollar, and dollar coin struck in 1975-1976 to honor the U.S. Bicentennial.",
+      "resources": [
+        {
+          "title": "Bicentennial Coins & Medals (website)",
+          "url": "https://www.usmint.gov/learn/coins-and-medals/bicentennial-coins-and-medals"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Identify for your counselor the people depicted on current currency: $1, $2, $5, $10, $20, $50, and $100 notes. Explain where United States currency is printed.",
+      "resources": [
+        {
+          "title": "How Money is Made (video)",
+          "url": "https://www.bep.gov/currency/how-money-is-made"
+        },
+        {
+          "title": "Do You Know Who Is on Every US Banknote? (video)",
+          "url": "https://www.youtube.com/shorts/Mdlw67Rt7lA?feature=share"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Collect and identify for your counselor 20 different world coins from at least seven different countries. Identify the country, major design elements, and denomination of each.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Collect and identify for your counselor 20 different world paper money from at least seven different countries. Identify the country, major design elements, and denomination of each.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "Collect and identify for your counselor 20 different tokens and/or medals. Identify the issuer and use of each.",
+          "resources": [
+            {
+              "title": "Exonumia (Tokens and Medals) (website)",
+              "url": "https://stacksbowers.com/coin-resource-center/coin-collectors-guide/exonumia-tokens-medals-guide/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7d",
+          "label": "(d)",
+          "text": "Complete one of the following and report to your counselor what you experienced:",
+          "resources": [],
+          "children": [
+            {
+              "id": "7d(1)",
+              "label": "(1)",
+              "text": "Attend a coin show",
+              "resources": [
+                {
+                  "title": "National and Regional Coin Shows for Collectors (website)",
+                  "url": "https://www.govmint.com/learn/post/best-national-regional-coin-shows-for-collectors"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7d(2)",
+              "label": "(2)",
+              "text": "Attend a coin club meeting",
+              "resources": [
+                {
+                  "title": "Local Coin Club Directory (website)",
+                  "url": "https://www.money.org/club-directory/"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7d(3)",
+              "label": "(3)",
+              "text": "Tour a U.S. Mint facility or museum",
+              "resources": [
+                {
+                  "title": "US Mint Locations in the US (website)",
+                  "url": "https://www.usmint.gov/about/tours-and-locations"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7d(4)",
+              "label": "(4)",
+              "text": "Tour a virtual exhibit (with your parent or guardian's permission) approved by your counselor",
+              "resources": [
+                {
+                  "title": "Virtual Tours (website)",
+                  "url": "https://www.money.org/money-museum/virtual-tours/"
+                },
+                {
+                  "title": "History of Money Exhibit (website)",
+                  "url": "https://www.money.org/money-museum/virtual-exhibits-hom/"
+                },
+                {
+                  "title": "Medal in America Exhibit (website)",
+                  "url": "https://www.money.org/money-museum/virtual-exhibits-mia/"
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,378 @@
+{
+  "awardId": "law",
+  "name": "Law",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/law/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Define law. Tell some of its sources. Describe the functions it serves.",
+      "resources": [
+        {
+          "title": "Sources of Law (website)",
+          "url": "https://guides.law.sc.edu/c.php?g=315539&p=10379907"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Discuss TWO of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Justinian's Code, the Code of Hammurabi, and the Magna Carta",
+          "resources": [
+            {
+              "title": "Code of Justinian (website)",
+              "url": "https://www.britannica.com/topic/Code-of-Justinian"
+            },
+            {
+              "title": "Code of Justinian (video)",
+              "url": "https://youtube.com/shorts/AeQV7RcHku0"
+            },
+            {
+              "title": "Code of Hammurabi (website)",
+              "url": "https://www.history.com/articles/hammurabi"
+            },
+            {
+              "title": "Code of Hammurabi (video)",
+              "url": "https://youtube.com/shorts/b0STcHOptgM"
+            },
+            {
+              "title": "Magna Carta (video)",
+              "url": "https://youtu.be/7xo4tUMdAMw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "The development of the jury system",
+          "resources": [
+            {
+              "title": "Origins of Modern Jury System (website)",
+              "url": "https://www.history.com/articles/trial-by-jury-origins-founding-fathers"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "Two famous trials in history",
+          "resources": [
+            {
+              "title": "Famous Trials That Shaped Legal History (video)",
+              "url": "https://www.youtube.com/shorts/RK7B-m6ZKyw"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Tell what civil law is; tell what criminal law is. Tell the main differences between them. Give examples of each.",
+      "resources": [
+        {
+          "title": "Differences Between Criminal Court and Civil Court (website)",
+          "url": "https://www.lawhelp.org/resource/the-differences-between-criminal-court-and-ci"
+        },
+        {
+          "title": "What Is the Difference Between Civil Cases and Criminal Cases? (video)",
+          "url": "https://youtu.be/Zg5ex8WZUao"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Ask five people (not more than one from your immediate family) about the role of law enforcement officers in our society. Discuss their answers with them. Report your findings to your counselor.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Discuss with your counselor several laws that were passed to protect the consumer and the seller. Describe several organizations that provide help to consumers and sellers.",
+      "resources": [
+        {
+          "title": "Consumer Protection Law Explained (video)",
+          "url": "https://youtu.be/e5vmBmyZbqY"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Attend a session of a civil or criminal court. Write 250 words or more on what you saw.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Plan and conduct a mock trial with your troop, school class, or other group. After the trial is over, discuss it with the group.",
+          "resources": [
+            {
+              "title": "Law Merit Badge Mock Trial (video)",
+              "url": "https://youtu.be/jzGBkWpAEQ8"
+            },
+            {
+              "title": "How Does a Mock Trial Work? (video)",
+              "url": "https://youtu.be/qwS1suoSimc"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Arrange a visit with a lawyer who works for a business, bank, title company, or government agency. Find out his or her duties and responsibilities. Report what you have learned.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Explain the requirements for becoming a lawyer in your state. Describe how judges are selected in your state.",
+      "resources": [
+        {
+          "title": "How To Become a Lawyer (video)",
+          "url": "https://youtu.be/NvlnLPZaSnk"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Make a list of 15 jobs that deal with some aspects of law or legal processes. Tell which you prefer. Why?",
+      "resources": [
+        {
+          "title": "List of Legal Careers (website)",
+          "url": "https://legalcareerpath.com/"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Tell where people can go to obtain the help of a lawyer if they are unable to pay for one. Tell what you can do if you can afford a lawyer but do not know of any in your area.",
+      "resources": [
+        {
+          "title": "Legal Help Program If You Cannot Afford an Attorney (website)",
+          "url": "https://www.lsc.gov/"
+        },
+        {
+          "title": "How To Find An Attorney (website)",
+          "url": "https://www.americanbar.org/groups/public_education/resources/public-information/how-do-i-find-a-lawyer-/"
+        },
+        {
+          "title": "How Do I Find a Lawyer (video)",
+          "url": "https://youtu.be/8V35XuRqr-c"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "11",
+      "label": "11.",
+      "text": "Discuss with your counselor the importance in our society of TWO of the following areas of the law or process:",
+      "resources": [],
+      "children": [
+        {
+          "id": "11a",
+          "label": "(a)",
+          "text": "Administrative",
+          "resources": [
+            {
+              "title": "Understanding Administrative Law (website)",
+              "url": "https://law.pepperdine.edu/blog/posts/understanding-administrative-law.htm"
+            },
+            {
+              "title": "Who Regulates Daily Life? | Administrative Law Explained (video)",
+              "url": "https://youtu.be/qzgtxM4hsCQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11b",
+          "label": "(b)",
+          "text": "Alternative Dispute Resolution",
+          "resources": [
+            {
+              "title": "Alternative Dispute Resolution (website)",
+              "url": "https://www.law.cornell.edu/wex/alternative_dispute_resolution"
+            },
+            {
+              "title": "Alternative Dispute Resolution - An Explanation & Overview (video)",
+              "url": "https://youtu.be/bUmWRqlL6oM"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11c",
+          "label": "(c)",
+          "text": "Bankruptcy",
+          "resources": [
+            {
+              "title": "Bankruptcy Basics (website)",
+              "url": "https://www.uscourts.gov/court-programs/bankruptcy/bankruptcy-basics"
+            },
+            {
+              "title": "Bankruptcy Basic (video)",
+              "url": "https://youtu.be/jobpaNCY-LU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11d",
+          "label": "(d)",
+          "text": "Biotechnology",
+          "resources": [
+            {
+              "title": "What Is Biotechnology Law? (website)",
+              "url": "https://testmaxprep.com/blog/bar-exam/biotechnology-law"
+            },
+            {
+              "title": "Biotech Regulation (video)",
+              "url": "https://youtu.be/ytzwXOaIvqQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11e",
+          "label": "(e)",
+          "text": "Environmental",
+          "resources": [
+            {
+              "title": "Environmental Law: A Short Introduction (video)",
+              "url": "https://youtu.be/nq3racsBxg0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11f",
+          "label": "(f)",
+          "text": "Family",
+          "resources": [
+            {
+              "title": "Family Law (website)",
+              "url": "https://www.metlife.com/stories/legal/what-is-family-law/"
+            },
+            {
+              "title": "Family Law Explained (video)",
+              "url": "https://youtu.be/7gGHZ6OHIXI"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11g",
+          "label": "(g)",
+          "text": "Immigration",
+          "resources": [
+            {
+              "title": "Immigration Law (website)",
+              "url": "https://www.law.georgetown.edu/your-life-career/career-exploration-professional-development/for-jd-students/explore-legal-careers/practice-areas/immigration-law/"
+            },
+            {
+              "title": "Immigration Law Explained (video)",
+              "url": "https://youtu.be/f790amgB6fo"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11h",
+          "label": "(h)",
+          "text": "Information Technology",
+          "resources": [
+            {
+              "title": "Information Technology Law (website)",
+              "url": "https://www.ebsco.com/research-starters/computer-science/information-technology-law-cyberlaw"
+            },
+            {
+              "title": "Cyber Law Explained (video)",
+              "url": "https://youtu.be/asByYA3rSCo"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11i",
+          "label": "(i)",
+          "text": "Intellectual Property (Copyright, Patents, and Trademarks)",
+          "resources": [
+            {
+              "title": "Intellectual Property Law (website)",
+              "url": "https://www.law.georgetown.edu/your-life-career/career-exploration-professional-development/for-jd-students/explore-legal-careers/practice-areas/intellectual-property-law/"
+            },
+            {
+              "title": "Intellectual Property Law Explained (video)",
+              "url": "https://youtu.be/JyafmkfQDiY"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11j",
+          "label": "(j)",
+          "text": "International",
+          "resources": [
+            {
+              "title": "International Law (website)",
+              "url": "https://www.law.cornell.edu/wex/international_law"
+            },
+            {
+              "title": "What Is International Law (video)",
+              "url": "https://youtu.be/jTzKgI68VLc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "11k",
+          "label": "(k)",
+          "text": "Privacy",
+          "resources": [
+            {
+              "title": "Tech Law & Privacy Law (website)",
+              "url": "https://www.law.georgetown.edu/your-life-career/career-exploration-professional-development/for-jd-students/explore-legal-careers/practice-areas/tech-and-privacy-law/"
+            },
+            {
+              "title": "Understanding the Basics of US Privacy Laws (video)",
+              "url": "https://youtu.be/_Wh8iNhNgpc"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -147,6 +147,19 @@
    "officialUrl": "https://www.scouting.org/merit-badges/art/"
   },
   {
+   "id": "artificial-intelligence",
+   "type": "merit_badge",
+   "name": "Artificial Intelligence",
+   "category": "stem",
+   "eagleRequired": false,
+   "eagleGroup": null,
+   "difficulty": 2,
+   "typicalTime": "3–5 weeks",
+   "summary": "Learn what AI and automation are, where each is used, and the ethics of AI including deepfakes. Practice writing clear prompts, then plan an AI project or teach a short lesson, and explore AI careers.",
+   "toughestPart": "The practical project or lesson you design and teach",
+   "officialUrl": "https://www.scouting.org/merit-badges/artificial-intelligence/"
+  },
+  {
    "id": "astronomy",
    "type": "merit_badge",
    "name": "Astronomy",
@@ -402,6 +415,19 @@
    "officialUrl": "https://www.scouting.org/merit-badges/communication/"
   },
   {
+   "id": "competitive-gaming",
+   "type": "merit_badge",
+   "name": "Competitive Gaming",
+   "category": "arts_hobbies",
+   "eagleRequired": false,
+   "eagleGroup": null,
+   "difficulty": 2,
+   "typicalTime": "3–5 weeks",
+   "summary": "Trace the history of video gaming and esports, practice good sportsmanship and online safety, and track your gaming, activity and sleep for two weeks before building a balanced schedule. Compare gaming platforms, serve others, and explore esports careers.",
+   "toughestPart": "Tracking gaming, activity and sleep for two weeks, then following a balanced week",
+   "officialUrl": "https://www.scouting.org/merit-badges/competitive-gaming/"
+  },
+  {
    "id": "composite-materials",
    "type": "merit_badge",
    "name": "Composite Materials",
@@ -439,6 +465,19 @@
    "summary": "Learn how crime affects communities, do a home security check, discuss drugs, gangs and cybercrime, and plan a crime prevention program for your community.",
    "toughestPart": "Developing the community prevention program",
    "officialUrl": "https://www.scouting.org/merit-badges/crime-prevention/"
+  },
+  {
+   "id": "cybersecurity",
+   "type": "merit_badge",
+   "name": "Cybersecurity",
+   "category": "stem",
+   "eagleRequired": false,
+   "eagleGroup": null,
+   "difficulty": 3,
+   "typicalTime": "4–6 weeks",
+   "summary": "Learn digital safety and ethics, common cyber threats, and how to defend computers and networks. Complete hands-on security tasks such as strong passwords and updates, try a cryptography activity, and explore careers.",
+   "toughestPart": "The hands-on system security and cryptography tasks",
+   "officialUrl": "https://www.scouting.org/merit-badges/cybersecurity/"
   },
   {
    "id": "cycling",
@@ -705,7 +744,7 @@
    "typicalTime": "1–2 months",
    "summary": "Learn wildlife habitats and management practices, study invasive species and laws, and complete a habitat improvement project or species survey.",
    "toughestPart": "The habitat or survey project",
-   "officialUrl": "https://www.scouting.org/merit-badges/fish-and-wildlife-management/"
+   "officialUrl": "https://www.scouting.org/merit-badges/fish-wildlife-management/"
   },
   {
    "id": "fishing",
@@ -1803,6 +1842,19 @@
    "officialUrl": "https://www.scouting.org/merit-badges/wilderness-survival/"
   },
   {
+   "id": "wildland-fire-management",
+   "type": "merit_badge",
+   "name": "Wildland Fire Management",
+   "category": "nature",
+   "eagleRequired": false,
+   "eagleGroup": null,
+   "difficulty": 3,
+   "typicalTime": "1–2 months",
+   "summary": "Learn the history, causes and effects of wildfire, how prescribed fire is used, and how fire behaves. Study firefighter safety, suppression tactics and the Incident Command System, demonstrate hand tools, and complete a prevention or readiness project.",
+   "toughestPart": "Demonstrating fireline tools and the Taking Action project",
+   "officialUrl": "https://www.scouting.org/merit-badges/wildland-fire-management/"
+  },
+  {
    "id": "woodcarving",
    "type": "merit_badge",
    "name": "Woodcarving",
@@ -1813,7 +1865,7 @@
    "typicalTime": "2–4 weeks",
    "summary": "Learn carving tools, sharpening and knife safety, and carve several projects in relief and in the round.",
    "toughestPart": "Carving several projects",
-   "officialUrl": "https://www.scouting.org/merit-badges/woodcarving/"
+   "officialUrl": "https://www.scouting.org/merit-badges/wood-carving/"
   },
   {
    "id": "woodwork",

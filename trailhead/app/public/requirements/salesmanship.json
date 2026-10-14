@@ -1,0 +1,272 @@
+{
+  "awardId": "salesmanship",
+  "name": "Salesmanship",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/salesmanship/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain the responsibilities of a salesperson and how a salesperson serves customers and helps stimulate the economy.",
+          "resources": [
+            {
+              "title": "Sales Representative Duties and Responsibilities (video)",
+              "url": "https://youtu.be/bpuVvUZnWxE"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Explain the differences between a business-to-business salesperson and a consumer salesperson.",
+          "resources": [
+            {
+              "title": "Understanding B2C vs B2B for Beginners (video)",
+              "url": "https://youtu.be/XEVR9zIbMiw"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Explain why it is important for a salesperson to do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Research the market to be sure the product or service meets the needs of customers.",
+          "resources": [
+            {
+              "title": "Market Research The Secret Ingredient for Business Success (video)",
+              "url": "https://youtu.be/CqaFYgRGDmo"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Learn all about the product to be sold.",
+          "resources": [
+            {
+              "title": "3 Keys for Successful Selling Know Your Product (video)",
+              "url": "https://youtu.be/FDVR9MoQb44"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "If possible, visit the location where the product is built and learn how it is constructed. If a service is being sold, learn about the benefits of the service to the customer.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2d",
+          "label": "(d)",
+          "text": "Follow up with customers after their purchase to confirm their satisfaction and discuss their concerns about the product.",
+          "resources": [
+            {
+              "title": "Why Is Following Up Important (video)",
+              "url": "https://youtu.be/DMfH_03nR0o"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Write and present a sales plan for a product and a sales territory assigned by your counselor.",
+      "resources": [
+        {
+          "title": "How to Write Your Marketing Plan (video)",
+          "url": "https://youtu.be/pFG_Q7e14AA"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Make a sales presentation of a product assigned by your counselor.",
+      "resources": [
+        {
+          "title": "How to Give Effective Sales Presentations (video)",
+          "url": "https://youtu.be/8eo01Wlkd4o"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do ONE of the following and keep a record (cost sheet). Use the sales techniques you have learned, and share your experience with your counselor:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Help your unit raise funds through sales of merchandise or of tickets to a Scout event.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Sell your services, such as lawn raking or mowing, pet sitting, dog walking, snow shoveling, or car washing, to your neighbors. Follow up after completing the service to determine the customer satisfaction.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Earn money through retail selling.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Do ONE of the following:",
+      "resources": [
+        {
+          "title": "How to Conduct an Interview (video)",
+          "url": "https://youtu.be/kO9WcdINoRk"
+        }
+      ],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Interview a salesperson and learn the following:",
+          "resources": [],
+          "children": [
+            {
+              "id": "6a(1)",
+              "label": "(1)",
+              "text": "What made the person choose sales as a profession?",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "6a(2)",
+              "label": "(2)",
+              "text": "What are the most important things to remember when talking to customers?",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "6a(3)",
+              "label": "(3)",
+              "text": "How is the product sold?",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "6a(4)",
+              "label": "(4)",
+              "text": "Include your own questions.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Interview a retail store owner and learn the following:",
+          "resources": [],
+          "children": [
+            {
+              "id": "6b(1)",
+              "label": "(1)",
+              "text": "How often is the owner approached by a sales representative?",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "6b(2)",
+              "label": "(2)",
+              "text": "What good traits should a sales representative have? What habits should the sales representative avoid?",
+              "resources": [
+                {
+                  "title": "Top 5 Traits of Great Sales People (video)",
+                  "url": "https://youtu.be/OjCnfTSrq1s"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "6b(3)",
+              "label": "(3)",
+              "text": "What does the owner consider when deciding whether to establish an account with a sales representative?",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "6b(4)",
+              "label": "(4)",
+              "text": "Include at least two of your own questions.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Investigate and report on career opportunities in sales, then do the following:",
+      "resources": [
+        {
+          "title": "Is Sales the Perfect Career for YOU? Career Deep Dive (video)",
+          "url": "https://youtu.be/2iQ6clokEPo"
+        }
+      ],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Prepare a written statement of your qualifications and experience. Include relevant classes you have taken in school and merit badges you have earned.",
+          "resources": [
+            {
+              "title": "Easy Guide to Writing a High School Student Resume (video)",
+              "url": "https://youtu.be/-z4v-Dw7n50"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Discuss with your counselor what education, experience, or training you should obtain so you are prepared to serve in a sales position.",
+          "resources": [
+            {
+              "title": "How to become a Highly Paid Salesperson (video)",
+              "url": "https://youtu.be/frRl9nrntpM"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

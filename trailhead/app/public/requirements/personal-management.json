@@ -1,0 +1,628 @@
+{
+  "awardId": "personal-management",
+  "name": "Personal Management",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/personal-management/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Choose an item that your family might want to purchase that is considered a major expense.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Write a plan that tells how your family would save money for the purchase identified in requirement 1(a).",
+          "resources": [
+            {
+              "title": "How To Create a Weekly Savings Plan (video)",
+              "url": "https://youtu.be/WG7j91s-E20&t=37"
+            },
+            {
+              "title": "Why and How To Save, Budgeting and Saving (video)",
+              "url": "https://youtu.be/cnW_HDIBmz4"
+            }
+          ],
+          "children": [
+            {
+              "id": "1b(1)",
+              "label": "(1)",
+              "text": "Discuss the plan with your counselor.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "1b(2)",
+              "label": "(2)",
+              "text": "Discuss the plan with your family.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "1b(3)",
+              "label": "(3)",
+              "text": "Discuss how other family needs must be considered in this plan.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "1c",
+          "label": "(c)",
+          "text": "Develop a written shopping strategy for the purchase identified in requirement 1(a).",
+          "resources": [
+            {
+              "title": "How To Determine Product Quality (website)",
+              "url": "https://awiseconsumer.com/how-to-determine-product-quality-before-buying/"
+            },
+            {
+              "title": "Can You Really Trust Online Reviews? (video)",
+              "url": "https://youtu.be/MfriPbc8hxM"
+            },
+            {
+              "title": "Inside the Consumer Reports Test Lab (video)",
+              "url": "https://youtu.be/nRMp8tVrWk4"
+            }
+          ],
+          "children": [
+            {
+              "id": "1c(1)",
+              "label": "(1)",
+              "text": "Determine the quality of the item or service (using consumer publications or rating systems).",
+              "resources": [
+                {
+                  "title": "How To Determine Product Quality (website)",
+                  "url": "https://awiseconsumer.com/how-to-determine-product-quality-before-buying/"
+                },
+                {
+                  "title": "Can You Really Trust Online Reviews? (video)",
+                  "url": "https://youtu.be/MfriPbc8hxM"
+                },
+                {
+                  "title": "Inside the Consumer Reports Test Lab (video)",
+                  "url": "https://youtu.be/nRMp8tVrWk4"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "1c(2)",
+              "label": "(2)",
+              "text": "Comparison shop for the item. Find out where you can buy the item for the best price. (Provide prices from at least two different price sources.) Call around; study ads. Look for a sale or discount coupon. Consider alternatives. Can you buy the item used? Should you wait for a sale?",
+              "resources": [
+                {
+                  "title": "Get the Best Value Every Time You Shop (video)",
+                  "url": "https://youtu.be/hFvwIjFfo_s"
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Prepare a budget reflecting your expected income (allowance, gifts, wages), expenses, and savings for a period of 13 consecutive weeks.",
+          "resources": [
+            {
+              "title": "How To Create a Budget for Beginners (video)",
+              "url": "https://youtu.be/-cOjBanoNP0"
+            },
+            {
+              "title": "Budgeting Basics (video)",
+              "url": "https://youtu.be/vUMV-XUdpuM"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Compare expected income with expected expenses.",
+          "resources": [],
+          "children": [
+            {
+              "id": "2b(1)",
+              "label": "(1)",
+              "text": "If expenses exceed budget income, determine steps to balance your budget.",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "2b(2)",
+              "label": "(2)",
+              "text": "If income exceeds budget expenses, state how you would use the excess money (new goal, savings).",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "Track and record your actual income, expenses, and savings for 13 consecutive weeks (the same 13-week period for which you budgeted). (You may use the forms provided in the Personal Management merit badge pamphlet, devise your own, or use a computer-generated version.) When complete, present the records showing the results to your counselor.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2d",
+          "label": "(d)",
+          "text": "Compare your budget with your actual income and expenses to understand when your budget worked and when it did not work. With your counselor, discuss what you might do differently the next time.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Discuss with your counselor FIVE of the following concepts:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "The emotions you feel when you receive money.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Your understanding of how the amount of money you have with you affects your spending habits.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Your thoughts when you buy something new and your thoughts about the same item three months later. Explain the concept of buyer's remorse.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3d",
+          "label": "(d)",
+          "text": "How hunger affects you when shopping for food items (snacks, groceries).",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3e",
+          "label": "(e)",
+          "text": "Your experience of an item you have purchased after seeing or hearing advertisements for it. Did the item work as well as advertised?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "3f",
+          "label": "(f)",
+          "text": "Your understanding of what happens when you put money into a savings account.",
+          "resources": [
+            {
+              "title": "How To Choose the Right Savings Account (video)",
+              "url": "https://youtu.be/sCiE4X_y1a0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3g",
+          "label": "(g)",
+          "text": "Charitable giving. Explain its purpose and your thoughts about it.",
+          "resources": [
+            {
+              "title": "What Is a Charity? (video)",
+              "url": "https://youtu.be/PpEOk2botAo"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3h",
+          "label": "(h)",
+          "text": "What you can do to better manage your money.",
+          "resources": [
+            {
+              "title": "Manage Money Effectively as a Teen (video)",
+              "url": "https://youtu.be/SgQPzcb8Q-A"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Explain the following to your counselor:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "The differences between saving and investing, including reasons for using one over the other.",
+          "resources": [
+            {
+              "title": "Why Invest? (website)",
+              "url": "https://www.wellsfargo.com/goals-investing/saving-vs-investing/"
+            },
+            {
+              "title": "Saving vs Investing (video)",
+              "url": "https://youtu.be/9tr_HxbAaU4"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "The concepts of return on investment and risk and how they are related.",
+          "resources": [
+            {
+              "title": "Risk and Return (video)",
+              "url": "https://youtu.be/acbV1-fErSI"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "The concepts of simple interest and compound interest.",
+          "resources": [
+            {
+              "title": "Simple vs Compound Interest (video)",
+              "url": "https://youtu.be/lMVwYoiiV0w"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "The concept of diversification in investing.",
+          "resources": [
+            {
+              "title": "What Is Diversification? (video)",
+              "url": "https://youtu.be/MZchH0Ddzn8"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4e",
+          "label": "(e)",
+          "text": "Why it is important to save and invest for retirement.",
+          "resources": [
+            {
+              "title": "Why Plan for Retirement? (video)",
+              "url": "https://youtu.be/J9lTE95LPaA"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Explain to your counselor what the following investments are and how each works:",
+      "resources": [
+        {
+          "title": "Every Type of Investment Explained (video)",
+          "url": "https://youtu.be/i-To1GILOhA"
+        }
+      ],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Common stocks",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Mutual funds",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Life insurance",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5d",
+          "label": "(d)",
+          "text": "A certificate of deposit (CD)",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5e",
+          "label": "(e)",
+          "text": "A savings account",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "5f",
+          "label": "(f)",
+          "text": "A U.S. savings bond",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Explain to your counselor why people might purchase the following types of insurance and how they work:",
+      "resources": [
+        {
+          "title": "Different Types of Insurance and Why You Need Them (website)",
+          "url": "https://www.allstate.com/resources/types-of-insurance"
+        }
+      ],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Automobile",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Health",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6c",
+          "label": "(c)",
+          "text": "Homeowner's/renter's",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "6d",
+          "label": "(d)",
+          "text": "Whole life and term life",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Explain to your counselor the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "What a loan is, what interest is, and how the annual percentage rate (APR) measures the true cost of a loan",
+          "resources": [
+            {
+              "title": "What Is the Difference Between Interest and APR? (website)",
+              "url": "https://www.investopedia.com/ask/answers/100314/what-difference-between-interest-rate-and-annual-percentage-rate-apr.asp"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "The different ways to borrow money",
+          "resources": [
+            {
+              "title": "Borrowing Money (video)",
+              "url": "https://www.prageru.com/videos/borrowing"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7c",
+          "label": "(c)",
+          "text": "The differences between a charge card, debit card, and credit card, including the costs and pitfalls of using these financial tools, and why it is unwise to make only the minimum payment on your credit card",
+          "resources": [
+            {
+              "title": "Credit Cards vs Debit Cards (video)",
+              "url": "https://youtu.be/mllbYh0DFMc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7d",
+          "label": "(d)",
+          "text": "Credit reports and how personal responsibility can affect your credit report",
+          "resources": [
+            {
+              "title": "Your Credit Score Explained (video)",
+              "url": "https://www.britannica.com/video/explanation-credit-scores/-279958"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "7e",
+          "label": "(e)",
+          "text": "Ways to reduce or eliminate debt.",
+          "resources": [
+            {
+              "title": "Easy Steps to Eliminate Debt (video)",
+              "url": "https://youtu.be/CHiOBzqcMV8"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Demonstrate to your counselor your understanding of time management by doing the following:",
+      "resources": [
+        {
+          "title": "Time Management for Teens (video)",
+          "url": "https://youtu.be/CBEQxJK9Y6Q"
+        }
+      ],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "Write a to-do list of tasks or activities, such as homework assignments, chores, and personal projects, that must be done in the coming week. List these in order of importance to you.",
+          "resources": [
+            {
+              "title": "Work Smart: How To Write a To-Do List (video)",
+              "url": "https://youtu.be/fjjKuoeYP5A"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Make a seven-day calendar or schedule. Put in your set activities, such as school classes, sports practices or games, jobs or chores, and/or Scout or place of worship or club meetings, then plan when you will do all the tasks from your to-do list between your set activities.",
+          "resources": [
+            {
+              "title": "Master Time Management Tips for Teens (video)",
+              "url": "https://youtu.be/OMcy0PD1jQc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8c",
+          "label": "(c)",
+          "text": "Follow the one-week schedule you planned. Keep a daily diary or journal during each of the seven days of this week's activities, writing down when you completed each of the tasks on your to-do list compared to when you scheduled them.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "8d",
+          "label": "(d)",
+          "text": "With your counselor, review your to-do list, one-week schedule, and diary/journal to understand when your schedule worked and when it did not work. Discuss what you might do differently the next time.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Prepare a written project plan demonstrating the steps below, including the desired outcome. This is a project on paper, not a real-life project. Examples could include planning a camping trip, developing a community service project or a school or religious event, or creating an annual patrol plan with additional activities not already included in the troop annual plan. Discuss your completed project plan with your counselor.",
+      "resources": [
+        {
+          "title": "How To Create a Project Plan (video)",
+          "url": "https://youtu.be/ntQ1Mx3GZwk"
+        }
+      ],
+      "children": [
+        {
+          "id": "9a",
+          "label": "(a)",
+          "text": "Define the project. What is your goal?",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9b",
+          "label": "(b)",
+          "text": "Develop a timeline for your project that shows the steps you must take from beginning to completion.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9c",
+          "label": "(c)",
+          "text": "Describe your project.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9d",
+          "label": "(d)",
+          "text": "Develop a list of resources. Identify how these resources will help you achieve your goal.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9e",
+          "label": "(e)",
+          "text": "Develop a budget for your project.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "10a",
+          "label": "(a)",
+          "text": "Choose a career you might want to enter after high school or college graduation. Discuss with your counselor the needed qualifications, education, skills, and experience.",
+          "resources": [
+            {
+              "title": "Explore Career Possibilities (website)",
+              "url": "https://bigfuture.collegeboard.org/explore-careers"
+            },
+            {
+              "title": "Career Search: Pursuing Passion (video)",
+              "url": "https://youtu.be/dMe69L-v4pI"
+            },
+            {
+              "title": "The Cost of Education Careers and Education (video)",
+              "url": "https://youtu.be/9TtKUydRfDM"
+            },
+            {
+              "title": "10 Ways To Pay for College (website)",
+              "url": "https://career.cornell.edu/blog/2025/03/05/10-ways-to-pay-for-college-scholarships-grants-and-more/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "10b",
+          "label": "(b)",
+          "text": "Explain to your counselor what the associated costs might be to pursue this career, such as tuition, school or training supplies, and room and board. Explain how you could prepare for these costs and how you might make up for any shortfall.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

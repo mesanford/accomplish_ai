@@ -1,0 +1,180 @@
+{
+  "awardId": "scholarship",
+  "name": "Scholarship",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/scholarship/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Show that you have had an average grade of B or higher (80% or higher) for one term or semester.",
+          "resources": [
+            {
+              "title": "How to Do Better in School (video)",
+              "url": "https://www.youtube.com/shorts/pZMXqaY-bYc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Show that for one term or semester you have improved your school grades over the previous period.",
+          "resources": [
+            {
+              "title": "How to Study (video)",
+              "url": "https://www.youtube.com/watch?v=TjPFZaMe2yw"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do TWO of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Make a list of educational places located where you live (other than schools). Visit one, and report on how you used the place for self-education.",
+          "resources": [
+            {
+              "title": "Why Do We Have Museums (video)",
+              "url": "https://www.youtube.com/watch?v=MHo928fd2wE"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "With your counselor's and your parent or guardian's approval, interview two professionals (other than teachers or other professionals at your school) with established careers. Find out where they were educated, what training they received, and how their education and training have helped prepare them for the career they have chosen. Find out how they continue to educate themselves. Discuss what you find out with your counselor.",
+          "resources": [
+            {
+              "title": "How to Have a Great Coffee Chat (video)",
+              "url": "https://youtu.be/RaSoVVF18n8?si=wbVez7VytPC0E0es"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "Using a daily planner, show your counselor how you keep track of assignments and activities, and discuss how you manage your time.",
+          "resources": [
+            {
+              "title": "How to Use Your Planner: Time-Management Tricks for Better Grades (video)",
+              "url": "https://youtu.be/9z35XeolxMU?si=haH_-yZvpcaTXy05"
+            },
+            {
+              "title": "My Daily Planner (video)",
+              "url": "https://www.youtube.com/shorts/ybb3h4re8kU"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2d",
+          "label": "(d)",
+          "text": "Discuss the advantages and disadvantages of the different methods of research available to you for school assignments, such as the library, books and periodicals, and the internet.",
+          "resources": [
+            {
+              "title": "The Internet vs the Library (video)",
+              "url": "https://youtu.be/RH3Z9BZryd8"
+            },
+            {
+              "title": "How To Use AI in School Without Cheating (video)",
+              "url": "https://youtu.be/1iVcFKAFu2E"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Get a note from the principal of your school (or another school official named by the principal) that states that during the past year your behavior, leadership, and service have been satisfactory.Note: If you are home-schooled or your school environment does not include a principal, you may obtain a note from a counterpart such as your parent or guardian.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Show that you have taken part in an extracurricular school activity, and discuss with your counselor the benefits of participation and what you learned about the importance of teamwork.",
+          "resources": [
+            {
+              "title": "What Extracurriculars Should You Do? (video)",
+              "url": "https://www.youtube.com/watch?v=_YrIAc3YL3E"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Discuss your participation in a school project during the past semester where you were a part of a team. Tell about the positive contributions you made to the team and the project.",
+          "resources": [
+            {
+              "title": "How to Be a Great Team Player (video)",
+              "url": "https://www.youtube.com/watch?v=GZnvHzivMkQ"
+            },
+            {
+              "title": "How to Be a Team Player To Succeed (video)",
+              "url": "https://www.youtube.com/watch?v=zdAfzLry85I"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Write a report of 250 to 300 words about how the education you receive in school will be of value to you in the future and how you will continue to educate yourself in the future.",
+          "resources": [
+            {
+              "title": "Personal Narrative (video)",
+              "url": "https://www.youtube.com/watch?v=UK4hir5lVXg"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Write a report of 250 to 300 words about two careers that interest you and how specific classes and good scholarship in general will help you achieve your career goals.",
+          "resources": [
+            {
+              "title": "Informative Writing (video)",
+              "url": "https://www.youtube.com/watch?v=o22BiMAMKPA"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

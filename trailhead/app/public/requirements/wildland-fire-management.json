@@ -1,0 +1,596 @@
+{
+  "awardId": "wildland-fire-management",
+  "name": "Wildland Fire Management",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/wildland-fire-management/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "History of Wildland Fire. Research and discuss with your counselor the history of wildland fire, its suppression, prevention, and management in the United States.",
+      "resources": [
+        {
+          "title": "A History of Wildfire Prevention (video)",
+          "url": "https://youtu.be/ZnabcDAQ1DU"
+        },
+        {
+          "title": "Wildfire Education (website)",
+          "url": "https://www.nifc.gov/fire-information/fire-prevention-education-mitigation/wildfire-education"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Harms of Wildfire. Research the harm caused by wildfire in the United States, including annual acres burned for the past three years. Discuss with your counselor. Include the negative impacts that wildfire has on the following:",
+      "resources": [
+        {
+          "title": "A Better Way To Think About Wildland Fires (video)",
+          "url": "https://youtu.be/HeOl2N6iLy0"
+        },
+        {
+          "title": "Effects of Wildfires and Forest Fires (video)",
+          "url": "https://youtu.be/bmX4kxdSi98"
+        }
+      ],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Commercial forest products",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Fish and wildlife habitat",
+          "resources": [
+            {
+              "title": "The Impact of Wildfires on Wildlife (video)",
+              "url": "https://youtu.be/P5EoR12vHcQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2c",
+          "label": "(c)",
+          "text": "Soil and water",
+          "resources": [
+            {
+              "title": "How Wildfires Affect Water Supply (video)",
+              "url": "https://youtu.be/RV_OZ430GAs"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2d",
+          "label": "(d)",
+          "text": "Recreation and public use",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2e",
+          "label": "(e)",
+          "text": "Homes, communities, and human resources",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2f",
+          "label": "(f)",
+          "text": "Air quality and public health",
+          "resources": [
+            {
+              "title": "How Are Wildfires Making Us Sick? (video)",
+              "url": "https://youtu.be/8mQllQnJrhg"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Fire as a Management Tool. Discuss with your counselor how prescribed fire is used to accomplish the following:",
+      "resources": [
+        {
+          "title": "Misconceptions and Benefits of Fire (video)",
+          "url": "https://youtu.be/vFPIoH4ML2U"
+        }
+      ],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Fuel reduction",
+          "resources": [
+            {
+              "title": "Good Fire: Prescribed Burning (video)",
+              "url": "https://youtu.be/E542gY7uR0s"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Fish and wildlife habitat enhancement",
+          "resources": [
+            {
+              "title": "Wildlife That Depends on Fire To Survive (video)",
+              "url": "https://youtu.be/Q8mD-4rexo0"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3c",
+          "label": "(c)",
+          "text": "Ecosystem restoration",
+          "resources": [
+            {
+              "title": "How Does Fire Affect Wildlife? (video)",
+              "url": "https://youtu.be/iKRYDp6VpyA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3d",
+          "label": "(d)",
+          "text": "Forest regeneration",
+          "resources": [
+            {
+              "title": "Fire Effects in the Forest (video)",
+              "url": "https://youtu.be/BxKh86ukZMc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3e",
+          "label": "(e)",
+          "text": "Insect and disease control",
+          "resources": [
+            {
+              "title": "Insects, Disease, Drought, and Fire (video)",
+              "url": "https://youtu.be/e_cOMAioE54"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Wildfire Prevention and Mitigation. Discuss the following with your counselor:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Wildfire Prevention:",
+          "resources": [
+            {
+              "title": "Fire Is Everyone's Fight (website)",
+              "url": "https://www.usfa.fema.gov/prevention/fief/"
+            }
+          ],
+          "children": [
+            {
+              "id": "4a(1)",
+              "label": "(1)",
+              "text": "The main causes of wildfire in the United States",
+              "resources": [
+                {
+                  "title": "Wildfires 101 (video)",
+                  "url": "https://youtu.be/5hghT1W33cY"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "4a(2)",
+              "label": "(2)",
+              "text": "How you can prevent human caused wildfires in your community and on outings with your unit.",
+              "resources": [
+                {
+                  "title": "Wildfire Prevention With Smokey the Bear (video)",
+                  "url": "https://youtu.be/tUTyDGlJt00"
+                }
+              ],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Wildfire Mitigation:",
+          "resources": [],
+          "children": [
+            {
+              "id": "4b(1)",
+              "label": "(1)",
+              "text": "Wildland-Urban Interface",
+              "resources": [
+                {
+                  "title": "Understanding the Wildland Urban Interface (website)",
+                  "url": "https://storymaps.arcgis.com/stories/6b2050a0ded0498c863ce30d73460c9e"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "4b(2)",
+              "label": "(2)",
+              "text": "Defensible space and how homes and communities in the wildland-urban interface can be protected from wildfire",
+              "resources": [
+                {
+                  "title": "Separating Your Home From Wildfire—the Zones of Defensible Space (video)",
+                  "url": "https://youtu.be/isf6COwOXPw"
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Fire Behavior. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "5a",
+          "label": "(a)",
+          "text": "Discuss with your counselor how the fire environment affects wildland fire behavior. Include examples of the influences of weather, topography, and fuel.",
+          "resources": [
+            {
+              "title": "The Relationship Between Relative Humidity, Fuel Moisture, and Fire Behavior (video)",
+              "url": "https://youtu.be/FUdPfKL8lXA"
+            },
+            {
+              "title": "Wildland Fire Behavior (website)",
+              "url": "https://www.nps.gov/articles/wildland-fire-behavior.htm"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5b",
+          "label": "(b)",
+          "text": "Explain how a wildfire can be suppressed by removing heat, fuel, or oxygen.",
+          "resources": [
+            {
+              "title": "Fire Triangle Explained (video)",
+              "url": "https://youtu.be/8WPk15XqN2E"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "5c",
+          "label": "(c)",
+          "text": "Draw a diagram to illustrate the parts of a wildfire.",
+          "resources": [
+            {
+              "title": "How To Describe the Behavior and Parts of a Wildfire (video)",
+              "url": "https://youtu.be/b1KvTswZYNA"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Wildland Firefighter Safety. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "6a",
+          "label": "(a)",
+          "text": "Discuss with your counselor the personal protective equipment used by wildland firefighters and its use.",
+          "resources": [
+            {
+              "title": "Dressed for Fire (video)",
+              "url": "https://youtu.be/a0NtIJMDUD4"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "6b",
+          "label": "(b)",
+          "text": "Discuss the following with your counselor, including why each is an important consideration for maintaining personal safety and situational awareness during wildland fire suppression activities:",
+          "resources": [],
+          "children": [
+            {
+              "id": "6b(1)",
+              "label": "(1)",
+              "text": "10 Standard Firefighting Orders",
+              "resources": [
+                {
+                  "title": "Standard Firefighting Orders (video)",
+                  "url": "https://youtu.be/9WhKKSGl9K0"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "6b(2)",
+              "label": "(2)",
+              "text": "18 Watch Out Situations",
+              "resources": [
+                {
+                  "title": "The Watchout Situations (video)",
+                  "url": "https://youtu.be/GIMeOZ_d1ko"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "6b(3)",
+              "label": "(3)",
+              "text": "Lookouts, Communication, Escape Routes, and Safety Zones (LCES)",
+              "resources": [
+                {
+                  "title": "LCES (video)",
+                  "url": "https://youtu.be/46kiCPcfUyg"
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Wildfire Suppression Tactics. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "7a",
+          "label": "(a)",
+          "text": "Alone or with a small team, using the diagram you created in Requirement 5(c) or a map of a wildfire, and tokens to represent firefighting resources, demonstrate the following wildland fire suppression tactics. Explain under which conditions each tactic would be used:",
+          "resources": [
+            {
+              "title": "How We Fight Wildfires (video)",
+              "url": "https://youtu.be/9EzcA3KvEsY"
+            }
+          ],
+          "children": [
+            {
+              "id": "7a(1)",
+              "label": "(1)",
+              "text": "Direct attack",
+              "resources": [
+                {
+                  "title": "Direct and Indirect Attack Strategies on Wildfires (video)",
+                  "url": "https://youtu.be/HDmGToDhgV4"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7a(2)",
+              "label": "(2)",
+              "text": "Indirect attack",
+              "resources": [],
+              "children": []
+            },
+            {
+              "id": "7a(3)",
+              "label": "(3)",
+              "text": "Minimum impact suppression tactics",
+              "resources": [
+                {
+                  "title": "Evolution of Fire Management and the Role of Knowledge (video)",
+                  "url": "https://youtu.be/W8GHIZAaUaQ"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7a(4)",
+              "label": "(4)",
+              "text": "Use of hand crews, machinery, and aircraft",
+              "resources": [
+                {
+                  "title": "California Battles Fires With \"Fire Plane\" (video)",
+                  "url": "https://youtu.be/Dw0wY6SgG2w"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7a(5)",
+              "label": "(5)",
+              "text": "Mop-up",
+              "resources": [
+                {
+                  "title": "Mop Up Operations on the Mosquito Fire (video)",
+                  "url": "https://youtu.be/DNFv_cr8r7I"
+                }
+              ],
+              "children": []
+            },
+            {
+              "id": "7a(6)",
+              "label": "(6)",
+              "text": "Repair and restoration",
+              "resources": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "7b",
+          "label": "(b)",
+          "text": "Draw a diagram of the Incident Command System. Alone or with your team, explain the responsibilities of the Command and General Staff positions on a wildfire incident.",
+          "resources": [
+            {
+              "title": "ICS Organizational Structure and Elements (PDF)",
+              "url": "https://training.fema.gov/emiweb/is/icsresource/assets/ics%20organizational%20structure%20and%20elements.pdf"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "label": "8.",
+      "text": "Wildfire Suppression Tools. Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "8a",
+          "label": "(a)",
+          "text": "Demonstrate the use of three hand tools unique to wildland fire suppression. Use one of these tools to demonstrate how to construct a fireline.",
+          "resources": [
+            {
+              "title": "Wildland Firefighting Tools (video)",
+              "url": "https://youtu.be/SHXLUEfHlxw"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "8b",
+          "label": "(b)",
+          "text": "Discuss seven other tools, equipment, or apparatus that are unique to wildland fire suppression and explain how these resources are used.",
+          "resources": [
+            {
+              "title": "Wildland Fire Engines (website w/ video)",
+              "url": "https://www.nps.gov/articles/wildland-fire-engines.htm"
+            },
+            {
+              "title": "Aircraft (website)",
+              "url": "https://www.nifc.gov/resources/aircraft"
+            },
+            {
+              "title": "Firefighting Equipment (website)",
+              "url": "https://www.nifc.gov/resources/equipment"
+            },
+            {
+              "title": "Dozers (website)",
+              "url": "https://www.nifc.gov/resources/equipment/dozers"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Taking Action. Do ONE of the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "9a",
+          "label": "(a)",
+          "text": "Develop a fire readiness plan for a wildland area with which you are familiar. The plan should include a map showing available resources, water supplies, natural and manmade barriers, and access. The plan should discuss fuel loads, available fire apparatus, structure protection needs, values at risk, medical and evacuation considerations, and potential fire suppression tactics.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9b",
+          "label": "(b)",
+          "text": "Visit with a state or federal forestry official or your local fire warden. Discuss the causes of and types of wildland fire that occur in your area. Discuss the prime fire season(s) in your area. Identify the agency responsible for wildland fire suppression in your area. Discuss what you learned with your counselor.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9c",
+          "label": "(c)",
+          "text": "Conduct a Firewise assessment of a home or a building in the wildland-urban interface, which could include a Scout camp building or facility. Identify potential risks and fire hazards. With your counselor's approval, complete a project to reduce the wildfire risk and increase the preparedness of the building. Write a brief report about what you did and learned from the assessment and project.",
+          "resources": [
+            {
+              "title": "Firewise USA® (website)",
+              "url": "https://www.nfpa.org/en/education-and-research/wildfire/preparing-homes-for-wildfire"
+            },
+            {
+              "title": "Fire Home Assessment (PDF)",
+              "url": "https://dem.ri.gov/sites/g/files/xkgbur861/files/programs/bnatres/forest/pdf/fire/fire-home-assessment-form.pdf"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "9d",
+          "label": "(d)",
+          "text": "Meet with a Fire Prevention Specialist or a local fire official to learn about fire prevention efforts in your community. From what you learned, prepare a fire prevention message (skit, video, or billboard concept) and share with your counselor and troop (or other group approved by your counselor).",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "9e",
+          "label": "(e)",
+          "text": "Meet with a meteorologist or someone familiar with fire weather and discuss the fire weather concerns and typical fire seasons that exist in your area. Discuss the conditions that lead to a Fire Weather Watch or a Red Flag Warning. Discuss what you learned with your counselor.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "label": "10.",
+      "text": "Apply Your Learning to a Real Event. Research an historic catastrophic wildland fire incident that occurred in the United States. Discuss with your counselor and/or your troop or a group approved by your counselor the conditions that led to the incident, how the incident was managed, and how the incident could have been prevented. Explain what lessons were learned and how this incident affected future fire suppression policy or suppression tactics.",
+      "resources": [
+        {
+          "title": "The Tillamook Burn Forest Fire of August, 1933 (video)",
+          "url": "https://youtu.be/LatzdMh49ps"
+        },
+        {
+          "title": "The Story Behind the Yellowstone Fires of 1988 (video)",
+          "url": "https://youtu.be/CAgP9fo3f7s"
+        },
+        {
+          "title": "The Smoke Jumper Tragedy of Mann Gulch (video)",
+          "url": "https://youtu.be/uKJdfYijVvQ"
+        },
+        {
+          "title": "Storm King Mountain Tragedy (video)",
+          "url": "https://youtu.be/7UVaFKnN-gI"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "11",
+      "label": "11.",
+      "text": "Careers in Wildland Fire Management. Explore careers related to this merit badge. Research one career to learn about the training and education needed, costs, job prospects, salary, job duties, and career advancement. Your research methods may include—with your parent or guardian's permission—an internet or library search, an interview with a professional in the field, or a visit to a location where people in this career work. Discuss with your counselor both your findings and what about this profession might make it an interesting career.",
+      "resources": [
+        {
+          "title": "Wildland Firefighting & Wildland Fire Ecology Jobs (video)",
+          "url": "https://youtu.be/55iglSp3ki0"
+        },
+        {
+          "title": "Fire Management Specialist (website)",
+          "url": "https://careers.iafc.org/career/fire-management-specialist"
+        },
+        {
+          "title": "The Forest Service's Wildfire Force (video)",
+          "url": "https://youtu.be/ewR1Ryqvr2Y"
+        }
+      ],
+      "children": []
+    }
+  ]
+}

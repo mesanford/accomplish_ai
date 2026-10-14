@@ -1,0 +1,237 @@
+{
+  "awardId": "woodcarving",
+  "name": "Woodcarving",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/wood-carving/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Explain to your counselor the hazards you are most likely to encounter while wood carving, and what you should do to anticipate, help prevent, mitigate, or lessen these hazards.",
+          "resources": [
+            {
+              "title": "Top 7 Safety Secrets I Wish I'd Known Before My First Cut! (video)",
+              "url": "https://youtu.be/6_4Bpltbnkg"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Show that you know first aid for injuries that could occur while wood carving, including minor cuts and scratches and splinters.",
+          "resources": [
+            {
+              "title": "The Emergency First Aid Kit for Woodworkers Need! (video)",
+              "url": "https://youtu.be/A0EmfREhgRw"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Earn the Totin' Chip recognition.",
+          "resources": [
+            {
+              "title": "Totin' Chip (website)",
+              "url": "https://www.scouting.org/awards/awards-central/totin-chip/"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Discuss with your counselor your understanding of the Safety Checklist for Carving.",
+          "resources": [
+            {
+              "title": "Safety Checklist for Carving (PDF)",
+              "url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Requirement%20Resources/Wood%20Carving/WoodcarvingChecklist.pdf"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "3a",
+          "label": "(a)",
+          "text": "Explain to your counselor, orally or in writing, the care and use of five types of tools that you may use in a carving project.",
+          "resources": [
+            {
+              "title": "Basic Hand Carving Tools Explained (video)",
+              "url": "https://youtu.be/vMrwACL0Yrc"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "3b",
+          "label": "(b)",
+          "text": "Tell your counselor how to care for and use several types of sharpening devices, then demonstrate that you know how to use these devices.",
+          "resources": [
+            {
+              "title": "Essential Sharpening Tools Every Wood Carver Needs (video)",
+              "url": "https://youtu.be/D6cy4av-18c"
+            },
+            {
+              "title": "How To Use a Sharpening Stone | Knives (video)",
+              "url": "https://youtu.be/lBXRkMZfIXk"
+            },
+            {
+              "title": "Fast and Easy Knife Stropping Guide (video)",
+              "url": "https://youtu.be/5Tt3K-kXhJc"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "label": "4.",
+      "text": "Using a piece of scrap wood or a project on which you are working, show your counselor that you know how to do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "4a",
+          "label": "(a)",
+          "text": "Paring cut",
+          "resources": [
+            {
+              "title": "Pairing Cut Safety Whittling With a Knife (video)",
+              "url": "https://youtu.be/V89HIK33dgQ"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4b",
+          "label": "(b)",
+          "text": "Basic cut and push cut",
+          "resources": [
+            {
+              "title": "Push Cut Tutorial | Beginner's Wood Carving Guide (video)",
+              "url": "https://youtu.be/ELvvu4wwMgM"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4c",
+          "label": "(c)",
+          "text": "V cut",
+          "resources": [
+            {
+              "title": "V-Shaped Cut Technique |Essential Carving Technique | Whittling Basics (video)",
+              "url": "https://youtu.be/8NdNyjHm-fA"
+            }
+          ],
+          "children": []
+        },
+        {
+          "id": "4d",
+          "label": "(d)",
+          "text": "Stop cut or score line",
+          "resources": [
+            {
+              "title": "How To Carve a Stop Cut | Woodcarving Fundamentals (video)",
+              "url": "https://youtu.be/45xBl3kiShM"
+            },
+            {
+              "title": "Incise Woodcarving || The Basics of How to Incise Wood Carve \"Line Carving\" (video)",
+              "url": "https://youtu.be/ckiBo5TLjk4"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "label": "5.",
+      "text": "Tell why different woods are used for different projects. Explain why you chose the type of wood you did for your projects in requirements 6 and 7.",
+      "resources": [
+        {
+          "title": "Beginners Guide to Wood Carving - Lets Talk Wood (video)",
+          "url": "https://youtu.be/qnrBh3M1KQw"
+        },
+        {
+          "title": "My Top 5 Favorite Carving Woods (video)",
+          "url": "https://youtu.be/iIyU1Zx7tmI"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "6",
+      "label": "6.",
+      "text": "Plan your own or select a project from the Wood Carving merit badge pamphlet and complete a simple carving in the round.",
+      "resources": [
+        {
+          "title": "Making Your Own Carving Patterns—Whittling Tips for Beginners (video)",
+          "url": "https://youtu.be/A1C40ObwTX0"
+        },
+        {
+          "title": "5-Minute Wizard (website)",
+          "url": "https://caseknives.com/blogs/whittle-more/5-minute-wizard"
+        },
+        {
+          "title": "How To Whittle a Simple Bear—Step-by-Step Beginner Wood Carving Project (video)",
+          "url": "https://youtu.be/7bQAa_CZsF4"
+        },
+        {
+          "title": "How To Carve a Arrowhead Neckerchief Slide Part 1 Carving Basics (video)",
+          "url": "https://youtu.be/HimTJN3A3lw"
+        },
+        {
+          "title": "What Should You Whittle? Whittling Tips for Beginners (video)",
+          "url": "https://youtu.be/CaP4V7CyYD8"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "7",
+      "label": "7.",
+      "text": "Complete a simple low-relief OR a chip carving project.",
+      "resources": [
+        {
+          "title": "Beginning Woodcarving—How To Carve a Basic Flower With Mary May (video)",
+          "url": "https://youtu.be/43dLqrKV9OI"
+        },
+        {
+          "title": "Chip Carving w/ Wayne Barton —Introduction (video)",
+          "url": "https://youtu.be/spg4f_ge6Is"
+        },
+        {
+          "title": "Chip Carving: Tips for Beginners (video)",
+          "url": "https://youtu.be/bOE99r5N0Ds"
+        }
+      ],
+      "children": []
+    }
+  ]
+}
