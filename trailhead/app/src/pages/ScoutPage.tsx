@@ -1,6 +1,6 @@
 import { collection, doc, query, where } from 'firebase/firestore';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
 import { PathSummary } from '../components/PathSummary';
@@ -49,7 +49,13 @@ export function ScoutPage() {
 
   return (
     <>
-      <PageHeader eyebrow={current ? `Current rank: ${current.name}` : 'Scout'} title={scout.displayName} />
+      <PageHeader eyebrow={current ? `Current rank: ${current.name}` : 'Scout'} title={scout.displayName}>
+        {isLeader ? (
+          <Link className="btn quiet small" to={`/t/${troopId}/scouts/${scoutId}/earlier`}>
+            Record earlier ranks and badges
+          </Link>
+        ) : null}
+      </PageHeader>
       {earned.length > 0 ? (
         <p className="muted small">
           {earned.map((r) => `${r.name} ${formatDate(record.data?.rankDates[r.id])}`).join(' · ')}

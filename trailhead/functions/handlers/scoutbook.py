@@ -39,12 +39,14 @@ def _candidates(signoffs, progress, records, since: datetime | None, until: date
             continue
         if (since is None or signed > since) and signed <= until:
             yield "requirement", s["scoutId"], s["awardId"], str(s.get("reqId", "")), _day(signed), s.get("signerUid")
+    # Work recorded as earned before the Scout joined Trailhead is already in Scoutbook.
     for p in progress:
-        if p.get("status") == "complete" and _day(p.get("completedAt")):
+        if p.get("status") == "complete" and _day(p.get("completedAt")) and p.get("source") != "prior":
             yield "merit_badge", p["scoutId"], p["awardId"], "", _day(p["completedAt"]), None
     for scout_id, record in records.items():
+        prior_ranks = set(record.get("priorRankIds") or [])
         for rank_id, earned in (record.get("rankDates") or {}).items():
-            if _day(earned):
+            if _day(earned) and rank_id not in prior_ranks:
                 yield "rank", scout_id, rank_id, "", _day(earned), None
 
 

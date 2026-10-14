@@ -19,7 +19,7 @@ test('a leader adds starter templates and a parent starts a Scout from one', asy
   await leader.getByLabel('Birth year').fill('2012');
   await leader.getByLabel('Current rank').selectOption('tenderfoot');
   await leader.getByRole('button', { name: 'Add Scout' }).click();
-  await expect(leader.getByRole('link', { name: 'Sam' })).toBeVisible();
+  await expect(leader.getByRole('link', { name: 'Sam', exact: true })).toBeVisible();
   const parentInvite = await createInviteLink(leader, 'parent', 'Sam');
 
   // The leader copies the starter templates into the troop.

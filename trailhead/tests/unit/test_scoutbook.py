@@ -121,3 +121,15 @@ def test_entered_request_must_name_a_scout_on_the_report():
         check_entered_request(rep, "s2")
     with pytest.raises(InvalidInput, match="wasn't found"):
         check_entered_request(None, "s1")
+
+
+def test_advancement_earned_before_trailhead_is_left_out():
+    progress = [
+        {"scoutId": "s1", "awardId": "chess", "status": "complete", "completedAt": "2026-09-05", "source": "prior"},
+        {"scoutId": "s1", "awardId": "art", "status": "complete", "completedAt": "2026-09-06"},
+    ]
+    records = {
+        "s1": {"rankDates": {"tenderfoot": "2026-09-02", "second-class": "2026-09-20"}, "priorRankIds": ["tenderfoot"]}
+    }
+    rows = report(progress=progress, records=records, since=None)
+    assert {r["awardId"] for r in rows} == {"art", "second-class"}

@@ -139,3 +139,14 @@ export interface MoveForm {
 }
 
 export const moveToCustomVersion = (form: MoveForm) => call<MoveForm, MoveSummary>('move_to_custom_version', form);
+
+export interface PriorForm {
+  troopId: string;
+  scoutId: string;
+  ranks: Record<string, string>;
+  badges: { awardId: string; date: string }[];
+  partials: { awardId: string; date: string; requirements: string[] }[];
+}
+
+export const recordPriorAdvancement = (form: PriorForm) =>
+  call<PriorForm, { ranks: number; badges: number; skipped: string[] }>('record_prior_advancement', form);

@@ -15,6 +15,7 @@ from endpoints.assistant import draft_path
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
 from endpoints.messaging import send_message
+from endpoints.prior import record_prior_advancement
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
 
 __all__ = [
@@ -31,6 +32,7 @@ __all__ = [
     "on_blue_card_written",
     "on_path_written",
     "on_signoff_created",
+    "record_prior_advancement",
     "save_custom_award",
     "send_message",
     "set_scoutbook_entered",

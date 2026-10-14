@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { InviteForm } from '../components/InviteForm';
@@ -23,6 +24,7 @@ function yptLabel(m: Member): { text: string; tone: string } | null {
 
 export function Roster() {
   const { troopId, members, memberName, isLeader } = useTroop();
+  const [added, setAdded] = useState('');
   const scouts = members.filter((m) => m.kind === 'scout').sort((a, b) => a.displayName.localeCompare(b.displayName));
   const adults = members.filter((m) => m.kind === 'adult').sort((a, b) => a.displayName.localeCompare(b.displayName));
   if (!isLeader) {
@@ -69,7 +71,12 @@ export function Roster() {
       <div className="grid" style={{ alignItems: 'start', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
         <section className="card">
           <h2>Add a Scout</h2>
-          <AddScoutForm troopId={troopId} />
+          <AddScoutForm troopId={troopId} onAdded={setAdded} />
+          {added ? (
+            <Link className="small" to={`/t/${troopId}/scouts/${added}/earlier`}>
+              Record {memberName(added)}'s earlier ranks and badges
+            </Link>
+          ) : null}
         </section>
         <section className="card">
           <h2>Invite someone</h2>

@@ -107,3 +107,9 @@ def load_catalog() -> Catalog:
         eagle_required_slots=ranks_doc["eagleRequiredSlots"],
         eagle_groups={k: tuple(sorted(v)) for k, v in groups.items()},
     )
+
+
+@lru_cache(maxsize=1)
+def badge_version() -> str:
+    """Requirement version id for merit badges: the content's effective date, as scripts/seed.py loads it."""
+    return json.loads((CONTENT_DIR / "merit_badges.json").read_text())["effectiveDate"]

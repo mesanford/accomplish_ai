@@ -11,7 +11,12 @@ test('Continue with Google signs in and returns to where the person was going', 
   const popupPromise = page.waitForEvent('popup');
   await page.getByRole('button', { name: 'Continue with Google' }).click();
   const popup = await popupPromise;
-  await popup.getByText('Add new account').first().click();
+  // The popup's script can attach its handlers after the page appears, so retry until the click takes.
+  await popup.waitForLoadState('networkidle');
+  await expect(async () => {
+    await popup.getByText('Add new account').first().click();
+    await expect(popup.getByText('Auto-generate user information')).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 30_000 });
   await popup.getByText('Auto-generate user information').click();
   await popup.getByText('Sign in with Google.com').click();
 
