@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { createInvite, errorMessage } from '../lib/api';
 import type { Member } from '../lib/types';
+import { HelpTip } from './HelpTip';
 import { Field, Notice } from './ui';
 
 const ROLE_OPTIONS: [string, string][] = [
@@ -11,6 +12,15 @@ const ROLE_OPTIONS: [string, string][] = [
   ['advancement', 'Advancement chair'],
   ['committee', 'Committee member'],
 ];
+
+const ROLE_HINTS: Record<string, string> = {
+  parent: 'Can see and plan for their own Scouts.',
+  scout: 'Signs in for themselves. Must be 13 or older.',
+  counselor: 'Signs off merit badges for Scouts assigned to them. Needs current Youth Protection training.',
+  leader: 'Can manage everything in the troop.',
+  advancement: 'Can manage ranks, badges and records.',
+  committee: 'Can see the troop but not change records.',
+};
 
 export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Member[] }) {
   const [role, setRole] = useState('parent');
@@ -49,7 +59,11 @@ export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Membe
 
   return (
     <form className="form" onSubmit={submit}>
-      <Field label="Invite as" htmlFor="invite-role">
+      <p className="small muted">
+        An invite link is a private web address for one person. They open it, sign in and join your troop.
+        <HelpTip topic="invite" label="how invitations work" />
+      </p>
+      <Field label="Invite as" htmlFor="invite-role" hint={ROLE_HINTS[role]}>
         <select id="invite-role" value={role} onChange={(e) => setRole(e.target.value)}>
           {ROLE_OPTIONS.map(([value, label]) => (
             <option key={value} value={value}>
@@ -90,7 +104,7 @@ export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Membe
       </div>
       {link ? (
         <div className="stack">
-          <span className="small muted">Send this link to them. It works once and expires in 30 days.</span>
+          <span className="small muted">Send this link to them by text or email. It works for one person and stops working in 30 days.</span>
           <input readOnly value={link} onFocus={(e) => e.target.select()} aria-label="Invite link" />
           <div>
             <button type="button" className="btn secondary small" onClick={copy}>

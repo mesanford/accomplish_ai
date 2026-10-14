@@ -18,8 +18,8 @@ export function Home() {
       </PageHeader>
       {troops.length === 0 ? (
         <Empty>
-          You're not in a troop yet. Open the invite link your leader sent you, or create a troop if you're its
-          leader.
+          You're not in a troop yet. If a leader sent you an invite link, open that link now. If you lead a troop that
+          is not here yet, press the button above to create it.
         </Empty>
       ) : (
         <div className="grid">

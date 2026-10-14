@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { InviteForm } from '../components/InviteForm';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
+import { NextStep } from '../components/NextStep';
 import { Empty, PageHeader } from '../components/ui';
 import { useTroop } from '../lib/troop';
 import type { Member } from '../lib/types';
@@ -33,10 +36,19 @@ export function Roster() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Roster" />
+      <GuideBlock
+        id="roster"
+        purpose="The roster is everyone in your troop. Start here when you set up."
+        steps={[
+          'Add each Scout with the form on this page.',
+          'Make an invite link for each parent, counselor or other leader.',
+          'Send the link by text or email. They open it and join.',
+        ]}
+      />
       <section className="stack">
         <h2>Scouts ({scouts.length})</h2>
         {scouts.length === 0 ? (
-          <Empty>No Scouts yet. Add your first Scout below.</Empty>
+          <NextStep action="Go to the form" onClick={() => document.getElementById('scout-name')?.focus()}>No Scouts yet. Add your first Scout with the form below.</NextStep>
         ) : (
           <ul className="list">
             {scouts.map((s) => (
@@ -53,7 +65,10 @@ export function Roster() {
         )}
       </section>
       <section className="stack">
-        <h2>Adults ({adults.length})</h2>
+        <h2>
+          Adults ({adults.length})
+          <HelpTip topic="ypt" />
+        </h2>
         <ul className="list">
           {adults.map((a) => {
             const ypt = yptLabel(a);
@@ -79,7 +94,10 @@ export function Roster() {
           ) : null}
         </section>
         <section className="card">
-          <h2>Invite someone</h2>
+          <h2>
+            Invite someone
+            <HelpTip topic="roles" />
+          </h2>
           <InviteForm troopId={troopId} scouts={scouts} />
         </section>
       </div>

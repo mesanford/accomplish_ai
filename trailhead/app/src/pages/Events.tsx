@@ -3,6 +3,9 @@ import { type FormEvent, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RequirementPicker } from '../components/RequirementPicker';
 import { RequirementRef } from '../components/RequirementRef';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
+import { NextStep } from '../components/NextStep';
 import { Empty, Field, formatDate, Notice, PageHeader, todayIso } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { awardName, BADGES } from '../lib/catalog';
@@ -61,6 +64,7 @@ function EventForm({ troopId }: { troopId: string }) {
         <label className="check">
           <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
           Show on the troop website
+          <HelpTip topic="publicEvent" />
         </label>
         <span className="hint">Only the event's name, day and place appear there.</span>
       </div>
@@ -75,7 +79,11 @@ function EventForm({ troopId }: { troopId: string }) {
           <input id="ev-hours" type="number" min="0" value={hours} onChange={(e) => setHours(e.target.value)} />
         </Field>
       </div>
-      <Field label="Requirement covered (optional)" htmlFor="ev-award" hint="Scouts who attend get it marked ready for sign-off.">
+      <Field
+        label="Requirement covered (optional)"
+        htmlFor="ev-award"
+        hint="If this event covers a merit badge requirement, pick it. Scouts who attend are marked ready for a counselor to sign off."
+      >
         <div className="row">
           <select
             id="ev-award"
@@ -124,8 +132,25 @@ export function Events() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Events" />
+      {isLeader ? (
+        <GuideBlock
+          id="events"
+          purpose="Events are your meetings, campouts and service days. They let you take attendance and log camping nights."
+          steps={[
+            'Add an event with the form below.',
+            'On the day, open the event and tick the Scouts who came.',
+            'Their nights, miles and hours are saved to their records.',
+          ]}
+        />
+      ) : null}
       {events.data.length === 0 ? (
-        <Empty>No events yet.</Empty>
+        isLeader ? (
+          <NextStep action="Add your first event" onClick={() => document.getElementById('ev-title')?.focus()}>
+            No events yet. Add your next meeting or campout with the form below.
+          </NextStep>
+        ) : (
+          <Empty>No events yet. A leader will add them here.</Empty>
+        )
       ) : (
         <ul className="list">
           {events.data.map((ev) => (

@@ -1,5 +1,7 @@
 import { collection, orderBy, query } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
 import { ScoutbookReportView, reportRange } from '../components/ScoutbookReportView';
 import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { createScoutbookReport, errorMessage } from '../lib/api';
@@ -50,14 +52,24 @@ export function Scoutbook() {
           {busy ? 'Creating…' : 'Create handoff report'}
         </button>
       </PageHeader>
-      <p className="muted no-print">
-        Scoutbook Plus is the official record of advancement. Each report lists what was signed off in Trailhead since the
-        last one, by Scout, so you can enter it all in one sitting. Trailhead can't send it to Scoutbook automatically yet.
-      </p>
+      <GuideBlock
+        id="scoutbook"
+        title="Why this page exists"
+        purpose="Scoutbook is the official place where advancement is recorded. Trailhead cannot send records there for you yet, so this page gives you a list to type in."
+        steps={[
+          'Press "Create handoff report". It lists what was signed off since your last report.',
+          'Open Scoutbook and enter each item, one Scout at a time.',
+          'Tick "Entered in Scoutbook" for each Scout so you know what is left.',
+        ]}
+      />
+
       <Notice kind="ok">{message}</Notice>
       <Notice kind="error">{error || reports.error}</Notice>
       <section className="stack no-print">
-        <h2>Past reports</h2>
+        <h2>
+          Past reports
+          <HelpTip topic="scoutbookReport" />
+        </h2>
         {reports.loading ? <Loading /> : null}
         {!reports.loading && reports.data.length === 0 ? <Empty>No reports yet. Create the first one above.</Empty> : null}
         <ul className="list">

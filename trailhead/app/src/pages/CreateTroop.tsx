@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { HelpTip } from '../components/HelpTip';
 import { Field, Notice, PageHeader } from '../components/ui';
 import { createTroop, errorMessage, type TroopForm } from '../lib/api';
 
@@ -28,7 +29,10 @@ export function CreateTroop() {
   return (
     <>
       <PageHeader eyebrow="New troop" title="Create a troop" />
-      <p className="muted">You'll be the troop's first leader. You can invite other leaders, parents and counselors next.</p>
+      <p className="muted">
+        You'll be the troop's first leader. After this, you will add your Scouts and invite parents and counselors.
+        <HelpTip topic="roles" />
+      </p>
       <form className="form" onSubmit={submit}>
         <Field label="Troop name" htmlFor="name">
           <input id="name" required value={form.name} onChange={set('name')} placeholder="Troop 101" />
@@ -36,7 +40,7 @@ export function CreateTroop() {
         <Field label="Unit number" htmlFor="unit">
           <input id="unit" required value={form.unitNumber} onChange={set('unitNumber')} inputMode="numeric" />
         </Field>
-        <Field label="Council" htmlFor="council">
+        <Field label="Council" htmlFor="council" hint="Optional. For example, the name of your local Scouting council.">
           <input id="council" value={form.council} onChange={set('council')} />
         </Field>
         <Field label="Your name" htmlFor="you">
@@ -49,6 +53,10 @@ export function CreateTroop() {
         >
           <input id="ypt" type="date" required value={form.yptExpiresAt} onChange={set('yptExpiresAt')} />
         </Field>
+        <p className="small muted">
+          Not sure what this is?
+          <HelpTip topic="ypt" />
+        </p>
         <Notice kind="error">{error}</Notice>
         <div>
           <button className="btn" type="submit" disabled={busy}>

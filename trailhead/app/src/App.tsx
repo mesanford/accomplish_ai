@@ -12,6 +12,7 @@ import { CustomAwards } from './pages/CustomAwards';
 import { CreateTroop } from './pages/CreateTroop';
 import { Events } from './pages/Events';
 import { FinishSignIn } from './pages/FinishSignIn';
+import { HelpPage } from './pages/Help';
 import { Home } from './pages/Home';
 import { Join } from './pages/Join';
 import { Messages } from './pages/Messages';
@@ -78,6 +79,7 @@ const router = createBrowserRouter([
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
       { path: 'website', element: <Website /> },
+      { path: 'help', element: <HelpPage /> },
     ],
   },
 ]);

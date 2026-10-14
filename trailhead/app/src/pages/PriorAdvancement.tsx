@@ -1,6 +1,8 @@
 import { collection, doc, query, where } from 'firebase/firestore';
 import { type FormEvent, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
 import { type BadgeEntry, PriorBadges } from '../components/PriorBadges';
 import { type PartialEntry, PriorPartials } from '../components/PriorPartials';
 import { PriorRanks } from '../components/PriorRanks';
@@ -71,13 +73,22 @@ export function PriorAdvancement() {
   return (
     <>
       <PageHeader eyebrow={memberName(scoutId)} title="Record earlier advancement" />
-      <p className="muted">
-        Enter ranks and merit badges {memberName(scoutId)} earned before joining Trailhead, from their handbook, blue
-        cards or Scoutbook. They count toward plans, and stay out of the Scoutbook handoff report.
-      </p>
+      <GuideBlock
+        id="prior"
+        purpose={`Use this for what ${memberName(scoutId)} earned before joining Trailhead. Trailhead then knows what is done and plans only what is left.`}
+        steps={[
+          'Enter the date for each rank earned. Look in the Scout handbook or Scoutbook.',
+          'Add each finished merit badge with its date.',
+          'For a badge started but not finished, add it as a partial with the requirements already signed.',
+          'Press Save. These do not appear in the Scoutbook report, since Scoutbook already has them.',
+        ]}
+      />
       <form className="stack" onSubmit={save}>
         <section className="card">
-          <h2>Ranks</h2>
+          <h2>
+            Ranks
+            <HelpTip topic="priorAdvancement" label="what earlier means" />
+          </h2>
           <PriorRanks dates={ranks} onChange={setRanks} />
         </section>
         <section className="card">
@@ -90,7 +101,10 @@ export function PriorAdvancement() {
           <PriorBadges entries={badges} onChange={setBadges} />
         </section>
         <section className="card">
-          <h2>Partly finished merit badges</h2>
+          <h2>
+            Partly finished merit badges
+            <HelpTip topic="partial" />
+          </h2>
           <p className="small muted">Badges started earlier, with the requirement numbers already signed on the blue card.</p>
           <PriorPartials entries={partials} exclude={completeIds} onChange={setPartials} />
         </section>

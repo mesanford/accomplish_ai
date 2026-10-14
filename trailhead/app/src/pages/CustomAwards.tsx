@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CustomAwardForm } from '../components/CustomAwardForm';
+import { GuideBlock } from '../components/GuideBlock';
+import { NextStep } from '../components/NextStep';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { useCustomAwards } from '../lib/customAwardsContext';
 import { useTroop } from '../lib/troop';
@@ -45,10 +47,15 @@ export function CustomAwards() {
           </button>
         )}
       </PageHeader>
-      <p className="muted">
-        Make your own awards with your own requirements. You can change requirements at any time: each change makes a
-        new version, and Scouts already working on the award keep theirs until you move them.
-      </p>
+      <GuideBlock
+        id="awards"
+        purpose="A troop award is your own award with your own requirements, such as a service badge. It works like a merit badge."
+        steps={[
+          'Press New award and list the requirements.',
+          'Scouts work on it, and leaders sign off each requirement.',
+          'Change requirements any time. Each change makes a new version. Scouts keep their old version until you move them.',
+        ]}
+      />
       {creating ? (
         <section className="card">
           <h2>New award</h2>
@@ -61,7 +68,9 @@ export function CustomAwards() {
         </section>
       ) : null}
       {loading ? <Loading /> : null}
-      {!loading && active.length === 0 ? <Empty>No troop awards yet. Create one to get started.</Empty> : null}
+      {!loading && active.length === 0 ? <NextStep action="Make your first award" onClick={() => setCreating(true)}>
+          No troop awards yet. Create your first one.
+        </NextStep> : null}
       {active.length > 0 ? <AwardList awards={active} troopId={troopId} /> : null}
       {archived.length > 0 ? (
         <section className="stack">

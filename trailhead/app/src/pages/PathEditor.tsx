@@ -2,6 +2,8 @@ import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DraftPanel } from '../components/DraftPanel';
+import { GuideBlock } from '../components/GuideBlock';
+import { HelpTip } from '../components/HelpTip';
 import { PathItems } from '../components/PathItems';
 import { FeasibilityView } from '../components/PathSummary';
 import { SaveAsTemplate } from '../components/SaveAsTemplate';
@@ -77,6 +79,16 @@ export function PathEditor() {
   return (
     <>
       <PageHeader eyebrow={memberName(scoutId)} title="Plan a path" />
+      <GuideBlock
+        id="path-editor"
+        purpose="A plan is the rank and merit badges a Scout wants to finish, with rough dates. It is only a guide, and you can change it any time."
+        steps={[
+          'Pick a goal, such as Eagle. A target date is optional.',
+          'Add merit badges. Dates for each are optional.',
+          'Read the box "Will this plan work?" and fix anything it points out.',
+          'Press Save plan.',
+        ]}
+      />
       <TemplatePicker
         scoutId={scoutId}
         items={items}
@@ -115,7 +127,10 @@ export function PathEditor() {
         />
         <PathItems items={items} onChange={setItems} />
         <section className="card">
-          <h2>Will this plan work?</h2>
+          <h2>
+            Will this plan work?
+            <HelpTip topic="pathFeasibility" />
+          </h2>
           {preview ? <FeasibilityView result={preview} /> : <p className="muted">Checking…</p>}
         </section>
         <Notice kind="error">{error}</Notice>
