@@ -9,6 +9,7 @@ function TroopNav() {
     [base, 'Home', true],
     [`${base}/roster`, 'Roster', isLeader],
     [`${base}/blue-cards`, 'Blue cards', isLeader],
+    [`${base}/scoutbook`, 'Scoutbook', isLeader],
     [`${base}/counseling`, 'Counseling', has('counselor')],
     [`${base}/events`, 'Events', true],
     [`${base}/badges`, 'Badges', true],

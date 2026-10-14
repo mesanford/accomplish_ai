@@ -101,3 +101,8 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: v
   .nav { order: 3; margin-left: 0; width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
   .nav a { white-space: nowrap; }
 }
+
+@media print {
+  .topbar, .no-print { display: none; }
+  .print-group { break-inside: avoid; }
+}

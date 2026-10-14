@@ -13,16 +13,19 @@ from endpoints.advancement import (
 )
 from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
 from endpoints.messaging import send_message
+from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
 
 __all__ = [
     "accept_invite",
     "add_scout",
     "check_path_preview",
     "create_invite",
+    "create_scoutbook_report",
     "create_troop",
     "on_attendance_written",
     "on_blue_card_written",
     "on_path_written",
     "on_signoff_created",
     "send_message",
+    "set_scoutbook_entered",
 ]

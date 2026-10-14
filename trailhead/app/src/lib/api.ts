@@ -75,3 +75,18 @@ export interface PreviewForm {
 }
 
 export const previewPath = (form: PreviewForm) => call<PreviewForm, Feasibility>('check_path_preview', form);
+
+export const createScoutbookReport = (troopId: string) =>
+  call<{ troopId: string }, { created: boolean; reportId?: string; rowCount?: number; message?: string }>(
+    'create_scoutbook_report',
+    { troopId },
+  );
+
+export interface EnteredForm {
+  troopId: string;
+  reportId: string;
+  scoutId: string;
+  entered: boolean;
+}
+
+export const setScoutbookEntered = (form: EnteredForm) => call<EnteredForm, { ok: boolean }>('set_scoutbook_entered', form);
