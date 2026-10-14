@@ -24,6 +24,7 @@ import { Scoutbook } from './pages/Scoutbook';
 import { SignIn } from './pages/SignIn';
 import { ThreadPage } from './pages/ThreadPage';
 import { TroopHome } from './pages/TroopHome';
+import { Website } from './pages/Website';
 
 /** Sends signed-out visitors to sign in, then back to where they were going (such as an invite link). */
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
       { path: 'events/:eventId', element: <AttendancePage /> },
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
+      { path: 'website', element: <Website /> },
     ],
   },
 ]);

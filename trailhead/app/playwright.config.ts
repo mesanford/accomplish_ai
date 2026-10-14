@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // Run through the emulators from the trailhead folder:
-//   firebase emulators:exec --only auth,firestore,functions --project demo-trailhead "npm --prefix app run e2e"
+//   firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead "npm --prefix app run e2e"
 export default defineConfig({
   testDir: 'e2e',
   timeout: 180_000,

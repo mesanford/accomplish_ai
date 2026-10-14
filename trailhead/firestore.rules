@@ -35,6 +35,15 @@ service cloud.firestore {
       allow read: if signedIn();
       allow write: if isAdmin();
     }
+    // Published troop websites: anyone may read them; only the publish_site function writes them.
+    match /publicSites/{slug} {
+      allow read: if true;
+      allow write: if false;
+    }
+    // Which troop owns each website address. Server-only, never readable by clients.
+    match /slugs/{slug} {
+      allow read, write: if false;
+    }
     match /users/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow write: if false;
@@ -54,9 +63,13 @@ service cloud.firestore {
         allow write: if false;
       }
       // Roster: names, roles, patrols. Shared with the whole troop.
+      // mediaConsent (may photos of this Scout go on the public website) is written only by the
+      // set_media_consent function, which checks the caller is a parent or a leader.
       match /members/{m} {
         allow read: if isMember(t);
-        allow create, update: if isLeader(t);
+        allow create: if isLeader(t) && !('mediaConsent' in request.resource.data);
+        allow update: if isLeader(t)
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent']);
         allow delete: if false;
       }
       // Private Scout details (birth month and year, rank dates).
@@ -182,6 +195,31 @@ service cloud.firestore {
             && request.auth.uid in get(/databases/$(database)/documents/troops/$(t)/threads/$(th)).data.participantUids;
           allow write: if false;
         }
+      }
+      // The troop website draft. Leaders edit it here; only the publish_site function makes a public copy.
+      match /site/draft {
+        allow read, delete: if isLeader(t);
+        allow create, update: if isLeader(t) && validSiteDraft(request.resource.data);
+
+        function absent(d, k) { return !(k in d) || d[k] == null; }
+        function text(d, k, max) { return absent(d, k) || (d[k] is string && d[k].size() <= max); }
+        function items(d, k, max) { return absent(d, k) || (d[k] is list && d[k].size() <= max); }
+        function section(d, k) { return absent(d, k) || (d[k] is map && d[k].size() <= 4); }
+        function validSiteDraft(d) {
+          return d.keys().hasOnly(['slug', 'theme', 'cover', 'about', 'meeting', 'faq', 'contacts', 'gallery',
+                                   'recruiting', 'updatedAt'])
+            && text(d, 'slug', 40)
+            && text(d, 'about', 4000)
+            && section(d, 'theme') && section(d, 'cover') && section(d, 'meeting') && section(d, 'recruiting')
+            && items(d, 'faq', 20)
+            && items(d, 'contacts', 6)
+            && items(d, 'gallery', 24);
+        }
+      }
+      // What the live site shows (which Scouts each public photo includes). Server-only.
+      match /site/published {
+        allow read: if isLeader(t);
+        allow write: if false;
       }
       // Draft counters for the plan assistant. Server-only; clients never read or write them.
       match /usage/{u} {

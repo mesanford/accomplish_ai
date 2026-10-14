@@ -15,7 +15,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Vendor code changes rarely; separate chunks let browsers keep it cached between releases.
-        manualChunks: { firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/functions'], react: ['react', 'react-dom', 'react-router-dom'] },
+        manualChunks: { firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/functions', 'firebase/storage'], react: ['react', 'react-dom', 'react-router-dom'] },
       },
     },
   },

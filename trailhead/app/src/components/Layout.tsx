@@ -17,6 +17,7 @@ function TroopNav() {
     [`${base}/templates`, 'Path templates', isLeader],
     [`${base}/awards`, 'Troop awards', isLeader],
     [`${base}/messages`, 'Messages', true],
+    [`${base}/website`, 'Website', isLeader],
   ];
   return (
     <>
