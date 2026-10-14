@@ -36,5 +36,16 @@ security rules, indexes, functions and hosting. The app is then live at `https:/
 
 ## Gemini plan assistant
 
-The "Draft with AI" feature calls Gemini on Vertex AI from the Cloud Functions. Details are filled in once the
-feature lands; locally it uses a built-in stand-in, so no Google credentials are needed for development.
+"Draft with AI" in the path planner calls Gemini on Vertex AI from the Cloud Functions. No API key is involved;
+the functions use their own service account. Locally, and in the emulator, it uses a built-in practice planner
+instead, so development needs no Google credentials.
+
+1. Enable the Vertex AI API: `gcloud services enable aiplatform.googleapis.com --project <project-id>`.
+2. Let the functions call it. 2nd-gen functions run as the default compute service account unless you set one:
+   `gcloud projects add-iam-policy-binding <project-id> --member serviceAccount:<project-number>-compute@developer.gserviceaccount.com --role roles/aiplatform.user`.
+3. Optional settings, as function environment variables: `GEMINI_MODEL` (default `gemini-2.5-flash`) and
+   `GEMINI_LOCATION` (default `us-central1`). Check the model is offered in that region.
+4. After the first deploy, try one draft in staging. The real Gemini call has only been tested against the
+   practice planner so far.
+
+Each person can make 20 drafts a day, so cost stays small. Usage counts are kept in `troops/{t}/usage`.

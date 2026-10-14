@@ -16,3 +16,7 @@ app/test-results/
 app/playwright-report/
 app/.env.staging
 app/.env.production
+# Worktrees may symlink these instead of reinstalling; a trailing slash would not match a symlink.
+.venv
+functions/venv
+app/node_modules
