@@ -91,7 +91,7 @@ Create a Firebase project with Email link sign-in enabled under Authentication, 
 firebase use --add                       # pick your Firebase project
 cp app/.env.example app/.env.local       # fill in the web app config from the Firebase console
 .venv/bin/python scripts/seed.py --project <project-id>   # load badges and ranks
-firebase deploy --only firestore,functions,hosting
+firebase deploy --only firestore,storage,functions,hosting
 ```
 
 ## Not built yet

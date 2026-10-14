@@ -30,4 +30,4 @@ echo "Loading badge and rank content…"
 .venv/bin/python scripts/seed.py --project "$project"
 
 echo "Deploying rules, indexes, functions and hosting…"
-firebase deploy --project "$project" --only firestore,functions,hosting
+firebase deploy --project "$project" --only firestore,storage,functions,hosting
