@@ -12,6 +12,7 @@ function TroopNav() {
     [`${base}/counseling`, 'Counseling', has('counselor')],
     [`${base}/events`, 'Events', true],
     [`${base}/badges`, 'Badges', true],
+    [`${base}/templates`, 'Path templates', isLeader],
     [`${base}/messages`, 'Messages', true],
   ];
   return (

@@ -95,6 +95,24 @@ service cloud.firestore {
           && request.resource.data.scoutId == scoutId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['feasibility']);
       }
+      // Troop path templates. Leaders write; everyone in the troop reads. Templates are archived, never deleted.
+      match /pathTemplates/{id} {
+        allow read: if isMember(t);
+        allow create, update: if isLeader(t) && validTemplate(request.resource.data);
+        allow delete: if false;
+
+        function validTemplate(d) {
+          return d.keys().hasOnly(['name', 'description', 'goalAwardId', 'items', 'createdByMemberId', 'updatedAt', 'archived'])
+            && d.keys().hasAll(['name', 'description', 'goalAwardId', 'items', 'createdByMemberId', 'updatedAt', 'archived'])
+            && d.name is string && d.name.size() > 0 && d.name.size() <= 120
+            && d.description is string && d.description.size() <= 1000
+            && d.goalAwardId is string
+            && d.items is list && d.items.size() <= 200
+            && d.createdByMemberId is string
+            && d.updatedAt is timestamp
+            && d.archived is bool;
+        }
+      }
       // Blue card id = {scoutId}_{awardId}.
       // requested -> approved -> counselor_assigned -> in_progress -> complete; leaders may cancel.
       match /blueCards/{id} {

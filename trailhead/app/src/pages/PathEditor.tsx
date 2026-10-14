@@ -3,6 +3,8 @@ import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PathItems } from '../components/PathItems';
 import { FeasibilityView } from '../components/PathSummary';
+import { SaveAsTemplate } from '../components/SaveAsTemplate';
+import { TemplatePicker } from '../components/TemplatePicker';
 import { Field, Loading, Notice, PageHeader } from '../components/ui';
 import { errorMessage, previewPath } from '../lib/api';
 import { RANKS } from '../lib/catalog';
@@ -13,7 +15,7 @@ import type { Feasibility, PathDoc, PathItemDoc } from '../lib/types';
 export function PathEditor() {
   const { scoutId = '' } = useParams();
   const navigate = useNavigate();
-  const { troopId, memberName } = useTroop();
+  const { troopId, memberName, isLeader } = useTroop();
   const [loaded, setLoaded] = useState(false);
   const [goal, setGoal] = useState('eagle');
   const [target, setTarget] = useState('');
@@ -73,6 +75,16 @@ export function PathEditor() {
   return (
     <>
       <PageHeader eyebrow={memberName(scoutId)} title="Plan a path" />
+      <TemplatePicker
+        scoutId={scoutId}
+        items={items}
+        onApply={(next, nextGoal) => {
+          setItems(next);
+          if (nextGoal) {
+            setGoal(nextGoal);
+          }
+        }}
+      />
       <form className="stack" onSubmit={save}>
         <div className="row">
           <Field label="Goal" htmlFor="goal">
@@ -103,6 +115,7 @@ export function PathEditor() {
           </button>
         </div>
       </form>
+      {isLeader ? <SaveAsTemplate goalAwardId={goal} items={items} /> : null}
     </>
   );
 }
