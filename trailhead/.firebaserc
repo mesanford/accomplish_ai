@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "demo-trailhead"
+    "default": "demo-trailhead",
+    "staging": "REPLACE-with-staging-project-id",
+    "production": "REPLACE-with-production-project-id"
   }
 }

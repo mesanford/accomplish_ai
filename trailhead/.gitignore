@@ -14,3 +14,5 @@ app/dist/
 app/.env.local
 app/test-results/
 app/playwright-report/
+app/.env.staging
+app/.env.production

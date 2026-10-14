@@ -22,9 +22,6 @@
       "firebase.json",
       "**/.*"
     ],
-    "predeploy": [
-      "npm --prefix app run build"
-    ],
     "rewrites": [
       {
         "source": "**",
