@@ -1,0 +1,30 @@
+{
+  "awardId": "tenderfoot",
+  "name": "Tenderfoot",
+  "kind": "rank",
+  "sourceUrl": "https://www.scouting.org/programs/scouts-bsa/advancement-and-awards/tenderfoot/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Present yourself to your leader, properly dressed.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "1a",
+      "label": "1a.",
+      "text": "Demonstrate how to tie a square knot.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Show your campsite is clean.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

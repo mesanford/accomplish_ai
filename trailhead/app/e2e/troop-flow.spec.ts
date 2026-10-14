@@ -64,9 +64,12 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   // Counselor signs a requirement and completes the badge.
   await counselor.getByRole('link', { name: 'Counseling' }).click();
   await counselor.getByRole('button', { name: 'Start working with this Scout' }).click();
-  await counselor.getByLabel('Requirement').fill('1a');
-  await counselor.getByRole('button', { name: 'Sign off requirement' }).click();
+  // The counselor reads the badge's requirements right on the page and signs one with its button.
+  await expect(counselor.getByText('Discuss the history of the game of chess.')).toBeVisible();
+  await counselor.getByRole('button', { name: 'Sign requirement 1a' }).click();
   await expect(counselor.getByText('Signed so far: 1a')).toBeVisible();
+  await expect(counselor.getByRole('button', { name: 'Sign requirement 1a' })).toBeHidden();
+  await expect(counselor.getByText('Requirements © Scouting America')).toBeVisible();
   await counselor.getByRole('button', { name: 'Mark Chess complete' }).click();
   await expect(counselor.getByRole('heading', { name: 'Completed' })).toBeVisible();
 

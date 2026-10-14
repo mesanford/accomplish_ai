@@ -1,0 +1,38 @@
+{
+  "awardId": "chess",
+  "name": "Chess",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/chess/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "1a",
+          "label": "(a)",
+          "text": "Discuss the history of the game of chess.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "1b",
+          "label": "(b)",
+          "text": "Explain the benefits of playing chess.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Explain the basic principles of play.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

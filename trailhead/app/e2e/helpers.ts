@@ -1,4 +1,26 @@
-import { type Browser, expect, type Page } from '@playwright/test';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join as joinPath } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { type Browser, type BrowserContext, expect, type Page } from '@playwright/test';
+
+const FIXTURES = joinPath(dirname(fileURLToPath(import.meta.url)), 'fixtures', 'requirements');
+
+/**
+ * Serve small requirement files from e2e/fixtures/requirements so tests do not depend on the real data.
+ * Awards without a fixture (anything but camping, chess, cooking and tenderfoot) answer 404, which is what
+ * the app sees when a requirements file is missing.
+ */
+export async function mockRequirements(context: BrowserContext): Promise<void> {
+  await context.route('**/requirements/*.json', async (route) => {
+    const id = new URL(route.request().url()).pathname.split('/').pop()?.replace(/\.json$/, '') ?? '';
+    const file = joinPath(FIXTURES, `${id}.json`);
+    if (existsSync(file)) {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: readFileSync(file, 'utf8') });
+    } else {
+      await route.fulfill({ status: 404, body: 'Not found' });
+    }
+  });
+}
 
 const PROJECT = 'demo-trailhead';
 
@@ -10,7 +32,9 @@ export async function resetEmulators(): Promise<void> {
 
 /** A fresh browser session, signed in by email link through the Auth emulator. */
 export async function signedIn(browser: Browser, email: string, startAt = '/'): Promise<Page> {
-  const page = await (await browser.newContext()).newPage();
+  const context = await browser.newContext();
+  await mockRequirements(context);
+  const page = await context.newPage();
   await page.goto(startAt);
   await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
   await page.getByLabel('Email').fill(email);

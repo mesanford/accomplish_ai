@@ -1,6 +1,8 @@
 import { addDoc, collection, orderBy, query } from 'firebase/firestore';
 import { type FormEvent, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { RequirementPicker } from '../components/RequirementPicker';
+import { RequirementRef } from '../components/RequirementRef';
 import { Empty, Field, formatDate, Notice, PageHeader, todayIso } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { awardName, BADGES } from '../lib/catalog';
@@ -32,6 +34,7 @@ function EventForm({ troopId }: { troopId: string }) {
       });
       setTitle('');
       setReqId('');
+      setAwardId('');
     } catch (err) {
       setError(errorMessage(err));
     }
@@ -58,7 +61,15 @@ function EventForm({ troopId }: { troopId: string }) {
       </div>
       <Field label="Requirement covered (optional)" htmlFor="ev-award" hint="Scouts who attend get it marked ready for sign-off.">
         <div className="row">
-          <select id="ev-award" value={awardId} onChange={(e) => setAwardId(e.target.value)} style={{ width: 'auto' }}>
+          <select
+            id="ev-award"
+            value={awardId}
+            onChange={(e) => {
+              setAwardId(e.target.value);
+              setReqId('');
+            }}
+            style={{ width: 'auto' }}
+          >
             <option value="">None</option>
             {BADGES.map((b) => (
               <option key={b.id} value={b.id}>
@@ -66,9 +77,20 @@ function EventForm({ troopId }: { troopId: string }) {
               </option>
             ))}
           </select>
-          <input aria-label="Requirement number" placeholder="e.g. 9a" value={reqId} onChange={(e) => setReqId(e.target.value)} style={{ width: 100 }} />
         </div>
       </Field>
+      {awardId ? (
+        <div className="stack">
+          <RequirementPicker
+            key={awardId}
+            awardId={awardId}
+            value={reqId ? [reqId] : []}
+            onChange={(v) => setReqId(v[0] ?? '')}
+            inputLabel="Requirement number"
+          />
+          {reqId ? <p className="small">Covers {awardName(awardId)} requirement {reqId}.</p> : null}
+        </div>
+      ) : null}
       <Notice kind="error">{error}</Notice>
       <div>
         <button className="btn" type="submit">
@@ -99,7 +121,12 @@ export function Events() {
                   {ev.logValues?.nights ? ` · ${ev.logValues.nights} nights` : ''}
                   {ev.logValues?.miles ? ` · ${ev.logValues.miles} miles` : ''}
                   {ev.logValues?.serviceHours ? ` · ${ev.logValues.serviceHours} service hours` : ''}
-                  {(ev.linkedRequirements ?? []).map((r) => ` · ${awardName(r.awardId)} ${r.reqId}`).join('')}
+                  {(ev.linkedRequirements ?? []).map((r) => (
+                    <span key={`${r.awardId}-${r.reqId}`}>
+                      {' · '}
+                      {awardName(r.awardId)} <RequirementRef awardId={r.awardId} reqId={r.reqId} />
+                    </span>
+                  ))}
                 </span>
               </div>
               {isLeader ? (

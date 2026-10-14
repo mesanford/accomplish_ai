@@ -3,6 +3,7 @@ import { errorMessage, setScoutbookEntered } from '../lib/api';
 import { downloadCsv, groupByScout, KIND_LABELS, reportToCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
 import type { ScoutbookReport } from '../lib/types';
+import { RequirementRef } from './RequirementRef';
 import { formatDate, Notice } from './ui';
 
 export function reportRange(report: ScoutbookReport): string {
@@ -72,7 +73,7 @@ export function ScoutbookReportView({ report }: { report: ScoutbookReport }) {
                     <td>{formatDate(r.date)}</td>
                     <td>{KIND_LABELS[r.kind]}</td>
                     <td>{r.awardName}</td>
-                    <td>{r.requirement ?? ''}</td>
+                    <td>{r.requirement ? <RequirementRef awardId={r.awardId} reqId={r.requirement} /> : null}</td>
                     <td>{r.signedBy ?? ''}</td>
                   </tr>
                 ))}

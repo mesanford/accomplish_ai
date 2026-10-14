@@ -1,5 +1,8 @@
 import { useAwardName } from '../lib/customAwardsContext';
+import { statusLookup } from '../lib/requirements';
 import type { BlueCard, Progress } from '../lib/types';
+import { RequirementsToggle } from './AwardRequirements';
+import { RequirementRefs } from './RequirementRef';
 import { CardStatusPill, Empty, formatDate } from './ui';
 
 function signedLabels(p: Progress): string[] {
@@ -31,8 +34,18 @@ export function ProgressList({ progress }: { progress: Progress[] }) {
             <div className="stack" style={{ gap: 2 }}>
               <strong>{awardName(p.awardId)}</strong>
               <span className="muted small">
-                {signed.length > 0 ? `Signed: ${signed.join(', ')}` : 'Nothing signed yet'}
-                {ready.length > 0 ? ` · Ready for sign-off: ${ready.join(', ')}` : ''}
+                {signed.length > 0 ? (
+                  <>
+                    Signed: <RequirementRefs awardId={p.awardId} reqIds={signed} />
+                  </>
+                ) : (
+                  'Nothing signed yet'
+                )}
+                {ready.length > 0 ? (
+                  <>
+                    {' · '}Ready for sign-off: <RequirementRefs awardId={p.awardId} reqIds={ready} />
+                  </>
+                ) : null}
               </span>
             </div>
             {p.status === 'complete' ? (
@@ -40,6 +53,9 @@ export function ProgressList({ progress }: { progress: Progress[] }) {
             ) : (
               <span className="pill neutral">In progress</span>
             )}
+            <div style={{ flexBasis: '100%' }}>
+              <RequirementsToggle awardId={p.awardId} statuses={statusLookup(p.requirements)} label={`${awardName(p.awardId)} requirements`} />
+            </div>
           </li>
         );
       })}

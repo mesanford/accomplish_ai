@@ -107,4 +107,23 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: v
 @media print {
   .topbar, .no-print { display: none; }
   .print-group { break-inside: avoid; }
+  .req-ref-btn { border: 0; color: inherit; }
+  .req-pop { display: none; }
 }
+
+/* Official requirement text */
+.req-list { display: grid; gap: 8px; min-width: 0; }
+.req-items { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.req { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 4px 10px; align-items: start; padding: 8px 10px; border-top: 1px solid var(--line); font-size: 15px; }
+.req:first-child { border-top: 0; }
+.req.chosen { background: var(--good-soft); }
+.req-label { font: 600 13px var(--mono); color: var(--muted); padding-top: 2px; }
+.req-body { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.req-side { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+.req-resources { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 14px; }
+.req-credit { margin: 0; }
+.req-ref { display: inline; }
+.req-ref-btn { font: inherit; background: none; border: 0; border-bottom: 1px dotted currentColor; padding: 0 1px; color: var(--accent); cursor: pointer; }
+.req-pop { display: block; margin: 4px 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 14px; max-width: 520px; }
+.req-pop a { margin-left: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

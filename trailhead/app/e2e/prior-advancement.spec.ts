@@ -35,14 +35,22 @@ test('a leader records ranks and badges a new Scout earned before joining', asyn
   await expect(leader.getByLabel('First Aid completed')).toHaveValue('2024-04-10');
 
   await leader.getByLabel('Add a partly finished merit badge').selectOption('cooking');
-  await leader.getByLabel('Cooking requirements done').fill('1, 2a');
+  await leader.getByRole('button', { name: 'Choose requirements' }).click();
+  await leader.getByLabel('Requirement 1 done').check();
+  await leader.getByLabel('Requirement 2a done').check();
   await leader.getByLabel('Cooking last signed').fill('2025-06-01');
+  // Swimming has no requirement file, so the app asks for a typed number and links to the official page.
+  await leader.getByLabel('Add a partly finished merit badge').selectOption('swimming');
+  await expect(leader.getByRole('link', { name: 'Official Swimming requirements' })).toBeVisible();
+  await leader.getByLabel('Swimming requirements done').fill('3');
+  await leader.getByLabel('Swimming last signed').fill('2025-05-01');
 
   await leader.getByRole('button', { name: 'Save earlier advancement' }).click();
-  await expect(leader.getByText('Saved 3 rank dates and 3 merit badges.')).toBeVisible();
+  await expect(leader.getByText('Saved 3 rank dates and 4 merit badges.')).toBeVisible();
 
   await leader.getByRole('link', { name: 'Back to Jamie' }).click();
   await expect(leader.getByText('Current rank: First Class')).toBeVisible();
   await expect(leader.getByText(/Complete Jul 15, 2024/)).toBeVisible();
   await expect(leader.getByText(/Signed: 1, 2a/)).toBeVisible();
+  await expect(leader.getByText(/Signed: 3/)).toBeVisible();
 });
