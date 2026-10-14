@@ -155,6 +155,10 @@ service cloud.firestore {
           allow write: if false;
         }
       }
+      // Draft counters for the plan assistant. Server-only; clients never read or write them.
+      match /usage/{u} {
+        allow read, write: if false;
+      }
       match /exports/{x} {
         allow read: if isLeader(t);
         allow write: if false;

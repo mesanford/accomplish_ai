@@ -75,3 +75,20 @@ export interface PreviewForm {
 }
 
 export const previewPath = (form: PreviewForm) => call<PreviewForm, Feasibility>('check_path_preview', form);
+
+export interface DraftForm {
+  troopId: string;
+  scoutId: string;
+  goalAwardId: string;
+  targetDate?: string;
+  request: string;
+}
+
+export interface DraftResult {
+  items: { awardId: string; plannedStart: string | null; plannedEnd: string | null }[];
+  explanation: string;
+  feasibility: Feasibility;
+  repaired: boolean;
+}
+
+export const draftPath = (form: DraftForm) => call<DraftForm, DraftResult>('draft_path', form);
