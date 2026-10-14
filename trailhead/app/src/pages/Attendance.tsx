@@ -1,8 +1,10 @@
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { RequirementRef } from '../components/RequirementRef';
 import { Empty, formatDate, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
+import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
@@ -49,6 +51,16 @@ export function AttendancePage() {
         Checking a Scout in logs this event's nights, miles and service hours for them and marks any linked requirement
         ready for sign-off. {scouts.filter((sc) => isPresent(sc.id)).length} of {scouts.length} Scouts present.
       </p>
+      {(event.data?.linkedRequirements ?? []).length > 0 ? (
+        <p className="small">
+          Covers:{' '}
+          {(event.data?.linkedRequirements ?? []).map((r) => (
+            <span key={`${r.awardId}-${r.reqId}`}>
+              {awardName(r.awardId)} <RequirementRef awardId={r.awardId} reqId={r.reqId} />{' '}
+            </span>
+          ))}
+        </p>
+      ) : null}
       <Notice kind="error">{error}</Notice>
       {scouts.length === 0 ? (
         <Empty>No Scouts on the roster yet.</Empty>

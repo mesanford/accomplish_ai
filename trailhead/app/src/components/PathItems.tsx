@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { BADGES, badge, eagleLabel } from '../lib/catalog';
 import type { PathItemDoc } from '../lib/types';
+import { AwardRequirements } from './AwardRequirements';
 import { Empty, Pips } from './ui';
 
 interface Props {
@@ -14,6 +15,7 @@ const EAGLE_CHOICES = ['emergency-preparedness', 'environmental-science', 'swimm
 
 export function PathItems({ items, onChange }: Props) {
   const [adding, setAdding] = useState('');
+  const [shown, setShown] = useState<string | null>(null);
   const planned = new Set(items.map((i) => i.awardId));
   const available = BADGES.filter((b) => !planned.has(b.id));
 
@@ -51,13 +53,25 @@ export function PathItems({ items, onChange }: Props) {
               {items.map((item, i) => {
                 const b = badge(item.awardId);
                 return (
-                  <tr key={item.awardId}>
+                  <Fragment key={item.awardId}>
+                  <tr>
                     <td>
                       <div className="stack" style={{ gap: 2 }}>
                         <strong>{b?.name ?? item.awardId}</strong>
                         <span className="row small muted" style={{ gap: 6 }}>
                           <Pips level={b?.difficulty ?? 1} /> {b?.typicalTime}
                           {b && eagleLabel(b) ? <span className="pill eagle">{eagleLabel(b)}</span> : null}
+                        </span>
+                        <span>
+                          <button
+                            type="button"
+                            className="btn quiet small"
+                            aria-expanded={shown === item.awardId}
+                            onClick={() => setShown(shown === item.awardId ? null : item.awardId)}
+                          >
+                            {shown === item.awardId ? 'Hide requirements' : 'Requirements'}
+                            <span className="sr-only"> for {b?.name}</span>
+                          </button>
                         </span>
                       </div>
                     </td>
@@ -73,6 +87,14 @@ export function PathItems({ items, onChange }: Props) {
                       </button>
                     </td>
                   </tr>
+                  {shown === item.awardId ? (
+                    <tr>
+                      <td colSpan={4}>
+                        <AwardRequirements awardId={item.awardId} />
+                      </td>
+                    </tr>
+                  ) : null}
+                  </Fragment>
                 );
               })}
             </tbody>

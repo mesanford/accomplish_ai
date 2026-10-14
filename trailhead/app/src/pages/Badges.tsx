@@ -1,5 +1,6 @@
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
+import { RequirementsToggle } from '../components/AwardRequirements';
 import { Notice, PageHeader, Pips } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { BADGE_VERSION, type Badge, CATEGORY_LABELS, eagleLabel, searchBadges } from '../lib/catalog';
@@ -101,6 +102,7 @@ export function Badges() {
             <a className="small" href={b.officialUrl} target="_blank" rel="noreferrer">
               Official requirements
             </a>
+            <RequirementsToggle awardId={b.id} label="requirements" />
             <StartCard b={b} />
           </article>
         ))}

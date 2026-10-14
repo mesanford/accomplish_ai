@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BADGES, badge } from '../lib/catalog';
+import { RequirementPicker } from './RequirementPicker';
 
 export interface PartialEntry {
   awardId: string;
@@ -22,14 +23,15 @@ export function PriorPartials({ entries, exclude, onChange }: Props) {
   return (
     <div className="stack">
       {entries.map((e, i) => (
-        <div key={e.awardId} className="row" style={{ alignItems: 'end' }}>
+        <div key={e.awardId} className="row" style={{ alignItems: 'start' }}>
           <strong style={{ minWidth: 180 }}>{badge(e.awardId)?.name}</strong>
-          <input
-            aria-label={`${badge(e.awardId)?.name} requirements done`}
-            placeholder="Requirements done, e.g. 1, 2a, 4"
-            value={e.requirements}
-            onChange={(ev) => update(i, { requirements: ev.target.value })}
-            style={{ maxWidth: 260 }}
+          <RequirementPicker
+            awardId={e.awardId}
+            multiple
+            collapsible
+            value={e.requirements.split(/[\s,;]+/).filter(Boolean)}
+            onChange={(v) => update(i, { requirements: v.join(', ') })}
+            inputLabel={`${badge(e.awardId)?.name} requirements done`}
           />
           <input
             type="date"

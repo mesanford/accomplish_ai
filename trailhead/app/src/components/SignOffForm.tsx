@@ -1,9 +1,15 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { type FormEvent, useState } from 'react';
+import { doc } from 'firebase/firestore';
+import { type FormEvent, useMemo, useState } from 'react';
 import { errorMessage } from '../lib/api';
 import { useAuth } from '../lib/auth';
-import { awardName, BADGES, badge, RANKS, versionFor } from '../lib/catalog';
+import { awardName, BADGES, RANKS } from '../lib/catalog';
 import { db } from '../lib/firebase';
+import { useDoc } from '../lib/hooks';
+import { statusLookup } from '../lib/requirements';
+import { recordSignOff } from '../lib/signoff';
+import type { Progress } from '../lib/types';
+import { OfficialLink } from './AwardRequirements';
+import { RequirementPicker } from './RequirementPicker';
 import { Field, Notice } from './ui';
 
 interface Props {
@@ -23,7 +29,10 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId }: Props
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState('');
-  const official = badge(awardId)?.officialUrl;
+  const [round, setRound] = useState(0);
+  const progressRef = useMemo(() => doc(db, `troops/${troopId}/progress/${scoutId}_${awardId}`), [troopId, scoutId, awardId]);
+  const progress = useDoc<Progress>(progressRef);
+  const statuses = useMemo(() => statusLookup(progress.data?.requirements), [progress.data]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -34,17 +43,10 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId }: Props
     setError('');
     setDone('');
     try {
-      await addDoc(collection(db, 'troops', troopId, 'signoffs'), {
-        scoutId,
-        awardId,
-        versionId: versionId ?? versionFor(awardId),
-        reqId: reqId.trim(),
-        signerUid: user.uid,
-        signedAt: serverTimestamp(),
-        status: 'pending',
-      });
+      await recordSignOff({ troopId, scoutId, awardId, versionId, reqId, signerUid: user.uid });
       setDone(`Signed ${awardName(awardId)} requirement ${reqId.trim()}.`);
       setReqId('');
+      setRound((n) => n + 1);
     } catch (err) {
       setError(errorMessage(err));
     } finally {
@@ -74,18 +76,22 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId }: Props
           </select>
         </Field>
       )}
-      <Field label="Requirement" htmlFor="so-req" hint="Use the number from the official requirements, such as 4b.">
-        <input id="so-req" required maxLength={12} value={reqId} onChange={(e) => setReqId(e.target.value)} />
+      <Field label="Requirement" htmlFor="so-req" hint="Choose the requirement that was completed. Signed ones are marked.">
+        <RequirementPicker
+          key={`${awardId}-${round}`}
+          awardId={awardId}
+          value={reqId ? [reqId] : []}
+          onChange={(v) => setReqId(v[0] ?? '')}
+          statuses={statuses}
+          inputId="so-req"
+        />
       </Field>
-      {official ? (
-        <a className="small" href={official} target="_blank" rel="noreferrer">
-          Official {awardName(awardId)} requirements
-        </a>
-      ) : null}
+      {reqId ? <p className="small">Selected: {reqId}</p> : null}
+      <OfficialLink awardId={awardId} />
       <Notice kind="error">{error}</Notice>
       <Notice kind="ok">{done}</Notice>
       <div>
-        <button className="btn" type="submit" disabled={busy}>
+        <button className="btn" type="submit" disabled={busy || !reqId.trim()}>
           {busy ? 'Signing…' : 'Sign off requirement'}
         </button>
       </div>

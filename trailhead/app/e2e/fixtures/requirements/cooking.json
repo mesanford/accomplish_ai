@@ -1,0 +1,45 @@
+{
+  "awardId": "cooking",
+  "name": "Cooking",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/cooking/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Explain kitchen safety.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "2",
+      "label": "2.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "2a",
+          "label": "(a)",
+          "text": "Describe the food pyramid.",
+          "resources": [],
+          "children": []
+        },
+        {
+          "id": "2b",
+          "label": "(b)",
+          "text": "Plan three meals.",
+          "resources": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "label": "3.",
+      "text": "Cook a meal over a campfire.",
+      "resources": [],
+      "children": []
+    }
+  ]
+}

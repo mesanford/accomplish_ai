@@ -1,0 +1,44 @@
+{
+  "awardId": "camping",
+  "name": "Camping",
+  "kind": "merit_badge",
+  "sourceUrl": "https://www.scouting.org/merit-badges/camping/",
+  "fetchedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "1",
+      "label": "1.",
+      "text": "Show that you know first aid for common camping injuries.",
+      "resources": [],
+      "children": []
+    },
+    {
+      "id": "9",
+      "label": "9.",
+      "text": "Do the following:",
+      "resources": [],
+      "children": [
+        {
+          "id": "9a",
+          "label": "(a)",
+          "text": "Plan a menu for a campout.",
+          "resources": [
+            {
+              "title": "Camping menu worksheet (video)",
+              "url": "https://example.com/menu"
+            }
+          ],
+          "children": [
+            {
+              "id": "9a(1)",
+              "label": "(1)",
+              "text": "Make a shopping list.",
+              "resources": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
