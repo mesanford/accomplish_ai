@@ -21,14 +21,22 @@ export function ScoutPage() {
   const scout = members.find((m) => m.id === scoutId);
   const allowed = visibleScoutIds.includes(scoutId);
   const base = `troops/${troopId}`;
-  const recordRef = useMemo(() => (allowed ? doc(db, `${base}/scoutRecords/${scoutId}`) : null), [allowed, base, scoutId]);
-  const pathRef = useMemo(() => (allowed ? doc(db, `${base}/paths/${scoutId}`) : null), [allowed, base, scoutId]);
+  const recordRef = useMemo(
+    () => (allowed ? doc(db, `${base}/scoutRecords/${scoutId}`) : null),
+    [allowed, base, scoutId],
+  );
+  const pathRef = useMemo(
+    () => (allowed ? doc(db, `${base}/paths/${scoutId}`) : null),
+    [allowed, base, scoutId],
+  );
   const progressQ = useMemo(
-    () => (allowed ? query(collection(db, `${base}/progress`), where('scoutId', '==', scoutId)) : null),
+    () =>
+      allowed ? query(collection(db, `${base}/progress`), where('scoutId', '==', scoutId)) : null,
     [allowed, base, scoutId],
   );
   const cardsQ = useMemo(
-    () => (allowed ? query(collection(db, `${base}/blueCards`), where('scoutId', '==', scoutId)) : null),
+    () =>
+      allowed ? query(collection(db, `${base}/blueCards`), where('scoutId', '==', scoutId)) : null,
     [allowed, base, scoutId],
   );
   const record = useDoc<ScoutRecord>(recordRef);
@@ -49,7 +57,10 @@ export function ScoutPage() {
 
   return (
     <>
-      <PageHeader eyebrow={current ? `Current rank: ${current.name}` : 'Scout'} title={scout.displayName}>
+      <PageHeader
+        eyebrow={current ? `Current rank: ${current.name}` : 'Scout'}
+        title={scout.displayName}
+      >
         {isLeader ? (
           <Link className="btn quiet small" to={`/t/${troopId}/scouts/${scoutId}/earlier`}>
             Record earlier ranks and badges
@@ -77,20 +88,29 @@ export function ScoutPage() {
         <BlueCardList cards={cards.data} counselorName={uidName} />
       </section>
       {isLeader && record.data ? (
-        <div className="grid" style={{ alignItems: 'start', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+        <>
+          {/* Full width: the requirement checklist needs room to read. */}
           <section className="card">
             <h2>Sign off a requirement</h2>
             <SignOffForm troopId={troopId} scoutId={scoutId} />
           </section>
-          <section className="card">
-            <h2>Sign off a troop award</h2>
-            <CustomSignOff troopId={troopId} scoutId={scoutId} progress={custom} />
-          </section>
-          <section className="card">
-            <h2>Record a rank</h2>
-            <RankForm troopId={troopId} scoutId={scoutId} record={record.data} />
-          </section>
-        </div>
+          <div
+            className="grid"
+            style={{
+              alignItems: 'start',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            }}
+          >
+            <section className="card">
+              <h2>Sign off a troop award</h2>
+              <CustomSignOff troopId={troopId} scoutId={scoutId} progress={custom} />
+            </section>
+            <section className="card">
+              <h2>Record a rank</h2>
+              <RankForm troopId={troopId} scoutId={scoutId} record={record.data} />
+            </section>
+          </div>
+        </>
       ) : null}
     </>
   );
