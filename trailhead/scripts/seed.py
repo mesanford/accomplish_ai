@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -26,7 +27,21 @@ def client(project: str) -> firestore.Client:
         from google.auth.credentials import AnonymousCredentials
 
         return firestore.Client(project=project, credentials=AnonymousCredentials())
-    return firestore.Client(project=project)
+    try:
+        import google.auth
+        from google.auth.transport.requests import Request
+
+        credentials, _ = google.auth.default()
+        credentials.refresh(Request())  # fails fast if they exist but have expired
+        return firestore.Client(project=project, credentials=credentials)
+    except google.auth.exceptions.GoogleAuthError:
+        # No usable application-default credentials: borrow the signed-in gcloud user's token instead.
+        from google.oauth2.credentials import Credentials
+
+        token = subprocess.run(
+            ["gcloud", "auth", "print-access-token"], capture_output=True, text=True, check=True
+        ).stdout.strip()
+        return firestore.Client(project=project, credentials=Credentials(token))
 
 
 def seed_content(db: firestore.Client) -> int:

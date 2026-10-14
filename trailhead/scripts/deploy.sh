@@ -20,10 +20,10 @@ if [[ ! -f "app/.env.$target" ]]; then
   exit 1
 fi
 
-echo "Checking everything before deploying to $project…"
+echo "Checking everything before deploying to ${project}…"
 scripts/test.sh
 
-echo "Building the web app for $target…"
+echo "Building the web app for ${target}…"
 npm --prefix app run build -- --mode "$target"
 
 echo "Loading badge and rank content…"
