@@ -1,8 +1,8 @@
 /* Layout: a field-notebook app shell. Top bar with troop and nav, single content column, cards only for objects. */
 :root {
   --bg: #f5f3ec; --surface: #fffdf7; --ink: #23281f; --muted: #5d6455; --line: #d9d6c8;
-  --accent: #4f6a2e; --accent-ink: #ffffff; --accent-soft: #e6ecd9; --eagle: #a8741a;
-  --good: #3f7a3a; --warn: #a86a10; --bad: #a83a2c; --good-soft: #e3efdf; --warn-soft: #f5ead6; --bad-soft: #f4e0dc;
+  --accent: #4f6a2e; --accent-ink: #ffffff; --accent-soft: #e6ecd9; --eagle: #8f6214;
+  --good: #356a31; --warn: #8a560b; --bad: #a83a2c; --good-soft: #e3efdf; --warn-soft: #f5ead6; --bad-soft: #f4e0dc;
   --d1: #5f8f4e; --d2: #8aa13d; --d3: #c79a2b; --d4: #c66a2c; --d5: #a83a2c; --pip-off: #e2dfd2;
   --display: "Zilla Slab", Rockwell, Georgia, serif; --body: "Source Sans 3", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -12,7 +12,7 @@
   :root {
     --bg: #171a14; --surface: #20241c; --ink: #e9e8de; --muted: #a6ab9a; --line: #353a2e;
     --accent: #9cbc63; --accent-ink: #171a14; --accent-soft: #2c3522; --eagle: #e0aa4a;
-    --good: #7fb56c; --warn: #e2b84a; --bad: #e0614f; --good-soft: #243021; --warn-soft: #362d17; --bad-soft: #3a211d;
+    --good: #7fb56c; --warn: #e2b84a; --bad: #ec7a68; --good-soft: #243021; --warn-soft: #362d17; --bad-soft: #3a211d;
     --d1: #7fb56c; --d2: #aec35a; --d3: #e2b84a; --d4: #e48a4c; --d5: #e0614f; --pip-off: #3a3f33;
     color-scheme: dark;
   }
@@ -29,7 +29,8 @@ a { color: var(--accent); }
 
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); border-bottom: 1px solid var(--line); }
 .topbar-inner { max-width: 1040px; margin: 0 auto; padding-inline: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-height: 56px; }
-.brand { font: 700 1.25rem var(--display); color: var(--ink); text-decoration: none; }
+.brand { font: 700 1.25rem var(--display); color: var(--ink); text-decoration: none; display: inline-flex; }
+.brand img { display: block; height: 28px; width: auto; }
 .troop-name { font-size: 13px; color: var(--muted); }
 /* The nav takes its own row under the brand, troop name and Sign out, so it can grow without crowding them. */
 .nav { display: flex; flex-wrap: wrap; gap: 2px; order: 3; width: 100%; padding-bottom: 6px; }

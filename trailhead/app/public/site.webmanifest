@@ -1,0 +1,13 @@
+{
+  "name": "Trailhead",
+  "short_name": "Trailhead",
+  "description": "Advancement planning for Scouts BSA troops.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f3ec",
+  "theme_color": "#4f6a2e",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

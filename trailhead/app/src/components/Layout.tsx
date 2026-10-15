@@ -1,4 +1,6 @@
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
+import lockupDark from '../assets/trailhead-lockup-dark.svg';
+import lockup from '../assets/trailhead-lockup.svg';
 import { signOutUser, useAuth } from '../lib/auth';
 import { CustomAwardsProvider } from '../lib/customAwardsContext';
 import { useNewLeadCount } from '../lib/leads';
@@ -47,7 +49,10 @@ function Shell({ troopNav }: { troopNav: boolean }) {
       <header className="topbar">
         <div className="topbar-inner">
           <a className="brand" href="/">
-            Trailhead
+            <picture>
+              <source srcSet={lockupDark} media="(prefers-color-scheme: dark)" />
+              <img src={lockup} alt="Trailhead" width={118} height={28} />
+            </picture>
           </a>
           {troopNav ? <TroopNav /> : <span className="nav" />}
           {user ? (
