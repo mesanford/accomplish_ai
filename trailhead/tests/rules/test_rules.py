@@ -136,6 +136,10 @@ def test_messages_are_server_only_and_participant_read():
     assert scout1.get(f"{T}/threads/th1") == DENIED
     assert leader.create(f"{T}/threads/th2", {"participantUids": ["leader", "scout1"]}) == DENIED
     assert leader.create(f"{T}/threads/th1/messages/m1", {"body": "hi"}) == DENIED
+    # A Scout cannot create a thread or message directly, even one with only Scouts in it.
+    assert scout1.create(f"{T}/threads/th3", {"memberIds": ["s1", "s2"], "participantUids": ["scout1"]}) == DENIED
+    assert scout1.create(f"{T}/threads/th3/messages/m1", {"body": "hi"}) == DENIED
+    assert scout1.set(f"{T}/threads/th1", {"participantUids": ["scout1"]}) == DENIED
 
 
 def test_invites_are_leader_read_and_server_written():

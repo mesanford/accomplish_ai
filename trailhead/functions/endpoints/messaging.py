@@ -45,7 +45,12 @@ def send_message(req: https_fn.CallableRequest) -> dict:
     second_adults = (t.get().to_dict() or {}).get("yptCopyMemberIds", [])
     try:
         delivery = plan_delivery(
-            people[sender_id], [people[r] for r in recipient_ids], people, second_adults, date.today()
+            people[sender_id],
+            [people[r] for r in recipient_ids],
+            people,
+            second_adults,
+            date.today(),
+            new_thread=thread_ref is None,
         )
     except YPTViolation as err:
         who = (members.get(err.person_id) or {}).get("displayName", "An adult in this conversation")
