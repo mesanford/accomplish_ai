@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'reac
 import { AppLayout, TroopLayout } from './components/Layout';
 import { Loading } from './components/ui';
 import { AuthProvider, useAuth } from './lib/auth';
+import { Account } from './pages/Account';
 import { AttendancePage } from './pages/Attendance';
 import { Badges } from './pages/Badges';
 import { BlueCards } from './pages/BlueCards';
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
       { path: '/', element: authed(<Home />) },
       { path: '/signin', element: <SignIn /> },
       { path: '/privacy', element: <PrivacyPage /> },
+      { path: '/account', element: authed(<Account />) },
       { path: '/signin/finish', element: <FinishSignIn /> },
       { path: '/create', element: authed(<CreateTroop />) },
       { path: '/join/:troopId/:code', element: authed(<Join />) },

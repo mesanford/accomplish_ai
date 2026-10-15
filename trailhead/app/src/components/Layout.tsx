@@ -56,13 +56,18 @@ function Shell({ troopNav }: { troopNav: boolean }) {
           </a>
           {troopNav ? <TroopNav /> : <span className="nav" />}
           {user ? (
-            <button
-              type="button"
-              className="btn quiet small"
-              onClick={() => signOutUser().then(() => navigate('/'))}
-            >
-              Sign out
-            </button>
+            <div className="row" style={{ marginLeft: 'auto' }}>
+              <NavLink className="btn quiet small" to="/account">
+                Account
+              </NavLink>
+              <button
+                type="button"
+                className="btn quiet small"
+                onClick={() => signOutUser().then(() => navigate('/'))}
+              >
+                Sign out
+              </button>
+            </div>
           ) : null}
         </div>
       </header>

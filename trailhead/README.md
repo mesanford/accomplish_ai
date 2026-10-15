@@ -39,6 +39,11 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     by name and signs requirements for them. A Scout's **paper blue card** can be recorded by a leader with each
     signed requirement, its date and a photo; unlike earlier advancement it goes in the next Scoutbook report, counted
     by when it was entered. Card photos live in Cloud Storage under `cards/{troop}/{scout}/{card}/`.
+12. **Deleting data.** A leader uses *Remove from troop* on a Scout's page (`remove_scout`) to erase the Scout's
+    records, files and login access. Anyone can delete their own account from the **Account** page
+    (`delete_account`); a Scout's records stay with the troop, and the last leader of a troop that still has
+    members is asked to make another leader first. Only the server deletes these documents; the rules refuse
+    client deletes.
 
 ## Setup
 
@@ -99,4 +104,5 @@ firebase deploy --only firestore,storage,functions,hosting
 - Claude requirement Q&A. Plan drafting and the website About helper are built.
 - Automatic Scoutbook Plus import (needs Scouting America certification) and the blue card PDF.
 - Offline sign-off at camp (data already caches locally for reading) and payments.
-- Self-service deletion of a Scout or an account. For now, deletion is by request, as the privacy policy explains.
+- Deleting a whole troop yourself. Leaders can remove a Scout (`remove_scout`) and anyone can delete their account (`delete_account`), but removing a troop and its website is still by email request, as the privacy policy explains.
+- Removing a Scout takes every live website photo that shows them down, but keeps draft photos that also show other Scouts. Their tag points at nobody, so the next publish leaves those photos out until a leader fixes the tags.

@@ -78,7 +78,9 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     items: [
       'Correct most information yourself in the app, or ask a troop leader to.',
       "Withdraw a Scout's media consent at any time. Photos showing that Scout are taken off the troop website.",
-      'Ask for a copy of the information we hold about you or your child, or ask us to delete it. We respond within 30 days.',
+      'Delete your own account at any time from the Account page. This removes your sign-in and your place in your troops. Your Scouts\' records stay with the troop, and sign-offs you made stay in the Scouts\' records.',
+      "Have a Scout's information deleted. A troop leader can use Remove from troop on the Scout's page, which deletes their profile, advancement, blue cards and photos of paper blue cards, plan, attendance and website photos. Parents can ask a leader to do this. It cannot be undone.",
+      'Ask for a copy of the information we hold about you or your child, or ask us to delete it by email instead. We respond within 30 days.',
     ],
   },
   {
