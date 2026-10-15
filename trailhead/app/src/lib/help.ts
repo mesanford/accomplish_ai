@@ -13,7 +13,7 @@ export interface HelpEntry {
 export const HELP = {
   blueCard: {
     title: 'Blue card',
-    body: 'The Application for Merit Badge, a paper form. In Forthright it is a request a leader approves, then a counselor is assigned. A Scout needs one before starting a merit badge.',
+    body: 'The Application for Merit Badge, a paper form. In Forthright it is a request the Scoutmaster or advancement chair approves, then a counselor is assigned. A Scout needs one before starting a merit badge.',
     learnMore: 'https://www.scouting.org/skills/merit-badges/',
   },
   boardOfReview: {
@@ -69,7 +69,7 @@ export const HELP = {
   },
   signOff: {
     title: 'Sign-off',
-    body: 'Marking a requirement as done by an approved adult. It records who signed and when. Only counselors and leaders can sign off.',
+    body: 'Marking a requirement as done by an approved adult. It records who signed and when. Merit badge requirements are signed by the Scoutmaster, the advancement chair or the counselor of that badge. Leaders sign ranks and troop awards.',
   },
   attendance: {
     title: 'Attendance',
@@ -85,7 +85,7 @@ export const HELP = {
   },
   roles: {
     title: 'Who can do what',
-    body: 'Leaders and advancement chairs manage everything. Counselors sign off merit badges for Scouts assigned to them. Parents see and plan for their own Scouts. Scouts 13 and older can sign in for themselves. One person can hold several roles, such as a leader who is also a parent.',
+    body: 'The Scoutmaster and advancement chair manage everything, including blue cards and merit badges. A troop can have more than one Scoutmaster. Other leaders manage the troop and sign ranks, but cannot change merit badge records. Counselors sign off merit badges for Scouts assigned to them. Parents see and plan for their own Scouts. Scouts 13 and older can sign in for themselves. One person can hold several roles, such as a leader who is also a parent.',
   },
   birthMonth: {
     title: 'Why birth month and year?',

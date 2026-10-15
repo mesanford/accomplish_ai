@@ -32,7 +32,7 @@ export function Badges() {
         steps={[
           'Search or filter to find a badge.',
           'Read the summary and the toughest part, or open the requirements.',
-          'Press "Start a blue card" to ask for it. A leader approves and assigns a counselor.',
+          'Press "Start a blue card" to ask for it. The Scoutmaster or advancement chair approves and assigns a counselor.',
         ]}
       />
       <div className="row">

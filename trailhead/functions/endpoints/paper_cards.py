@@ -6,7 +6,7 @@ from datetime import UTC, date, datetime
 
 from firebase_functions import https_fn
 
-from fb import db, fail, require_leader, troop
+from fb import db, fail, require_badge_manager, troop
 from handlers.membership import InvalidInput
 from handlers.paper_cards import already_started, card_doc, check_paper_card, progress_doc, signoff_doc
 from trailhead_core.catalog import badge_version, load_catalog
@@ -16,10 +16,11 @@ BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 
 @https_fn.on_call()
 def record_paper_blue_card(req: https_fn.CallableRequest) -> dict:
-    """A leader enters a paper blue card: the card, each signed requirement and the progress, in one batch."""
+    """The Scoutmaster or advancement chair enters a paper blue card: the card, each signed requirement and the
+    progress, in one batch."""
     data = req.data or {}
     troop_id, scout_id = data.get("troopId"), data.get("scoutId")
-    access = require_leader(req, troop_id)
+    access = require_badge_manager(req, troop_id)
     t = troop(troop_id)
     record = t.collection("scoutRecords").document(scout_id or "-").get().to_dict()
     if record is None:

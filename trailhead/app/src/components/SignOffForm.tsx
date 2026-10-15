@@ -6,7 +6,9 @@ import { awardName, BADGES, RANKS } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
 import { statusLookup } from '../lib/requirements';
+import { SIGNOFF_NOTE } from '../lib/badgeAuthority';
 import { recordSignOff } from '../lib/signoff';
+import { useTroop } from '../lib/troop';
 import type { Progress } from '../lib/types';
 import { OfficialLink } from './AwardRequirements';
 import { RequirementPicker } from './RequirementPicker';
@@ -26,6 +28,9 @@ interface Props {
 /** Record a signed requirement. The server checks permissions and applies it to the Scout's progress. */
 export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId, onBehalfOf }: Props) {
   const { user } = useAuth();
+  const { canManageBadges } = useTroop();
+  // Leaders who aren't the Scoutmaster or advancement chair sign ranks only; a counselor's form is fixed to their badge.
+  const ranksOnly = !fixedAwardId && !canManageBadges;
   const [awardId, setAwardId] = useState(fixedAwardId ?? 'scout');
   const [reqId, setReqId] = useState('');
   const [busy, setBusy] = useState(false);
@@ -59,7 +64,7 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId, onBehal
   return (
     <form className="form" onSubmit={submit}>
       {fixedAwardId ? null : (
-        <Field label="Rank or merit badge" htmlFor="so-award">
+        <Field label={ranksOnly ? 'Rank' : 'Rank or merit badge'} htmlFor="so-award">
           <select id="so-award" value={awardId} onChange={(e) => setAwardId(e.target.value)}>
             <optgroup label="Ranks">
               {RANKS.map((r) => (
@@ -68,16 +73,23 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId, onBehal
                 </option>
               ))}
             </optgroup>
-            <optgroup label="Merit badges">
-              {BADGES.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </optgroup>
+            {ranksOnly ? null : (
+              <optgroup label="Merit badges">
+                {BADGES.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </select>
         </Field>
       )}
+      {ranksOnly ? (
+        <p className="small muted" role="note">
+          {SIGNOFF_NOTE}
+        </p>
+      ) : null}
       <Field label="Requirement" htmlFor="so-req" hint="Choose the requirement that was completed. Signed ones are marked.">
         <RequirementPicker
           key={`${awardId}-${round}`}

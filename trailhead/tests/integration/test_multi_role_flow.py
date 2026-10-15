@@ -45,7 +45,7 @@ def test_a_leader_adds_their_own_child():
     me = read(f"troops/{tid}/access/lead")["memberId"]
     assert call("add_scout", "lead", {**child_form(tid), "isMyChild": True}).status_code == 400  # must agree
     sid = ok(call("add_scout", "lead", {**child_form(tid), "isMyChild": True, **AGREE}))["scoutId"]
-    assert roles_everywhere(tid, "lead") == ["leader", "parent"]
+    assert roles_everywhere(tid, "lead") == ["leader", "scoutmaster", "parent"]
     assert read(f"troops/{tid}/access/lead")["scoutIds"] == [sid]
     assert read(f"troops/{tid}/members/{sid}")["guardianIds"] == [me]
     [consent] = read(f"troops/{tid}/consents/{sid}")["parentConsents"]
@@ -68,7 +68,7 @@ def test_a_leader_links_themselves_to_an_existing_scout():
     assert call("link_self_as_parent", "lead", {**link, "consent": True, "consentVersion": "old"}).status_code == 400
     assert call("link_self_as_parent", "lead", {**link, "scoutId": "nope", **AGREE}).status_code == 404
     ok(call("link_self_as_parent", "lead", {**link, **AGREE}))
-    assert roles_everywhere(tid, "lead") == ["leader", "parent"]
+    assert roles_everywhere(tid, "lead") == ["leader", "scoutmaster", "parent"]
     assert read(f"troops/{tid}/access/lead")["scoutIds"] == [sid]
     members = read(f"troops/{tid}/members/{sid}")["guardianIds"]
     assert read(f"troops/{tid}/access/lead")["memberId"] in members and len(members) == 2
@@ -89,7 +89,7 @@ def test_only_leaders_change_roles_and_the_last_leader_stays():
     last = call("set_member_roles", "lead", {"troopId": tid, "memberId": lead_id, "roles": ["committee"]})
     assert last.status_code == 400
     assert "at least one leader" in last.text
-    assert read(f"troops/{tid}/access/lead")["roles"] == ["leader"]
+    assert read(f"troops/{tid}/access/lead")["roles"] == ["leader", "scoutmaster"]
     # Giving up the role is fine once someone else leads, and then that person is the last one.
     chair = {"troopId": tid, "memberId": mom_id, "roles": ["advancement", "parent"], "yptExpiresAt": YPT}
     ok(call("set_member_roles", "lead", {**chair, "scoutIds": [sid]}))
@@ -210,7 +210,7 @@ def test_an_existing_member_accepts_an_invite_for_another_role():
     assert call("accept_invite", "lead", form).status_code == 400  # must agree
     assert read(f"troops/{tid}/invites/{invite['code']}").get("usedBy") is None
     ok(call("accept_invite", "lead", {**form, **AGREE}))
-    assert roles_everywhere(tid, "lead") == ["leader", "parent"]
+    assert roles_everywhere(tid, "lead") == ["leader", "scoutmaster", "parent"]
     assert read(f"troops/{tid}/access/lead")["scoutIds"] == [sid]
     assert len(read(f"troops/{tid}/members/{sid}")["guardianIds"]) == 1
     assert [c["uid"] for c in read(f"troops/{tid}/consents/{sid}")["parentConsents"]] == ["lead"]

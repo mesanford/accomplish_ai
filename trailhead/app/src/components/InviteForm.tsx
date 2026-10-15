@@ -11,6 +11,7 @@ const ROLE_OPTIONS: [string, string][] = [
   ['scout', 'Scout (13 or older)'],
   ['counselor', 'Merit badge counselor'],
   ['leader', 'Leader'],
+  ['scoutmaster', 'Scoutmaster'],
   ['advancement', 'Advancement chair'],
   ['committee', 'Committee member'],
 ];
@@ -19,8 +20,9 @@ const ROLE_HINTS: Record<string, string> = {
   parent: 'Can see and plan for their own Scouts.',
   scout: 'Signs in for themselves. Must be 13 or older.',
   counselor: 'Signs off merit badges for Scouts assigned to them. Needs current Youth Protection training.',
-  leader: 'Can manage everything in the troop.',
-  advancement: 'Can manage ranks, badges and records.',
+  leader: 'Can manage the troop and sign ranks, but cannot change merit badge records.',
+  scoutmaster: 'Can manage everything in the troop, including blue cards and merit badges.',
+  advancement: 'Can manage everything in the troop, including blue cards and merit badges.',
   committee: 'Can see the troop but not change records.',
 };
 

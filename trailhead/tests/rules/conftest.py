@@ -33,7 +33,8 @@ def pytest_collection_modifyitems(items):
 
 @pytest.fixture(autouse=True)
 def troop():
-    """A troop with a leader, an expired leader, a counselor, a parent and two Scouts."""
+    """A troop with a Scoutmaster ("leader"), an assistant leader, an advancement chair, a Scoutmaster whose Youth
+    Protection training lapsed, a counselor, a parent and two Scouts."""
     if not _emulator_up():
         yield
         return
@@ -41,8 +42,10 @@ def troop():
     owner = Client("owner")
     owner.set(T, {"unitNumber": "123", "yptCopyMemberIds": ["m-leader"]})
     access = {
-        "leader": {"memberId": "m-leader", "roles": ["leader"], "scoutIds": [], "yptExpiresAt": FUTURE},
-        "lapsed": {"memberId": "m-lapsed", "roles": ["leader"], "scoutIds": [], "yptExpiresAt": PAST},
+        "leader": {"memberId": "m-leader", "roles": ["leader", "scoutmaster"], "scoutIds": [], "yptExpiresAt": FUTURE},
+        "assistant": {"memberId": "m-asst", "roles": ["leader"], "scoutIds": [], "yptExpiresAt": FUTURE},
+        "chair": {"memberId": "m-chair", "roles": ["advancement"], "scoutIds": [], "yptExpiresAt": FUTURE},
+        "lapsed": {"memberId": "m-lapsed", "roles": ["leader", "scoutmaster"], "scoutIds": [], "yptExpiresAt": PAST},
         "counselor": {"memberId": "m-mbc", "roles": ["counselor"], "scoutIds": [], "yptExpiresAt": FUTURE},
         "parent": {"memberId": "m-parent", "roles": ["parent"], "scoutIds": ["s1"], "yptExpiresAt": PAST},
         "scout1": {"memberId": "s1", "roles": ["scout"], "scoutIds": ["s1"], "yptExpiresAt": PAST},

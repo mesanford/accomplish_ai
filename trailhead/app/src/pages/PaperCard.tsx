@@ -8,12 +8,13 @@ import { cardFileProblem, paperDateProblem, paperRequirements } from '../lib/car
 import { BADGES } from '../lib/catalog';
 import { stillNeeded } from '../lib/formCheck';
 import { plural } from '../lib/plural';
+import { BADGE_MANAGER_NOTE } from '../lib/badgeAuthority';
 import { useTroop } from '../lib/troop';
 
-/** A leader records a blue card a Scout brought signed on paper by a counselor outside Forthright. */
+/** The Scoutmaster or advancement chair records a blue card a Scout brought signed on paper by a counselor outside Forthright. */
 export function PaperCard() {
   const { scoutId = '' } = useParams();
-  const { troopId, isLeader, memberName } = useTroop();
+  const { troopId, canManageBadges, memberName } = useTroop();
   const [awardId, setAwardId] = useState('');
   const [counselorName, setCounselorName] = useState('');
   const [counselorEmail, setCounselorEmail] = useState('');
@@ -28,8 +29,8 @@ export function PaperCard() {
   const [result, setResult] = useState('');
   const max = todayIso();
 
-  if (!isLeader) {
-    return <Empty>Only leaders can record paper blue cards.</Empty>;
+  if (!canManageBadges) {
+    return <Empty>{BADGE_MANAGER_NOTE}</Empty>;
   }
 
   async function save(e: FormEvent) {

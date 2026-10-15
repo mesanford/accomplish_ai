@@ -24,7 +24,8 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
 
 ## How people use it
 
-1. A leader signs in and creates the troop. Leaders need a Youth Protection training expiry date.
+1. A leader signs in and creates the troop, and becomes its first Scoutmaster. Leaders need a Youth Protection
+   training expiry date. A troop can have more than one Scoutmaster; leaders give or remove the role on the Roster.
 2. On **Roster**, the leader adds Scouts (birth month and year, current rank) and creates invite links for parents,
    Scouts 13 and older, counselors and other leaders. Each link works once and expires in 30 days.
 3. Parents open their link, sign in, read a notice about what Trailhead keeps and tick a box to agree, then see their
@@ -35,9 +36,15 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
    The confirmation email COPPA's "email plus" method calls for isn't sent yet: `send_consent_confirmation` in
    `functions/endpoints/consent.py` is the one place to add it.
 4. A Scout or parent plans a **path** to a rank. The planner checks it live and explains what won't work.
-5. From **Badges**, they start a blue card. A leader approves it and assigns a counselor under **Blue cards**.
+5. From **Badges**, they start a blue card. The Scoutmaster or advancement chair approves it and assigns a counselor
+   under **Blue cards**. Other leaders see that page read-only. Only the Scoutmaster, the advancement chair and a
+   badge's assigned counselor change merit badge records (blue cards, card photos, paper cards, earlier badges and
+   merit badge sign-offs). `canManageBadges` in `firestore.rules` and `can_manage_badges` in `functions/fb.py` are the
+   one rule. Rank and troop award sign-offs stay open to every leader; the rules treat any award that is not a rank
+   (a fixed list, checked against `ranks.json` by a test) or a `custom-` troop award as a merit badge.
 6. The counselor signs requirements and marks the badge complete under **Counseling**.
 7. Leaders sign off rank requirements and record ranks on a Scout's page, and take attendance at **Events**.
+   Troops that existed before the Scoutmaster role run `scripts/migrate_scoutmaster.py` once (see Seeding below).
 8. In the path planner, **Draft with AI** turns a goal in plain words into a plan. Claude drafts it and the plan
    checker verifies it before anyone sees it. Leaders can also publish **Path templates** that Scouts start from.
 9. Leaders create **Troop awards** with their own requirements. Editing one makes a new version; a leader moves
@@ -45,7 +52,8 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
 10. **Scoutbook** gives the advancement chair a report of everything signed since the last one, grouped by Scout,
     to enter in Scoutbook Plus. Troop awards are left out, since Scoutbook doesn't know them.
 11. Counselors outside the troop need no account: under **Blue cards** a leader assigns "Someone outside the troop"
-    by name and signs requirements for them. A Scout's **paper blue card** can be recorded by a leader with each
+    by name and signs requirements for them. A Scout's **paper blue card** can be recorded by the Scoutmaster or
+    advancement chair with each
     signed requirement, its date and a photo; unlike earlier advancement it goes in the next Scoutbook report, counted
     by when it was entered. Card photos live in Cloud Storage under `cards/{troop}/{scout}/{card}/`.
 12. **Deleting data.** A leader uses *Remove from troop* on a Scout's page (`remove_scout`) to erase the Scout's
@@ -111,6 +119,14 @@ firebase use --add                       # pick your Firebase project
 cp app/.env.example app/.env.local       # fill in the web app config from the Firebase console
 .venv/bin/python scripts/seed.py --project <project-id>   # load badges and ranks
 firebase deploy --only firestore,storage,functions,hosting
+```
+
+Existing troops have no Scoutmaster, so nobody could change merit badge records after this release. Run the one-off
+migration once, after deploying. It gives the role to each troop's creator and is safe to run again:
+
+```bash
+.venv/bin/python scripts/migrate_scoutmaster.py --project <project-id>           # dry run: prints what would change
+.venv/bin/python scripts/migrate_scoutmaster.py --project <project-id> --apply   # make the changes
 ```
 
 ## Not built yet

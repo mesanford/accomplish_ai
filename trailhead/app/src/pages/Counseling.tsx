@@ -78,7 +78,7 @@ export function Counseling() {
     [troopId, user],
   );
   const cards = useQuery<BlueCard>(mine, `${troopId}/counseling/${user?.uid}`);
-  if (!has('counselor', 'leader')) {
+  if (!has('counselor', 'scoutmaster', 'advancement')) {
     return <Empty>This page is for merit badge counselors.</Empty>;
   }
   const active = cards.data.filter((c) => c.status === 'counselor_assigned' || c.status === 'in_progress');

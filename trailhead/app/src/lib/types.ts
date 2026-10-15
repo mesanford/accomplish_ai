@@ -1,6 +1,6 @@
 import type { Timestamp } from 'firebase/firestore';
 
-export type Role = 'leader' | 'advancement' | 'counselor' | 'committee' | 'parent' | 'scout';
+export type Role = 'leader' | 'scoutmaster' | 'advancement' | 'counselor' | 'committee' | 'parent' | 'scout';
 
 export interface Membership {
   name: string;

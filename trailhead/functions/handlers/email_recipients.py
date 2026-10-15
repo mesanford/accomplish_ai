@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from handlers.account import LEADER_ROLES
+from handlers.account import BADGE_MANAGER_ROLES
 from handlers.roles import acts_for
 
 MAX_RECIPIENTS = 20  # per event, so one action can never send a flood
@@ -13,9 +13,9 @@ def wants_email(user_doc: dict | None) -> bool:
     return (user_doc or {}).get("emailNotifications") is not False
 
 
-def leader_uids(access_docs: dict[str, dict]) -> list[str]:
-    """Every leader and advancement chair, in a steady order."""
-    return sorted(uid for uid, a in access_docs.items() if LEADER_ROLES & set(a.get("roles", [])))
+def badge_manager_uids(access_docs: dict[str, dict]) -> list[str]:
+    """Every Scoutmaster and advancement chair, in a steady order. Only they can approve a blue card."""
+    return sorted(uid for uid, a in access_docs.items() if BADGE_MANAGER_ROLES & set(a.get("roles", [])))
 
 
 def parent_uids(scout_id: str, scout: dict, access_docs: dict[str, dict]) -> list[str]:

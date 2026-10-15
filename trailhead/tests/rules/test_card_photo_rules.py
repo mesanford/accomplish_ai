@@ -16,12 +16,22 @@ def clean_bucket():
     yield
 
 
-def test_leaders_upload_read_and_delete_card_photos():
+def test_the_scoutmaster_uploads_reads_and_deletes_card_photos():
     leader = Storage("leader")
     assert leader.upload(PHOTO) == OK
     assert leader.download(PHOTO) == OK
     assert leader.upload("cards/t1/s1/s1_archery/scan.pdf", b"%PDF-1.4", "application/pdf") == OK
     assert leader.delete(PHOTO) in (OK, 204)
+
+
+def test_the_advancement_chair_writes_card_photos_but_an_assistant_leader_only_reads_them():
+    assert Storage("chair").upload(PHOTO) == OK
+    assert Storage("chair").delete(PHOTO) in (OK, 204)
+    assert Storage("owner").upload(PHOTO) == OK
+    assistant = Storage("assistant")
+    assert assistant.download(PHOTO) == OK
+    assert assistant.upload("cards/t1/s1/s1_archery/mine.png") == DENIED
+    assert assistant.delete(PHOTO) == DENIED
 
 
 def test_the_scout_and_their_parent_read_but_do_not_write():

@@ -4,19 +4,24 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from handlers.account import LEADER_ROLES
+from handlers.account import BADGE_MANAGER_ROLES, LEADER_ROLES
 from handlers.membership import ROLES, YPT_ROLES, InvalidInput
 
 # The roles a leader can give to an adult. A Scout's role is never edited.
 ADULT_ROLES = tuple(r for r in ROLES if r != "scout")
 ROLE_WORDS = {
     "leader": "a leader",
+    "scoutmaster": "the Scoutmaster",
     "advancement": "an advancement chair",
     "counselor": "a counselor",
     "committee": "a committee member",
     "parent": "a parent",
 }
 NO_LEADER = "A troop needs at least one leader. Make someone else a leader or advancement chair first."
+NO_MANAGER = (
+    "A troop needs a Scoutmaster or an advancement chair to manage merit badges. "
+    "Make someone else the Scoutmaster or advancement chair first."
+)
 
 
 def in_order(roles) -> list[str]:
@@ -30,7 +35,9 @@ def parse_roles(value) -> list[str]:
     if not isinstance(value, list) or not value or not all(isinstance(r, str) for r in value):
         raise InvalidInput("Pick at least one role.")
     if not set(value) <= set(ADULT_ROLES):
-        raise InvalidInput("Pick roles from the list: leader, advancement, counselor, committee or parent.")
+        raise InvalidInput(
+            "Pick roles from the list: leader, Scoutmaster, advancement chair, counselor, committee or parent."
+        )
     return in_order(value)
 
 
@@ -59,6 +66,16 @@ def loses_all_leaders(target_uid: str, new_roles: list[str], access_docs: dict[s
     before = any(LEADER_ROLES & set(a.get("roles", [])) for a in access_docs.values())
     after = any(
         LEADER_ROLES & set(new_roles if uid == target_uid else a.get("roles", [])) for uid, a in access_docs.items()
+    )
+    return before and not after
+
+
+def loses_all_badge_managers(target_uid: str, new_roles: list[str], access_docs: dict[str, dict]) -> bool:
+    """True if this change would leave a troop that had a Scoutmaster or advancement chair with neither."""
+    before = any(BADGE_MANAGER_ROLES & set(a.get("roles", [])) for a in access_docs.values())
+    after = any(
+        BADGE_MANAGER_ROLES & set(new_roles if uid == target_uid else a.get("roles", []))
+        for uid, a in access_docs.items()
     )
     return before and not after
 

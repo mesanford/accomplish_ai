@@ -32,7 +32,7 @@ def add_scout(req: https_fn.CallableRequest) -> dict:
     troop_id = data.get("troopId")
     access = require_access(req, troop_id)
     roles = set(access.get("roles", []))
-    if not roles & {"leader", "advancement", "parent"}:
+    if not roles & {"leader", "scoutmaster", "advancement", "parent"}:
         raise fail(https_fn.FunctionsErrorCode.PERMISSION_DENIED, "Only leaders and parents can add Scouts.")
     try:
         member, record = new_scout(data, date.today())

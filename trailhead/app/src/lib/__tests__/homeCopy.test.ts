@@ -25,4 +25,12 @@ describe('blueCardAction', () => {
     expect(blueCardAction(1)).toEqual({ text: '1 blue card needs action', waiting: true });
     expect(blueCardAction(3).text).toBe('3 blue cards need action');
   });
+
+  it('does not ask a leader who cannot act on blue cards to act', () => {
+    expect(blueCardAction(0, false)).toEqual({ text: 'No blue cards are waiting', waiting: false });
+    expect(blueCardAction(2, false)).toEqual({
+      text: '2 blue cards waiting for the Scoutmaster or advancement chair',
+      waiting: false,
+    });
+  });
 });

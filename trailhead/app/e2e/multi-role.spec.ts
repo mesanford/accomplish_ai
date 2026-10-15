@@ -33,7 +33,7 @@ test('a leader adds their own child and is both leader and parent', async ({ bro
   await expect(leader.getByRole('link', { name: 'Ava', exact: true })).toBeVisible();
 
   // The roster shows both roles and the parent consent the leader just gave.
-  await expect(leader.getByText('Leader and parent')).toBeVisible();
+  await expect(leader.getByText('Leader, Scoutmaster and parent')).toBeVisible();
   await expect(leader.getByText('Parent of Ava')).toBeVisible();
   await expect(leader.getByText(/Parent consent: given/)).toBeVisible();
 

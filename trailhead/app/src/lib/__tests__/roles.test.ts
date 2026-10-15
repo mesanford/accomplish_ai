@@ -10,6 +10,7 @@ describe('roleList', () => {
     expect(roleList(['parent', 'leader'])).toBe('Leader and parent');
     expect(roleList(['counselor', 'committee', 'parent'])).toBe('Counselor, committee member and parent');
     expect(roleList(['leader'])).toBe('Leader');
+    expect(roleList(['advancement', 'scoutmaster', 'leader'])).toBe('Leader, Scoutmaster and advancement chair');
     expect(roleList(undefined)).toBe('No role');
   });
 });
@@ -29,6 +30,7 @@ describe('needsTrainingDate', () => {
   it('asks for a date when a trained role is added and there is no current one', () => {
     expect(needsTrainingDate(['counselor'], null, now)).toBe(true);
     expect(needsTrainingDate(['leader'], past, now)).toBe(true);
+    expect(needsTrainingDate(['scoutmaster'], null, now)).toBe(true);
   });
 
   it('does not ask when the date is current or the role needs no training', () => {

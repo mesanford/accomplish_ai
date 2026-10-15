@@ -54,13 +54,13 @@ function LeadAlert() {
 }
 
 function LeaderSummary() {
-  const { troopId } = useTroop();
+  const { troopId, canManageBadges } = useTroop();
   const pendingQuery = useMemo(
     () => query(collection(db, 'troops', troopId, 'blueCards'), where('status', 'in', ['requested', 'approved'])),
     [troopId],
   );
   const pending = useQuery<BlueCard>(pendingQuery, `${troopId}/pending-cards`);
-  const action = blueCardAction(pending.data.length);
+  const action = blueCardAction(pending.data.length, canManageBadges);
   return (
     <div className="row">
       <Link className={action.waiting ? 'btn' : 'btn quiet'} to={`/t/${troopId}/blue-cards`}>

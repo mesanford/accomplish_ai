@@ -6,9 +6,9 @@ from datetime import UTC, date, datetime, time, timedelta
 
 from trailhead_core.catalog import load_catalog
 
-ROLES = ("leader", "advancement", "counselor", "committee", "parent", "scout")
+ROLES = ("leader", "scoutmaster", "advancement", "counselor", "committee", "parent", "scout")
 # Roles that sign off, counsel or message Scouts need current Youth Protection training.
-YPT_ROLES = {"leader", "advancement", "counselor", "committee"}
+YPT_ROLES = {"leader", "scoutmaster", "advancement", "counselor", "committee"}
 INVITE_DAYS = 30
 
 
@@ -49,7 +49,7 @@ def new_troop(data: dict, uid: str, today: date) -> tuple[dict, dict]:
         "council": (data.get("council") or "").strip()[:80],
         "createdBy": uid,
     }
-    member = adult_member(data, uid, ["leader"], today)
+    member = adult_member(data, uid, ["leader", "scoutmaster"], today)
     return troop, member
 
 

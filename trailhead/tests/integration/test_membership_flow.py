@@ -43,7 +43,7 @@ def new_scout(tid: str, caller: str, name: str, year: int) -> str:
 
 def test_troop_invite_and_join():
     tid = new_troop("7")
-    assert read("users/lead")["troops"][tid]["roles"] == ["leader"]
+    assert read("users/lead")["troops"][tid]["roles"] == ["leader", "scoutmaster"]
     sid = new_scout(tid, "lead", "Sam", 2012)
     assert read(f"troops/{tid}/scoutRecords/{sid}")["currentRankId"] == "first-class"
 

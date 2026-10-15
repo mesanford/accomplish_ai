@@ -12,7 +12,7 @@ def test_new_troop_needs_name_number_and_training():
     data = {"name": "Troop 101", "unitNumber": "101", "displayName": "Pat", "yptExpiresAt": "2027-05-01"}
     troop, member = new_troop(data, "u1", TODAY)
     assert troop["name"] == "Troop 101"
-    assert member["roles"] == ["leader"]
+    assert member["roles"] == ["leader", "scoutmaster"]
     assert member["yptExpiresAt"].date() == date(2027, 5, 1)
     with pytest.raises(InvalidInput, match="Youth Protection"):
         new_troop({**data, "yptExpiresAt": ""}, "u1", TODAY)

@@ -8,7 +8,7 @@ import { TroopProvider, useTroop } from '../lib/troop';
 import { ConsentGate } from './ConsentGate';
 
 function TroopNav() {
-  const { troopId, troop, has, isLeader } = useTroop();
+  const { troopId, troop, has, isLeader, canManageBadges } = useTroop();
   const newLeads = useNewLeadCount();
   const base = `/t/${troopId}`;
   const links: [string, string, boolean][] = [
@@ -16,7 +16,7 @@ function TroopNav() {
     [`${base}/roster`, 'Roster', isLeader],
     [`${base}/blue-cards`, 'Blue cards', isLeader],
     [`${base}/scoutbook`, 'Scoutbook', isLeader],
-    [`${base}/counseling`, 'Counseling', has('counselor')],
+    [`${base}/counseling`, 'Counseling', has('counselor') || canManageBadges],
     [`${base}/events`, 'Events', true],
     [`${base}/badges`, 'Badges', true],
     [`${base}/templates`, 'Path templates', isLeader],

@@ -34,7 +34,28 @@ export const ROLE_GUIDES: RoleGuide[] = [
       },
       {
         task: 'Approve a blue card',
-        steps: ['Open Blue cards.', 'Press Approve on a request.', 'Choose a counselor and press Assign.'],
+        steps: [
+          'Open Blue cards.',
+          'Press Approve on a request.',
+          'Choose a counselor and press Assign.',
+          'Only the Scoutmaster and advancement chair can do this. Other leaders can see the list but not change it.',
+        ],
+      },
+      {
+        task: 'Make someone the Scoutmaster',
+        steps: [
+          'Open Roster and find the person under Adults.',
+          'Press "Change roles" and tick Scoutmaster.',
+          'Press "Save roles". A troop can have more than one Scoutmaster, and always keeps at least one Scoutmaster or advancement chair.',
+        ],
+      },
+      {
+        task: 'Know who can change merit badges',
+        steps: [
+          'The Scoutmaster and advancement chair can approve blue cards, record paper cards and earlier badges, and sign any merit badge requirement.',
+          "A badge's counselor can sign requirements for that badge.",
+          'Other leaders can see everything and can sign ranks and troop awards.',
+        ],
       },
       {
         task: 'Take attendance',
@@ -60,7 +81,7 @@ export const ROLE_GUIDES: RoleGuide[] = [
       },
       {
         task: 'Start a merit badge',
-        steps: ['Open Badges and search for the badge.', 'Press "Start a blue card".', 'A leader approves it and assigns a counselor.'],
+        steps: ['Open Badges and search for the badge.', 'Press "Start a blue card".', 'The Scoutmaster or advancement chair approves it and assigns a counselor.'],
       },
     ],
   },

@@ -72,7 +72,10 @@ def _notification(subject: str, lines: list[str], button: tuple[str, str], app_u
 def card_requested(scout: str, badge: str, troop_id: str, app_url: str) -> Email:
     return _notification(
         f"{scout} asked to start {badge}",
-        [f"{scout} asked to start the {badge} merit badge.", "A leader needs to approve the blue card."],
+        [
+            f"{scout} asked to start the {badge} merit badge.",
+            "The Scoutmaster or advancement chair needs to approve the blue card.",
+        ],
         ("Open blue cards", f"{app_url}/t/{troop_id}/blue-cards"),
         app_url,
     )
@@ -85,7 +88,10 @@ def _scout_link(scout_id: str, troop_id: str, app_url: str) -> tuple[str, str]:
 def card_approved(scout: str, badge: str, scout_id: str, troop_id: str, app_url: str) -> Email:
     return _notification(
         f"{scout}'s {badge} blue card was approved",
-        [f"A leader approved {scout}'s blue card for {badge}.", "A counselor will be assigned next."],
+        [
+            f"The Scoutmaster or advancement chair approved {scout}'s blue card for {badge}.",
+            "A counselor will be assigned next.",
+        ],
         _scout_link(scout_id, troop_id, app_url),
         app_url,
     )
@@ -112,7 +118,7 @@ def card_completed(scout: str, badge: str, scout_id: str, troop_id: str, app_url
 def counselor_assigned(scout: str, badge: str, troop_id: str, app_url: str) -> Email:
     return _notification(
         f"You've been assigned as {badge} counselor for {scout}",
-        [f"A leader assigned you as the {badge} merit badge counselor for {scout}."],
+        [f"The Scoutmaster or advancement chair assigned you as the {badge} merit badge counselor for {scout}."],
         ("Open counseling", f"{app_url}/t/{troop_id}/counseling"),
         app_url,
     )

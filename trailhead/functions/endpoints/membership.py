@@ -22,6 +22,7 @@ from handlers.membership import (
 )
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
+ROLES_AT_START = ["leader", "scoutmaster"]  # whoever creates a troop is its first leader and Scoutmaster
 
 
 def _membership(troop_doc: dict, member_id: str, roles: list[str]) -> dict:
@@ -35,7 +36,7 @@ def _access(member_id: str, roles: list[str], scout_ids: list[str], ypt) -> dict
 
 @https_fn.on_call()
 def create_troop(req: https_fn.CallableRequest) -> dict:
-    """The caller becomes the troop's first leader."""
+    """The caller becomes the troop's first leader and its Scoutmaster."""
     uid = require_uid(req)
     try:
         troop_doc, member = new_troop(req.data or {}, uid, date.today())
@@ -46,9 +47,11 @@ def create_troop(req: https_fn.CallableRequest) -> dict:
     batch = db().batch()
     batch.set(ref, {**troop_doc, "yptCopyMemberIds": [member_ref.id], "createdAt": firestore.SERVER_TIMESTAMP})
     batch.set(member_ref, member)
-    batch.set(ref.collection("access").document(uid), _access(member_ref.id, ["leader"], [], member["yptExpiresAt"]))
+    batch.set(
+        ref.collection("access").document(uid), _access(member_ref.id, ROLES_AT_START, [], member["yptExpiresAt"])
+    )
     user_ref = db().collection("users").document(uid)
-    batch.set(user_ref, {"troops": {ref.id: _membership(troop_doc, member_ref.id, ["leader"])}}, merge=True)
+    batch.set(user_ref, {"troops": {ref.id: _membership(troop_doc, member_ref.id, ROLES_AT_START)}}, merge=True)
     batch.commit()
     return {"troopId": ref.id, "memberId": member_ref.id}
 

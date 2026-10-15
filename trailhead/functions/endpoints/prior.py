@@ -7,7 +7,7 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import db, fail, require_leader, troop
+from fb import can_manage_badges, db, fail, require_leader, troop
 from handlers.membership import InvalidInput
 from handlers.prior import check_prior, completed_doc, keep_existing, partial_doc
 from trailhead_core.catalog import badge_version, load_catalog
@@ -17,13 +17,19 @@ BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 
 @https_fn.on_call()
 def record_prior_advancement(req: https_fn.CallableRequest) -> dict:
-    """Leaders enter ranks and merit badges a Scout earned earlier, plus partly finished badges.
+    """Leaders enter ranks a Scout earned earlier. The Scoutmaster and advancement chair also enter merit badges
+    earned earlier, plus partly finished badges.
 
     Badges already completed or started in Trailhead are left alone and reported back as skipped.
     """
     data = req.data or {}
     troop_id, scout_id = data.get("troopId"), data.get("scoutId")
     access = require_leader(req, troop_id)
+    if (data.get("badges") or data.get("partials")) and not can_manage_badges(access):
+        raise fail(
+            https_fn.FunctionsErrorCode.PERMISSION_DENIED,
+            "Only the Scoutmaster or advancement chair can record merit badges. Leaders can still record ranks.",
+        )
     t = troop(troop_id)
     record_ref = t.collection("scoutRecords").document(scout_id or "-")
     record = record_ref.get().to_dict()

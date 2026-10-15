@@ -1,8 +1,9 @@
 rules_version = '2';
 
 // Access model: troops/{t}/access/{uid} is written only by the server. It holds
-// { memberId, roles: [...], scoutIds: [...], yptExpiresAt, consentPendingScoutIds? }. Roles: leader, advancement,
-// counselor, parent, scout, committee; one person can hold several. scoutIds = the Scouts this login acts for
+// { memberId, roles: [...], scoutIds: [...], yptExpiresAt, consentPendingScoutIds? }. Roles: leader, scoutmaster,
+// advancement, counselor, parent, scout, committee; one person can hold several. A Scoutmaster has every permission a
+// leader has. Only the Scoutmaster, the advancement chair and a badge's assigned counselor change merit badge records. scoutIds = the Scouts this login acts for
 // (a Scout's own id, or a parent's children). consentPendingScoutIds = Scouts a leader linked this parent to, which
 // the parent has not yet agreed to the consent notice for.
 service cloud.firestore {
@@ -12,7 +13,16 @@ service cloud.firestore {
     function isMember(t) { return signedIn() && exists(/databases/$(database)/documents/troops/$(t)/access/$(request.auth.uid)); }
     function access(t) { return get(/databases/$(database)/documents/troops/$(t)/access/$(request.auth.uid)).data; }
     function hasRole(t, role) { return isMember(t) && role in access(t).roles; }
-    function isLeader(t) { return hasRole(t, 'leader') || hasRole(t, 'advancement'); }
+    function isLeader(t) { return hasRole(t, 'leader') || hasRole(t, 'scoutmaster') || hasRole(t, 'advancement'); }
+    // Who may change merit badge records: blue cards, card photos and merit badge sign-offs.
+    function canManageBadges(t) { return hasRole(t, 'scoutmaster') || hasRole(t, 'advancement'); }
+    // Rank and troop-made awards keep the leader rule. Every other award id is a merit badge. Ranks are a fixed set
+    // (functions/trailhead_core/content/ranks.json; tests/unit/test_rules_ranks.py keeps this list in step) and
+    // troop-made awards all start with "custom-". Anything not recognised as one of those counts as a merit badge.
+    function isRankOrTroopAward(awardId) {
+      return awardId in ['scout', 'tenderfoot', 'second-class', 'first-class', 'star', 'life', 'eagle']
+        || awardId.matches('custom-.*');
+    }
     // A parent a leader linked to a Scout acts for them only after agreeing to the consent notice, which removes
     // the Scout from consentPendingScoutIds.
     function actsFor(t, scoutId) {
@@ -111,7 +121,7 @@ service cloud.firestore {
                   && request.resource.data.onBehalfOf.size() > 0 && request.resource.data.onBehalfOf.size() <= 80))
           && request.resource.data.status == 'pending'
           && yptCurrent(t)
-          && (isLeader(t)
+          && ((isLeader(t) && (isRankOrTroopAward(request.resource.data.awardId) || canManageBadges(t)))
               || (isCounselorFor(t, request.resource.data.scoutId + '_' + request.resource.data.awardId)
                   && card(t, request.resource.data.scoutId + '_' + request.resource.data.awardId).status
                      in ['counselor_assigned', 'in_progress']));
@@ -147,17 +157,18 @@ service cloud.firestore {
         }
       }
       // Blue card id = {scoutId}_{awardId}.
-      // requested -> approved -> counselor_assigned -> in_progress -> complete; leaders may cancel.
-      // The counselor is either a troop member (counselorUid) or someone outside the troop (counselorName, and
-      // counselorEmail when known). For an outside counselor a leader signs and completes the card. Leaders may
-      // also change photoPaths (photos of the paper card) alone, in any status.
+      // requested -> approved -> counselor_assigned -> in_progress -> complete; the Scoutmaster or advancement chair
+      // may cancel. The counselor is either a troop member (counselorUid) or someone outside the troop (counselorName,
+      // and counselorEmail when known). For an outside counselor the Scoutmaster or advancement chair signs and
+      // completes the card. They may also change photoPaths (photos of the paper card) alone, in any status.
+      // Other leaders can read cards but not change them.
       match /blueCards/{id} {
         allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.counselorUid == request.auth.uid;
-        allow create: if (actsFor(t, request.resource.data.scoutId) || isLeader(t))
+        allow create: if (actsFor(t, request.resource.data.scoutId) || canManageBadges(t))
           && id == request.resource.data.scoutId + '_' + request.resource.data.awardId
           && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'status', 'requestedAt'])
           && request.resource.data.status == 'requested';
-        allow update: if (isLeader(t) && (leaderTransition() || photosOnly()))
+        allow update: if (canManageBadges(t) && (leaderTransition() || photosOnly()))
           || (resource.data.counselorUid == request.auth.uid && counselorTransition());
         allow delete: if false;
 
