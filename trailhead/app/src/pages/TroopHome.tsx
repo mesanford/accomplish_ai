@@ -7,13 +7,14 @@ import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
+import { blueCardAction, noScoutsText } from '../lib/homeCopy';
 import { useQuery } from '../lib/hooks';
 import { useNewLeadCount } from '../lib/leads';
 import { useTroop } from '../lib/troop';
 import type { BlueCard } from '../lib/types';
 
 function ScoutCards() {
-  const { troopId, members, visibleScoutIds, isLeader } = useTroop();
+  const { troopId, members, visibleScoutIds, isLeader, access } = useTroop();
   const scouts = members.filter((m) => visibleScoutIds.includes(m.id));
   if (scouts.length === 0) {
     return isLeader ? (
@@ -21,7 +22,7 @@ function ScoutCards() {
         No Scouts yet. Add your Scouts on the Roster, then invite their parents.
       </NextStep>
     ) : (
-      <Empty>No Scout is linked to you yet. Add your Scout below, or ask a leader for an invite link.</Empty>
+      <Empty>{noScoutsText(access?.roles ?? [])}</Empty>
     );
   }
   return (
@@ -57,11 +58,11 @@ function LeaderSummary() {
     [troopId],
   );
   const pending = useQuery<BlueCard>(pendingQuery, `${troopId}/pending-cards`);
-  const count = pending.data.length;
+  const action = blueCardAction(pending.data.length);
   return (
     <div className="row">
-      <Link className="btn" to={`/t/${troopId}/blue-cards`}>
-        {count === 1 ? '1 blue card needs action' : `${count} blue cards need action`}
+      <Link className={action.waiting ? 'btn' : 'btn quiet'} to={`/t/${troopId}/blue-cards`}>
+        {action.text}
       </Link>
       <HelpTip topic="blueCard" />
       <Link className="btn secondary" to={`/t/${troopId}/roster`}>

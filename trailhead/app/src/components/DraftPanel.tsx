@@ -84,6 +84,7 @@ export function DraftPanel({ troopId, scoutId, goal, target, onUse }: Props) {
         <button type="button" className="btn" disabled={busy || !request.trim()} onClick={draft}>
           {busy ? 'Drafting…' : 'Draft a plan'}
         </button>
+        {!request.trim() && !busy ? <span className="small muted">Write what you want to work toward first.</span> : null}
         <button type="button" className="btn quiet" onClick={() => setOpen(false)}>
           Close
         </button>
@@ -124,7 +125,7 @@ function DraftPreview({ drafted, onUse, onDiscard }: PreviewProps) {
           ))}
         </ul>
       )}
-      <FeasibilityView result={result.feasibility} />
+      <FeasibilityView result={result.feasibility} hideCodes={['missing_rank_date']} />
       <div className="row">
         <button type="button" className="btn" disabled={result.items.length === 0} onClick={() => onUse(true)}>
           Use this plan

@@ -55,6 +55,7 @@ test('a leader works with a counselor outside the troop and records a paper blue
   await leader.getByRole('button', { name: 'Sign requirement 1a' }).click();
   await expect(leader.getByRole('button', { name: 'Sign requirement 1a' })).toBeHidden();
   await leader.getByRole('button', { name: 'Mark Chess complete' }).click();
+  await leader.getByRole('button', { name: 'Mark complete anyway' }).click();
   await expect(leader.getByText('No open blue cards.')).toBeVisible();
 
   // The first Scoutbook report covers the Chess work.

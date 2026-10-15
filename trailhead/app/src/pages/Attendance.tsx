@@ -9,6 +9,7 @@ import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
+import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 import type { TroopEvent } from '../lib/types';
 
@@ -59,7 +60,7 @@ export function AttendancePage() {
         ]}
       />
       <p className="muted">
-        {scouts.filter((sc) => isPresent(sc.id)).length} of {scouts.length} Scouts present.
+        {scouts.filter((sc) => isPresent(sc.id)).length} of {plural(scouts.length, 'Scout')} present.
         <HelpTip topic="attendanceLog" />
       </p>
       {(event.data?.linkedRequirements ?? []).length > 0 ? (

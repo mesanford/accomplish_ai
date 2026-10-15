@@ -107,6 +107,17 @@ def test_message_to_scout_copies_parent():
     assert set(threads[0]["participantUids"]) == {"leader", "scout1", "parent"}
 
 
+def test_message_of_only_spaces_is_refused_and_text_is_trimmed():
+    blank = call("send_message", "leader", {"troopId": "t1", "recipientMemberIds": ["s1"], "body": "   \n  "})
+    assert blank.status_code == 400
+    assert "Write a message first" in blank.text
+    assert list_docs(f"{T}/threads") == []
+    ok = call("send_message", "leader", {"troopId": "t1", "recipientMemberIds": ["s1"], "body": "  Hello  "})
+    assert ok.status_code == 200, ok.text
+    thread_id = ok.json()["result"]["threadId"]
+    assert [m["body"] for m in list_docs(f"{T}/threads/{thread_id}/messages")] == ["Hello"]
+
+
 def test_message_to_scout_without_parent_copies_second_adult():
     r = call("send_message", "leader", {"troopId": "t1", "recipientMemberIds": ["s2"], "body": "Welcome"})
     assert r.status_code == 200, r.text

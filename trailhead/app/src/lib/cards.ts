@@ -1,4 +1,4 @@
-import type { BlueCard, Progress } from './types';
+import type { BlueCard, Member, Progress, Role } from './types';
 
 /** Who counsels a card: an outside counselor's name, else the troop member's. */
 export function counselorLabel(card: Pick<BlueCard, 'counselorName' | 'counselorUid'>, uidName: (uid?: string) => string): string {
@@ -72,4 +72,60 @@ export function paperRequirements(
     }
   }
   return { requirements, missing };
+}
+
+/** The same checks the server makes on a paper card's dates, in the same words. `today` is YYYY-MM-DD. */
+export function paperDateProblem(card: {
+  startedOn: string;
+  completedOn?: string;
+  requirements: PaperRequirement[];
+  today: string;
+}): string | null {
+  const { startedOn, completedOn, requirements, today } = card;
+  if (startedOn > today) {
+    return "The start date can't be in the future.";
+  }
+  if (completedOn && completedOn > today) {
+    return "The completion date can't be in the future.";
+  }
+  if (completedOn && completedOn < startedOn) {
+    return 'The completion date is before the start date.';
+  }
+  for (const r of requirements) {
+    if (r.date > today) {
+      return `The date for requirement ${r.reqId} can't be in the future.`;
+    }
+    if (r.date < startedOn) {
+      return `The date for requirement ${r.reqId} is before the start date.`;
+    }
+    if (completedOn && r.date > completedOn) {
+      return `The date for requirement ${r.reqId} is after the completion date.`;
+    }
+  }
+  return null;
+}
+
+const ROLE_NAMES: Partial<Record<Role, string>> = {
+  counselor: 'Counselor',
+  leader: 'Leader',
+  advancement: 'Advancement chair',
+  committee: 'Committee member',
+};
+
+/** Troop members who can counsel, each labelled with their roles. People with the counselor role come first. */
+export function counselorOptions(members: Pick<Member, 'id' | 'uid' | 'displayName' | 'roles'>[]): { uid: string; id: string; label: string }[] {
+  const options = members
+    .filter((m) => m.uid && (m.roles ?? []).some((r) => r === 'counselor' || r === 'leader'))
+    .map((m) => {
+      const roles = (m.roles ?? []).map((r) => ROLE_NAMES[r]).filter(Boolean);
+      return {
+        uid: m.uid as string,
+        id: m.id,
+        counselor: (m.roles ?? []).includes('counselor'),
+        name: m.displayName,
+        label: roles.length > 0 ? `${m.displayName} (${roles.join(', ')})` : m.displayName,
+      };
+    });
+  options.sort((a, b) => Number(b.counselor) - Number(a.counselor) || a.name.localeCompare(b.name));
+  return options.map(({ uid, id, label }) => ({ uid, id, label }));
 }

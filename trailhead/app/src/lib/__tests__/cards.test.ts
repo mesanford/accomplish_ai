@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   cardFileProblem,
   cardPhotoPath,
+  counselorOptions,
   counselorLabel,
   hasOutsideCounselor,
+  paperDateProblem,
   paperRequirements,
   safeFileName,
   signedForCounselors,
@@ -68,5 +70,40 @@ describe('paperRequirements', () => {
       requirements: [{ reqId: '1', date: '2026-05-01' }],
       missing: ['2'],
     });
+  });
+});
+
+describe('paperDateProblem', () => {
+  const base = { startedOn: '2026-05-01', requirements: [{ reqId: '1', date: '2026-05-20' }], today: '2026-10-14' };
+
+  it('accepts sensible dates', () => {
+    expect(paperDateProblem(base)).toBeNull();
+    expect(paperDateProblem({ ...base, completedOn: '2026-06-01' })).toBeNull();
+  });
+
+  it('refuses a start date in the future', () => {
+    expect(paperDateProblem({ ...base, startedOn: '2026-11-01' })).toBe("The start date can't be in the future.");
+  });
+
+  it('refuses a completion date before the start', () => {
+    expect(paperDateProblem({ ...base, completedOn: '2026-04-01' })).toBe('The completion date is before the start date.');
+  });
+
+  it('refuses a requirement signed before the start', () => {
+    expect(paperDateProblem({ ...base, requirements: [{ reqId: '2a', date: '2026-04-30' }] })).toBe(
+      'The date for requirement 2a is before the start date.',
+    );
+  });
+});
+
+describe('counselorOptions', () => {
+  it('shows each role and lists counselors first', () => {
+    const out = counselorOptions([
+      { id: 'a', uid: 'ua', displayName: 'Avery Lead', roles: ['leader'] },
+      { id: 'b', uid: 'ub', displayName: 'Casey Counselor', roles: ['counselor'] },
+      { id: 'c', displayName: 'No Login', roles: ['counselor'] },
+      { id: 'd', uid: 'ud', displayName: 'Dana Parent', roles: ['parent'] },
+    ]);
+    expect(out.map((o) => o.label)).toEqual(['Casey Counselor (Counselor)', 'Avery Lead (Leader)']);
   });
 });

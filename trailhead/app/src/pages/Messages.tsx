@@ -22,12 +22,17 @@ function NewMessage() {
   const isScout = access?.roles.includes('scout') ?? false;
   const others = members.filter((m) => m.id !== access?.memberId && (!isScout || m.kind === 'adult')).sort((a, b) => a.displayName.localeCompare(b.displayName));
 
+  const ready = to.length > 0 && body.trim().length > 0;
+
   async function submit(e: FormEvent) {
     e.preventDefault();
+    if (!ready) {
+      return;
+    }
     setBusy(true);
     setError('');
     try {
-      const { threadId } = await sendMessage({ troopId, body, recipientMemberIds: to });
+      const { threadId } = await sendMessage({ troopId, body: body.trim(), recipientMemberIds: to });
       navigate(`/t/${troopId}/messages/${threadId}`);
     } catch (err) {
       setError(errorMessage(err));
@@ -60,10 +65,11 @@ function NewMessage() {
         <HelpTip topic="yptMessages" />
       </p>
       <Notice kind="error">{error}</Notice>
-      <div>
-        <button className="btn" type="submit" disabled={busy || to.length === 0}>
+      <div className="row">
+        <button className="btn" type="submit" disabled={busy || !ready}>
           {busy ? 'Sending…' : 'Send'}
         </button>
+        {!ready ? <span className="small muted">{to.length === 0 ? 'Choose who this is for.' : 'Write your message.'}</span> : null}
       </div>
     </form>
   );

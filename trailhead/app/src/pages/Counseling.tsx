@@ -1,6 +1,7 @@
 import { collection, doc, query, updateDoc, where } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { CounselChecklist } from '../components/CounselChecklist';
+import { MarkComplete } from '../components/MarkComplete';
 import { RequirementRefs } from '../components/RequirementRef';
 import { CardStatusPill, Empty, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
@@ -60,9 +61,7 @@ function CounselCard({ card }: { card: BlueCard }) {
         <>
           <CounselChecklist troopId={troopId} scoutId={card.scoutId} awardId={card.awardId} versionId={card.versionId} statuses={statuses} />
           <div>
-            <button type="button" className="btn secondary" onClick={() => setStatus('complete')}>
-              Mark {awardName(card.awardId)} complete
-            </button>
+            <MarkComplete card={card} onComplete={() => setStatus('complete')} />
           </div>
         </>
       ) : null}

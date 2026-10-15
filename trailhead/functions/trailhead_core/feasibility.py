@@ -6,6 +6,7 @@ from datetime import date, timedelta
 
 from .badge_checks import check_badges
 from .catalog import Catalog, is_custom_award, load_catalog
+from .dates import human
 from .models import FeasibilityResult, Issue, Path, PathStatus, ScoutRecord, Severity
 from .timeline import rank_timeline
 
@@ -34,15 +35,26 @@ def check_path(path: Path, scout: ScoutRecord, today: date, catalog: Catalog | N
     timeline, timing = rank_timeline(scout, path.items, path.goal_award_id, catalog, today)
     issues += timing
     earliest = timeline.get(path.goal_award_id)
-    if earliest and path.target_date and earliest > path.target_date:
+    if path.target_date and path.target_date < today:
+        # Say so once. "The earliest date is after the target" would only repeat it in a more confusing way.
+        issues.append(
+            Issue(
+                code="target_in_past",
+                severity=Severity.ERROR,
+                message=(
+                    f"The target date, {human(path.target_date)}, has already passed. Choose a date ahead of today."
+                ),
+            )
+        )
+    elif earliest and path.target_date and earliest > path.target_date:
         goal = catalog.ranks[path.goal_award_id].name
         issues.append(
             Issue(
                 code="misses_target",
                 severity=Severity.ERROR,
                 message=(
-                    f"The earliest possible {goal} date is {earliest.isoformat()}, "
-                    f"after the target of {path.target_date.isoformat()}."
+                    f"The earliest possible {goal} date is {human(earliest)}, "
+                    f"after the target of {human(path.target_date)}."
                 ),
                 award_id=path.goal_award_id,
             )
@@ -62,10 +74,10 @@ def next_steps(
     for item in upcoming:
         if item.planned_start and item.planned_start <= today + NEXT_STEP_WINDOW:
             name = catalog.badges[item.award_id].name
-            when = "now" if item.planned_start <= today else f"by {item.planned_start.isoformat()}"
+            when = "now" if item.planned_start <= today else f"by {human(item.planned_start)}"
             steps.append(f"Start {name} {when}.")
     for rank_id, when in sorted(timeline.items(), key=lambda kv: kv[1]):
-        steps.append(f"Earliest {catalog.ranks[rank_id].name} date: {when.isoformat()}.")
+        steps.append(f"Earliest {catalog.ranks[rank_id].name} date: {human(when)}.")
         break
     return steps[:limit]
 

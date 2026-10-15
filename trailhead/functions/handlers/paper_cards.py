@@ -13,7 +13,6 @@ from trailhead_core.catalog import Catalog
 
 from .membership import InvalidInput
 from .prior import REQ_LABEL
-from .prior import _date as check_date
 
 MAX_REQUIREMENTS = 80
 MAX_NAME = 80
@@ -28,6 +27,20 @@ class PaperPlan:
     started_on: str
     requirements: dict[str, str] = field(default_factory=dict)  # requirement label -> date signed
     completed_on: str | None = None
+
+
+def check_date(value, what: str, today: date, earliest: date) -> str:
+    """An ISO date that is not in the future and not before the Scout turned 10. `what` names it for the message."""
+    label = what[:1].upper() + what[1:]
+    try:
+        d = date.fromisoformat(str(value)[:10])
+    except ValueError as err:
+        raise InvalidInput(f"Enter {what} as a date like 2026-05-01.") from err
+    if d > today:
+        raise InvalidInput(f"{label} can't be in the future.")
+    if d < earliest:
+        raise InvalidInput(f"{label} is before the Scout turned 10.")
+    return d.isoformat()
 
 
 def _counselor(data: dict) -> tuple[str, str | None]:
@@ -50,7 +63,7 @@ def check_paper_card(data: dict, record: dict, catalog: Catalog, today: date) ->
     badge = catalog.badges[badge_id].name
     earliest = date(record["birthYear"] + 10, record["birthMonth"], 1)
     name, email = _counselor(data)
-    started = check_date(data.get("startedOn"), "the date the badge was started", today, earliest)
+    started = check_date(data.get("startedOn"), "the start date", today, earliest)
     completed_in = data.get("completedOn")
     completed = check_date(completed_in, "the completion date", today, earliest) if completed_in else None
 
@@ -64,11 +77,14 @@ def check_paper_card(data: dict, record: dict, catalog: Catalog, today: date) ->
             raise InvalidInput(f"'{label}' doesn't look like a requirement number. Use forms like 3 or 4b.")
         if label in plan.requirements:
             raise InvalidInput(f"Requirement {label} is listed twice.")
-        plan.requirements[label] = check_date(item.get("date"), f"requirement {label}", today, earliest)
+        plan.requirements[label] = check_date(item.get("date"), f"the date for requirement {label}", today, earliest)
     if not plan.requirements and not completed:
         raise InvalidInput(f"List the requirements already signed on the {badge} card, or enter a completion date.")
     if completed and completed < started:
         raise InvalidInput("The completion date is before the start date.")
+    early = sorted(label for label, d in plan.requirements.items() if d < started)
+    if early:
+        raise InvalidInput(f"The date for requirement {early[0]} is before the start date.")
     if completed and any(d > completed for d in plan.requirements.values()):
         raise InvalidInput("A requirement is dated after the completion date.")
     return plan

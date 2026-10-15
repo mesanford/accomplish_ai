@@ -17,6 +17,7 @@ import { HelpPage } from './pages/Help';
 import { Home } from './pages/Home';
 import { Join } from './pages/Join';
 import { Messages } from './pages/Messages';
+import { NotFound, RouteError } from './pages/NotFound';
 import { PathEditor } from './pages/PathEditor';
 import { PathTemplates } from './pages/PathTemplates';
 import { PublicSite } from './pages/PublicSite';
@@ -48,10 +49,12 @@ function RequireAuth({ children }: { children: ReactNode }) {
 const authed = (page: ReactNode) => <RequireAuth>{page}</RequireAuth>;
 
 const router = createBrowserRouter([
+  // Any failure or unknown address shows a plain page, never the router's developer error screen.
   // The public troop website has its own look and needs no sign-in, so it sits outside the app layout.
-  { path: '/s/:slug', element: <PublicSite /> },
+  { path: '/s/:slug', element: <PublicSite />, errorElement: <RouteError /> },
   {
     element: <AppLayout />,
+    errorElement: <RouteError />,
     children: [
       { path: '/', element: authed(<Home />) },
       { path: '/signin', element: <SignIn /> },
@@ -60,11 +63,13 @@ const router = createBrowserRouter([
       { path: '/signin/finish', element: <FinishSignIn /> },
       { path: '/create', element: authed(<CreateTroop />) },
       { path: '/join/:troopId/:code', element: authed(<Join />) },
+      { path: '*', element: <NotFound /> },
     ],
   },
   {
     path: '/t/:troopId',
     element: authed(<TroopLayout />),
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <TroopHome /> },
       { path: 'roster', element: <Roster /> },

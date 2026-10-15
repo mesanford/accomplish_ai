@@ -8,6 +8,7 @@ import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { plural } from '../lib/plural';
 import { STARTER_TEMPLATES } from '../lib/starterTemplates';
 import { saveTemplate, setArchived } from '../lib/templateStore';
 import { daysToWeeks } from '../lib/templates';
@@ -109,8 +110,8 @@ export function PathTemplates() {
             </div>
             {t.description ? <p>{t.description}</p> : null}
             <p className="small muted">
-              Goal: {awardName(t.goalAwardId)} · {t.items.length} badges · about{' '}
-              {daysToWeeks(Math.max(0, ...t.items.map((i) => i.startOffsetDays + i.durationDays)))} weeks
+              Goal: {awardName(t.goalAwardId)} · {plural(t.items.length, 'badge')} · about{' '}
+              {plural(daysToWeeks(Math.max(0, ...t.items.map((i) => i.startOffsetDays + i.durationDays))), 'week')}
             </p>
             <div className="row">
               <button type="button" className="btn quiet small" onClick={() => setEditing({ id: t.id, authorId: t.createdByMemberId, draft: t })}>

@@ -1,6 +1,8 @@
 import { type FormEvent, useState } from 'react';
 import { createInvite, errorMessage } from '../lib/api';
-import type { Member } from '../lib/types';
+import { mayBeUnder13 } from '../lib/consent';
+import { plural } from '../lib/plural';
+import type { Member, ScoutRecord } from '../lib/types';
 import { HelpTip } from './HelpTip';
 import { Field, Notice } from './ui';
 
@@ -22,7 +24,14 @@ const ROLE_HINTS: Record<string, string> = {
   committee: 'Can see the troop but not change records.',
 };
 
-export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Member[] }) {
+interface Props {
+  troopId: string;
+  scouts: Member[];
+  /** Each Scout's private record (id is the Scout's id), used to leave out Scouts under 13. */
+  records?: (ScoutRecord & { id: string })[];
+}
+
+export function InviteForm({ troopId, scouts, records = [] }: Props) {
   const [role, setRole] = useState('parent');
   const [scoutIds, setScoutIds] = useState<string[]>([]);
   const [scoutMemberId, setScoutMemberId] = useState('');
@@ -30,6 +39,12 @@ export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Membe
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState('');
   const unlinked = scouts.filter((s) => !s.uid);
+  // A Scout under 13 can't have a login (the server refuses), so don't offer one.
+  const eligible = unlinked.filter((s) => {
+    const r = records.find((x) => x.id === s.id);
+    return r && !mayBeUnder13(r.birthYear, r.birthMonth, new Date());
+  });
+  const hidden = unlinked.length - eligible.length;
 
   function toggle(id: string) {
     setScoutIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]));
@@ -40,9 +55,19 @@ export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Membe
     setError('');
     setLink('');
     setCopied(false);
+    if (role === 'parent' && scoutIds.length === 0) {
+      setError('Choose at least one Scout this parent is linked to.');
+      return;
+    }
+    if (role === 'scout' && !scoutMemberId) {
+      setError('Choose which Scout this invite is for.');
+      return;
+    }
     try {
       const invite = await createInvite({ troopId, role, scoutIds, scoutMemberId: scoutMemberId || undefined });
       setLink(`${window.location.origin}${invite.path}`);
+      setScoutIds([]);
+      setScoutMemberId('');
     } catch (err) {
       setError(errorMessage(err));
     }
@@ -58,7 +83,7 @@ export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Membe
   }
 
   return (
-    <form className="form" onSubmit={submit}>
+    <form className="form" onSubmit={submit} noValidate>
       <p className="small muted">
         An invite link is a private web address for one person. They open it, sign in and join your troop.
         <HelpTip topic="invite" label="how invitations work" />
@@ -85,10 +110,15 @@ export function InviteForm({ troopId, scouts }: { troopId: string; scouts: Membe
         </fieldset>
       ) : null}
       {role === 'scout' ? (
-        <Field label="Which Scout" htmlFor="invite-scout" hint="Scouts under 13 can't have their own login; invite a parent.">
+        <Field label="Which Scout" htmlFor="invite-scout" hint={
+            hidden > 0
+              ? `${plural(hidden, 'Scout')} under 13 ${hidden === 1 ? "isn't" : "aren't"} listed: they can't have their own login. Invite a parent instead.`
+              : "Scouts under 13 can't have their own login; invite a parent."
+          }
+        >
           <select id="invite-scout" required value={scoutMemberId} onChange={(e) => setScoutMemberId(e.target.value)}>
             <option value="">Choose a Scout</option>
-            {unlinked.map((s) => (
+            {eligible.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.displayName}
               </option>

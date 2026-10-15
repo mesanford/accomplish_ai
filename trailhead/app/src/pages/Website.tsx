@@ -25,6 +25,8 @@ export function Website() {
   const saved = useDoc<Partial<SiteDraft>>(draftRef);
   const [draft, setDraft] = useState<SiteDraft | null>(null);
   const [dirty, setDirty] = useState(false);
+  // A draft is "saved" only once one exists: loaded from the server, or written in this visit.
+  const [savedHere, setSavedHere] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<Message>(null);
   const [result, setResult] = useState<PublishResult | null>(null);
@@ -55,6 +57,7 @@ export function Website() {
       // The id field from useDoc is not part of the draft; normalizeDraft never adds it.
       await setDoc(draftRef, { ...draft, updatedAt: serverTimestamp() });
       setDirty(false);
+      setSavedHere(true);
       return true;
     } catch (err) {
       setMessage({ kind: 'error', text: errorMessage(err) });
@@ -112,6 +115,7 @@ export function Website() {
         site={troop?.site}
         busy={busy}
         dirty={dirty}
+        stored={savedHere || Boolean(saved.data)}
         result={result}
         message={message}
         onSave={onSave}

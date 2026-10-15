@@ -31,8 +31,10 @@ export function PathItems({ items, onChange }: Props) {
     setAdding('');
   }
 
+  const missingEagle = [...EAGLE_CORE, ...EAGLE_CHOICES].filter((id) => !planned.has(id));
+
   function addEagleRequired() {
-    const missing = [...EAGLE_CORE, ...EAGLE_CHOICES].filter((id) => !planned.has(id));
+    const missing = missingEagle;
     onChange([...items, ...missing.map((awardId) => ({ awardId }))]);
   }
 
@@ -112,9 +114,10 @@ export function PathItems({ items, onChange }: Props) {
             </option>
           ))}
         </select>
-        <button type="button" className="btn quiet" onClick={addEagleRequired}>
+        <button type="button" className="btn quiet" disabled={missingEagle.length === 0} onClick={addEagleRequired}>
           Add all Eagle-required badges
         </button>
+        {missingEagle.length === 0 ? <span className="small muted">All Eagle-required badges are in the plan.</span> : null}
         <HelpTip topic="eagleRequired" />
       </div>
     </div>

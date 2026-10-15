@@ -1,10 +1,11 @@
 import { type FormEvent, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { HelpTip } from '../components/HelpTip';
 import { Field, Notice } from '../components/ui';
 import { errorMessage } from '../lib/api';
-import { emailSignInLink, signInWithGoogle } from '../lib/auth';
+import { emailSignInLink, signInWithGoogle, useAuth } from '../lib/auth';
 import { usingEmulators } from '../lib/firebase';
+import { safeNext } from '../lib/redirect';
 
 /** In local development the Auth emulator holds the emailed link; fetch it so sign-in works offline. */
 async function emulatorLink(email: string): Promise<string | null> {
@@ -16,12 +17,13 @@ async function emulatorLink(email: string): Promise<string | null> {
 
 export function SignIn() {
   const [params] = useSearchParams();
+  const { user, ready } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const next = params.get('next') || '/';
+  const next = safeNext(params.get('next'));
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -57,6 +59,11 @@ export function SignIn() {
     } else {
       setError('No sign-in link found in the Auth emulator yet.');
     }
+  }
+
+  // Someone already signed in has nothing to do here.
+  if (ready && user) {
+    return <Navigate to={next} replace />;
   }
 
   return (

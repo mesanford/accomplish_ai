@@ -6,6 +6,7 @@ import {
   imageProblem,
   normalizeDraft,
   photoWillShow,
+  saveLabel,
   siteAddress,
   slugify,
   type SiteDraft,
@@ -109,5 +110,16 @@ describe('media consent', () => {
     const older = normalizeDraft({ cover: { heading: 'H', tagline: '', photoPath: 'p' } as SiteDraft['cover'] }, troop);
     expect(older.cover.photoScoutIds).toEqual([]);
     expect(older.theme.logoNoScoutsShown).toBe(false);
+  });
+});
+
+describe('saveLabel', () => {
+  it('does not claim a save before anything was saved', () => {
+    expect(saveLabel(false, false)).toBe('Save draft');
+  });
+
+  it('says saved only for a stored draft with no changes', () => {
+    expect(saveLabel(false, true)).toBe('Draft saved');
+    expect(saveLabel(true, true)).toBe('Save draft');
   });
 });
