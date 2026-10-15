@@ -31,7 +31,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: 'collect',
     heading: 'What we collect',
     items: [
-      'Adults who sign in: name, email address and the troop roles you hold (leader, parent, counselor). If you sign in with Google, we receive your name and email from Google. Leaders also give their Youth Protection training expiry date.',
+      'Adults who sign in: name, email address and the troop roles you hold (Scoutmaster, leader, advancement chair, committee, counselor, parent). If you sign in with Google, we receive your name and email from Google. Leaders also give their Youth Protection training expiry date.',
       "Scouts: name, birth month and year (never the full date), current rank, the ranks, merit badges and requirements they've completed and when, who signed each one off, blue cards, photos of signed paper blue cards, advancement plans, event attendance and troop messages.",
       'Families who use a troop website\'s "Join us" form: the parent or guardian\'s name, email, optional phone number, the Scout\'s age or grade, and any note they add.',
       'Scouts 13 and older who sign in: their email address, and what they type, such as plan requests and messages.',
