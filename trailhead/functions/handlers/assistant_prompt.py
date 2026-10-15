@@ -11,7 +11,7 @@ from trailhead_core.models import ScoutRecord
 
 MAX_REQUEST_CHARS = 500
 
-# The answer's shape, as JSON Schema: Claude fills it in through a forced tool call.
+# The answer's shape, as JSON Schema: Claude's structured output follows it exactly.
 # The model's answer is still cleaned and checked by the rules engine.
 RESPONSE_SCHEMA = {
     "type": "object",
@@ -26,11 +26,13 @@ RESPONSE_SCHEMA = {
                     "plannedEnd": {"type": "string", "description": "YYYY-MM-DD"},
                 },
                 "required": ["awardId", "plannedStart", "plannedEnd"],
+                "additionalProperties": False,
             },
         },
         "explanation": {"type": "string"},
     },
     "required": ["items", "explanation"],
+    "additionalProperties": False,
 }
 
 SYSTEM_PROMPT = """You help a Scouts BSA Scout or parent draft a merit badge plan.

@@ -46,6 +46,7 @@ development needs no API key (`scripts/test.sh` gives the emulator a stand-in ke
 2. Store it as a Cloud Functions secret (this enables Secret Manager on first use):
    `firebase functions:secrets:set ANTHROPIC_API_KEY --project <project-id>`, then paste the key when asked.
 3. Optional: set `ANTHROPIC_MODEL` in `functions/.env.<project-id>` (default `claude-sonnet-5-5`).
+   If the key is not scoped to a workspace, also set `ANTHROPIC_WORKSPACE_ID` there; it is sent with every request.
 4. To keep a project on the practice drafts, set `TRAILHEAD_FAKE_LLM=1` in its `functions/.env.<project-id>`. The
    secret must still exist, so store any stand-in value. Staging does this.
 

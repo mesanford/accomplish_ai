@@ -12,7 +12,7 @@ from firebase_functions import https_fn
 from endpoints.assistant import use_fake_llm
 from fb import db, fail, require_leader, troop
 from handlers.assistant import usage_doc_id, within_daily_limit
-from handlers.claude_model import DEFAULT_MODEL, claude_text
+from handlers.claude_model import DEFAULT_MODEL, claude_text, real_client
 from handlers.site_about import SYSTEM_PROMPT, build_prompt, clean_about, fake_about, scrub_names, validate_notes
 
 log = logging.getLogger(__name__)
@@ -21,10 +21,7 @@ Code = https_fn.FunctionsErrorCode
 
 def _claude_about(prompt: str) -> str:
     """REAL path: Claude through the Anthropic API. The key comes from the ANTHROPIC_API_KEY secret."""
-    import anthropic
-
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    return claude_text(client, prompt, SYSTEM_PROMPT, os.environ.get("ANTHROPIC_MODEL", DEFAULT_MODEL))
+    return claude_text(real_client(os.environ), prompt, SYSTEM_PROMPT, os.environ.get("ANTHROPIC_MODEL", DEFAULT_MODEL))
 
 
 def _count(uid: str, troop_id: str, today: date) -> None:

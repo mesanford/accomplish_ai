@@ -12,7 +12,7 @@ from firebase_functions import https_fn
 from endpoints.advancement import _scout_record
 from fb import db, fail, require_access, troop
 from handlers.assistant import ModelFn, draft_plan, usage_doc_id, validate_request, within_daily_limit
-from handlers.claude_model import DEFAULT_MODEL, claude_model
+from handlers.claude_model import DEFAULT_MODEL, claude_model, real_client
 from handlers.fake_planner import fake_plan
 from trailhead_core import load_catalog
 
@@ -27,10 +27,7 @@ def use_fake_llm() -> bool:
 
 def _claude() -> ModelFn:
     """REAL path: Claude through the Anthropic API. The key comes from the ANTHROPIC_API_KEY secret."""
-    import anthropic
-
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    return claude_model(client, os.environ.get("ANTHROPIC_MODEL", DEFAULT_MODEL))
+    return claude_model(real_client(os.environ), os.environ.get("ANTHROPIC_MODEL", DEFAULT_MODEL))
 
 
 def _count_draft(uid: str, troop_id: str, today: date) -> None:
