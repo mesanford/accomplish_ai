@@ -36,7 +36,7 @@ def record_paper_blue_card(req: https_fn.CallableRequest) -> dict:
         raise fail(
             https_fn.FunctionsErrorCode.ALREADY_EXISTS,
             f"This Scout already has a {catalog.badges[plan.award_id].name} blue card or finished badge in "
-            "Trailhead. Use that card instead.",
+            "Forthright. Use that card instead.",
         )
 
     now, version = datetime.now(UTC), badge_version()

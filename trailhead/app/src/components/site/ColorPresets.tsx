@@ -5,7 +5,7 @@ interface Props {
   onPick: (color: string) => void;
 }
 
-/** One-tap troop colors from the Trailhead palette, beside the full color picker. */
+/** One-tap troop colors from the Forthright palette, beside the full color picker. */
 export function ColorPresets({ value, onPick }: Props) {
   const current = value.toLowerCase();
   return (

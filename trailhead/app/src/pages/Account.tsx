@@ -28,7 +28,7 @@ export function Account() {
 
   return (
     <>
-      <PageHeader eyebrow="Trailhead" title="Your account" />
+      <PageHeader eyebrow="Forthright" title="Your account" />
       <p className="muted">Signed in as {user?.email ?? 'you'}.</p>
       <section className="card stack">
         <h2>Delete my account</h2>

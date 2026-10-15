@@ -55,7 +55,7 @@ export function Scoutbook() {
       <GuideBlock
         id="scoutbook"
         title="Why this page exists"
-        purpose="Scoutbook is the official place where advancement is recorded. Trailhead cannot send records there for you yet, so this page gives you a list to type in."
+        purpose="Scoutbook is the official place where advancement is recorded. Forthright cannot send records there for you yet, so this page gives you a list to type in."
         steps={[
           'Press "Create handoff report". It lists what was signed off since your last report.',
           'Open Scoutbook and enter each item, one Scout at a time.',

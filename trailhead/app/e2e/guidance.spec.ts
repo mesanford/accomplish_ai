@@ -64,7 +64,7 @@ test('new leaders get guidance: checklist, help tips, how-this-page-works panels
 
   // The Help page lists the guides and the glossary, and search narrows them.
   await leader.getByRole('link', { name: 'Help', exact: true }).click();
-  await expect(leader.getByRole('heading', { name: 'How to use Trailhead' })).toBeVisible();
+  await expect(leader.getByRole('heading', { name: 'How to use Forthright' })).toBeVisible();
   await expect(leader.getByRole('heading', { name: "I'm a leader" })).toBeVisible();
   await expect(leader.getByRole('heading', { name: 'Scouting words, explained' })).toBeVisible();
   await expect(leader.getByText('The Application for Merit Badge, a paper form.').first()).toBeVisible();

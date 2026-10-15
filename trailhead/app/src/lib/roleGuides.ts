@@ -1,4 +1,4 @@
-/** Step-by-step walkthroughs for each kind of person using Trailhead, shown on the Help page. */
+/** Step-by-step walkthroughs for each kind of person using Forthright, shown on the Help page. */
 
 export interface GuideTask {
   task: string;

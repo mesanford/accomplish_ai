@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
-import lockupDark from '../assets/trailhead-lockup-dark.svg';
-import lockup from '../assets/trailhead-lockup.svg';
+import lockupDark from '../assets/forthright-lockup-dark.svg';
+import lockup from '../assets/forthright-lockup.svg';
 import { signOutUser, useAuth } from '../lib/auth';
 import { CustomAwardsProvider } from '../lib/customAwardsContext';
 import { useNewLeadCount } from '../lib/leads';
@@ -51,7 +51,7 @@ function Shell({ troopNav }: { troopNav: boolean }) {
           <a className="brand" href="/">
             <picture>
               <source srcSet={lockupDark} media="(prefers-color-scheme: dark)" />
-              <img src={lockup} alt="Trailhead" width={118} height={28} />
+              <img src={lockup} alt="Forthright" width={128} height={28} />
             </picture>
           </a>
           {troopNav ? <TroopNav /> : <span className="nav" />}

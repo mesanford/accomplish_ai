@@ -14,7 +14,7 @@ import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
 import type { Progress, ScoutRecord } from '../lib/types';
 
-/** Leaders record ranks and merit badges a Scout earned before joining Trailhead. */
+/** Leaders record ranks and merit badges a Scout earned before joining Forthright. */
 export function PriorAdvancement() {
   const { scoutId = '' } = useParams();
   const { troopId, isLeader, memberName } = useTroop();
@@ -58,7 +58,7 @@ export function PriorAdvancement() {
         badges,
         partials: partials.map((p) => ({ ...p, requirements: p.requirements.split(/[\s,;]+/).filter(Boolean) })),
       });
-      const skipped = out.skipped.length ? ` Left as they were, because Trailhead already has them: ${out.skipped.join(', ')}.` : '';
+      const skipped = out.skipped.length ? ` Left as they were, because Forthright already has them: ${out.skipped.join(', ')}.` : '';
       setResult(`Saved ${out.ranks} rank dates and ${out.badges} merit badges.${skipped}`);
       setBadges([]);
       setPartials([]);
@@ -75,7 +75,7 @@ export function PriorAdvancement() {
       <PageHeader eyebrow={memberName(scoutId)} title="Record earlier advancement" />
       <GuideBlock
         id="prior"
-        purpose={`Use this for what ${memberName(scoutId)} earned before joining Trailhead. Trailhead then knows what is done and plans only what is left.`}
+        purpose={`Use this for what ${memberName(scoutId)} earned before joining Forthright. Forthright then knows what is done and plans only what is left.`}
         steps={[
           'Enter the date for each rank earned. Look in the Scout handbook or Scoutbook.',
           'Add each finished merit badge with its date.',

@@ -11,7 +11,7 @@ export function Home() {
   }
   return (
     <>
-      <PageHeader eyebrow="Trailhead" title="Your troops">
+      <PageHeader eyebrow="Forthright" title="Your troops">
         <Link className="btn" to="/create">
           Create a troop
         </Link>

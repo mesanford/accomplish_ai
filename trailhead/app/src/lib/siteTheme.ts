@@ -2,9 +2,9 @@
 
 export const DEFAULT_COLOR = '#4f6a2e';
 
-/** Suggested troop colors: Trailhead green and the Topo Map palette from the design system. */
+/** Suggested troop colors: Forthright green and the Topo Map palette from the design system. */
 export const COLOR_PRESETS: { name: string; color: string }[] = [
-  { name: 'Trailhead green', color: DEFAULT_COLOR },
+  { name: 'Forthright green', color: DEFAULT_COLOR },
   { name: 'Contour brown', color: '#7a4f24' },
   { name: 'Water blue', color: '#2f6e9e' },
   { name: 'Woodland', color: '#d3e3bc' },

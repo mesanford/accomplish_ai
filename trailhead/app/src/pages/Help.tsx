@@ -21,7 +21,7 @@ export function HelpPage() {
   const terms = GLOSSARY.filter((g) => !q || `${g.term} ${g.meaning}`.toLowerCase().includes(q));
   return (
     <>
-      <PageHeader eyebrow="Help" title="How to use Trailhead" />
+      <PageHeader eyebrow="Help" title="How to use Forthright" />
       <p className="muted">Pick the description that fits you. Each task is a few short steps. Words used in Scouting are explained at the bottom.</p>
       <div className="field" style={{ maxWidth: 420 }}>
         <label htmlFor="help-search">Search help</label>
@@ -57,7 +57,7 @@ export function HelpPage() {
         </dl>
       </section>
       <p className="muted small">
-        How Trailhead handles your information: <a href="/privacy">Privacy policy</a>
+        How Forthright handles your information: <a href="/privacy">Privacy policy</a>
       </p>
     </>
   );

@@ -4,7 +4,7 @@ import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 export function NotFound() {
   return (
     <section className="stack" style={{ maxWidth: 520 }}>
-      <div className="eyebrow">Trailhead</div>
+      <div className="eyebrow">Forthright</div>
       <h1>We couldn't find that page</h1>
       <p className="muted">The link may be old or mistyped.</p>
       <div>
@@ -32,7 +32,7 @@ export function RouteError() {
   return (
     <main className="main">
       <section className="stack" style={{ maxWidth: 520 }}>
-        <div className="eyebrow">Trailhead</div>
+        <div className="eyebrow">Forthright</div>
         <h1>Something went wrong</h1>
         <p className="muted">This page didn't load. Try again, or go back to the start.</p>
         <div className="row">

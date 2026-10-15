@@ -13,7 +13,7 @@ export interface HelpEntry {
 export const HELP = {
   blueCard: {
     title: 'Blue card',
-    body: 'The Application for Merit Badge, a paper form. In Trailhead it is a request a leader approves, then a counselor is assigned. A Scout needs one before starting a merit badge.',
+    body: 'The Application for Merit Badge, a paper form. In Forthright it is a request a leader approves, then a counselor is assigned. A Scout needs one before starting a merit badge.',
     learnMore: 'https://www.scouting.org/skills/merit-badges/',
   },
   boardOfReview: {
@@ -49,7 +49,7 @@ export const HELP = {
   },
   pathFeasibility: {
     title: 'Will this plan work?',
-    body: 'Trailhead checks your plan against the real rules: how long each rank takes, required badges and age limits. "On track" means the dates work. "Won\'t work as planned" means something has to change. The notes below say what.',
+    body: 'Forthright checks your plan against the real rules: how long each rank takes, required badges and age limits. "On track" means the dates work. "Won\'t work as planned" means something has to change. The notes below say what.',
   },
   pathPlan: {
     title: 'What is a plan?',
@@ -65,7 +65,7 @@ export const HELP = {
   },
   priorAdvancement: {
     title: 'Earlier ranks and badges',
-    body: 'Use this for what a Scout earned before joining Trailhead. Enter the date each was earned. Trailhead then knows what is already done and plans only what is left.',
+    body: 'Use this for what a Scout earned before joining Forthright. Enter the date each was earned. Forthright then knows what is already done and plans only what is left.',
   },
   signOff: {
     title: 'Sign-off',

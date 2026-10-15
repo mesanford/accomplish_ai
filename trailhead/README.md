@@ -1,4 +1,7 @@
-# Trailhead
+# Forthright
+
+Forthright is the product's public name. The code, this folder and settings such as `TRAILHEAD_*` still use the
+earlier working name, Trailhead.
 
 Scouts BSA advancement planning on Firebase: a React web app, with the backend in Python. It follows the
 [product spec](https://claude.ai/code/artifact/ddbc6f94-4646-412f-bc8c-4e52f42509b3). Phase 2 makes it usable by a

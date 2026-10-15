@@ -65,7 +65,7 @@ export function ParentConsent({ scout }: { scout: Member }) {
         <div className="stack">
           <p className="small">
             Withdrawing consent asks the troop to delete {first}'s information. A leader will remove the records, or you
-            can email {email}. Until then, {first}'s records stay in Trailhead.
+            can email {email}. Until then, {first}'s records stay in Forthright.
           </p>
           <div className="row">
             <button type="button" className="btn small" disabled={busy} onClick={withdraw}>

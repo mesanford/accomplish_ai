@@ -32,7 +32,7 @@ test('a young Scout needs a leader confirmation, a parent agrees to the notice, 
   const invite = await createInviteLink(leader, 'parent', 'Riley');
   const parent = await signedIn(browser, 'consent-parent@example.com', invite);
   await expect(parent.getByRole('heading', { name: 'Join your troop' })).toBeVisible();
-  await expect(parent.getByText(/Troop 202 uses Trailhead, run by MM Sanford/)).toBeVisible();
+  await expect(parent.getByText(/Troop 202 uses Forthright, run by MM Sanford/)).toBeVisible();
   const notice = parent.getByLabel('Notice to parents and guardians');
   await expect(notice.getByRole('link', { name: 'privacy policy' })).toHaveAttribute('href', '/privacy');
   await expect(notice.getByRole('link', { name: 'privacy@msanford.com' })).toBeVisible();

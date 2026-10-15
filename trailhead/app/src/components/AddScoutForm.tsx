@@ -112,7 +112,7 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
       {needsLeaderBox ? (
         <label className="check">
           <input type="checkbox" required checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />
-          This Scout's parent or guardian has given the troop permission to keep their advancement records in Trailhead,
+          This Scout's parent or guardian has given the troop permission to keep their advancement records in Forthright,
           for example on their youth application.
         </label>
       ) : null}

@@ -19,7 +19,7 @@ function PaperCardStart() {
     <section className="card">
       <h2>A Scout brought a paper blue card?</h2>
       <p className="small muted">
-        Counselors outside the troop don't need a Trailhead account. Record the card as it is signed, with a photo of it.
+        Counselors outside the troop don't need a Forthright account. Record the card as it is signed, with a photo of it.
       </p>
       <div className="row">
         <select aria-label="Scout with a paper card" value={scoutId} onChange={(e) => setScoutId(e.target.value)} style={{ width: 'auto' }}>

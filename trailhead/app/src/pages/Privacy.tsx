@@ -5,7 +5,7 @@ import { PRIVACY_ADDRESS, PRIVACY_EFFECTIVE, PRIVACY_EMAIL, PRIVACY_OPERATOR, PR
 export function PrivacyPage() {
   return (
     <article className="stack policy" aria-labelledby="privacy-title">
-      <PageHeader eyebrow="Trailhead" title="Privacy policy" />
+      <PageHeader eyebrow="Forthright" title="Privacy policy" />
       <p className="muted small">Effective {PRIVACY_EFFECTIVE}</p>
       <nav aria-label="On this page" className="policy-toc">
         {PRIVACY_SECTIONS.map((s) => (

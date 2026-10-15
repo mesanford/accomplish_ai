@@ -10,7 +10,7 @@ import { stillNeeded } from '../lib/formCheck';
 import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 
-/** A leader records a blue card a Scout brought signed on paper by a counselor outside Trailhead. */
+/** A leader records a blue card a Scout brought signed on paper by a counselor outside Forthright. */
 export function PaperCard() {
   const { scoutId = '' } = useParams();
   const { troopId, isLeader, memberName } = useTroop();
@@ -94,7 +94,7 @@ export function PaperCard() {
     <>
       <PageHeader eyebrow={memberName(scoutId)} title="Record a paper blue card" />
       <p className="muted">
-        Enter a blue card {memberName(scoutId)} brought already signed. It counts in Trailhead and goes in the next Scoutbook
+        Enter a blue card {memberName(scoutId)} brought already signed. It counts in Forthright and goes in the next Scoutbook
         report, with the dates written on the card.
       </p>
       <form className="stack" onSubmit={save} noValidate>

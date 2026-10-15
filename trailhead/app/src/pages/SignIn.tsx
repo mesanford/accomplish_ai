@@ -68,7 +68,7 @@ export function SignIn() {
 
   return (
     <section className="stack" style={{ maxWidth: 520 }}>
-      <div className="eyebrow">Trailhead</div>
+      <div className="eyebrow">Forthright</div>
       <h1>Sign in</h1>
       <div>
         <button type="button" className="btn secondary" onClick={google}>

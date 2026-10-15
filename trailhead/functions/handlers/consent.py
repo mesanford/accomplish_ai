@@ -8,7 +8,7 @@ from handlers.membership import InvalidInput, under_13
 
 # Bump this whenever the notice shown on the Join page changes in substance. Each consent records the version
 # the parent saw, so we can tell who agreed to which wording. Keep it equal to CONSENT_NOTICE_VERSION in the app.
-CONSENT_NOTICE_VERSION = "2026-10-15"
+CONSENT_NOTICE_VERSION = "2026-10-15.2"
 
 
 def check_parent_consent(data: dict) -> None:

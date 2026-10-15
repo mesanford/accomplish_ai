@@ -7,9 +7,9 @@ export function ConsentNotice({ troopName }: { troopName: string }) {
     <div className="card stack" aria-label="Notice to parents and guardians">
       <h2>Notice to parents and guardians</h2>
       <p>
-        {troopName} uses Trailhead, run by MM Sanford, to track your Scout's advancement. Leaders and you may enter your
+        {troopName} uses Forthright, run by MM Sanford, to track your Scout's advancement. Leaders and you may enter your
         Scout's name, birth month and year, rank, advancement, sign-offs, photos of paper blue cards, attendance and troop
-        messages. We use it only to run Trailhead for your troop.
+        messages. We use it only to run Forthright for your troop.
       </p>
       <p>
         Google hosts it, and Anthropic's Claude drafts plans without your Scout's name. Photos of your Scout appear on the

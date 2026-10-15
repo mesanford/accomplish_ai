@@ -145,7 +145,7 @@ def row_keys(rows: list[dict]) -> set[Key]:
 
 def nothing_new_message(since: datetime | None) -> str:
     if since is None:
-        return "Nothing has been signed off in Trailhead yet."
+        return "Nothing has been signed off in Forthright yet."
     return f"Nothing new since {since.astimezone(UTC).strftime('%b')} {since.day}, {since.year}."
 
 

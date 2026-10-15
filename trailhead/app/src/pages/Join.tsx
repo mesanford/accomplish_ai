@@ -46,7 +46,7 @@ export function Join() {
     <>
       <PageHeader eyebrow="Invitation" title="Join your troop" />
       <p className="muted">
-        Your leader invited you to the troop on Trailhead. Tell us your name and you will land on your troop's home page.
+        Your leader invited you to the troop on Forthright. Tell us your name and you will land on your troop's home page.
         <HelpTip topic="invite" />
       </p>
       <form className="form" onSubmit={submit}>
