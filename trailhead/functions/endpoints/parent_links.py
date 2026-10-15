@@ -19,15 +19,25 @@ def stage_roles(write, t, troop_id: str, uid: str, member_id: str, roles: list[s
 
 
 def stage_link(write, t, uid: str, member_id: str, scout_ids: list[str], pending: bool = False) -> None:
-    """Link a parent to Scouts. `pending`: the parent has not yet agreed to the consent notice for them."""
+    """Link a parent to Scouts. `pending`: the parent has not yet agreed to the consent notice for them.
+
+    A pending link lives only on the parent's access record, which only leaders and the parent can read. The Scout's
+    `guardianIds`, which the whole troop can see, gets the parent once they agree (`stage_guardians`).
+    """
     if not scout_ids:
         return
-    for scout_id in scout_ids:
-        write.update(t.collection("members").document(scout_id), {"guardianIds": firestore.ArrayUnion([member_id])})
+    if not pending:
+        stage_guardians(write, t, member_id, scout_ids)
     fields = {"scoutIds": firestore.ArrayUnion(scout_ids)}
     if pending:
         fields["consentPendingScoutIds"] = firestore.ArrayUnion(scout_ids)
     write.update(t.collection("access").document(uid), fields)
+
+
+def stage_guardians(write, t, member_id: str, scout_ids: list[str]) -> None:
+    """Show the parent on each Scout's record, where the troop roster reads it."""
+    for scout_id in scout_ids:
+        write.update(t.collection("members").document(scout_id), {"guardianIds": firestore.ArrayUnion([member_id])})
 
 
 def stage_unlink(write, t, uid: str, member_id: str, scout_ids: list[str], keep: list[str]) -> None:

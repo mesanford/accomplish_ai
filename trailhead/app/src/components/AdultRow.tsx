@@ -22,15 +22,19 @@ function yptLabel(m: Member): { text: string; tone: string } | null {
 interface Props {
   adult: Member;
   scouts: Member[];
-  /** A leader linked this person to Scouts and they have not yet agreed to the parent notice. */
-  waiting: boolean;
+  /** Scouts a leader linked this person to who are waiting for them to agree to the parent notice. */
+  pendingScoutIds: string[];
 }
 
 /** One adult on the roster: their roles, children and training, with a way for a leader to change their roles. */
-export function AdultRow({ adult, scouts, waiting }: Props) {
+export function AdultRow({ adult, scouts, pendingScoutIds }: Props) {
+  const waiting = pendingScoutIds.length > 0;
   const [open, setOpen] = useState(false);
   const ypt = yptLabel(adult);
-  const children = scouts.filter((s) => (s.guardianIds ?? []).includes(adult.id)).map((s) => s.displayName);
+  const children = [
+    ...scouts.filter((s) => (s.guardianIds ?? []).includes(adult.id)).map((s) => s.displayName),
+    ...scouts.filter((s) => pendingScoutIds.includes(s.id)).map((s) => `${s.displayName} (waiting to agree)`),
+  ];
   return (
     <li>
       <span>
@@ -42,7 +46,7 @@ export function AdultRow({ adult, scouts, waiting }: Props) {
       <button type="button" className="btn quiet small" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
         {open ? 'Close' : `Change roles for ${adult.displayName}`}
       </button>
-      {open ? <MemberRoles adult={adult} scouts={scouts} onClose={() => setOpen(false)} /> : null}
+      {open ? <MemberRoles adult={adult} scouts={scouts} pendingScoutIds={pendingScoutIds} onClose={() => setOpen(false)} /> : null}
     </li>
   );
 }

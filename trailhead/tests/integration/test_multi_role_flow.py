@@ -137,7 +137,8 @@ def test_a_parent_added_by_a_leader_agrees_themselves_before_they_see_the_scout(
     assert roles_everywhere(tid, "asm") == ["committee", "parent"]
     access = read(f"troops/{tid}/access/asm")
     assert access["scoutIds"] == [sid] and access["consentPendingScoutIds"] == [sid]
-    assert read(f"troops/{tid}/members/{sid}")["guardianIds"] == [asm_id]
+    # Until they agree, only leaders (who read access records) see the link; the troop-wide roster does not.
+    assert read(f"troops/{tid}/members/{sid}")["guardianIds"] == []
     assert (read(f"troops/{tid}/consents/{sid}") or {}).get("parentConsents", []) == []  # nothing recorded for them
 
     owner.set(f"troops/{tid}/progress/{sid}_art", {"scoutId": sid, "awardId": "art", "status": "in_progress"})
@@ -150,12 +151,14 @@ def test_a_parent_added_by_a_leader_agrees_themselves_before_they_see_the_scout(
     assert "consentPendingScoutIds" not in access and access["scoutIds"] == [sid]
     [consent] = read(f"troops/{tid}/consents/{sid}")["parentConsents"]
     assert consent["uid"] == "asm" and consent["version"] == NOTICE
+    assert read(f"troops/{tid}/members/{sid}")["guardianIds"] == [asm_id]  # agreed: now shown as the parent
     assert Client("asm").get(f"troops/{tid}/progress/{sid}_art") == 200
 
     # Adding a second Scout makes only that one pending; the first keeps working.
     ok(call("set_member_roles", "lead", {**change, "scoutIds": [other]}))
     access = read(f"troops/{tid}/access/asm")
     assert access["scoutIds"] == [sid, other] and access["consentPendingScoutIds"] == [other]
+    assert read(f"troops/{tid}/members/{other}")["guardianIds"] == []
 
 
 def test_a_parent_can_decline_and_is_unlinked():

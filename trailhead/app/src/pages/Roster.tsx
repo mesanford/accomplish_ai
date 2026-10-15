@@ -9,6 +9,7 @@ import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { Empty, Notice, PageHeader } from '../components/ui';
 import { rank } from '../lib/catalog';
+import { parentLine, pendingLinks } from '../lib/roles';
 import { consentSummary } from '../lib/consent';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
@@ -25,8 +26,9 @@ export function Roster() {
   const accessQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/access`) : null), [isLeader, troopId]);
   const logins = useQuery<Access>(accessQuery, `${troopId}/access/${isLeader}`);
   // Parents a leader linked who have not yet agreed to the parent notice, and the Scouts they are waiting on.
-  const waitingParents = new Set(logins.data.filter((a) => (a.consentPendingScoutIds ?? []).length > 0).map((a) => a.memberId));
-  const waitingScouts = new Set(logins.data.flatMap((a) => a.consentPendingScoutIds ?? []));
+  const pending = pendingLinks(logins.data);
+  const waitingScouts = new Set([...pending.values()].flat());
+  const waitingFor = (scoutId: string) => [...pending].filter(([, ids]) => ids.includes(scoutId)).map(([memberId]) => memberId);
   const rankOf = (id: string) => rank(records.data.find((r) => r.id === id)?.currentRankId ?? '')?.name;
   const scouts = members.filter((m) => m.kind === 'scout').sort((a, b) => a.displayName.localeCompare(b.displayName));
   const adults = members.filter((m) => m.kind === 'adult').sort((a, b) => a.displayName.localeCompare(b.displayName));
@@ -78,11 +80,7 @@ export function Roster() {
                     <Link to={`/t/${troopId}/scouts/${s.id}`}>{s.displayName}</Link>
                     {rankOf(s.id) ? <span className="muted small"> · {rankOf(s.id)}</span> : null}
                   </span>
-                  <span className="muted small">
-                    {(s.guardianIds ?? []).length > 0
-                      ? `Parents: ${(s.guardianIds ?? []).map(memberName).join(', ')}`
-                      : 'No parent on the app yet'}
-                  </span>
+                  <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>
                 </li>
               );
@@ -97,7 +95,7 @@ export function Roster() {
         </h2>
         <ul className="list">
           {adults.map((a) => (
-            <AdultRow key={a.id} adult={a} scouts={scouts} waiting={waitingParents.has(a.id)} />
+            <AdultRow key={a.id} adult={a} scouts={scouts} pendingScoutIds={pending.get(a.id) ?? []} />
           ))}
         </ul>
       </section>

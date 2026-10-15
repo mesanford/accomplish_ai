@@ -1,4 +1,4 @@
-import type { Role } from './types';
+import type { Access, Role } from './types';
 
 /** The roles a leader can give an adult, in the order the app lists them. */
 export const ADULT_ROLES: Role[] = ['leader', 'advancement', 'counselor', 'committee', 'parent'];
@@ -81,4 +81,18 @@ export function savedMessage(name: string, pending: number): string {
     return `Saved ${name}'s roles.`;
   }
   return `Saved ${name}'s roles. ${name} will be asked to agree to the parent notice the next time they open the troop.`;
+}
+
+/** Parents a leader linked who have not yet agreed to the notice, by member id. These links live only on access
+ * records, which leaders can read; the Scouts' records show the parent once they agree. */
+export function pendingLinks(logins: Access[]): Map<string, string[]> {
+  return new Map(
+    logins.filter((a) => (a.consentPendingScoutIds ?? []).length > 0).map((a) => [a.memberId, a.consentPendingScoutIds ?? []]),
+  );
+}
+
+/** The parents shown on a Scout's roster row, with any still waiting to agree to the notice marked. */
+export function parentLine(guardianIds: string[], waitingIds: string[], nameOf: (id: string) => string): string {
+  const names = [...guardianIds.map(nameOf), ...waitingIds.map((id) => `${nameOf(id)} (waiting to agree)`)];
+  return names.length > 0 ? `Parents: ${names.join(', ')}` : 'No parent on the app yet';
 }

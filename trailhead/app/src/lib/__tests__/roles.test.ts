@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { consentSummary } from '../consent';
-import { needsTrainingDate, roleChange, roleList, rolesProblem, savedMessage } from '../roles';
+import { needsTrainingDate, parentLine, pendingLinks, roleChange, roleList, rolesProblem, savedMessage } from '../roles';
+import type { Access } from '../types';
 
 const now = new Date(2026, 9, 15);
 
@@ -63,5 +64,20 @@ describe('consentSummary while a parent has not agreed', () => {
   it('prefers a consent that was given', () => {
     const given = { id: 's1', parentConsents: [{ uid: 'u', memberId: 'm', version: 'v' }] };
     expect(consentSummary(given, true, true).tone).toBe('good');
+  });
+});
+
+describe('pending parent links', () => {
+  const access = (memberId: string, pending?: string[]) => ({ memberId, roles: ['parent'], scoutIds: pending ?? [], consentPendingScoutIds: pending }) as unknown as Access;
+
+  it('lists only parents still waiting to agree', () => {
+    const links = pendingLinks([access('m1', ['s1']), access('m2'), access('m3', [])]);
+    expect([...links]).toEqual([['m1', ['s1']]]);
+  });
+
+  it('marks waiting parents on a Scout row and says when there are none', () => {
+    const name = (id: string) => ({ m1: 'Jordan Lee', m2: 'Pat Kim' })[id] ?? id;
+    expect(parentLine(['m1'], ['m2'], name)).toBe('Parents: Jordan Lee, Pat Kim (waiting to agree)');
+    expect(parentLine([], [], name)).toBe('No parent on the app yet');
   });
 });

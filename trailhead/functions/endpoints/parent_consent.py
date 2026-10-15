@@ -9,7 +9,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.consent import send_consent_confirmation, stage_parent_consent
-from endpoints.parent_links import stage_link, stage_roles, stage_unlink
+from endpoints.parent_links import stage_guardians, stage_link, stage_roles, stage_unlink
 from fb import db, fail, is_leader, require_access
 from fb import troop as troop_ref
 from handlers.consent import check_parent_consent, parent_consent_entry
@@ -79,6 +79,7 @@ def answer_pending_consent(req: https_fn.CallableRequest) -> dict:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     consent = parent_consent_entry(uid, member_id, datetime.now(UTC))
     stage_parent_consent(batch, t, pending, consent)
+    stage_guardians(batch, t, member_id, pending)  # now the troop roster shows them as the Scouts' parent
     batch.update(t.collection("access").document(uid), {"consentPendingScoutIds": firestore.DELETE_FIELD})
     batch.commit()
     send_consent_confirmation(troop_id, pending, consent)

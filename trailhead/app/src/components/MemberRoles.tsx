@@ -9,14 +9,16 @@ import { Field, Notice } from './ui';
 interface Props {
   adult: Member;
   scouts: Member[];
+  /** Scouts already linked to this person but waiting for them to agree to the parent notice. */
+  pendingScoutIds: string[];
   onClose: () => void;
 }
 
 /** A leader changes the roles an adult holds. Adding "parent" links Scouts; the parent agrees to the notice themselves. */
-export function MemberRoles({ adult, scouts, onClose }: Props) {
+export function MemberRoles({ adult, scouts, pendingScoutIds, onClose }: Props) {
   const { troopId } = useTroop();
   const before = (adult.roles ?? []).filter((r) => ADULT_ROLES.includes(r));
-  const linked = scouts.filter((s) => (s.guardianIds ?? []).includes(adult.id));
+  const linked = scouts.filter((s) => (s.guardianIds ?? []).includes(adult.id) || pendingScoutIds.includes(s.id));
   const [roles, setRoles] = useState<Role[]>(before);
   const [picked, setPicked] = useState<string[]>([]);
   const [date, setDate] = useState('');
