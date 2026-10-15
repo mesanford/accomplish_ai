@@ -4,6 +4,10 @@ export const PRIVACY_EFFECTIVE = 'October 14, 2026';
 export const PRIVACY_OPERATOR = 'MM Sanford';
 /** Where privacy questions and deletion requests go. */
 export const PRIVACY_EMAIL: string | null = 'privacy@msanford.com';
+/** COPPA's online notice must give the operator's postal address and phone number (16 CFR 312.4(d)(1)). */
+export const PRIVACY_ADDRESS = '1107 Scotney Castle Court, Green Bay, WI 54313';
+/** Still needed for COPPA. Shown on the page once set. */
+export const PRIVACY_PHONE: string | null = null;
 
 export interface PolicySection {
   id: string;

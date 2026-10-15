@@ -1,5 +1,5 @@
 import { PageHeader } from '../components/ui';
-import { PRIVACY_EFFECTIVE, PRIVACY_EMAIL, PRIVACY_OPERATOR, PRIVACY_SECTIONS } from '../lib/privacy';
+import { PRIVACY_ADDRESS, PRIVACY_EFFECTIVE, PRIVACY_EMAIL, PRIVACY_OPERATOR, PRIVACY_PHONE, PRIVACY_SECTIONS } from '../lib/privacy';
 
 /** The public privacy policy. Anyone can read it without signing in. */
 export function PrivacyPage() {
@@ -39,6 +39,10 @@ export function PrivacyPage() {
         ) : (
           <p>Contact {PRIVACY_OPERATOR} through your troop leader. A direct privacy email address will be listed here.</p>
         )}
+        <p className="muted small">
+          By mail: {PRIVACY_OPERATOR}, {PRIVACY_ADDRESS}
+          {PRIVACY_PHONE ? `. By phone: ${PRIVACY_PHONE}` : ''}
+        </p>
       </section>
     </article>
   );
