@@ -10,6 +10,7 @@ from firebase_functions import https_fn
 from endpoints.site import site_urls
 from endpoints.site_files import delete_public_files
 from fb import db, fail, is_leader, require_access, require_uid, troop
+from handlers.roles import acts_for
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -58,7 +59,7 @@ def set_media_consent(req: https_fn.CallableRequest) -> dict:
     if not isinstance(granted, bool) or not isinstance(scout_id, str) or not scout_id:
         raise fail(Code.INVALID_ARGUMENT, "Choose a Scout and whether you give consent.")
     access = require_access(req, troop_id, scout_id=scout_id)
-    is_parent = "parent" in access.get("roles", []) and scout_id in access.get("scoutIds", [])
+    is_parent = "parent" in access.get("roles", []) and acts_for(access, scout_id)
     if not (is_leader(access) or is_parent):
         raise fail(Code.PERMISSION_DENIED, "Only a parent or guardian, or a troop leader, can record media consent.")
     member_ref = troop(troop_id).collection("members").document(scout_id)

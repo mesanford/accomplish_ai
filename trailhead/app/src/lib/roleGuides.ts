@@ -25,6 +25,14 @@ export const ROLE_GUIDES: RoleGuide[] = [
         steps: ['Open Roster and find "Invite someone".', 'Choose their role and, for a parent, their Scout.', 'Press "Create invite link" and send the link by text or email.'],
       },
       {
+        task: 'Add your own child, or link yourself to a Scout',
+        steps: ['To add a new Scout, open Roster and tick "This is my child" in the Add a Scout form.', 'For a Scout already on the roster, open their page and press "I\'m this Scout\'s parent".', 'Read the parent notice and tick the box to agree. You keep your leader role.'],
+      },
+      {
+        task: "Change someone's roles",
+        steps: ['Open Roster and find the person under Adults.', 'Press "Change roles", tick the roles they hold, then press "Save roles".', 'For a parent, choose their Scouts. They agree to the parent notice the next time they open the troop.'],
+      },
+      {
         task: 'Approve a blue card',
         steps: ['Open Blue cards.', 'Press Approve on a request.', 'Choose a counselor and press Assign.'],
       },

@@ -1,9 +1,10 @@
 rules_version = '2';
 
 // Access model: troops/{t}/access/{uid} is written only by the server. It holds
-// { memberId, roles: [...], scoutIds: [...], yptExpiresAt }. Roles: leader, advancement,
-// counselor, parent, scout, committee. scoutIds = the Scouts this login acts for
-// (a Scout's own id, or a parent's children).
+// { memberId, roles: [...], scoutIds: [...], yptExpiresAt, consentPendingScoutIds? }. Roles: leader, advancement,
+// counselor, parent, scout, committee; one person can hold several. scoutIds = the Scouts this login acts for
+// (a Scout's own id, or a parent's children). consentPendingScoutIds = Scouts a leader linked this parent to, which
+// the parent has not yet agreed to the consent notice for.
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
@@ -12,7 +13,12 @@ service cloud.firestore {
     function access(t) { return get(/databases/$(database)/documents/troops/$(t)/access/$(request.auth.uid)).data; }
     function hasRole(t, role) { return isMember(t) && role in access(t).roles; }
     function isLeader(t) { return hasRole(t, 'leader') || hasRole(t, 'advancement'); }
-    function actsFor(t, scoutId) { return isMember(t) && scoutId in access(t).scoutIds; }
+    // A parent a leader linked to a Scout acts for them only after agreeing to the consent notice, which removes
+    // the Scout from consentPendingScoutIds.
+    function actsFor(t, scoutId) {
+      return isMember(t) && scoutId in access(t).scoutIds
+        && !(scoutId in access(t).get('consentPendingScoutIds', []));
+    }
     function canSeeScout(t, scoutId) { return isLeader(t) || actsFor(t, scoutId); }
     function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
     function card(t, cardId) { return get(/databases/$(database)/documents/troops/$(t)/blueCards/$(cardId)).data; }

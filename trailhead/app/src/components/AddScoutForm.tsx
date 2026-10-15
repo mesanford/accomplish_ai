@@ -11,18 +11,19 @@ import { Field, Notice } from './ui';
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: (id: string) => void }) {
-  const { access, troop } = useTroop();
+  const { troop, isLeader, has } = useTroop();
   const [name, setName] = useState('');
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('1');
   const [rank, setRank] = useState('scout');
   const [confirmed, setConfirmed] = useState(false);
+  const [mine, setMine] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState('');
-  // A parent adding their own child agrees to the notice. A leader confirms the family's permission for a
-  // Scout who may be under 13.
-  const isParent = Boolean(access?.roles.includes('parent'));
+  // A parent adding their own child agrees to the notice, and so does a leader who ticks "This is my child".
+  // Otherwise a leader confirms the family's permission for a Scout who may be under 13.
+  const isParent = isLeader ? mine : has('parent');
   const needsLeaderBox = !isParent && mayBeUnder13(Number(year), Number(month), new Date());
 
   async function submit(e: FormEvent) {
@@ -54,12 +55,14 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
         birthMonth: Number(month),
         currentRankId: rank,
         ...(isParent ? { consent: confirmed, consentVersion: CONSENT_NOTICE_VERSION } : {}),
+        ...(isLeader && mine ? { isMyChild: true } : {}),
         ...(needsLeaderBox ? { leaderConfirmed: confirmed } : {}),
       });
       setDone(`Added ${name.trim()}.`);
       setName('');
       setYear('');
       setConfirmed(false);
+      setMine(false);
       onAdded?.(scoutId);
     } catch (err) {
       setError(errorMessage(err));
@@ -100,6 +103,19 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
         We keep only birth month and year, never the full birthday.
         <HelpTip topic="birthMonth" label="why we ask about age" />
       </p>
+      {isLeader ? (
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={mine}
+            onChange={(e) => {
+              setMine(e.target.checked);
+              setConfirmed(false);
+            }}
+          />
+          This is my child
+        </label>
+      ) : null}
       {isParent ? (
         <>
           <ConsentNotice troopName={troop?.name ?? 'Your troop'} />

@@ -5,6 +5,7 @@ import { signOutUser, useAuth } from '../lib/auth';
 import { CustomAwardsProvider } from '../lib/customAwardsContext';
 import { useNewLeadCount } from '../lib/leads';
 import { TroopProvider, useTroop } from '../lib/troop';
+import { ConsentGate } from './ConsentGate';
 
 function TroopNav() {
   const { troopId, troop, has, isLeader } = useTroop();
@@ -41,6 +42,13 @@ function TroopNav() {
   );
 }
 
+/** A parent a leader linked to Scouts must agree to the parent notice (or decline) before any troop page opens. */
+function TroopOutlet() {
+  const { access } = useTroop();
+  const waiting = access?.consentPendingScoutIds ?? [];
+  return waiting.length > 0 ? <ConsentGate scoutIds={waiting} /> : <Outlet />;
+}
+
 function Shell({ troopNav }: { troopNav: boolean }) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -72,7 +80,7 @@ function Shell({ troopNav }: { troopNav: boolean }) {
         </div>
       </header>
       <main className="main">
-        <Outlet />
+        {troopNav ? <TroopOutlet /> : <Outlet />}
       </main>
     </>
   );

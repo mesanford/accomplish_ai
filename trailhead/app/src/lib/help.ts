@@ -85,7 +85,7 @@ export const HELP = {
   },
   roles: {
     title: 'Who can do what',
-    body: 'Leaders and advancement chairs manage everything. Counselors sign off merit badges for Scouts assigned to them. Parents see and plan for their own Scouts. Scouts 13 and older can sign in for themselves.',
+    body: 'Leaders and advancement chairs manage everything. Counselors sign off merit badges for Scouts assigned to them. Parents see and plan for their own Scouts. Scouts 13 and older can sign in for themselves. One person can hold several roles, such as a leader who is also a parent.',
   },
   birthMonth: {
     title: 'Why birth month and year?',

@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
+import { LinkAsParent } from '../components/LinkAsParent';
 import { MarkLeft } from '../components/MarkLeft';
 import { MediaConsent } from '../components/MediaConsent';
 import { ParentConsent } from '../components/ParentConsent';
@@ -21,7 +22,7 @@ import type { BlueCard, PathDoc, Progress, ScoutRecord } from '../lib/types';
 
 export function ScoutPage() {
   const { scoutId = '' } = useParams();
-  const { troopId, members, isLeader, visibleScoutIds, uidName } = useTroop();
+  const { troopId, members, isLeader, visibleScoutIds, uidName, parentOf } = useTroop();
   const scout = members.find((m) => m.id === scoutId);
   const allowed = visibleScoutIds.includes(scoutId);
   const base = `troops/${troopId}`;
@@ -65,6 +66,7 @@ export function ScoutPage() {
         eyebrow={current ? `Current rank: ${current.name}` : 'Scout'}
         title={scout.displayName}
       >
+        {parentOf(scoutId) ? <span className="pill good">Your child</span> : null}
         {isLeader ? (
           <Link className="btn quiet small" to={`/t/${troopId}/scouts/${scoutId}/earlier`}>
             Record earlier ranks and badges
@@ -96,6 +98,7 @@ export function ScoutPage() {
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={isLeader} />
       </section>
+      <LinkAsParent scout={scout} />
       <ParentConsent scout={scout} />
       <MediaConsent scout={scout} />
       {isLeader && scout.kind === 'scout' ? <MarkLeft scout={scout} /> : null}

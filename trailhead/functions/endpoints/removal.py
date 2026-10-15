@@ -50,7 +50,11 @@ def _plan_ops(t, scout_id: str, scout_uid: str | None) -> tuple[list, list[str],
     for uid in access.delete_uids:
         ops.append(delete_op(t.collection("access").document(uid)))
     for uid, ids in access.new_scout_ids.items():
-        ops.append(update_op(t.collection("access").document(uid), {"scoutIds": ids}))
+        fields = {"scoutIds": ids}
+        if uid in access.new_pending:
+            left = access.new_pending[uid]
+            fields["consentPendingScoutIds"] = left or firestore.DELETE_FIELD
+        ops.append(update_op(t.collection("access").document(uid), fields))
 
     drop, trim = plan_invites(scout_id, _docs(t.collection("invites")))
     ops += [delete_op(t.collection("invites").document(c)) for c in drop]

@@ -2,6 +2,7 @@ import { collection } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
+import { AdultRow } from '../components/AdultRow';
 import { InviteForm } from '../components/InviteForm';
 import { GuideBlock } from '../components/GuideBlock';
 import { HelpTip } from '../components/HelpTip';
@@ -12,23 +13,7 @@ import { consentSummary } from '../lib/consent';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
-import type { ConsentDoc, Member, ScoutRecord } from '../lib/types';
-
-function yptLabel(m: Member): { text: string; tone: string } | null {
-  if (m.kind !== 'adult' || !(m.roles ?? []).some((r) => r !== 'parent')) {
-    return null;
-  }
-  const expires = m.yptExpiresAt?.toDate();
-  if (!expires) {
-    return { text: 'No YPT on file', tone: 'bad' };
-  }
-  if (expires < new Date()) {
-    return { text: 'YPT expired', tone: 'bad' };
-  }
-  const soon = new Date();
-  soon.setDate(soon.getDate() + 60);
-  return expires < soon ? { text: 'YPT expires soon', tone: 'warn' } : { text: 'YPT current', tone: 'good' };
-}
+import type { Access, ConsentDoc, Member, ScoutRecord } from '../lib/types';
 
 export function Roster() {
   const { troopId, members, memberName, isLeader } = useTroop();
@@ -37,6 +22,11 @@ export function Roster() {
   const consents = useQuery<ConsentDoc>(consentsQuery, `${troopId}/consents/${isLeader}`);
   const recordsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/scoutRecords`) : null), [isLeader, troopId]);
   const records = useQuery<ScoutRecord & { id: string }>(recordsQuery, `${troopId}/scoutRecords/${isLeader}`);
+  const accessQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/access`) : null), [isLeader, troopId]);
+  const logins = useQuery<Access>(accessQuery, `${troopId}/access/${isLeader}`);
+  // Parents a leader linked who have not yet agreed to the parent notice, and the Scouts they are waiting on.
+  const waitingParents = new Set(logins.data.filter((a) => (a.consentPendingScoutIds ?? []).length > 0).map((a) => a.memberId));
+  const waitingScouts = new Set(logins.data.flatMap((a) => a.consentPendingScoutIds ?? []));
   const rankOf = (id: string) => rank(records.data.find((r) => r.id === id)?.currentRankId ?? '')?.name;
   const scouts = members.filter((m) => m.kind === 'scout').sort((a, b) => a.displayName.localeCompare(b.displayName));
   const adults = members.filter((m) => m.kind === 'adult').sort((a, b) => a.displayName.localeCompare(b.displayName));
@@ -47,8 +37,8 @@ export function Roster() {
     consentSummary(
       consents.data.find((c) => c.id === s.id),
       (s.guardianIds ?? []).length > 0,
+      waitingScouts.has(s.id),
     );
-  const childrenOf = (a: Member) => scouts.filter((s) => (s.guardianIds ?? []).includes(a.id)).map((s) => s.displayName);
   const withdrawn = scouts.filter((s) => consentOf(s).withdrawn);
   return (
     <>
@@ -106,18 +96,9 @@ export function Roster() {
           <HelpTip topic="ypt" />
         </h2>
         <ul className="list">
-          {adults.map((a) => {
-            const ypt = yptLabel(a);
-            return (
-              <li key={a.id}>
-                <span>
-                  {a.displayName} <span className="muted small">· {(a.roles ?? []).join(', ')}</span>
-                  {childrenOf(a).length > 0 ? <span className="muted small"> · Parent of {childrenOf(a).join(', ')}</span> : null}
-                </span>
-                {ypt ? <span className={`pill ${ypt.tone}`}>{ypt.text}</span> : null}
-              </li>
-            );
-          })}
+          {adults.map((a) => (
+            <AdultRow key={a.id} adult={a} scouts={scouts} waiting={waitingParents.has(a.id)} />
+          ))}
         </ul>
       </section>
       <div className="grid" style={{ alignItems: 'start', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>

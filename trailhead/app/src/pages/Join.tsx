@@ -11,7 +11,7 @@ export function Join() {
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState('');
   const [ypt, setYpt] = useState('');
-  const [notice, setNotice] = useState<{ troopName: string; role: string } | null>(null);
+  const [notice, setNotice] = useState<{ troopName: string; role: string; alreadyMember: boolean } | null>(null);
   const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -22,6 +22,8 @@ export function Join() {
   }, [troopId, code]);
 
   const parentNotice = notice?.role === 'parent' ? notice : null;
+  const existing = notice?.alreadyMember === true;
+  const joinLabel = existing ? 'Accept invite' : 'Join troop';
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -45,14 +47,25 @@ export function Join() {
   return (
     <>
       <PageHeader eyebrow="Invitation" title="Join your troop" />
-      <p className="muted">
-        Your leader invited you to the troop on Forthright. Tell us your name and you will land on your troop's home page.
-        <HelpTip topic="invite" />
-      </p>
+      {existing ? (
+        <p className="muted">
+          You are already in {notice?.troopName}. Accepting this invite adds a role to your membership. You keep the roles
+          you have.
+          <HelpTip topic="invite" />
+        </p>
+      ) : (
+        <p className="muted">
+          Your leader invited you to the troop on Forthright. Tell us your name and you will land on your troop's home
+          page.
+          <HelpTip topic="invite" />
+        </p>
+      )}
       <form className="form" onSubmit={submit}>
-        <Field label="Your name" htmlFor="name" hint="Scouts: use the name your troop knows you by.">
-          <input id="name" required value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-        </Field>
+        {existing ? null : (
+          <Field label="Your name" htmlFor="name" hint="Scouts: use the name your troop knows you by.">
+            <input id="name" required value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+          </Field>
+        )}
         <Field
           label="Youth Protection training expires"
           htmlFor="ypt"
@@ -76,7 +89,7 @@ export function Join() {
         <Notice kind="error">{error}</Notice>
         <div>
           <button className="btn" type="submit" disabled={busy}>
-            {busy ? 'Joining…' : 'Join troop'}
+            {busy ? 'Joining…' : joinLabel}
           </button>
         </div>
       </form>

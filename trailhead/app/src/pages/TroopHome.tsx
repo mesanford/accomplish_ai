@@ -14,7 +14,7 @@ import { useTroop } from '../lib/troop';
 import type { BlueCard } from '../lib/types';
 
 function ScoutCards() {
-  const { troopId, members, visibleScoutIds, isLeader, access } = useTroop();
+  const { troopId, members, visibleScoutIds, isLeader, access, parentOf } = useTroop();
   const scouts = members.filter((m) => visibleScoutIds.includes(m.id));
   if (scouts.length === 0) {
     return isLeader ? (
@@ -30,7 +30,9 @@ function ScoutCards() {
       {scouts.map((s) => (
         <Link key={s.id} className="card link" to={`/t/${troopId}/scouts/${s.id}`}>
           <h3>{s.displayName}</h3>
-          <span className="muted small">View path, badges and blue cards</span>
+          <span className="muted small">
+            {parentOf(s.id) ? 'Your child · ' : ''}View path, badges and blue cards
+          </span>
         </Link>
       ))}
     </div>

@@ -10,6 +10,7 @@ from firebase_functions import https_fn
 
 from fb import fail, require_access, require_uid, troop
 from handlers.membership import InvalidInput, check_invite
+from handlers.roles import acts_for
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -39,8 +40,9 @@ def send_consent_confirmation(troop_id: str, scout_ids: list[str], entry: dict) 
 
 @https_fn.on_call()
 def invite_notice(req: https_fn.CallableRequest) -> dict:
-    """What the Join page needs before someone accepts: the troop's name and the role the invite is for."""
-    require_uid(req)
+    """What the Join page needs before someone accepts: the troop's name, the invite's role, and whether the
+    person is already in the troop (the role is then added to their membership)."""
+    uid = require_uid(req)
     data = req.data or {}
     troop_id, code = data.get("troopId"), data.get("code")
     if not troop_id or not code:
@@ -51,7 +53,12 @@ def invite_notice(req: https_fn.CallableRequest) -> dict:
         invite = check_invite(snap.to_dict() if snap.exists else None, datetime.now(UTC))
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
-    return {"troopName": (t.get().to_dict() or {}).get("name", "Your troop"), "role": invite["role"]}
+    member = t.collection("access").document(uid).get().exists
+    return {
+        "troopName": (t.get().to_dict() or {}).get("name", "Your troop"),
+        "role": invite["role"],
+        "alreadyMember": member,
+    }
 
 
 @https_fn.on_call()
@@ -66,7 +73,7 @@ def withdraw_parent_consent(req: https_fn.CallableRequest) -> dict:
     if not isinstance(scout_id, str) or not scout_id:
         raise fail(Code.INVALID_ARGUMENT, "Choose a Scout.")
     access = require_access(req, troop_id)
-    if "parent" not in access.get("roles", []) or scout_id not in access.get("scoutIds", []):
+    if "parent" not in access.get("roles", []) or not acts_for(access, scout_id):
         raise fail(Code.PERMISSION_DENIED, "Only this Scout's parent or guardian can withdraw consent.")
     ref = consent_ref(troop(troop_id), scout_id)
     if (ref.get().to_dict() or {}).get("withdrawal"):

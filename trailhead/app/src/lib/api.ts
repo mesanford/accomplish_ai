@@ -45,10 +45,38 @@ export interface JoinForm {
 export const acceptInvite = (form: JoinForm) => call<JoinForm, { troopId: string }>('accept_invite', form);
 
 export const getInviteNotice = (troopId: string, code: string) =>
-  call<{ troopId: string; code: string }, { troopName: string; role: string }>('invite_notice', { troopId, code });
+  call<{ troopId: string; code: string }, { troopName: string; role: string; alreadyMember: boolean }>('invite_notice', {
+    troopId,
+    code,
+  });
 
 export const withdrawParentConsent = (troopId: string, scoutId: string) =>
   call<{ troopId: string; scoutId: string }, { ok: boolean }>('withdraw_parent_consent', { troopId, scoutId });
+
+export interface ConsentAnswer {
+  consent: boolean;
+  consentVersion?: string;
+}
+
+/** A leader or advancement chair says an existing Scout is their child. */
+export const linkSelfAsParent = (troopId: string, scoutId: string, agree: ConsentAnswer) =>
+  call<{ troopId: string; scoutId: string } & ConsentAnswer, { ok: boolean }>('link_self_as_parent', { troopId, scoutId, ...agree });
+
+/** A parent a leader linked to Scouts agrees to the notice (consent true) or declines (false). */
+export const answerPendingConsent = (troopId: string, agree: ConsentAnswer) =>
+  call<{ troopId: string } & ConsentAnswer, { ok: boolean }>('answer_pending_consent', { troopId, ...agree });
+
+export interface RolesForm {
+  troopId: string;
+  memberId: string;
+  roles: string[];
+  /** The Scouts to link when the person is a parent. */
+  scoutIds?: string[];
+  yptExpiresAt?: string;
+}
+
+export const setMemberRoles = (form: RolesForm) =>
+  call<RolesForm, { roles: string[]; pendingScoutIds: string[] }>('set_member_roles', form);
 
 export interface ScoutForm {
   troopId: string;
@@ -61,6 +89,8 @@ export interface ScoutForm {
   /** A parent adding their own child agrees to the notice. */
   consent?: boolean;
   consentVersion?: string;
+  /** A leader says this Scout is their own child, so they are linked as a parent and agree to the notice. */
+  isMyChild?: boolean;
 }
 
 export const addScout = (form: ScoutForm) => call<ScoutForm, { scoutId: string }>('add_scout', form);

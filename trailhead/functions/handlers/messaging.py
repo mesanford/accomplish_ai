@@ -25,13 +25,26 @@ def person_from_member(member_id: str, member: dict) -> Person:
     )
 
 
-def people_from_members(members: dict[str, dict]) -> dict[str, Person]:
+def pending_links(access_docs: list[dict]) -> set[tuple[str, str]]:
+    """(parent member id, Scout id) pairs where the parent has not yet agreed to the consent notice."""
+    return {
+        (a["memberId"], s)
+        for a in access_docs
+        for s in a.get("consentPendingScoutIds", [])
+        if s in a.get("scoutIds", [])
+    }
+
+
+def people_from_members(members: dict[str, dict], pending: set[tuple[str, str]] | None = None) -> dict[str, Person]:
+    """A guardian counts only with a login, and only once they have agreed to the notice for that Scout."""
+    pending = pending or set()
     reachable = {mid for mid, m in members.items() if m.get("uid")}
     people = {}
     for mid, m in members.items():
         p = person_from_member(mid, m)
         if p.is_youth:
-            p = Person(p.id, True, tuple(g for g in p.guardian_ids if g in reachable), p.ypt_expires)
+            guardians = tuple(g for g in p.guardian_ids if g in reachable and (g, mid) not in pending)
+            p = Person(p.id, True, guardians, p.ypt_expires)
         people[mid] = p
     return people
 
