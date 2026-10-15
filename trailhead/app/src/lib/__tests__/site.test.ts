@@ -8,8 +8,10 @@ import {
   photoWillShow,
   siteAddress,
   slugify,
+  type SiteDraft,
   slugProblem,
   suggestSlug,
+  tagsWillShow,
   uploadPath,
 } from '../site';
 import type { Member } from '../types';
@@ -94,5 +96,18 @@ describe('media consent', () => {
     expect(photoWillShow(photo(['unknown']), members)).toBe(false);
     expect(photoWillShow(photo([]), members)).toBe(false);
     expect(photoWillShow(photo(['no'], true), members)).toBe(true);
+  });
+
+  it('applies the same rule to the cover photo and logo tags', () => {
+    const members = [scout('yes', true), scout('no', false)];
+    const fresh = emptyDraft(troop);
+    expect(fresh.cover.photoNoScoutsShown).toBe(false);
+    expect(tagsWillShow({ scoutIds: fresh.cover.photoScoutIds, noScoutsShown: fresh.cover.photoNoScoutsShown }, members)).toBe(false);
+    expect(tagsWillShow({ scoutIds: ['yes'], noScoutsShown: false }, members)).toBe(true);
+    expect(tagsWillShow({ scoutIds: ['yes', 'no'], noScoutsShown: false }, members)).toBe(false);
+    expect(tagsWillShow({ scoutIds: [], noScoutsShown: true }, members)).toBe(true);
+    const older = normalizeDraft({ cover: { heading: 'H', tagline: '', photoPath: 'p' } as SiteDraft['cover'] }, troop);
+    expect(older.cover.photoScoutIds).toEqual([]);
+    expect(older.theme.logoNoScoutsShown).toBe(false);
   });
 });

@@ -10,6 +10,8 @@ export interface LeftOutPhoto {
   path: string;
   caption: string;
   reason: string;
+  /** What was left out: a gallery photo, the cover photo or the logo. */
+  kind?: 'photo' | 'cover' | 'logo';
 }
 
 export interface PublishResult {

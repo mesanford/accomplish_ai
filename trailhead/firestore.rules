@@ -224,7 +224,7 @@ service cloud.firestore {
         function absent(d, k) { return !(k in d) || d[k] == null; }
         function text(d, k, max) { return absent(d, k) || (d[k] is string && d[k].size() <= max); }
         function items(d, k, max) { return absent(d, k) || (d[k] is list && d[k].size() <= max); }
-        function section(d, k) { return absent(d, k) || (d[k] is map && d[k].size() <= 4); }
+        function section(d, k) { return absent(d, k) || (d[k] is map && d[k].size() <= 5); }
         function validSiteDraft(d) {
           return d.keys().hasOnly(['slug', 'theme', 'cover', 'about', 'meeting', 'faq', 'contacts', 'gallery',
                                    'recruiting', 'updatedAt'])

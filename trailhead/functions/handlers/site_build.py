@@ -25,27 +25,48 @@ def _scout_label(scout_id: str, members: dict[str, dict]) -> str:
     return (member.get("displayName") or "A Scout") if member else "a Scout no longer on the roster"
 
 
+def image_problem(item: dict, members: dict[str, dict], noun: str = "photo") -> str | None:
+    """Why an image can't be published, or None. `item` has scoutIds and noScoutsShown. The reason may name
+    Scouts; it is only shown to the leader, never published."""
+    if item["noScoutsShown"]:
+        return None
+    if not item["scoutIds"]:
+        return f"Tag the Scouts in this {noun}, or check that no Scouts can be identified."
+    missing = [s for s in item["scoutIds"] if not has_consent(members.get(s))]
+    if missing:
+        names = ", ".join(_scout_label(s, members) for s in missing)
+        return f"No media consent recorded for {names}."
+    return None
+
+
 def filter_gallery(gallery: list[dict], members: dict[str, dict]) -> tuple[list[dict], list[dict]]:
-    """(photos to publish, photos left out with a reason for the leader). Reasons may name Scouts; they are
-    only shown to the leader, never published."""
+    """(photos to publish, photos left out with a reason for the leader)."""
     kept: list[dict] = []
     left_out: list[dict] = []
     for item in gallery:
-        reason = None
-        if item["noScoutsShown"]:
-            reason = None
-        elif not item["scoutIds"]:
-            reason = "Tag the Scouts in this photo, or check that no Scouts can be identified."
-        else:
-            missing = [s for s in item["scoutIds"] if not has_consent(members.get(s))]
-            if missing:
-                names = ", ".join(_scout_label(s, members) for s in missing)
-                reason = f"No media consent recorded for {names}."
+        reason = image_problem(item, members)
         if reason:
-            left_out.append({"path": item["path"], "caption": item["caption"], "reason": reason})
+            left_out.append({"path": item["path"], "caption": item["caption"], "reason": reason, "kind": "photo"})
         else:
             kept.append(item)
     return kept, left_out
+
+
+def filter_branding(clean: dict, members: dict[str, dict]) -> tuple[dict, list[dict]]:
+    """The cleaned draft with a cover photo or logo removed when it shows a Scout without media consent (the site
+    then falls back to the troop color and no logo), and the leader-facing list of what was left out and why."""
+    left_out: list[dict] = []
+    theme, cover = dict(clean["theme"]), dict(clean["cover"])
+    for holder, key, tags, kind, caption in (
+        (cover, "photoPath", "photoTags", "cover", "Cover photo"),
+        (theme, "logoPath", "logoTags", "logo", "Logo"),
+    ):
+        path = holder[key]
+        reason = image_problem(holder[tags], members, caption.lower()) if path else None
+        if reason:
+            left_out.append({"path": path, "caption": caption, "reason": reason, "kind": kind})
+            holder[key] = None
+    return {**clean, "theme": theme, "cover": cover}, left_out
 
 
 def resolve_contacts(contacts: list[dict], members: dict[str, dict]) -> list[dict]:

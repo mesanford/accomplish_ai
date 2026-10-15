@@ -41,7 +41,12 @@ def test_reserved_slugs(slug):
 
 def test_clean_draft_trims_and_normalizes():
     clean = validate_draft(draft(), T)
-    assert clean["theme"] == {"color": "#4f6a2e", "logoPath": f"sites/{T}/draft/logo.png"}
+    assert clean["theme"] == {
+        "color": "#4f6a2e",
+        "logoPath": f"sites/{T}/draft/logo.png",
+        "logoTags": {"scoutIds": [], "noScoutsShown": False},
+    }
+    assert clean["cover"]["photoTags"] == {"scoutIds": [], "noScoutsShown": False}
     assert clean["meeting"]["address"] is None
     assert clean["faq"] == [{"q": "What does it cost?", "a": "$60 a year."}]
     assert clean["contacts"] == [{"memberId": "m-leader", "role": "Scoutmaster", "email": "sm@example.com"}]
@@ -51,7 +56,19 @@ def test_clean_draft_trims_and_normalizes():
 
 
 def test_missing_theme_uses_the_default_color():
-    assert validate_draft(draft(theme=None), T)["theme"] == {"color": DEFAULT_COLOR, "logoPath": None}
+    assert validate_draft(draft(theme=None), T)["theme"] == {
+        "color": DEFAULT_COLOR,
+        "logoPath": None,
+        "logoTags": {"scoutIds": [], "noScoutsShown": False},
+    }
+
+
+def test_cover_and_logo_tags_are_cleaned():
+    theme = {"logoPath": f"sites/{T}/draft/logo.png", "logoScoutIds": ["s1", "s1", 7, "s2"], "logoNoScoutsShown": "yes"}
+    cover = {"heading": "H", "photoPath": f"sites/{T}/draft/c.jpg", "photoScoutIds": "bad", "photoNoScoutsShown": True}
+    clean = validate_draft(draft(theme=theme, cover=cover), T)
+    assert clean["theme"]["logoTags"] == {"scoutIds": ["s1", "s2"], "noScoutsShown": False}
+    assert clean["cover"]["photoTags"] == {"scoutIds": [], "noScoutsShown": True}
 
 
 @pytest.mark.parametrize(

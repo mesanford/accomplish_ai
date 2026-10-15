@@ -18,6 +18,12 @@ interface Props {
   onUnpublish: () => void;
 }
 
+const FALLBACK = {
+  photo: '',
+  cover: ' The cover shows your troop color instead.',
+  logo: ' Your site has no logo until this is fixed.',
+};
+
 /** The web address, the draft and publish buttons, and what happened on the last publish. */
 export function PublishPanel(props: Props) {
   const { draft, onChange, site, busy, dirty, result, message } = props;
@@ -75,12 +81,13 @@ export function PublishPanel(props: Props) {
           {result.leftOut.length > 0 ? (
             <div className="notice warn" role="status">
               <p>
-                {result.leftOut.length === 1 ? '1 photo was' : `${result.leftOut.length} photos were`} left out:
+                {result.leftOut.length === 1 ? '1 image was' : `${result.leftOut.length} images were`} left out:
               </p>
               <ul>
                 {result.leftOut.map((p) => (
                   <li key={p.path}>
                     {p.caption || 'Untitled photo'}: {p.reason}
+                    {FALLBACK[p.kind ?? 'photo']}
                   </li>
                 ))}
               </ul>
