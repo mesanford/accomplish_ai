@@ -3,6 +3,9 @@
 # then the web app's typecheck, unit tests, build and browser tests.
 # Needs the Firebase CLI (npm i -g firebase-tools) and Java 11+ for the emulators.
 set -euo pipefail
+# On macOS, a forked Functions emulator worker crashes (SIGSEGV) when an HTTP call makes Python ask the system for its
+# proxy settings, as deleting an Auth user does. Telling it to use no proxy skips that lookup. Linux is unaffected.
+export NO_PROXY='*' no_proxy='*'
 cd "$(dirname "$0")/.."
 
 # The Functions emulator leaves its Python workers running after it exits, and they pile up over many runs.
