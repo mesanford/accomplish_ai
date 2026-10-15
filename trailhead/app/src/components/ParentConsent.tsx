@@ -11,13 +11,13 @@ import { formatDate, Notice } from './ui';
 
 /** Parent consent for a Scout: leaders see its status, and a parent can withdraw it. */
 export function ParentConsent({ scout }: { scout: Member }) {
-  const { troopId, access, isLeader } = useTroop();
+  const { troopId, parentOf, isLeader } = useTroop();
   const ref = useMemo(() => doc(db, `troops/${troopId}/consents/${scout.id}`), [troopId, scout.id]);
   const consent = useDoc<ConsentDoc>(ref);
   const [asking, setAsking] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const isParent = Boolean(access?.roles.includes('parent') && access.scoutIds.includes(scout.id));
+  const isParent = parentOf(scout.id);
   if (!isParent && !isLeader) {
     return null;
   }

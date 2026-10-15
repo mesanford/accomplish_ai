@@ -9,10 +9,10 @@ import { formatDate, Notice } from './ui';
 
 /** A parent (or a leader recording a paper form) allows or withdraws photos of a Scout on the public website. */
 export function MediaConsent({ scout }: { scout: Member }) {
-  const { troopId, access, isLeader, memberName } = useTroop();
+  const { troopId, parentOf, isLeader, memberName } = useTroop();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
-  const isParent = Boolean(access?.roles.includes('parent') && access.scoutIds.includes(scout.id));
+  const isParent = parentOf(scout.id);
   if (!isParent && !isLeader) {
     return null;
   }

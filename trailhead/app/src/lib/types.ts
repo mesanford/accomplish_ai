@@ -26,6 +26,8 @@ export interface Access {
   roles: Role[];
   scoutIds: string[];
   yptExpiresAt?: Timestamp | null;
+  /** Scouts a leader linked this parent to, which the parent has not yet agreed to the consent notice for. */
+  consentPendingScoutIds?: string[];
 }
 
 export interface Member {

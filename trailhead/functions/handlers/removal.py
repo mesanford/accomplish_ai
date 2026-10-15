@@ -24,6 +24,7 @@ def card_folder(troop_id: str, scout_id: str) -> str:
 class AccessPlan:
     delete_uids: list[str] = field(default_factory=list)  # logins that exist only for this Scout
     new_scout_ids: dict[str, list[str]] = field(default_factory=dict)  # uid -> scoutIds without this Scout
+    new_pending: dict[str, list[str]] = field(default_factory=dict)  # uid -> Scouts a parent still has to agree for
 
 
 def plan_access(scout_id: str, access_docs: dict[str, dict]) -> AccessPlan:
@@ -35,6 +36,8 @@ def plan_access(scout_id: str, access_docs: dict[str, dict]) -> AccessPlan:
             plan.delete_uids.append(uid)
         elif scout_id in ids:
             plan.new_scout_ids[uid] = [s for s in ids if s != scout_id]
+            if scout_id in access.get("consentPendingScoutIds", []):
+                plan.new_pending[uid] = [s for s in access["consentPendingScoutIds"] if s != scout_id]
     return plan
 
 

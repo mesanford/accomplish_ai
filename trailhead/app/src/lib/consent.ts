@@ -22,8 +22,11 @@ export interface ConsentSummary {
 
 const when = (at?: { toDate(): Date }) => (at ? ` ${formatDate(at.toDate().toISOString())}` : '');
 
-/** What leaders see about a Scout's consent. `hasParent`: a parent has joined the troop for this Scout. */
-export function consentSummary(doc: ConsentDoc | null | undefined, hasParent: boolean): ConsentSummary {
+/**
+ * What leaders see about a Scout's consent. `hasParent`: a parent has joined the troop for this Scout.
+ * `waitingOnParent`: a leader linked a parent who has not yet agreed to the notice.
+ */
+export function consentSummary(doc: ConsentDoc | null | undefined, hasParent: boolean, waitingOnParent = false): ConsentSummary {
   if (doc?.withdrawal) {
     return { text: 'Parent withdrew consent', tone: 'bad', withdrawn: true };
   }
@@ -33,6 +36,9 @@ export function consentSummary(doc: ConsentDoc | null | undefined, hasParent: bo
   }
   if (doc?.leaderConfirmation) {
     return { text: `Leader confirmed permission${when(doc.leaderConfirmation.at)}`, tone: 'warn', withdrawn: false };
+  }
+  if (waitingOnParent) {
+    return { text: 'Waiting for a parent to agree', tone: 'warn', withdrawn: false };
   }
   const text = hasParent ? 'No parent consent recorded' : 'Waiting for a parent to join';
   return { text, tone: 'warn', withdrawn: false };

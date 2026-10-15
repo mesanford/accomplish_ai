@@ -17,14 +17,17 @@ from endpoints.assistant import draft_path
 from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.leads import delete_lead
-from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
+from endpoints.membership import accept_invite, create_invite, create_troop
 from endpoints.messaging import send_message
 from endpoints.paper_cards import record_paper_blue_card
+from endpoints.parent_consent import answer_pending_consent, link_self_as_parent
 from endpoints.prior import record_prior_advancement
 from endpoints.recruiting import submit_interest
 from endpoints.removal import remove_scout
 from endpoints.retention import apply_retention
+from endpoints.roles import set_member_roles
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
+from endpoints.scouts import add_scout
 from endpoints.site import on_event_written_site, publish_site, unpublish_site
 from endpoints.site_about import draft_site_about
 from endpoints.site_consent import set_media_consent
@@ -32,6 +35,7 @@ from endpoints.site_consent import set_media_consent
 __all__ = [
     "accept_invite",
     "add_scout",
+    "answer_pending_consent",
     "apply_retention",
     "archive_custom_award",
     "check_path_preview",
@@ -43,6 +47,7 @@ __all__ = [
     "draft_path",
     "draft_site_about",
     "invite_notice",
+    "link_self_as_parent",
     "mark_scout_left",
     "move_to_custom_version",
     "on_attendance_written",
@@ -57,6 +62,7 @@ __all__ = [
     "remove_scout",
     "save_custom_award",
     "send_message",
+    "set_member_roles",
     "set_media_consent",
     "set_scoutbook_entered",
     "submit_interest",

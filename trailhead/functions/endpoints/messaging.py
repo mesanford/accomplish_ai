@@ -8,7 +8,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from fb import fail, require_access, troop
-from handlers.messaging import participant_uids, people_from_members
+from handlers.messaging import participant_uids, pending_links, people_from_members
 from trailhead_core import YPTViolation, plan_delivery
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -39,7 +39,8 @@ def send_message(req: https_fn.CallableRequest) -> dict:
         raise fail(BAD, "Choose who to send this to.")
 
     members = {d.id: d.to_dict() for d in t.collection("members").stream()}
-    people = people_from_members(members)
+    pending = pending_links([d.to_dict() for d in t.collection("access").stream()])
+    people = people_from_members(members, pending)
     if sender_id not in people or any(r not in people for r in recipient_ids):
         raise fail(BAD, "One of the recipients isn't in this troop.")
     second_adults = (t.get().to_dict() or {}).get("yptCopyMemberIds", [])

@@ -160,7 +160,7 @@ def test_invite_notice_names_the_troop_and_role():
     sid = new_scout(tid, "lead", "Sam", 2015)
     invite = parent_invite(tid, sid)
     notice = ok(call("invite_notice", "mom", {"troopId": tid, "code": invite["code"]}))
-    assert notice == {"troopName": "Troop 14", "role": "parent"}
+    assert notice == {"troopName": "Troop 14", "role": "parent", "alreadyMember": False}
     assert call("invite_notice", "mom", {"troopId": tid, "code": "nope"}).status_code == 400
 
 

@@ -9,6 +9,8 @@ from functools import cache
 from firebase_admin import firestore, initialize_app
 from firebase_functions import https_fn, options
 
+from handlers.roles import acts_for
+
 initialize_app()
 options.set_global_options(region="us-central1", max_instances=10)
 # Python shows only warnings by default, which hid the info-level audit lines (retention summaries, Scout removals,
@@ -52,7 +54,7 @@ def require_access(req: https_fn.CallableRequest, troop_id: str | None, scout_id
     access = snap.to_dict() if snap.exists else None
     if access is None:
         raise fail(https_fn.FunctionsErrorCode.PERMISSION_DENIED, "You're not a member of this troop.")
-    if scout_id and not is_leader(access) and scout_id not in access.get("scoutIds", []):
+    if scout_id and not is_leader(access) and not acts_for(access, scout_id):
         raise fail(https_fn.FunctionsErrorCode.PERMISSION_DENIED, "You can't see this Scout.")
     return access
 
