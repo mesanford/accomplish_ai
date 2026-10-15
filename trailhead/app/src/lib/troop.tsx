@@ -1,8 +1,10 @@
 import { collection, doc } from 'firebase/firestore';
-import { createContext, type ReactNode, useContext, useMemo } from 'react';
+import { createContext, type ReactNode, useContext, useEffect, useMemo } from 'react';
+import { recordActivity } from './api';
 import { useAuth } from './auth';
 import { db } from './firebase';
 import { useDoc, useQuery } from './hooks';
+import { activityDue, browserStorage, localDay, rememberActivity } from './retention';
 import type { Access, Member, Role, Troop } from './types';
 
 export interface TroopState {
@@ -29,6 +31,19 @@ export function TroopProvider({ troopId, children }: { troopId: string; children
   const access = useDoc<Access>(accessRef);
   const membersQuery = useMemo(() => (access.data ? collection(db, 'troops', troopId, 'members') : null), [troopId, access.data]);
   const members = useQuery<Member>(membersQuery, `${troopId}/members/${Boolean(access.data)}`);
+  const isMember = Boolean(access.data);
+
+  // Tell the server the troop is in use (at most once a day per browser), so it isn't deleted as inactive.
+  useEffect(() => {
+    const today = localDay();
+    const storage = browserStorage();
+    if (!isMember || !activityDue(troopId, today, storage)) {
+      return;
+    }
+    recordActivity(troopId)
+      .then(() => rememberActivity(troopId, today, storage))
+      .catch(() => undefined); // best effort: it is tried again next time the troop opens
+  }, [troopId, isMember]);
 
   const value = useMemo<TroopState>(() => {
     const roles = new Set(access.data?.roles ?? []);

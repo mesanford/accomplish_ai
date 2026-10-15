@@ -51,3 +51,36 @@ development needs no API key (`scripts/test.sh` gives the emulator a stand-in ke
    secret must still exist, so store any stand-in value. Staging does this.
 
 Each person can make 20 drafts a day, so cost stays small. Usage counts are kept in `troops/{t}/usage`.
+
+## Data retention
+
+The `apply_retention` function runs every night at 03:30 US Central time (Cloud Scheduler; the first deploy may
+ask to enable the Cloud Scheduler API). It enforces the privacy policy's retention schedule:
+
+| What                    | Deleted                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------- |
+| A Scout's records       | 12 months after a leader marks them as left the troop, or after they turn 18, if sooner |
+| A conversation          | 24 months after its last message (the messages and the conversation)                    |
+| A "Join us" request     | 12 months after it was sent                                                             |
+| Daily AI draft counters | after 30 days                                                                           |
+| A whole troop           | 18 months after anyone in it last opened the app (see the switch below)                 |
+
+Each run is capped (20 Scouts, 200 conversations, 2 troops, and about 7 minutes); anything left over is picked up
+the next night. The logs have one line per rule per troop (`retention rule=...`), with ids and counts, never names.
+
+**Whole-troop deletion starts in dry run.** Until you turn it off, the job only logs what it would delete, as a
+warning: `retention rule=troop troop=<id> dry_run=True last_active=<date> would_delete={...}`. Read those lines in
+the Cloud Functions logs first. To turn dry run off, add this line to `functions/.env.<project-id>` and deploy the
+functions again:
+
+```
+TRAILHEAD_RETENTION_DRY_RUN=false
+```
+
+Any other value, or none, keeps dry run on. To turn it back on, remove the line (or set it to `true`) and deploy.
+The switch only affects whole troops; the other rules always run. Troops created before activity tracking existed
+start their 18-month clock on the job's first run (`activityTrackedSince`), so no troop is deleted sooner than 18
+months after this is first deployed.
+
+Before the first production deploy, note that the Scout rule applies to existing records straight away: a Scout who
+turned 18 more than 12 months ago is deleted on the first night.

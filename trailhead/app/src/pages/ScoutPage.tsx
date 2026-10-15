@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
+import { MarkLeft } from '../components/MarkLeft';
 import { MediaConsent } from '../components/MediaConsent';
 import { ParentConsent } from '../components/ParentConsent';
 import { PathSummary } from '../components/PathSummary';
@@ -97,6 +98,7 @@ export function ScoutPage() {
       </section>
       <ParentConsent scout={scout} />
       <MediaConsent scout={scout} />
+      {isLeader && scout.kind === 'scout' ? <MarkLeft scout={scout} /> : null}
       {isLeader && scout.kind === 'scout' ? <RemoveScout scout={scout} /> : null}
       {isLeader && record.data ? (
         <>

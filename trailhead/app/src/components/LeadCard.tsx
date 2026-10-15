@@ -1,6 +1,6 @@
 import { doc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { createInvite, errorMessage } from '../lib/api';
+import { createInvite, deleteLead, errorMessage } from '../lib/api';
 import { db } from '../lib/firebase';
 import { LEAD_STATUSES, leadStatusLabel } from '../lib/leads';
 import type { Lead, LeadStatus } from '../lib/types';
@@ -50,6 +50,7 @@ export function LeadCard({ lead, troopId }: { lead: Lead; troopId: string }) {
   const [notes, setNotes] = useState(lead.notes ?? '');
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   async function change(fields: { status?: LeadStatus; notes?: string }) {
     setError('');
@@ -57,6 +58,15 @@ export function LeadCard({ lead, troopId }: { lead: Lead; troopId: string }) {
     try {
       await updateDoc(ref, fields);
       setSaved(Boolean(fields.notes !== undefined));
+    } catch (err) {
+      setError(errorMessage(err));
+    }
+  }
+
+  async function remove() {
+    setError('');
+    try {
+      await deleteLead(troopId, lead.id);
     } catch (err) {
       setError(errorMessage(err));
     }
@@ -112,11 +122,28 @@ export function LeadCard({ lead, troopId }: { lead: Lead; troopId: string }) {
         <span className="hint">{saved ? 'Notes saved.' : 'Saved when you click away.'}</span>
       </div>
       {lead.invitePath ? <InviteLink path={lead.invitePath} /> : null}
-      <div>
+      <div className="row">
         <button type="button" className="btn small" onClick={invite}>
           {lead.invitePath ? 'Make a new invite link' : 'Create invite link'}
         </button>
+        {confirming ? null : (
+          <button type="button" className="btn quiet small" onClick={() => setConfirming(true)}>
+            Delete request
+          </button>
+        )}
       </div>
+      {confirming ? (
+        <div className="row">
+          <span className="small">Delete this request and the family's contact details? This cannot be undone.</span>
+          <button type="button" className="btn danger small" onClick={remove}>
+            Delete
+          </button>
+          <button type="button" className="btn quiet small" onClick={() => setConfirming(false)}>
+            Keep
+          </button>
+        </div>
+      ) : null}
+      <span className="hint">Requests are deleted automatically 12 months after they were sent.</span>
       <Notice kind="error">{error}</Notice>
     </li>
   );

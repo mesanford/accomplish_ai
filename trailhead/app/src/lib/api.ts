@@ -209,3 +209,20 @@ export const removeScout = (form: RemoveScoutForm) =>
 
 export const deleteAccount = () =>
   call<{ confirm: true }, { deleted: boolean; troops: number }>('delete_account', { confirm: true });
+
+/** Note that someone used this troop today. The server writes at most once a day per troop. */
+export const recordActivity = (troopId: string) =>
+  call<{ troopId: string }, { recorded: boolean }>('record_activity', { troopId });
+
+export interface MarkLeftForm {
+  troopId: string;
+  scoutId: string;
+  /** true: the Scout has left the troop; false: undo it. */
+  left: boolean;
+}
+
+export const markScoutLeft = (form: MarkLeftForm) =>
+  call<MarkLeftForm, { left: boolean; leftAt: string | null }>('mark_scout_left', form);
+
+export const deleteLead = (troopId: string, leadId: string) =>
+  call<{ troopId: string; leadId: string }, { deleted: boolean }>('delete_lead', { troopId, leadId });

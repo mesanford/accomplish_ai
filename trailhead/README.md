@@ -50,6 +50,11 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     (`delete_account`); a Scout's records stay with the troop, and the last leader of a troop that still has
     members is asked to make another leader first. Only the server deletes these documents; the rules refuse
     client deletes.
+13. **Retention.** A nightly job (`apply_retention`, see [DEPLOY.md](DEPLOY.md#data-retention)) deletes data on the
+    privacy policy's schedule. *Mark as left the troop* on a Scout's page (`mark_scout_left`) starts a 12-month
+    clock, after which the Scout's records are deleted (or 12 months after they turn 18, if sooner). Leaders can
+    delete a "Join us" request at any time (`delete_lead`). Opening a troop calls `record_activity`, which keeps
+    `troops/{t}.lastActiveAt`; a troop nobody opens for 18 months is deleted (dry run until the operator turns it on).
 
 ## Setup
 
