@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from functools import cache
 
@@ -10,6 +11,9 @@ from firebase_functions import https_fn, options
 
 initialize_app()
 options.set_global_options(region="us-central1", max_instances=10)
+# Python shows only warnings by default, which hid the info-level audit lines (retention summaries, Scout removals,
+# Claude usage). Never log names or message text at any level.
+logging.getLogger().setLevel(logging.INFO)
 
 LEADER_ROLES = {"leader", "advancement"}
 
