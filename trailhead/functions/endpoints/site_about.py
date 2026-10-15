@@ -53,8 +53,9 @@ def draft_site_about(req: https_fn.CallableRequest) -> dict:
     except ValueError as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from None
     t = troop(troop_id)
-    scouts = [d.to_dict() for d in t.collection("members").where("kind", "==", "scout").stream()]
-    notes = scrub_names(notes, [s.get("displayName") or "" for s in scouts])
+    # The notes go to Anthropic, so every roster name (Scouts and adults) is removed first, as for plan requests.
+    members = [d.to_dict() for d in t.collection("members").stream()]
+    notes = scrub_names(notes, [m.get("displayName") or "" for m in members])
     troop_doc = t.get().to_dict() or {}
     _count(req.auth.uid, troop_id, datetime.now(UTC).date())
     if use_fake_llm():

@@ -17,6 +17,9 @@ export function PrivacyPage() {
       {PRIVACY_SECTIONS.map((s) => (
         <section key={s.id} id={s.id} className="stack">
           <h2>{s.heading}</h2>
+          {(s.paragraphs ?? []).map((p) => (
+            <p key={p}>{p}</p>
+          ))}
           {s.items ? (
             <ul className="policy-list">
               {s.items.map((item) => (
@@ -24,7 +27,7 @@ export function PrivacyPage() {
               ))}
             </ul>
           ) : null}
-          {(s.paragraphs ?? []).map((p) => (
+          {(s.notes ?? []).map((p) => (
             <p key={p}>{p}</p>
           ))}
         </section>

@@ -30,7 +30,7 @@ def new_troop(number: str) -> str:
     return ok(call("create_troop", "lead", form))["troopId"]
 
 
-NOTICE = "2026-10-15.2"
+NOTICE = "2026-10-15.3"
 AGREE = {"consent": True, "consentVersion": NOTICE}
 
 

@@ -1,4 +1,4 @@
-import { doc } from 'firebase/firestore';
+import { clearIndexedDbPersistence, doc, terminate } from 'firebase/firestore';
 import {
   GoogleAuthProvider,
   isSignInWithEmailLink,
@@ -82,6 +82,15 @@ export async function signInWithGoogle(): Promise<void> {
   await signInWithPopup(auth, provider);
 }
 
-export function signOutUser(): Promise<void> {
-  return signOut(auth);
+/** Signs out and removes the offline copy of troop data from this browser, so the next person on a shared
+ * computer can't read it. The page reloads because the database can't be used after its cache is cleared. */
+export async function signOutUser(): Promise<void> {
+  await signOut(auth);
+  try {
+    await terminate(db);
+    await clearIndexedDbPersistence(db);
+  } catch {
+    // Another open tab can hold the cache; the privacy policy tells people to close it on shared computers.
+  }
+  window.location.assign('/');
 }
