@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  wholeSentences,
   clearRequirementsCache,
   findRequirement,
   flatten,
@@ -138,5 +139,15 @@ describe('bullet prompts', () => {
     const parent = { id: '3a', label: '(a)', text: 'Think about a time…', resources: [], children: [bullet] };
     expect(isSignable(bullet)).toBe(false);
     expect(isSignable(parent)).toBe(true);
+  });
+});
+
+describe('wholeSentences', () => {
+  it('cuts a note that stops mid-sentence back to its last full sentence', () => {
+    expect(wholeSentences('First one. Second one. The meals may not be')).toBe('First one. Second one.');
+  });
+
+  it('leaves a finished note alone', () => {
+    expect(wholeSentences('All done.')).toBe('All done.');
   });
 });

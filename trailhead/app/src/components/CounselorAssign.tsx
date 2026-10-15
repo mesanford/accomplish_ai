@@ -1,5 +1,6 @@
 import { deleteField, type FieldValue } from 'firebase/firestore';
 import { useState } from 'react';
+import { counselorOptions } from '../lib/cards';
 import type { BlueCard, Member } from '../lib/types';
 
 export const OUTSIDE = '__outside__';
@@ -43,9 +44,9 @@ export function CounselorAssign({ card, counselors, onAssign }: Props) {
     <>
       <select aria-label="Counselor" value={choice} onChange={(e) => setChoice(e.target.value)} style={{ width: 'auto' }}>
         <option value="">Choose counselor</option>
-        {counselors.map((c) => (
+        {counselorOptions(counselors).map((c) => (
           <option key={c.id} value={c.uid}>
-            {c.displayName}
+            {c.label}
           </option>
         ))}
         <option value={OUTSIDE}>Someone outside the troop</option>

@@ -73,6 +73,16 @@ export function statusLookup<T extends string>(states: Record<string, { status: 
   return out;
 }
 
+/** A note cut off mid-sentence at its source is shortened to its last complete sentence, so it never ends mid-thought. */
+export function wholeSentences(text: string): string {
+  const t = text.trim();
+  if (/[.!?]["')\]]?$/.test(t)) {
+    return t;
+  }
+  const end = Math.max(t.lastIndexOf('. '), t.lastIndexOf('! '), t.lastIndexOf('? '));
+  return end > 0 ? t.slice(0, end + 1) : t;
+}
+
 /** Where to read the official requirements when the text is not available in the app. */
 export function officialRequirementsUrl(awardId: string): string {
   return badge(awardId)?.officialUrl ?? RANKS_URL;

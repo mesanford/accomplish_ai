@@ -1,5 +1,5 @@
 import type { EditDraft, SiteDraft } from '../../lib/site';
-import { siteAddress, slugProblem } from '../../lib/site';
+import { saveLabel, siteAddress, slugProblem } from '../../lib/site';
 import type { PublishResult } from '../../lib/siteApi';
 import type { Troop } from '../../lib/types';
 import { HelpTip } from '../HelpTip';
@@ -11,6 +11,8 @@ interface Props {
   site: Troop['site'];
   busy: boolean;
   dirty: boolean;
+  /** A draft already exists on the server (or was saved in this visit). */
+  stored: boolean;
   result: PublishResult | null;
   message: { kind: 'ok' | 'error'; text: string } | null;
   onSave: () => void;
@@ -61,7 +63,7 @@ export function PublishPanel(props: Props) {
       )}
       <div className="row">
         <button type="button" className="btn quiet" disabled={busy} onClick={props.onSave}>
-          {dirty ? 'Save draft' : 'Draft saved'}
+          {saveLabel(dirty, props.stored)}
         </button>
         <button type="button" className="btn" disabled={busy || Boolean(problem)} onClick={props.onPublish}>
           {busy ? 'Working…' : 'Publish'}

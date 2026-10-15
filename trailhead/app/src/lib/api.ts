@@ -1,4 +1,3 @@
-import { FirebaseError } from 'firebase/app';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import type { CustomRequirement, Feasibility, PathItemDoc } from './types';
@@ -8,16 +7,7 @@ async function call<In, Out>(name: string, data: In): Promise<Out> {
   return result.data;
 }
 
-/** A message safe to show a person: the server's own wording, or a plain fallback. */
-export function errorMessage(err: unknown): string {
-  if (err instanceof FirebaseError) {
-    if (err.code === 'functions/internal' || err.code === 'functions/unavailable') {
-      return "Something went wrong on our side. Try again in a moment.";
-    }
-    return err.message.replace(/^Firebase: /, '');
-  }
-  return err instanceof Error ? err.message : 'Something went wrong. Try again.';
-}
+export { errorMessage, isPermissionDenied } from './errors';
 
 export interface TroopForm {
   name: string;

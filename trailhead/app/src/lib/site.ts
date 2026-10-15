@@ -161,3 +161,8 @@ export const photoWillShow = (item: GalleryItem, members: Member[]): boolean => 
 /** Builder sections change the draft through this: a shallow patch of top-level fields, or a function of the
  * latest draft (for changes that land after an upload finishes). */
 export type EditDraft = (patch: Partial<SiteDraft> | ((current: SiteDraft) => Partial<SiteDraft>)) => void;
+
+/** The save button's label: "Draft saved" only once a draft exists and nothing has changed since. */
+export function saveLabel(dirty: boolean, stored: boolean): string {
+  return dirty || !stored ? 'Save draft' : 'Draft saved';
+}

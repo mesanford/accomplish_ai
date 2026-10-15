@@ -13,6 +13,11 @@ def add_months(d: date, months: int) -> date:
     return date(year, month, min(d.day, calendar.monthrange(year, month)[1]))
 
 
+def human(d: date) -> str:
+    """The one date format shown to people: "Oct 22, 2026"."""
+    return f"{d:%b} {d.day}, {d.year}"
+
+
 def end_of_month(year: int, month: int) -> date:
     return date(year, month, calendar.monthrange(year, month)[1])
 

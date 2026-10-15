@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { plural } from '../lib/plural';
 import { type ApplyMode, applyTemplate } from '../lib/templates';
 import { useTroop } from '../lib/troop';
 import type { PathItemDoc, PathTemplate, Progress } from '../lib/types';
@@ -42,7 +43,7 @@ export function TemplatePicker({ scoutId, items, onApply }: Props) {
     const result = applyTemplate({ template: chosen, current: items, today, mode, earned });
     onApply(result.items, mode === 'replace' ? chosen.goalAwardId : null);
     const left = result.skipped.length > 0 ? ` Left out ${result.skipped.length} already earned or planned.` : '';
-    setMessage(`Added ${result.added.length} badges from "${chosen.name}".${left}`);
+    setMessage(`Added ${plural(result.added.length, 'badge')} from "${chosen.name}".${left}`);
     setChosenId('');
   }
 
@@ -65,7 +66,7 @@ export function TemplatePicker({ scoutId, items, onApply }: Props) {
         <div className="stack">
           {chosen.description ? <p className="muted">{chosen.description}</p> : null}
           <p>
-            This adds {preview.added.length} badges, with dates counted from today ({formatDate(today)}):
+            This adds {plural(preview.added.length, 'badge')}, with dates counted from today ({formatDate(today)}):
           </p>
           <ul>
             {preview.added.map((i) => (

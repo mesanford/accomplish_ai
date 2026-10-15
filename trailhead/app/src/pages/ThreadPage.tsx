@@ -22,10 +22,13 @@ export function ThreadPage() {
 
   async function reply(e: FormEvent) {
     e.preventDefault();
+    if (!body.trim()) {
+      return;
+    }
     setBusy(true);
     setError('');
     try {
-      await sendMessage({ troopId, threadId, body });
+      await sendMessage({ troopId, threadId, body: body.trim() });
       setBody('');
     } catch (err) {
       setError(errorMessage(err));
@@ -68,7 +71,7 @@ export function ThreadPage() {
           <textarea aria-label="Reply" required value={body} onChange={(e) => setBody(e.target.value)} />
           <Notice kind="error">{error}</Notice>
           <div>
-            <button className="btn" type="submit" disabled={busy}>
+            <button className="btn" type="submit" disabled={busy || !body.trim()}>
               {busy ? 'Sending…' : 'Reply'}
             </button>
           </div>

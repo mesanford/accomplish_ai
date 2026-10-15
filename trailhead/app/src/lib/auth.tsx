@@ -12,6 +12,7 @@ import {
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { auth, db } from './firebase';
 import { useDoc } from './hooks';
+import { safeNext } from './redirect';
 import { storage } from './storage';
 import type { UserDoc } from './types';
 
@@ -68,7 +69,7 @@ export function rememberedEmail(): string {
 /** Finish signing in from the emailed link. Returns where to go next. */
 export async function finishSignIn(email: string, href: string): Promise<string> {
   await signInWithEmailLink(auth, email, href);
-  const next = storage.get(NEXT_KEY) || '/';
+  const next = safeNext(storage.get(NEXT_KEY));
   storage.remove(EMAIL_KEY);
   storage.remove(NEXT_KEY);
   return next;

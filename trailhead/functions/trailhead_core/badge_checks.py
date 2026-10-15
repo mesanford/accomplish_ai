@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 
 from .catalog import Catalog
+from .dates import human
 from .models import Issue, PathItem, ScoutRecord, Severity
 
 # Sum of difficulty across badges worked at the same time before we warn.
@@ -36,14 +37,14 @@ def check_badges(items: list[PathItem], scout: ScoutRecord, catalog: Catalog) ->
                     )
                 )
         if badge.finish_by and item.planned_end and item.planned_end > badge.finish_by:
-            deadline = f"{badge.finish_by:%B} {badge.finish_by.day}, {badge.finish_by.year}"
+            deadline = human(badge.finish_by)
             issues.append(
                 Issue(
                     code="discontinued",
                     severity=Severity.ERROR,
                     message=(
                         f"{badge.name} was discontinued. Scouts who already started it must finish by "
-                        f"{deadline}; the plan finishes {item.planned_end.isoformat()}."
+                        f"{deadline}; the plan finishes {human(item.planned_end)}."
                     ),
                     award_id=badge.id,
                 )
@@ -108,7 +109,7 @@ def _overload_issue(week: date, load: int) -> Issue:
         code="overloaded",
         severity=Severity.WARNING,
         message=(
-            f"The week of {week.isoformat()} stacks badges with a combined difficulty of {load} "
+            f"The week of {human(week)} stacks badges with a combined difficulty of {load} "
             f"(over {MAX_CONCURRENT_DIFFICULTY}). Consider spreading them out."
         ),
     )

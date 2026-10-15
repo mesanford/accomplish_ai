@@ -1,5 +1,5 @@
 import { type ReactNode, useState } from 'react';
-import { type FlatRequirement, flatten, normalizeReqId, REQUIREMENTS_ATTRIBUTION, type RequirementsDoc } from '../lib/requirements';
+import { type FlatRequirement, flatten, normalizeReqId, REQUIREMENTS_ATTRIBUTION, type RequirementsDoc, wholeSentences } from '../lib/requirements';
 
 export type ReqStatus = 'signed' | 'ready' | 'review';
 
@@ -47,7 +47,7 @@ export function Attribution({ doc }: { doc: RequirementsDoc }) {
         Source on scouting.org
       </a>
       {doc.fetchedAt ? ` · retrieved ${doc.fetchedAt}` : ''}
-      {doc.note ? ` · ${doc.note}` : ''}
+      {doc.note ? ` · ${wholeSentences(doc.note)}` : ''}
     </p>
   );
 }

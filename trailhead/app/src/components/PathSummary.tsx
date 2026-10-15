@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
 import { awardName } from '../lib/catalog';
+import { plural } from '../lib/plural';
+import { uniqueIssues } from '../lib/feasibility';
 import type { Feasibility, PathDoc } from '../lib/types';
 import { HelpTip } from './HelpTip';
 import { formatDate, PathStatusPill } from './ui';
 
-export function FeasibilityView({ result }: { result: Feasibility }) {
+/**
+ * `hideCodes` leaves out issues shown elsewhere on the same page, such as the plan check under a draft.
+ * The same message is never listed twice.
+ */
+export function FeasibilityView({ result, hideCodes = [] }: { result: Feasibility; hideCodes?: string[] }) {
+  const issues = uniqueIssues(result.issues.filter((i) => !hideCodes.includes(i.code)));
   return (
     <div className="stack">
       <div className="row">
@@ -16,9 +23,9 @@ export function FeasibilityView({ result }: { result: Feasibility }) {
           </span>
         ) : null}
       </div>
-      {result.issues.length > 0 ? (
+      {issues.length > 0 ? (
         <ul className="issues">
-          {[...result.issues].sort((a, b) => Number(b.severity === 'error') - Number(a.severity === 'error')).map((i, n) => (
+          {[...issues].sort((a, b) => Number(b.severity === 'error') - Number(a.severity === 'error')).map((i, n) => (
             <li key={`${i.code}-${n}`} className={i.severity}>
               {i.message}
             </li>
@@ -62,7 +69,7 @@ export function PathSummary({ path, editTo }: { path: PathDoc | null; editTo: st
         </Link>
       </div>
       <p className="muted small">
-        {path.items.length} badges planned{path.targetDate ? ` · target ${formatDate(path.targetDate)}` : ''}
+        {plural(path.items.length, 'badge')} planned{path.targetDate ? ` · target ${formatDate(path.targetDate)}` : ''}
       </p>
       {path.feasibility ? <FeasibilityView result={path.feasibility} /> : <p className="muted">Checking the plan…</p>}
     </div>

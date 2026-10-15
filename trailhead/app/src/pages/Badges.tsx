@@ -1,70 +1,24 @@
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RequirementsToggle } from '../components/AwardRequirements';
 import { GuideBlock } from '../components/GuideBlock';
 import { HelpTip } from '../components/HelpTip';
-import { Notice, PageHeader, Pips } from '../components/ui';
-import { errorMessage } from '../lib/api';
-import { BADGE_VERSION, type Badge, CATEGORY_LABELS, discontinuedLabel, eagleLabel, searchBadges } from '../lib/catalog';
-import { db } from '../lib/firebase';
-import { useTroop } from '../lib/troop';
-
-function StartCard({ b }: { b: Badge }) {
-  const { troopId, members, visibleScoutIds } = useTroop();
-  const scouts = members.filter((m) => visibleScoutIds.includes(m.id));
-  const [scoutId, setScoutId] = useState(scouts[0]?.id ?? '');
-  const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
-  if (scouts.length === 0) {
-    return null;
-  }
-
-  async function start() {
-    setMessage(null);
-    try {
-      await setDoc(doc(db, `troops/${troopId}/blueCards/${scoutId}_${b.id}`), {
-        scoutId,
-        awardId: b.id,
-        versionId: BADGE_VERSION,
-        status: 'requested',
-        requestedAt: serverTimestamp(),
-      });
-      setMessage({ kind: 'ok', text: 'Blue card requested. A leader will approve it and assign a counselor.' });
-    } catch (err) {
-      const text = errorMessage(err).includes('permission')
-        ? 'There is already a blue card for this badge.'
-        : errorMessage(err);
-      setMessage({ kind: 'error', text });
-    }
-  }
-
-  return (
-    <div className="stack">
-      <div className="row">
-        {scouts.length > 1 ? (
-          <select aria-label="Scout" value={scoutId} onChange={(e) => setScoutId(e.target.value)} style={{ width: 'auto' }}>
-            {scouts.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.displayName}
-              </option>
-            ))}
-          </select>
-        ) : null}
-        <button type="button" className="btn secondary small" onClick={start}>
-          Start a blue card
-        </button>
-      </div>
-      {message ? <Notice kind={message.kind}>{message.text}</Notice> : null}
-    </div>
-  );
-}
+import { StartCard } from '../components/StartCard';
+import { PageHeader, Pips } from '../components/ui';
+import { CATEGORY_LABELS, discontinuedLabel, eagleLabel, searchBadges } from '../lib/catalog';
+import { firstPage, PAGE_SIZE } from '../lib/paging';
+import { plural } from '../lib/plural';
 
 export function Badges() {
   const [q, setQ] = useState('');
   const [category, setCategory] = useState('');
   const [eagleOnly, setEagleOnly] = useState(false);
+  const [limit, setLimit] = useState(PAGE_SIZE);
+  // A new search or filter starts again from the first page.
+  useEffect(() => setLimit(PAGE_SIZE), [q, category, eagleOnly]);
   const list = searchBadges(q).filter(
     (b) => (!category || b.category === category) && (!eagleOnly || eagleLabel(b)),
   );
+  const { items, remaining } = firstPage(list, limit);
   return (
     <>
       <PageHeader eyebrow="Merit badges" title="Badges">
@@ -95,7 +49,7 @@ export function Badges() {
           <input type="checkbox" checked={eagleOnly} onChange={(e) => setEagleOnly(e.target.checked)} /> Counts toward Eagle
           <HelpTip topic="eagleRequired" />
         </label>
-        <span className="muted small">{list.length} badges</span>
+        <span className="muted small">{plural(list.length, 'badge')}</span>
         <span className="muted small">
           Squares = difficulty
           <HelpTip topic="difficulty" />
@@ -106,7 +60,7 @@ export function Badges() {
         </span>
       </div>
       <div className="grid">
-        {list.map((b) => (
+        {items.map((b) => (
           <article key={b.id} className="card">
             <div className="stack" style={{ gap: 4 }}>
               <h3>{b.name}</h3>
@@ -128,6 +82,17 @@ export function Badges() {
           </article>
         ))}
       </div>
+      {list.length === 0 ? <p className="muted">No badges match. Try a different search.</p> : null}
+      {remaining > 0 ? (
+        <div className="row">
+          <button type="button" className="btn quiet" onClick={() => setLimit(limit + PAGE_SIZE)}>
+            Show more badges
+          </button>
+          <span className="muted small">
+            Showing {items.length} of {list.length}
+          </span>
+        </div>
+      ) : null}
     </>
   );
 }

@@ -11,6 +11,7 @@ import type { BlueCard, Progress } from '../lib/types';
 import { CardPhotos } from './CardPhotos';
 import { CounselChecklist } from './CounselChecklist';
 import { type CardPatch, CounselorAssign } from './CounselorAssign';
+import { MarkComplete } from './MarkComplete';
 import { CardStatusPill, Notice } from './ui';
 
 /** For a card with a counselor outside the troop: the leader signs requirements for them and completes the badge. */
@@ -27,9 +28,7 @@ function OutsideCounselorPanel({ card, change }: { card: BlueCard; change: (patc
         <button type="button" className="btn quiet small" aria-expanded={open} onClick={() => setOpen(!open)}>
           {open ? 'Hide requirements' : `Sign requirements for ${name}`}
         </button>
-        <button type="button" className="btn secondary small" onClick={() => change({ status: 'complete' })}>
-          Mark {awardName(card.awardId)} complete
-        </button>
+        <MarkComplete card={card} small onComplete={() => change({ status: 'complete' })} />
       </div>
       {open ? (
         <>

@@ -2,6 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { addScout, errorMessage } from '../lib/api';
 import { RANKS } from '../lib/catalog';
 import { CONSENT_NOTICE_VERSION, mayBeUnder13 } from '../lib/consent';
+import { stillNeeded } from '../lib/formCheck';
 import { useTroop } from '../lib/troop';
 import { ConsentNotice } from './ConsentNotice';
 import { HelpTip } from './HelpTip';
@@ -26,9 +27,25 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    setBusy(true);
     setError('');
     setDone('');
+    const missing = stillNeeded([
+      ["the Scout's name", name],
+      ['the birth year', year],
+    ]);
+    if (missing) {
+      setError(missing);
+      return;
+    }
+    if (!/^\d{4}$/.test(year.trim())) {
+      setError('Enter the birth year as four digits, like 2013.');
+      return;
+    }
+    if ((isParent || needsLeaderBox) && !confirmed) {
+      setError(isParent ? 'Tick the box to agree before adding your Scout.' : "Tick the box to confirm the family's permission.");
+      return;
+    }
+    setBusy(true);
     try {
       const { scoutId } = await addScout({
         troopId,
@@ -52,7 +69,7 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
   }
 
   return (
-    <form className="form" onSubmit={submit}>
+    <form className="form" onSubmit={submit} noValidate>
       <Field label="Scout's name" htmlFor="scout-name">
         <input id="scout-name" required value={name} onChange={(e) => setName(e.target.value)} />
       </Field>

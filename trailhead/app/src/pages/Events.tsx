@@ -8,9 +8,11 @@ import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { Empty, Field, formatDate, Notice, PageHeader, todayIso } from '../components/ui';
 import { errorMessage } from '../lib/api';
+import { stillNeeded } from '../lib/formCheck';
 import { awardName, BADGES } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 import type { TroopEvent } from '../lib/types';
 
@@ -29,6 +31,14 @@ function EventForm({ troopId }: { troopId: string }) {
   async function submit(e: FormEvent) {
     e.preventDefault();
     setError('');
+    const missing = stillNeeded([
+      ["the event's name", title],
+      ['the date', start],
+    ]);
+    if (missing) {
+      setError(missing);
+      return;
+    }
     const linked = awardId && reqId.trim() ? [{ awardId, reqId: reqId.trim() }] : [];
     try {
       await addDoc(collection(db, `troops/${troopId}/events`), {
@@ -50,7 +60,7 @@ function EventForm({ troopId }: { troopId: string }) {
   }
 
   return (
-    <form className="form" onSubmit={submit}>
+    <form className="form" onSubmit={submit} noValidate>
       <Field label="Event" htmlFor="ev-title">
         <input id="ev-title" required value={title} onChange={(e) => setTitle(e.target.value)} placeholder="October campout" />
       </Field>
@@ -161,9 +171,9 @@ export function Events() {
                   {formatDate(ev.start)}
                   {ev.place ? ` · ${ev.place}` : ''}
                   {ev.public ? ' · On the troop website' : ''}
-                  {ev.logValues?.nights ? ` · ${ev.logValues.nights} nights` : ''}
-                  {ev.logValues?.miles ? ` · ${ev.logValues.miles} miles` : ''}
-                  {ev.logValues?.serviceHours ? ` · ${ev.logValues.serviceHours} service hours` : ''}
+                  {ev.logValues?.nights ? ` · ${plural(ev.logValues.nights, 'night')}` : ''}
+                  {ev.logValues?.miles ? ` · ${plural(ev.logValues.miles, 'mile')}` : ''}
+                  {ev.logValues?.serviceHours ? ` · ${plural(ev.logValues.serviceHours, 'service hour')}` : ''}
                   {(ev.linkedRequirements ?? []).map((r) => (
                     <span key={`${r.awardId}-${r.reqId}`}>
                       {' · '}

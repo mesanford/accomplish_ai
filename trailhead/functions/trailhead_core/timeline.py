@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 
 from .catalog import Catalog, Rank, is_custom_award
-from .dates import add_months, age_deadline
+from .dates import add_months, age_deadline, human
 from .eagle import eagle_slots_filled, missing_eagle_required
 from .models import Issue, PathItem, ScoutRecord, Severity
 
@@ -98,7 +98,7 @@ def _age_check(rank: Rank, earliest: date, scout: ScoutRecord) -> list[Issue]:
             code="age_limit",
             severity=severity,
             message=(
-                f"The earliest {rank.name} date, {earliest.isoformat()}, {verb} the Scout's "
+                f"The earliest {rank.name} date, {human(earliest)}, {verb} the Scout's "
                 f"{rank.before_age}th birthday ({soonest:%B %Y})."
             ),
             award_id=rank.id,

@@ -122,7 +122,7 @@ def test_overloaded_weeks_warn():
 def test_next_steps_mention_soon_badges():
     item = PathItem(award_id="chess", planned_start=date(2026, 10, 20), planned_end=date(2026, 11, 20))
     result = check_path(Path(scout_id="s1", goal_award_id="star", items=[item]), first_class_scout(), TODAY)
-    assert result.next_steps[0] == "Start Chess by 2026-10-20."
+    assert result.next_steps[0] == "Start Chess by Oct 20, 2026."
 
 
 def test_unknown_goal():
@@ -146,7 +146,33 @@ def test_discontinued_badge_must_finish_by_its_deadline():
     late = PathItem(award_id="citizenship-in-society", planned_start=date(2026, 11, 1), planned_end=date(2027, 1, 15))
     result = check_path(Path(scout_id="s1", goal_award_id="star", items=[late]), first_class_scout(), TODAY)
     issue = next(i for i in result.issues if i.code == "discontinued")
-    assert "December 31, 2026" in issue.message
+    assert "Dec 31, 2026" in issue.message
     ok = late.model_copy(update={"planned_end": date(2026, 12, 20)})
     result = check_path(Path(scout_id="s1", goal_award_id="star", items=[ok]), first_class_scout(), TODAY)
     assert "discontinued" not in codes(result)
+
+
+def test_target_date_in_the_past_is_flagged_once():
+    path = Path(scout_id="s1", goal_award_id="star", target_date=date(2026, 10, 1))
+    result = check_path(path, first_class_scout(), TODAY)
+    past = [i for i in result.issues if i.code == "target_in_past"]
+    assert [i.message for i in past] == [
+        "The target date, Oct 1, 2026, has already passed. Choose a date ahead of today."
+    ]
+    assert "misses_target" not in codes(result)
+    assert result.status == PathStatus.INFEASIBLE
+
+
+def test_today_is_not_in_the_past():
+    path = Path(scout_id="s1", goal_award_id="star", target_date=TODAY)
+    assert "target_in_past" not in codes(check_path(path, first_class_scout(), TODAY))
+
+
+def test_dates_in_messages_use_one_format():
+    earned = {b: date(2026, 6, 1) for b in ["camping", "cooking", "first-aid", "swimming", "chess", "art"]}
+    path = Path(scout_id="s1", goal_award_id="star", target_date=date(2026, 12, 1))
+    result = check_path(path, first_class_scout(earned_badges=earned), TODAY)
+    text = " ".join([i.message for i in result.issues] + result.next_steps)
+    assert "Jan 1, 2027" in text
+    assert "Dec 1, 2026" in text
+    assert "2026-" not in text

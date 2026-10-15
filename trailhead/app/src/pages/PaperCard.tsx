@@ -4,8 +4,10 @@ import { PaperCardRequirements } from '../components/PaperCardRequirements';
 import { Empty, Field, Notice, PageHeader, todayIso } from '../components/ui';
 import { errorMessage, recordPaperBlueCard } from '../lib/api';
 import { attachCardFiles } from '../lib/cardPhotos';
-import { cardFileProblem, paperRequirements } from '../lib/cards';
+import { cardFileProblem, paperDateProblem, paperRequirements } from '../lib/cards';
 import { BADGES } from '../lib/catalog';
+import { stillNeeded } from '../lib/formCheck';
+import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 
 /** A leader records a blue card a Scout brought signed on paper by a counselor outside Trailhead. */
@@ -34,9 +36,23 @@ export function PaperCard() {
     e.preventDefault();
     setError('');
     setResult('');
+    const empty = stillNeeded([
+      ['the merit badge', awardId],
+      ["the counselor's name", counselorName],
+      ['the start date', startedOn],
+    ]);
+    if (empty) {
+      setError(empty);
+      return;
+    }
     const { requirements, missing } = paperRequirements(reqIds, dates, sharedDate);
     if (missing.length > 0) {
       setError(`Add a date for requirement ${missing[0]}, or a date for all of them.`);
+      return;
+    }
+    const dateProblem = paperDateProblem({ startedOn, completedOn, requirements, today: max });
+    if (dateProblem) {
+      setError(dateProblem);
       return;
     }
     const problem = files.map(cardFileProblem).find(Boolean);
@@ -56,7 +72,7 @@ export function PaperCard() {
         requirements,
         completedOn: completedOn || undefined,
       });
-      const state = out.complete ? 'marked complete' : `saved with ${out.requirements} signed requirements`;
+      const state = out.complete ? 'marked complete' : `saved with ${plural(out.requirements, 'signed requirement')}`;
       setResult(`The card is ${state}.`);
       setAwardId('');
       setReqIds([]);
@@ -81,7 +97,7 @@ export function PaperCard() {
         Enter a blue card {memberName(scoutId)} brought already signed. It counts in Trailhead and goes in the next Scoutbook
         report, with the dates written on the card.
       </p>
-      <form className="stack" onSubmit={save}>
+      <form className="stack" onSubmit={save} noValidate>
         <section className="card form">
           <Field label="Merit badge" htmlFor="pc-award">
             <select id="pc-award" value={awardId} onChange={(e) => setAwardId(e.target.value)} required>

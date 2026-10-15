@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { HelpTip } from '../components/HelpTip';
 import { Field, Notice, PageHeader } from '../components/ui';
 import { createTroop, errorMessage, type TroopForm } from '../lib/api';
+import { stillNeeded } from '../lib/formCheck';
 
 const EMPTY: TroopForm = { name: '', unitNumber: '', council: '', displayName: '', yptExpiresAt: '' };
 
@@ -15,8 +16,18 @@ export function CreateTroop() {
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    setBusy(true);
     setError('');
+    const missing = stillNeeded([
+      ['the troop name', form.name],
+      ['the unit number', form.unitNumber],
+      ['your name', form.displayName],
+      ['the date your Youth Protection training expires', form.yptExpiresAt],
+    ]);
+    if (missing) {
+      setError(missing);
+      return;
+    }
+    setBusy(true);
     try {
       const { troopId } = await createTroop(form);
       navigate(`/t/${troopId}`);
@@ -33,7 +44,7 @@ export function CreateTroop() {
         You'll be the troop's first leader. After this, you will add your Scouts and invite parents and counselors.
         <HelpTip topic="roles" />
       </p>
-      <form className="form" onSubmit={submit}>
+      <form className="form" onSubmit={submit} noValidate>
         <Field label="Troop name" htmlFor="name">
           <input id="name" required value={form.name} onChange={set('name')} placeholder="Troop 101" />
         </Field>

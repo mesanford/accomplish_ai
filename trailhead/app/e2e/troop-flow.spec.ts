@@ -57,7 +57,7 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
 
   await leader.getByRole('link', { name: 'Blue cards' }).click();
   await leader.getByRole('button', { name: 'Approve' }).click();
-  await leader.getByLabel('Counselor').selectOption({ label: 'Casey Counselor' });
+  await leader.getByLabel('Counselor').selectOption({ label: 'Casey Counselor (Counselor)' });
   await leader.getByRole('button', { name: 'Assign' }).click();
   await expect(leader.getByText('Counselor: Casey Counselor')).toBeVisible();
 
@@ -70,7 +70,13 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await expect(counselor.getByText('Signed so far: 1a')).toBeVisible();
   await expect(counselor.getByRole('button', { name: 'Sign requirement 1a' })).toBeHidden();
   await expect(counselor.getByText('Requirements © Scouting America')).toBeVisible();
+  // Completing with requirements unsigned asks first, in the page, and says how many are signed.
   await counselor.getByRole('button', { name: 'Mark Chess complete' }).click();
+  await expect(counselor.getByText('Only 1 of 3 requirements are signed. Mark Chess complete anyway?')).toBeVisible();
+  await counselor.getByRole('button', { name: 'Keep working' }).click();
+  await expect(counselor.getByRole('heading', { name: 'Completed' })).toBeHidden();
+  await counselor.getByRole('button', { name: 'Mark Chess complete' }).click();
+  await counselor.getByRole('button', { name: 'Mark complete anyway' }).click();
   await expect(counselor.getByRole('heading', { name: 'Completed' })).toBeVisible();
 
   // Everyone sees the result on Sam's page.
@@ -100,5 +106,14 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await leader.getByRole('button', { name: 'Add event' }).click();
   await leader.getByRole('link', { name: 'Attendance' }).click();
   await leader.getByRole('checkbox', { name: 'Sam' }).check();
-  await expect(leader.getByText('1 of 1 Scouts present')).toBeVisible();
+  await expect(leader.getByText('1 of 1 Scout present')).toBeVisible();
+});
+
+test('an unknown address shows a plain page, and sign-in is skipped when already signed in', async ({ browser }) => {
+  const leader = await signedIn(browser, 'lost@example.com');
+  await leader.goto('/no/such/page');
+  await expect(leader.getByRole('heading', { name: "We couldn't find that page" })).toBeVisible();
+  await leader.getByRole('link', { name: 'Go home' }).click();
+  await leader.goto('/signin?next=%2Fcreate');
+  await expect(leader.getByRole('heading', { name: 'Create a troop' })).toBeVisible();
 });

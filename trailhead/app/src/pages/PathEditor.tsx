@@ -8,7 +8,7 @@ import { PathItems } from '../components/PathItems';
 import { FeasibilityView } from '../components/PathSummary';
 import { SaveAsTemplate } from '../components/SaveAsTemplate';
 import { TemplatePicker } from '../components/TemplatePicker';
-import { Field, Loading, Notice, PageHeader } from '../components/ui';
+import { Empty, Field, Loading, Notice, PageHeader } from '../components/ui';
 import { errorMessage, previewPath } from '../lib/api';
 import { RANKS } from '../lib/catalog';
 import { addDraftItems } from '../lib/draft';
@@ -19,7 +19,8 @@ import type { Feasibility, PathDoc, PathItemDoc } from '../lib/types';
 export function PathEditor() {
   const { scoutId = '' } = useParams();
   const navigate = useNavigate();
-  const { troopId, memberName, isLeader } = useTroop();
+  const { troopId, memberName, isLeader, visibleScoutIds, loading } = useTroop();
+  const allowed = visibleScoutIds.includes(scoutId);
   const [loaded, setLoaded] = useState(false);
   const [goal, setGoal] = useState('eagle');
   const [target, setTarget] = useState('');
@@ -31,6 +32,9 @@ export function PathEditor() {
   const ref = doc(db, `troops/${troopId}/paths/${scoutId}`);
 
   useEffect(() => {
+    if (!allowed) {
+      return;
+    }
     getDoc(ref)
       .then((snap) => {
         const data = snap.data() as PathDoc | undefined;
@@ -42,11 +46,11 @@ export function PathEditor() {
       })
       .catch((err) => setError(errorMessage(err)))
       .finally(() => setLoaded(true));
-  }, [troopId, scoutId]);
+  }, [troopId, scoutId, allowed]);
 
   // Live check while editing. A token drops answers to older edits that arrive late.
   useEffect(() => {
-    if (!loaded) {
+    if (!loaded || !allowed) {
       return undefined;
     }
     const token = ++requestToken.current;
@@ -56,7 +60,7 @@ export function PathEditor() {
         .catch((err) => token === requestToken.current && setError(errorMessage(err)));
     }, 500);
     return () => window.clearTimeout(timer);
-  }, [loaded, troopId, scoutId, goal, target, items]);
+  }, [loaded, allowed, troopId, scoutId, goal, target, items]);
 
   async function save(e: FormEvent) {
     e.preventDefault();
@@ -73,6 +77,12 @@ export function PathEditor() {
     }
   }
 
+  if (loading) {
+    return <Loading />;
+  }
+  if (!allowed) {
+    return <Empty>You can only see your own Scouts.</Empty>;
+  }
   if (!loaded) {
     return <Loading />;
   }
