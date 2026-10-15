@@ -5,7 +5,7 @@ import os
 import pytest
 
 from tests.integration.test_functions import call, owner
-from tests.integration.test_membership_flow import new_scout, new_troop, ok
+from tests.integration.test_membership_flow import AGREE, new_scout, new_troop, ok
 from tests.rules.emulator import Client, list_docs, read, reset
 from tests.rules.storage import Storage, reset_storage
 
@@ -25,7 +25,8 @@ def clean():
 
 def join(tid: str, uid: str, role: str, name: str, **invite) -> str:
     code = ok(call("create_invite", "lead", {"troopId": tid, "role": role, **invite}))["code"]
-    return ok(call("accept_invite", uid, {"troopId": tid, "code": code, "displayName": name}))["memberId"]
+    agree = AGREE if role == "parent" else {}
+    return ok(call("accept_invite", uid, {"troopId": tid, "code": code, "displayName": name, **agree}))["memberId"]
 
 
 def seed_scout_data(tid: str, sid: str, uid: str | None):
@@ -81,6 +82,7 @@ def test_remove_scout_erases_their_data_and_leaves_everyone_else():
     for path in (
         f"members/{gone}",
         f"scoutRecords/{gone}",
+        f"consents/{gone}",
         f"progress/{gone}_art",
         f"blueCards/{gone}_art",
         f"signoffs/so-{gone}",
@@ -110,6 +112,7 @@ def test_remove_scout_erases_their_data_and_leaves_everyone_else():
     for path in (
         f"members/{kept}",
         f"scoutRecords/{kept}",
+        f"consents/{kept}",
         f"progress/{kept}_art",
         f"blueCards/{kept}_art",
         f"signoffs/so-{kept}",

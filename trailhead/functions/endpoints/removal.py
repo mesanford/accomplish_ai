@@ -106,9 +106,10 @@ def remove_scout(req: https_fn.CallableRequest) -> dict:
     commit(
         [
             delete_op(t.collection("paths").document(scout_id)),
+            delete_op(t.collection("consents").document(scout_id)),
             delete_op(t.collection("scoutRecords").document(scout_id)),
             delete_op(member_ref),
         ]
     )
-    log.info("scout removed troop=%s docs=%d files=%d live_photos=%d", troop_id, len(ops) + 3, files, photos)
-    return {"removed": True, "documents": len(ops) + 3, "files": files, "photosTakenDown": photos}
+    log.info("scout removed troop=%s docs=%d files=%d live_photos=%d", troop_id, len(ops) + 4, files, photos)
+    return {"removed": True, "documents": len(ops) + 4, "files": files, "photosTakenDown": photos}
