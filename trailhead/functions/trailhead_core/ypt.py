@@ -2,12 +2,17 @@
 
 No adult may have one-on-one digital contact with a Scout. Every message that includes
 a Scout and an adult must also reach the Scout's parent or a second registered adult.
+A Scout is never in a conversation without an adult, so Scout-to-Scout messaging does not exist:
+a Scout may start a conversation only with adults, and an adult may bring several Scouts into one.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
+
+SCOUT_TO_SCOUT = "Scouts can message adult leaders, not other Scouts. Ask a leader to start a group conversation."
+NO_ADULT = "Every conversation with a Scout needs an adult in it. Ask a leader to start a group conversation."
 
 
 class YPTViolation(Exception):
@@ -45,16 +50,22 @@ def plan_delivery(
     people: dict[str, Person],
     second_adult_ids: list[str],
     today: date,
+    new_thread: bool = False,
 ) -> Delivery:
     """Return the full recipient list for a message, adding parents or a second adult as required.
 
     `people` maps ids to everyone in the troop. `second_adult_ids` are leaders the troop has
     named to be copied when a Scout has no parent on the app, in order of preference.
+    `new_thread` is true when the sender is starting the conversation: a Scout may then pick only adults.
     """
     everyone = [sender, *recipients]
     adults = [p for p in everyone if not p.is_youth]
     youth = [p for p in everyone if p.is_youth]
-    if not adults or not youth:
+    if youth and not adults:
+        raise YPTViolation(SCOUT_TO_SCOUT if new_thread else NO_ADULT)
+    if new_thread and sender.is_youth and any(r.is_youth for r in recipients):
+        raise YPTViolation(SCOUT_TO_SCOUT)
+    if not youth:
         return Delivery(recipient_ids=_unique(r.id for r in recipients))
     for adult in adults:
         # A parent talking with their own children needs no training; anyone else in the conversation does.

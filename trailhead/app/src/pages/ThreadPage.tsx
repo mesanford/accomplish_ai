@@ -10,7 +10,7 @@ import type { Message, Thread } from '../lib/types';
 
 export function ThreadPage() {
   const { threadId = '' } = useParams();
-  const { troopId, memberName, access } = useTroop();
+  const { troopId, memberName, access, members } = useTroop();
   const base = `troops/${troopId}/threads/${threadId}`;
   const threadRef = useMemo(() => doc(db, base), [base]);
   const messagesQ = useMemo(() => query(collection(db, `${base}/messages`), orderBy('createdAt', 'asc')), [base]);
@@ -34,6 +34,11 @@ export function ThreadPage() {
     }
   }
 
+  // Older conversations with only Scouts in them can still be read, but nothing new can be sent.
+  const ids = thread.data?.memberIds ?? [];
+  const kinds = ids.map((id) => members.find((m) => m.id === id)?.kind);
+  const youthOnly = kinds.length > 0 && kinds.includes('scout') && !kinds.includes('adult');
+
   if (thread.error) {
     return <Empty>This conversation isn't available.</Empty>;
   }
@@ -53,15 +58,22 @@ export function ThreadPage() {
           </div>
         ))}
       </div>
-      <form className="form" onSubmit={reply} style={{ maxWidth: 'none' }}>
-        <textarea aria-label="Reply" required value={body} onChange={(e) => setBody(e.target.value)} />
-        <Notice kind="error">{error}</Notice>
-        <div>
-          <button className="btn" type="submit" disabled={busy}>
-            {busy ? 'Sending…' : 'Reply'}
-          </button>
-        </div>
-      </form>
+      {youthOnly ? (
+        <Notice kind="error">
+          This conversation has no adult in it, so it is read-only. Scouts can message adult leaders, not other Scouts.
+          Ask a leader to start a group conversation.
+        </Notice>
+      ) : (
+        <form className="form" onSubmit={reply} style={{ maxWidth: 'none' }}>
+          <textarea aria-label="Reply" required value={body} onChange={(e) => setBody(e.target.value)} />
+          <Notice kind="error">{error}</Notice>
+          <div>
+            <button className="btn" type="submit" disabled={busy}>
+              {busy ? 'Sending…' : 'Reply'}
+            </button>
+          </div>
+        </form>
+      )}
     </>
   );
 }

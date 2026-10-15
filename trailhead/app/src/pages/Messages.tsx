@@ -19,7 +19,8 @@ function NewMessage() {
   const [body, setBody] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const others = members.filter((m) => m.id !== access?.memberId).sort((a, b) => a.displayName.localeCompare(b.displayName));
+  const isScout = access?.roles.includes('scout') ?? false;
+  const others = members.filter((m) => m.id !== access?.memberId && (!isScout || m.kind === 'adult')).sort((a, b) => a.displayName.localeCompare(b.displayName));
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -100,6 +101,9 @@ export function Messages() {
           'Replies show up in the same conversation.',
         ]}
       />
+      <p className="muted small">
+        Scouts can message adult leaders, not other Scouts. A leader can start a group conversation with several Scouts.
+      </p>
       {composing ? (
         <section className="card">
           <NewMessage />

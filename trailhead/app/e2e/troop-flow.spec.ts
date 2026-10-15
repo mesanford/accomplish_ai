@@ -80,6 +80,7 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
 
   // Leader messages Sam; Sam has no login, so the parent is added automatically and replies.
   await leader.getByRole('link', { name: 'Messages' }).click();
+  await expect(leader.getByText(/Scouts can message adult leaders, not other Scouts/)).toBeVisible();
   await leader.getByRole('button', { name: 'New message' }).click();
   await leader.getByRole('checkbox', { name: 'Sam' }).check();
   await leader.getByLabel('Message').fill('Great work on Chess!');

@@ -113,6 +113,31 @@ def test_message_to_scout_without_parent_copies_second_adult():
     assert r.json()["result"]["addedMemberIds"] == ["m-asm"]
 
 
+def test_scout_cannot_message_another_scout():
+    r = call("send_message", "scout1", {"troopId": "t1", "recipientMemberIds": ["s2"], "body": "Hey"})
+    assert r.status_code == 403
+    assert "not other Scouts" in r.text
+    assert list_docs(f"{T}/threads") == []
+
+
+def test_scout_cannot_add_a_scout_to_a_new_conversation():
+    r = call("send_message", "scout1", {"troopId": "t1", "recipientMemberIds": ["m-leader", "s2"], "body": "Hey"})
+    assert r.status_code == 403
+
+
+def test_scout_can_message_a_leader_and_parent_is_copied():
+    r = call("send_message", "scout1", {"troopId": "t1", "recipientMemberIds": ["m-leader"], "body": "Question"})
+    assert r.status_code == 200, r.text
+    assert "m-parent" in r.json()["result"]["recipientMemberIds"]
+
+
+def test_existing_youth_only_thread_is_read_only():
+    owner.set(f"{T}/threads/old", {"memberIds": ["s1", "s2"], "participantUids": ["scout1"], "lastMessage": "hi"})
+    r = call("send_message", "scout1", {"troopId": "t1", "threadId": "old", "body": "Anyone?"})
+    assert r.status_code == 403
+    assert "needs an adult" in r.text
+
+
 def test_scout_cannot_preview_another_scouts_path():
     r = call("check_path_preview", "scout1", {"troopId": "t1", "path": {"scoutId": "s2", "goalAwardId": "star"}})
     assert r.status_code == 403

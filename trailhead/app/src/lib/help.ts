@@ -45,7 +45,7 @@ export const HELP = {
   },
   yptMessages: {
     title: 'Why a parent is copied',
-    body: 'Scouting rules say adults must not be alone in private messages with a youth. So when a leader writes to a Scout, a parent is added automatically.',
+    body: 'Scouting rules say adults must not be alone in private messages with a youth. So when a leader writes to a Scout, a parent is added automatically. Scouts can message adult leaders, not other Scouts.',
   },
   pathFeasibility: {
     title: 'Will this plan work?',
