@@ -14,6 +14,7 @@ from fb import db, fail, require_access, troop
 from handlers.assistant import ModelFn, draft_plan, usage_doc_id, validate_request, within_daily_limit
 from handlers.claude_model import DEFAULT_MODEL, claude_model, real_client
 from handlers.fake_planner import fake_plan
+from handlers.site_about import scrub_names
 from trailhead_core import load_catalog
 
 log = logging.getLogger(__name__)
@@ -71,6 +72,9 @@ def draft_path(req: https_fn.CallableRequest) -> dict:
         request = validate_request(data.get("request"))
     except ValueError as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from None
+    # The request goes to Anthropic, so names of Scouts on the roster are removed first, as for the About helper.
+    names = [m.get("displayName") or "" for m in (d.to_dict() for d in troop(troop_id).collection("members").stream())]
+    request = scrub_names(request, names)
     target = _parse_date(data.get("targetDate"))
     scout = _scout_record(troop(troop_id), scout_id)
     if scout is None:

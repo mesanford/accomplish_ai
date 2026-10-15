@@ -16,7 +16,7 @@ from handlers.membership import (
     new_invite,
     new_scout,
     new_troop,
-    under_13,
+    scout_login_blocker,
 )
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -64,9 +64,10 @@ def create_invite(req: https_fn.CallableRequest) -> dict:
     try:
         invite = new_invite(data, set(scouts), unlinked, now)
         if invite["role"] == "scout":
-            record = t.collection("scoutRecords").document(invite["scoutMemberId"]).get().to_dict() or {}
-            if record and under_13(record, now.date()):
-                raise InvalidInput("Scouts under 13 can't have their own login. Invite a parent instead.")
+            record = t.collection("scoutRecords").document(invite["scoutMemberId"]).get().to_dict()
+            blocker = scout_login_blocker(record, now.date())
+            if blocker:
+                raise InvalidInput(blocker)
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
     lead_ref = None

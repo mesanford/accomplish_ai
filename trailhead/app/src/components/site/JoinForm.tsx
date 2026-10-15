@@ -94,7 +94,7 @@ export function JoinForm({ slug, intro, troopName }: { slug: string; intro?: str
             </button>
           </div>
           <p className="site-muted small">
-            We only use this to reply to you. Nothing is shared outside the troop. <a href="/privacy">Privacy policy</a>
+            We only use this to reply to you. Only this troop's leaders see it. <a href="/privacy">Privacy policy</a>
           </p>
         </form>
       )}

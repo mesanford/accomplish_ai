@@ -64,3 +64,16 @@ def test_new_scout_checks_age_and_rank():
 def test_under_13_assumes_the_latest_birthday():
     assert under_13({"birthYear": 2013, "birthMonth": 10}, TODAY)  # turns 13 sometime this month
     assert not under_13({"birthYear": 2013, "birthMonth": 9}, TODAY)
+
+
+def test_scout_logins_fail_closed_without_a_birth_month_and_year():
+    from datetime import date
+
+    from handlers.membership import scout_login_blocker
+
+    today = date(2026, 10, 14)
+    assert "birth month and year" in scout_login_blocker(None, today)
+    assert "birth month and year" in scout_login_blocker({}, today)
+    assert "birth month and year" in scout_login_blocker({"birthYear": 2012}, today)
+    assert "under 13" in scout_login_blocker({"birthYear": 2014, "birthMonth": 1}, today)
+    assert scout_login_blocker({"birthYear": 2012, "birthMonth": 5}, today) is None

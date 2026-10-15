@@ -27,12 +27,15 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     items: [
       'Adults who sign in: name, email address and the troop roles you hold (leader, parent, counselor). If you sign in with Google, we receive your name and email from Google. Leaders also give their Youth Protection training expiry date.',
       "Scouts: name, birth month and year (never the full date), current rank, the ranks, merit badges and requirements they've completed and when, who signed each one off, blue cards, photos of signed paper blue cards, advancement plans, event attendance and troop messages.",
-      'Families who use a troop website\'s "Join us" form: the parent or guardian\'s name, email, optional phone number, the Scout\'s name and age or grade, and any note they add.',
+      'Families who use a troop website\'s "Join us" form: the parent or guardian\'s name, email, optional phone number, the Scout\'s age or grade, and any note they add.',
+      'Scouts 13 and older who sign in: their email address, and what they type, such as plan requests and messages.',
+      'Merit badge counselors from outside the troop: the name and email address a leader enters.',
       'Troop websites: what leaders choose to publish, such as meeting details, events, contacts and photos.',
       'Usage counts: how many AI drafts each person makes per day, so we can keep a daily limit.',
     ],
     paragraphs: [
       'We do not use analytics or advertising tools, and we do not set tracking cookies. Your browser stores a few preferences on your device, such as whether you hid the Getting started list, and the sign-in session that keeps you signed in.',
+      'Google, which hosts Trailhead, processes your IP address and basic browser information to deliver pages, keep you signed in and protect the service.',
     ],
   },
   {
@@ -40,7 +43,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     heading: 'How we use it',
     items: [
       'To run Trailhead for your troop: planning paths to rank, recording sign-offs, managing blue cards and counselors, events, messages and the troop website.',
-      'To follow Youth Protection rules. Messages between an adult and a Scout always include a parent or a second trained adult.',
+      'To follow Youth Protection rules. Messages between an adult and a Scout always include a parent or a second adult with current Youth Protection training. Scouts can also message each other.',
       'To build the report leaders use to enter advancement in Scoutbook. Leaders download it; we never send records to Scouting America ourselves.',
       'To send sign-in links by email.',
     ],
@@ -50,9 +53,12 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: 'see',
     heading: 'Who can see it',
     items: [
-      'Leaders see their own troop. Parents see their own Scouts. Counselors see only the merit badges they are assigned. Scouts 13 and older see their own records.',
+      'Everyone in a troop who has a login (leaders, parents, counselors and Scouts 13 and older) can see the troop roster (names and roles), events, who said they are coming and who attended, the list of merit badge counselors, and troop awards.',
+      "Only leaders see every Scout's private details: birth month and year, rank dates, progress, sign-offs, blue cards, photos of paper blue cards and plans. Parents see these only for their own Scouts, Scouts 13 and older only for themselves, and counselors only for the merit badges assigned to them.",
+      'Messages are seen only by the people in the conversation. "Join us" requests are seen only by that troop\'s leaders.',
       'These limits are enforced on our servers, not only in the app.',
-      'Anything a leader publishes on the troop website is public. Photos that show a Scout appear there only if the Scout\'s family gave media consent, and they come down if consent is withdrawn.',
+      'We, the operator, can access stored data. We look at a troop\'s information only to run and secure Trailhead, to answer a request from the troop or a family, to look into a safety concern, or when the law requires it.',
+      'Anything a leader publishes on the troop website is public. Website gallery photos that show a Scout appear only if the Scout\'s family gave media consent, and they come down if consent is withdrawn. Leaders are asked to use a cover photo and logo in which no Scout can be identified.',
     ],
   },
   {
@@ -60,7 +66,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     heading: 'Companies that help us run Trailhead',
     items: [
       'Google (Firebase and Google Cloud) hosts the app and stores its data in the United States, handles sign-in, stores photos and runs our server code.',
-      'Anthropic provides Claude, the AI behind "Draft with AI". To draft a plan we send a Scout\'s birth month and year, current rank, rank dates, merit badges already earned and the request typed into the box. We do not send names. For the troop website\'s About us helper, we send the leader\'s notes with Scout names removed. Under Anthropic\'s commercial terms, data sent through its API is not used to train its models.',
+      'Anthropic provides Claude, the AI behind "Draft with AI" and the website About us helper. To draft a plan we send a Scout\'s birth month and year, current rank, rank dates, merit badges already earned and the words typed into the request box. We remove the names of people on your troop roster from what you type, but please don\'t include names, health, family or school details. For the About us helper we send the troop\'s name, unit number and council and the leader\'s notes, with roster names removed. Under Anthropic\'s commercial terms, data sent through its API is not used to train its models.',
     ],
     paragraphs: ['These companies process data only to provide their services to us.'],
   },
@@ -85,7 +91,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: 'keep',
     heading: 'How long we keep it',
     paragraphs: [
-      "We keep a troop's information while the troop uses Trailhead. When a troop stops using Trailhead, or after a verified deletion request, we delete the information from our systems within 30 days.",
+      "We keep a troop's information while the troop uses Trailhead. When a troop asks us to close its account, or after a verified deletion request, we delete the information within 30 days.",
     ],
   },
   {

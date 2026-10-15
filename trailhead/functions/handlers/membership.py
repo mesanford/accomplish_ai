@@ -115,6 +115,15 @@ def new_scout(data: dict, today: date) -> tuple[dict, dict]:
     return member, record
 
 
+def scout_login_blocker(record: dict | None, today: date) -> str | None:
+    """Why this Scout can't have their own login yet, or None. Fails closed when the birth month or year is missing."""
+    if not record or not isinstance(record.get("birthYear"), int) or not isinstance(record.get("birthMonth"), int):
+        return "Add the Scout's birth month and year before inviting them to sign in."
+    if under_13(record, today):
+        return "Scouts under 13 can't have their own login. Invite a parent instead."
+    return None
+
+
 def under_13(record: dict, today: date) -> bool:
     """True if the Scout may still be under 13 (birth day unknown, so assume the latest day)."""
     return (today.year, today.month) < (record["birthYear"] + 13, record["birthMonth"] + 1)

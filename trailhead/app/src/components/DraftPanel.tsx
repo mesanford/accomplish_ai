@@ -71,7 +71,7 @@ export function DraftPanel({ troopId, scoutId, goal, target, onUse }: Props) {
   return (
     <section className="card" aria-label="Draft with AI">
       <h2>Draft a plan for me</h2>
-      <Field label="What do you want to work toward?" htmlFor="draft-request" hint={`Up to ${MAX_REQUEST_CHARS} characters.`}>
+      <Field label="What do you want to work toward?" htmlFor="draft-request" hint={`Up to ${MAX_REQUEST_CHARS} characters. Please don't include names, health, family or school details.`}>
         <textarea
           id="draft-request"
           value={request}
