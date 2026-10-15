@@ -21,7 +21,7 @@ from handlers.roles import in_order
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 
 
-@https_fn.on_call()
+@https_fn.on_call(secrets=["RESEND_API_KEY"])
 def add_scout(req: https_fn.CallableRequest) -> dict:
     """Leaders add Scouts to the roster; parents add their own children, who are linked to them.
 

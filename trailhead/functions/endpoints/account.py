@@ -100,3 +100,14 @@ def delete_account(req: https_fn.CallableRequest) -> dict:
         auth.delete_user(uid)
     log.info("account deleted troops=%d docs=%d", len(memberships), written)
     return {"deleted": True, "troops": len(memberships)}
+
+
+@https_fn.on_call()
+def set_email_notifications(req: https_fn.CallableRequest) -> dict:
+    """Turn emails about blue cards and the caller's Scouts on or off. The consent confirmation is always sent."""
+    uid = require_uid(req)
+    enabled = (req.data or {}).get("enabled")
+    if not isinstance(enabled, bool):
+        raise fail(Code.INVALID_ARGUMENT, "Choose on or off.")
+    db().collection("users").document(uid).set({"emailNotifications": enabled}, merge=True)
+    return {"enabled": enabled}
