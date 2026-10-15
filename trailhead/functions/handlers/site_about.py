@@ -69,7 +69,7 @@ def clean_about(text: object) -> str:
 
 
 def fake_about(troop_doc: dict, notes: str) -> str:
-    """The emulator's stand-in for Gemini: a predictable draft built from the notes, never a network call."""
+    """The emulator's stand-in for Claude: a predictable draft built from the notes, never a network call."""
     name = troop_doc.get("name") or "Our troop"
     unit = troop_doc.get("unitNumber")
     council = troop_doc.get("council")

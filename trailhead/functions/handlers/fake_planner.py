@@ -1,4 +1,4 @@
-"""FAKE planner for local development and tests. Never used when talking to the real Gemini model.
+"""FAKE planner for local development and tests. Never used when talking to the real Claude model.
 
 Picks the badges a Scout still needs for the goal rank (Eagle-required first, then one from each
 Eagle choice group, then easy electives) and spaces them out from today in two lanes, respecting
@@ -43,7 +43,7 @@ def fake_plan(scout: ScoutRecord, goal_id: str, catalog: Catalog, today: date) -
     return {
         "items": items,
         "explanation": (
-            f"Practice plan (not from Gemini): {len(items)} badges toward {goal.name}, "
+            f"Practice plan (not from Claude): {len(items)} badges toward {goal.name}, "
             "Eagle-required badges first, two at a time."
         ),
     }

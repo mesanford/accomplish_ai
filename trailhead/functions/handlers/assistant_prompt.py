@@ -11,23 +11,24 @@ from trailhead_core.models import ScoutRecord
 
 MAX_REQUEST_CHARS = 500
 
-# Gemini structured output. The model's answer is still cleaned and checked by the rules engine.
+# The answer's shape, as JSON Schema: Claude fills it in through a forced tool call.
+# The model's answer is still cleaned and checked by the rules engine.
 RESPONSE_SCHEMA = {
-    "type": "OBJECT",
+    "type": "object",
     "properties": {
         "items": {
-            "type": "ARRAY",
+            "type": "array",
             "items": {
-                "type": "OBJECT",
+                "type": "object",
                 "properties": {
-                    "awardId": {"type": "STRING"},
-                    "plannedStart": {"type": "STRING", "description": "YYYY-MM-DD"},
-                    "plannedEnd": {"type": "STRING", "description": "YYYY-MM-DD"},
+                    "awardId": {"type": "string"},
+                    "plannedStart": {"type": "string", "description": "YYYY-MM-DD"},
+                    "plannedEnd": {"type": "string", "description": "YYYY-MM-DD"},
                 },
                 "required": ["awardId", "plannedStart", "plannedEnd"],
             },
         },
-        "explanation": {"type": "STRING"},
+        "explanation": {"type": "string"},
     },
     "required": ["items", "explanation"],
 }

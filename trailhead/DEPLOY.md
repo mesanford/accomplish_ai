@@ -17,7 +17,8 @@ Do the one-time setup for each, then deploy with `scripts/deploy.sh`.
    committed.
 6. **Link the project locally:** put the project ids in `.firebaserc` under `staging` and `production`, then run
    `firebase login` if you aren't signed in.
-7. **Gemini plan assistant (optional):** see the Gemini section below.
+7. **Claude writing help:** see the Claude section below. Every project needs the `ANTHROPIC_API_KEY` secret set
+   before functions deploy.
 
 ## Deploy
 
@@ -34,18 +35,18 @@ security rules, indexes, functions and hosting. The app is then live at `https:/
 - Sign in at the app's address and create the pilot troop. You become its first leader.
 - Add Scouts on the Roster page and send invite links to parents, counselors and other leaders.
 
-## Gemini plan assistant
+## Claude writing help
 
-"Draft with AI" in the path planner calls Gemini on Vertex AI from the Cloud Functions. No API key is involved;
-the functions use their own service account. Locally, and in the emulator, it uses a built-in practice planner
-instead, so development needs no Google credentials.
+"Draft with AI" in the path planner, and the About us helper on the troop website, call Claude through the
+Anthropic API from the Cloud Functions. Locally and in the emulator they use built-in practice drafts instead, so
+development needs no API key (`scripts/test.sh` gives the emulator a stand-in key).
 
-1. Enable the Vertex AI API: `gcloud services enable aiplatform.googleapis.com --project <project-id>`.
-2. Let the functions call it. 2nd-gen functions run as the default compute service account unless you set one:
-   `gcloud projects add-iam-policy-binding <project-id> --member serviceAccount:<project-number>-compute@developer.gserviceaccount.com --role roles/aiplatform.user`.
-3. Optional settings, as function environment variables: `GEMINI_MODEL` (default `gemini-2.5-flash`) and
-   `GEMINI_LOCATION` (default `us-central1`). Check the model is offered in that region.
-4. After the first deploy, try one draft in staging. The real Gemini call has only been tested against the
-   practice planner so far.
+1. Create an API key in the [Anthropic Console](https://console.anthropic.com) for this project. Use a separate
+   key per project so spending is easy to see and a leaked key is easy to revoke.
+2. Store it as a Cloud Functions secret (this enables Secret Manager on first use):
+   `firebase functions:secrets:set ANTHROPIC_API_KEY --project <project-id>`, then paste the key when asked.
+3. Optional: set `ANTHROPIC_MODEL` in `functions/.env.<project-id>` (default `claude-sonnet-5-5`).
+4. To keep a project on the practice drafts, set `TRAILHEAD_FAKE_LLM=1` in its `functions/.env.<project-id>`. The
+   secret must still exist, so store any stand-in value. Staging does this.
 
 Each person can make 20 drafts a day, so cost stays small. Usage counts are kept in `troops/{t}/usage`.

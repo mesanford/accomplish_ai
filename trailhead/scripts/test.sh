@@ -11,6 +11,9 @@ workers="$(cd functions/venv && pwd -P)/bin/functions-framework" # the real path
 stop_workers() { pkill -f "$workers" || true; }
 trap stop_workers EXIT
 
+# The plan assistant declares the ANTHROPIC_API_KEY secret. The emulator never calls Anthropic, so a stand-in will do.
+[[ -f functions/.secret.local ]] || echo "ANTHROPIC_API_KEY=emulator-never-calls-anthropic" > functions/.secret.local
+
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
 .venv/bin/pytest -q tests/unit

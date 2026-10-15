@@ -1,4 +1,4 @@
-"""draft_path on the Functions emulator. The emulator always uses the fake planner, never Gemini."""
+"""draft_path on the Functions emulator. The emulator always uses the fake planner, never Claude."""
 
 import os
 from datetime import UTC, datetime, timedelta
