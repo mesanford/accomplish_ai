@@ -95,6 +95,9 @@ export function SignIn() {
           </div>
         </form>
       )}
+      <p className="muted small">
+        <a href="/privacy">Privacy policy</a>
+      </p>
     </section>
   );
 }

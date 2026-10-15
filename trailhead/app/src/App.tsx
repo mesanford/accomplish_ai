@@ -21,6 +21,7 @@ import { PathTemplates } from './pages/PathTemplates';
 import { PublicSite } from './pages/PublicSite';
 import { PaperCard } from './pages/PaperCard';
 import { PriorAdvancement } from './pages/PriorAdvancement';
+import { PrivacyPage } from './pages/Privacy';
 import { Recruiting } from './pages/Recruiting';
 import { Roster } from './pages/Roster';
 import { ScoutPage } from './pages/ScoutPage';
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: authed(<Home />) },
       { path: '/signin', element: <SignIn /> },
+      { path: '/privacy', element: <PrivacyPage /> },
       { path: '/signin/finish', element: <FinishSignIn /> },
       { path: '/create', element: authed(<CreateTroop />) },
       { path: '/join/:troopId/:code', element: authed(<Join />) },

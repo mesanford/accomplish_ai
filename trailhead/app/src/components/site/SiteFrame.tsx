@@ -19,7 +19,7 @@ export function SiteFrame({ site, children }: { site?: PublicSite; children: Rea
       {children}
       <footer className="site-footer">
         <p>
-          Made with <a href="/">Trailhead</a>
+          Made with <a href="/">Trailhead</a> · <a href="/privacy">Privacy</a>
         </p>
       </footer>
     </div>

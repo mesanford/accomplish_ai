@@ -3,7 +3,7 @@
 Scouts BSA advancement planning on Firebase: a React web app, with the backend in Python. It follows the
 [product spec](https://claude.ai/code/artifact/ddbc6f94-4646-412f-bc8c-4e52f42509b3). Phase 2 makes it usable by a
 pilot troop: sign-in, invites, and screens for Scouts, parents, leaders and counselors. Phase 3 adds troop awards,
-path templates, a Gemini plan assistant and the Scoutbook Plus handoff report. Deploying is covered in
+path templates, a Claude plan assistant and the Scoutbook Plus handoff report. Deploying is covered in
 [DEPLOY.md](DEPLOY.md).
 
 ## What works today
@@ -29,7 +29,7 @@ path templates, a Gemini plan assistant and the Scoutbook Plus handoff report. D
 5. From **Badges**, they start a blue card. A leader approves it and assigns a counselor under **Blue cards**.
 6. The counselor signs requirements and marks the badge complete under **Counseling**.
 7. Leaders sign off rank requirements and record ranks on a Scout's page, and take attendance at **Events**.
-8. In the path planner, **Draft with AI** turns a goal in plain words into a plan. Gemini drafts it and the plan
+8. In the path planner, **Draft with AI** turns a goal in plain words into a plan. Claude drafts it and the plan
    checker verifies it before anyone sees it. Leaders can also publish **Path templates** that Scouts start from.
 9. Leaders create **Troop awards** with their own requirements. Editing one makes a new version; a leader moves
    each Scout to it, keeping what still matches and flagging what changed. Signing the last requirement completes it.
@@ -96,8 +96,7 @@ firebase deploy --only firestore,storage,functions,hosting
 
 ## Not built yet
 
-- Requirement text for each badge. Requirements are signed by number, with a link to the official text; storing the
-  official text waits on licensing.
-- Gemini requirement Q&A (waits on the official requirement text). Plan drafting is built.
+- Claude requirement Q&A. Plan drafting and the website About helper are built.
 - Automatic Scoutbook Plus import (needs Scouting America certification) and the blue card PDF.
-- Offline sign-off at camp (data already caches locally for reading), payments, the public troop website.
+- Offline sign-off at camp (data already caches locally for reading) and payments.
+- Self-service deletion of a Scout or an account. For now, deletion is by request, as the privacy policy explains.

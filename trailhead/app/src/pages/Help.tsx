@@ -56,6 +56,9 @@ export function HelpPage() {
           ))}
         </dl>
       </section>
+      <p className="muted small">
+        How Trailhead handles your information: <a href="/privacy">Privacy policy</a>
+      </p>
     </>
   );
 }
