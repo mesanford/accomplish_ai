@@ -2,8 +2,8 @@
 
 export const PRIVACY_EFFECTIVE = 'October 14, 2026';
 export const PRIVACY_OPERATOR = 'MM Sanford';
-/** Where privacy questions and deletion requests go. Must be set before production launch. */
-export const PRIVACY_EMAIL: string | null = null;
+/** Where privacy questions and deletion requests go. */
+export const PRIVACY_EMAIL: string | null = 'privacy@msanford.com';
 
 export interface PolicySection {
   id: string;
