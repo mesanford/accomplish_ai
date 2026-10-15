@@ -9,6 +9,7 @@ from functools import cache
 from firebase_admin import firestore, initialize_app
 from firebase_functions import https_fn, options
 
+from handlers.account import BADGE_MANAGER_ROLES, LEADER_ROLES
 from handlers.roles import acts_for
 
 initialize_app()
@@ -16,8 +17,6 @@ options.set_global_options(region="us-central1", max_instances=10)
 # Python shows only warnings by default, which hid the info-level audit lines (retention summaries, Scout removals,
 # Claude usage). Never log names or message text at any level.
 logging.getLogger().setLevel(logging.INFO)
-
-LEADER_ROLES = {"leader", "advancement"}
 
 
 @cache
@@ -68,3 +67,19 @@ def require_leader(req: https_fn.CallableRequest, troop_id: str | None) -> dict:
 
 def is_leader(access: dict) -> bool:
     return bool(LEADER_ROLES & set(access.get("roles", [])))
+
+
+def can_manage_badges(access: dict) -> bool:
+    """Only the Scoutmaster and the advancement chair change merit badge records (blue cards, paper cards, earlier
+    badges). A badge's assigned counselor also signs that badge's requirements, which is checked where it happens."""
+    return bool(BADGE_MANAGER_ROLES & set(access.get("roles", [])))
+
+
+def require_badge_manager(req: https_fn.CallableRequest, troop_id: str | None) -> dict:
+    access = require_access(req, troop_id)
+    if not can_manage_badges(access):
+        raise fail(
+            https_fn.FunctionsErrorCode.PERMISSION_DENIED,
+            "Only the Scoutmaster or advancement chair can change merit badge records.",
+        )
+    return access

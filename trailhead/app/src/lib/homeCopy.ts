@@ -12,10 +12,14 @@ export function noScoutsText(roles: Role[]): string {
   return 'No Scouts are linked to you yet. Ask a leader if this looks wrong.';
 }
 
-/** The leader's blue card shortcut: what it says, and whether anything is waiting. */
-export function blueCardAction(count: number): { text: string; waiting: boolean } {
+/** The leader's blue card shortcut: what it says, and whether anything is waiting. Only the Scoutmaster and the
+ * advancement chair act on blue cards, so other leaders see what is waiting without being asked to act. */
+export function blueCardAction(count: number, canAct = true): { text: string; waiting: boolean } {
   if (count === 0) {
-    return { text: 'No blue cards need action', waiting: false };
+    return { text: canAct ? 'No blue cards need action' : 'No blue cards are waiting', waiting: false };
+  }
+  if (!canAct) {
+    return { text: `${plural(count, 'blue card')} waiting for the Scoutmaster or advancement chair`, waiting: false };
   }
   return { text: `${plural(count, 'blue card')} ${count === 1 ? 'needs' : 'need'} action`, waiting: true };
 }

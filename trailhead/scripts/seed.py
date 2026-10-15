@@ -85,7 +85,7 @@ def seed_demo_troop(db: firestore.Client) -> None:
     for mid, doc in members.items():
         t.collection("members").document(mid).set(doc)
     t.collection("access").document("leader").set(
-        {"memberId": "m-leader", "roles": ["leader"], "scoutIds": [], "yptExpiresAt": ypt}
+        {"memberId": "m-leader", "roles": ["leader", "scoutmaster"], "scoutIds": [], "yptExpiresAt": ypt}
     )
     t.collection("access").document("parent").set({"memberId": "m-parent", "roles": ["parent"], "scoutIds": ["s1"]})
     t.collection("access").document("scout1").set({"memberId": "s1", "roles": ["scout"], "scoutIds": ["s1"]})

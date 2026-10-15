@@ -1,6 +1,7 @@
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { errorMessage, isPermissionDenied } from '../lib/api';
+import { START_CARD_NOTE } from '../lib/badgeAuthority';
 import { BADGE_VERSION, type Badge } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useTroop } from '../lib/troop';
@@ -8,12 +9,14 @@ import { Notice } from './ui';
 
 /** Asks for a blue card. The first Scout is chosen once the roster has loaded, never before. */
 export function StartCard({ b }: { b: Badge }) {
-  const { troopId, members, visibleScoutIds } = useTroop();
-  const scouts = members.filter((m) => visibleScoutIds.includes(m.id));
+  const { troopId, members, visibleScoutIds, actingScoutIds, canManageBadges, isLeader } = useTroop();
+  // The Scoutmaster and advancement chair start cards for any Scout; everyone else only for Scouts they are family of.
+  const mayStart = canManageBadges ? visibleScoutIds : actingScoutIds;
+  const scouts = members.filter((m) => mayStart.includes(m.id));
   const [picked, setPicked] = useState('');
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null);
   if (scouts.length === 0) {
-    return null;
+    return isLeader ? <p className="small muted">{START_CARD_NOTE}</p> : null;
   }
   // Derived each render: a stale or empty pick falls back to the first Scout on the loaded roster.
   const scoutId = scouts.find((s) => s.id === picked)?.id ?? scouts[0].id;
@@ -32,7 +35,7 @@ export function StartCard({ b }: { b: Badge }) {
         status: 'requested',
         requestedAt: serverTimestamp(),
       });
-      setMessage({ kind: 'ok', text: 'Blue card requested. A leader will approve it and assign a counselor.' });
+      setMessage({ kind: 'ok', text: 'Blue card requested. The Scoutmaster or advancement chair will approve it and assign a counselor.' });
     } catch (err) {
       // The rules refuse a second card for the same Scout and badge, which looks like a permission error.
       const text = isPermissionDenied(err) ? 'There is already a blue card for this badge.' : errorMessage(err);

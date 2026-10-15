@@ -11,13 +11,14 @@ import { errorMessage, recordPriorAdvancement } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
+import { PRIOR_BADGES_NOTE } from '../lib/badgeAuthority';
 import { useTroop } from '../lib/troop';
 import type { Progress, ScoutRecord } from '../lib/types';
 
-/** Leaders record ranks and merit badges a Scout earned before joining Forthright. */
+/** Leaders record ranks, and the Scoutmaster and advancement chair record merit badges, a Scout earned before joining Forthright. */
 export function PriorAdvancement() {
   const { scoutId = '' } = useParams();
-  const { troopId, isLeader, memberName } = useTroop();
+  const { troopId, isLeader, canManageBadges, memberName } = useTroop();
   const recordRef = useMemo(() => doc(db, `troops/${troopId}/scoutRecords/${scoutId}`), [troopId, scoutId]);
   const doneQ = useMemo(
     () => query(collection(db, `troops/${troopId}/progress`), where('scoutId', '==', scoutId), where('status', '==', 'complete')),
@@ -91,23 +92,32 @@ export function PriorAdvancement() {
           </h2>
           <PriorRanks dates={ranks} onChange={setRanks} />
         </section>
-        <section className="card">
-          <h2>Completed merit badges</h2>
-          {done.data.length > 0 ? (
-            <p className="small muted">
-              Already recorded: {done.data.map((p) => `${awardName(p.awardId)} (${formatDate(p.completedAt)})`).join(', ')}
-            </p>
-          ) : null}
-          <PriorBadges entries={badges} onChange={setBadges} />
-        </section>
-        <section className="card">
-          <h2>
-            Partly finished merit badges
-            <HelpTip topic="partial" />
-          </h2>
-          <p className="small muted">Badges started earlier, with the requirement numbers already signed on the blue card.</p>
-          <PriorPartials entries={partials} exclude={completeIds} onChange={setPartials} />
-        </section>
+        {canManageBadges ? null : (
+          <p className="muted" role="note">
+            {PRIOR_BADGES_NOTE}
+          </p>
+        )}
+        {canManageBadges ? (
+          <>
+            <section className="card">
+              <h2>Completed merit badges</h2>
+              {done.data.length > 0 ? (
+                <p className="small muted">
+                  Already recorded: {done.data.map((p) => `${awardName(p.awardId)} (${formatDate(p.completedAt)})`).join(', ')}
+                </p>
+              ) : null}
+              <PriorBadges entries={badges} onChange={setBadges} />
+            </section>
+            <section className="card">
+              <h2>
+                Partly finished merit badges
+                <HelpTip topic="partial" />
+              </h2>
+              <p className="small muted">Badges started earlier, with the requirement numbers already signed on the blue card.</p>
+              <PriorPartials entries={partials} exclude={completeIds} onChange={setPartials} />
+            </section>
+          </>
+        ) : null}
         <Notice kind="error">{error}</Notice>
         <Notice kind="ok">{result}</Notice>
         <div className="row">

@@ -14,7 +14,7 @@ import { type CardPatch, CounselorAssign } from './CounselorAssign';
 import { MarkComplete } from './MarkComplete';
 import { CardStatusPill, Notice } from './ui';
 
-/** For a card with a counselor outside the troop: the leader signs requirements for them and completes the badge. */
+/** For a card with a counselor outside the troop: the Scoutmaster or advancement chair signs requirements for them and completes the badge. */
 function OutsideCounselorPanel({ card, change }: { card: BlueCard; change: (patch: CardPatch) => void }) {
   const { troopId } = useTroop();
   const [open, setOpen] = useState(false);
@@ -48,8 +48,7 @@ function OutsideCounselorPanel({ card, change }: { card: BlueCard; change: (patc
 }
 
 export function BlueCardRow({ card }: { card: BlueCard }) {
-  const { troopId, members, memberName, uidName } = useTroop();
-  const counselors = members.filter((m) => m.uid && (m.roles ?? []).some((r) => r === 'counselor' || r === 'leader'));
+  const { troopId, members, memberName, uidName, canManageBadges } = useTroop();
   const [error, setError] = useState('');
   const ref = doc(db, `troops/${troopId}/blueCards/${card.id}`);
   const assigning = card.status === 'approved' || card.status === 'counselor_assigned';
@@ -72,21 +71,23 @@ export function BlueCardRow({ card }: { card: BlueCard }) {
         <span className="row small muted">
           <CardStatusPill status={card.status} /> Counselor: {counselorLabel(card, uidName)}
         </span>
-        <CardPhotos troopId={troopId} card={card} canAdd />
+        <CardPhotos troopId={troopId} card={card} canAdd={canManageBadges} />
         <Notice kind="error">{error}</Notice>
       </div>
-      <div className="row">
-        {card.status === 'requested' ? (
-          <button type="button" className="btn small" onClick={() => change({ status: 'approved' })}>
-            Approve
+      {canManageBadges ? (
+        <div className="row">
+          {card.status === 'requested' ? (
+            <button type="button" className="btn small" onClick={() => change({ status: 'approved' })}>
+              Approve
+            </button>
+          ) : null}
+          {assigning ? <CounselorAssign card={card} counselors={members} onAssign={change} /> : null}
+          <button type="button" className="btn danger small" onClick={() => change({ status: 'cancelled' })}>
+            Cancel
           </button>
-        ) : null}
-        {assigning ? <CounselorAssign card={card} counselors={counselors} onAssign={change} /> : null}
-        <button type="button" className="btn danger small" onClick={() => change({ status: 'cancelled' })}>
-          Cancel
-        </button>
-      </div>
-      {hasOutsideCounselor(card) && (card.status === 'counselor_assigned' || card.status === 'in_progress') ? (
+        </div>
+      ) : null}
+      {canManageBadges && hasOutsideCounselor(card) && (card.status === 'counselor_assigned' || card.status === 'in_progress') ? (
         <OutsideCounselorPanel card={card} change={change} />
       ) : null}
     </li>

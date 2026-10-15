@@ -108,14 +108,16 @@ export function paperDateProblem(card: {
 const ROLE_NAMES: Partial<Record<Role, string>> = {
   counselor: 'Counselor',
   leader: 'Leader',
+  scoutmaster: 'Scoutmaster',
   advancement: 'Advancement chair',
   committee: 'Committee member',
 };
 
-/** Troop members who can counsel, each labelled with their roles. People with the counselor role come first. */
+/** Troop members who can counsel, each labelled with their roles: counselors, the Scoutmaster and the advancement chair.
+ * An assistant leader can't sign merit badge requirements, so they are not offered. Counselors come first. */
 export function counselorOptions(members: Pick<Member, 'id' | 'uid' | 'displayName' | 'roles'>[]): { uid: string; id: string; label: string }[] {
   const options = members
-    .filter((m) => m.uid && (m.roles ?? []).some((r) => r === 'counselor' || r === 'leader'))
+    .filter((m) => m.uid && (m.roles ?? []).some((r) => r === 'counselor' || r === 'scoutmaster' || r === 'advancement'))
     .map((m) => {
       const roles = (m.roles ?? []).map((r) => ROLE_NAMES[r]).filter(Boolean);
       return {

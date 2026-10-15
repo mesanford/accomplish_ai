@@ -10,7 +10,7 @@ from endpoints.advancement import Written, _before_after
 from endpoints.mailer import address_of, app_url, send_all
 from fb import db, troop
 from handlers import email_templates as tpl
-from handlers.email_recipients import card_events, choose, leader_uids, parent_uids
+from handlers.email_recipients import badge_manager_uids, card_events, choose, parent_uids
 from trailhead_core.catalog import load_catalog
 
 log = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ def notify_card(troop_id: str, card_id: str, before: dict | None, after: dict | 
     parents = parent_uids(scout_id, scout, access)
     for event in events:
         if event == "requested":
-            deliver("card_requested", leader_uids(access), tpl.card_requested(name, badge, troop_id, url))
+            deliver("card_requested", badge_manager_uids(access), tpl.card_requested(name, badge, troop_id, url))
         elif event == "counselor":
             email = tpl.counselor_assigned(name, badge, troop_id, url)
             deliver("counselor_assigned", [after["counselorUid"]], email)

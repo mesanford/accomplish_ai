@@ -17,7 +17,7 @@ import { useTroop } from '../lib/troop';
 import type { Access, ConsentDoc, Member, ScoutRecord } from '../lib/types';
 
 export function Roster() {
-  const { troopId, members, memberName, isLeader } = useTroop();
+  const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
   const [added, setAdded] = useState('');
   const consentsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/consents`) : null), [isLeader, troopId]);
   const consents = useQuery<ConsentDoc>(consentsQuery, `${troopId}/consents/${isLeader}`);
@@ -105,7 +105,7 @@ export function Roster() {
           <AddScoutForm troopId={troopId} onAdded={setAdded} />
           {added ? (
             <Link className="small" to={`/t/${troopId}/scouts/${added}/earlier`}>
-              Record {memberName(added)}'s earlier ranks and badges
+              Record {memberName(added)}'s earlier ranks{canManageBadges ? ' and badges' : ''}
             </Link>
           ) : null}
         </section>

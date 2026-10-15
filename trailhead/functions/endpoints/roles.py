@@ -12,7 +12,15 @@ from endpoints.parent_links import stage_link, stage_roles, stage_unlink
 from fb import db as get_db
 from fb import fail, require_leader, troop
 from handlers.membership import YPT_ROLES, InvalidInput, parse_ypt
-from handlers.roles import NO_LEADER, loses_all_leaders, new_links, parse_roles, ypt_blocker
+from handlers.roles import (
+    NO_LEADER,
+    NO_MANAGER,
+    loses_all_badge_managers,
+    loses_all_leaders,
+    new_links,
+    parse_roles,
+    ypt_blocker,
+)
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -27,11 +35,12 @@ def _scout_ids(data: dict, scouts: set[str]) -> list[str]:
 
 @https_fn.on_call()
 def set_member_roles(req: https_fn.CallableRequest) -> dict:
-    """Set an adult's roles (leader, advancement, counselor, committee, parent). Scouts' roles are never edited.
+    """Set an adult's roles (leader, Scoutmaster, advancement, counselor, committee, parent). Never a Scout's.
 
     Roles that sign off or message Scouts need a current Youth Protection date. Adding "parent" links the chosen
     Scouts but records no consent: the parent agrees themselves the next time they open the troop. Removing
-    "parent" unlinks every Scout. The troop always keeps at least one leader or advancement chair.
+    "parent" unlinks every Scout. The troop always keeps at least one leader, and once it has a Scoutmaster or
+    advancement chair it keeps at least one of them.
     """
     data = req.data or {}
     troop_id, member_id = data.get("troopId"), data.get("memberId")
@@ -58,6 +67,8 @@ def set_member_roles(req: https_fn.CallableRequest) -> dict:
         added, removed = new - old, old - new
         if loses_all_leaders(uid, roles, access_docs):
             raise InvalidInput(NO_LEADER)
+        if loses_all_badge_managers(uid, roles, access_docs):
+            raise InvalidInput(NO_MANAGER)
         today, expires, extra = date.today(), member.get("yptExpiresAt"), {}
         if data.get("yptExpiresAt"):
             expires = parse_ypt(data["yptExpiresAt"], [], today)
@@ -84,6 +95,8 @@ def set_member_roles(req: https_fn.CallableRequest) -> dict:
     try:
         waiting = change(get_db().transaction())
     except InvalidInput as err:
-        raise fail(Code.FAILED_PRECONDITION if err.args[0] == NO_LEADER else Code.INVALID_ARGUMENT, str(err)) from err
+        raise fail(
+            Code.FAILED_PRECONDITION if err.args[0] in (NO_LEADER, NO_MANAGER) else Code.INVALID_ARGUMENT, str(err)
+        ) from err
     log.info("roles changed troop=%s now=%s waiting=%d", troop_id, ",".join(roles), len(waiting))
     return {"roles": roles, "pendingScoutIds": waiting}

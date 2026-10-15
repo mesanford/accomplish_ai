@@ -97,13 +97,19 @@ describe('paperDateProblem', () => {
 });
 
 describe('counselorOptions', () => {
-  it('shows each role and lists counselors first', () => {
+  it('shows each role, lists counselors first, and leaves out assistant leaders who cannot sign badges', () => {
     const out = counselorOptions([
-      { id: 'a', uid: 'ua', displayName: 'Avery Lead', roles: ['leader'] },
+      { id: 'a', uid: 'ua', displayName: 'Avery Lead', roles: ['leader', 'scoutmaster'] },
       { id: 'b', uid: 'ub', displayName: 'Casey Counselor', roles: ['counselor'] },
       { id: 'c', displayName: 'No Login', roles: ['counselor'] },
       { id: 'd', uid: 'ud', displayName: 'Dana Parent', roles: ['parent'] },
+      { id: 'e', uid: 'ue', displayName: 'Eli Assistant', roles: ['leader'] },
+      { id: 'f', uid: 'uf', displayName: 'Fran Chair', roles: ['advancement'] },
     ]);
-    expect(out.map((o) => o.label)).toEqual(['Casey Counselor (Counselor)', 'Avery Lead (Leader)']);
+    expect(out.map((o) => o.label)).toEqual([
+      'Casey Counselor (Counselor)',
+      'Avery Lead (Leader, Scoutmaster)',
+      'Fran Chair (Advancement chair)',
+    ]);
   });
 });

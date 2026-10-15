@@ -1,10 +1,11 @@
 import type { Access, Role } from './types';
 
 /** The roles a leader can give an adult, in the order the app lists them. */
-export const ADULT_ROLES: Role[] = ['leader', 'advancement', 'counselor', 'committee', 'parent'];
+export const ADULT_ROLES: Role[] = ['leader', 'scoutmaster', 'advancement', 'counselor', 'committee', 'parent'];
 
 export const ROLE_LABELS: Record<Role, string> = {
   leader: 'Leader',
+  scoutmaster: 'Scoutmaster',
   advancement: 'Advancement chair',
   counselor: 'Merit badge counselor',
   committee: 'Committee member',
@@ -14,6 +15,7 @@ export const ROLE_LABELS: Record<Role, string> = {
 
 const SHORT_NAMES: Record<Role, string> = {
   leader: 'leader',
+  scoutmaster: 'Scoutmaster',
   advancement: 'advancement chair',
   counselor: 'counselor',
   committee: 'committee member',
@@ -22,7 +24,7 @@ const SHORT_NAMES: Record<Role, string> = {
 };
 
 /** Roles that sign off, counsel or message Scouts, so they need current Youth Protection training. */
-const TRAINED_ROLES: Role[] = ['leader', 'advancement', 'counselor', 'committee'];
+const TRAINED_ROLES: Role[] = ['leader', 'scoutmaster', 'advancement', 'counselor', 'committee'];
 
 const sameSet = (a: Role[], b: Role[]) => a.length === b.length && a.every((r) => b.includes(r));
 

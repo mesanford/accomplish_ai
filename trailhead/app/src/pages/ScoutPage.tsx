@@ -22,7 +22,7 @@ import type { BlueCard, PathDoc, Progress, ScoutRecord } from '../lib/types';
 
 export function ScoutPage() {
   const { scoutId = '' } = useParams();
-  const { troopId, members, isLeader, visibleScoutIds, uidName, parentOf } = useTroop();
+  const { troopId, members, isLeader, canManageBadges, visibleScoutIds, uidName, parentOf } = useTroop();
   const scout = members.find((m) => m.id === scoutId);
   const allowed = visibleScoutIds.includes(scoutId);
   const base = `troops/${troopId}`;
@@ -69,10 +69,10 @@ export function ScoutPage() {
         {parentOf(scoutId) ? <span className="pill good">Your child</span> : null}
         {isLeader ? (
           <Link className="btn quiet small" to={`/t/${troopId}/scouts/${scoutId}/earlier`}>
-            Record earlier ranks and badges
+            {canManageBadges ? 'Record earlier ranks and badges' : 'Record earlier ranks'}
           </Link>
         ) : null}
-        {isLeader ? (
+        {canManageBadges ? (
           <Link className="btn quiet small" to={`/t/${troopId}/scouts/${scoutId}/paper-card`}>
             Record a paper blue card
           </Link>
@@ -96,7 +96,7 @@ export function ScoutPage() {
       ) : null}
       <section className="stack">
         <h2>Blue cards</h2>
-        <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={isLeader} />
+        <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={canManageBadges} />
       </section>
       <LinkAsParent scout={scout} />
       <ParentConsent scout={scout} />

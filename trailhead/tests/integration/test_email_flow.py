@@ -19,9 +19,10 @@ T = "troops/tn"
 CARD = f"{T}/blueCards/s1_camping"
 CARD_DOC = {"scoutId": "s1", "awardId": "camping", "versionId": "v1", "status": "requested"}
 ADULTS = {
-    "lead": ["leader"],
+    "lead": ["leader", "scoutmaster"],
+    "asst": ["leader"],  # an assistant leader, who does not approve blue cards
     "chair": ["advancement"],
-    "quiet": ["leader"],  # a leader who turned notifications off
+    "quiet": ["scoutmaster"],  # a Scoutmaster who turned notifications off
     "mom": ["parent"],
     "dad": ["parent"],
     "pending": ["parent"],  # linked by a leader, has not agreed to the notice yet
@@ -69,12 +70,13 @@ def seeded():
     yield
 
 
-def test_a_new_request_goes_to_leaders_and_chairs_who_want_it():
+def test_a_new_request_goes_to_scoutmasters_and_chairs_who_want_it():
     owner.set(CARD, CARD_DOC)
     assert recipients("card_requested", 2) == {email_of("lead"), email_of("chair")}
     [mail, _] = outbox("card_requested")
     assert mail["subject"] == "Ava asked to start Camping"
     assert "Jones" not in mail["text"] and "/t/tn/blue-cards" in mail["text"]
+    assert "The Scoutmaster or advancement chair needs to approve the blue card." in mail["text"]
 
 
 def test_approval_assignment_and_completion_go_to_confirmed_parents_and_the_counselor():

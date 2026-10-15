@@ -5,6 +5,7 @@ import { BlueCardRow } from '../components/BlueCardRow';
 import { Empty, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { BADGE_MANAGER_NOTE } from '../lib/badgeAuthority';
 import { useTroop } from '../lib/troop';
 import type { BlueCard } from '../lib/types';
 
@@ -41,7 +42,7 @@ function PaperCardStart() {
 }
 
 export function BlueCards() {
-  const { troopId, isLeader } = useTroop();
+  const { troopId, isLeader, canManageBadges } = useTroop();
   const openQuery = useMemo(
     () => (isLeader ? query(collection(db, `troops/${troopId}/blueCards`), where('status', 'in', OPEN)) : null),
     [troopId, isLeader],
@@ -55,12 +56,18 @@ export function BlueCards() {
   return (
     <>
       <PageHeader eyebrow="Advancement" title="Blue cards" />
-      <p className="muted">
-        Approve requests, then assign a merit badge counselor: a troop member, or someone outside the troop whom you sign
-        for.
-      </p>
+      {canManageBadges ? (
+        <p className="muted">
+          Approve requests, then assign a merit badge counselor: a troop member, or someone outside the troop whom you sign
+          for.
+        </p>
+      ) : (
+        <p className="muted" role="note">
+          {BADGE_MANAGER_NOTE} You can see which cards are open here.
+        </p>
+      )}
       {sorted.length === 0 ? <Empty>No open blue cards.</Empty> : <ul className="list">{sorted.map((c) => <BlueCardRow key={c.id} card={c} />)}</ul>}
-      <PaperCardStart />
+      {canManageBadges ? <PaperCardStart /> : null}
     </>
   );
 }

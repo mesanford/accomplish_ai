@@ -17,6 +17,10 @@ export interface TroopState {
   visibleScoutIds: string[];
   has: (...roles: Role[]) => boolean;
   isLeader: boolean;
+  /** The Scoutmaster or advancement chair: the only leaders who change blue cards and merit badge records. */
+  canManageBadges: boolean;
+  /** Scouts this login acts for as a family member (and has agreed to the notice for), whatever else their roles allow. */
+  actingScoutIds: string[];
   /** True if this person is a parent of the Scout and has agreed to the consent notice for them. */
   parentOf: (scoutId: string) => boolean;
   memberName: (memberId: string) => string;
@@ -50,7 +54,8 @@ export function TroopProvider({ troopId, children }: { troopId: string; children
   const value = useMemo<TroopState>(() => {
     const roles = new Set(access.data?.roles ?? []);
     const has = (...wanted: Role[]) => wanted.some((r) => roles.has(r));
-    const isLeader = has('leader', 'advancement');
+    const isLeader = has('leader', 'scoutmaster', 'advancement');
+    const canManageBadges = has('scoutmaster', 'advancement');
     const pending = new Set(access.data?.consentPendingScoutIds ?? []);
     const parentOf = (scoutId: string) => roles.has('parent') && (access.data?.scoutIds ?? []).includes(scoutId) && !pending.has(scoutId);
     const byId = new Map(members.data.map((m) => [m.id, m]));
@@ -63,8 +68,10 @@ export function TroopProvider({ troopId, children }: { troopId: string; children
       members: members.data,
       loading: troop.loading || access.loading || members.loading,
       visibleScoutIds: isLeader ? scouts : (access.data?.scoutIds ?? []).filter((id) => !pending.has(id)),
+      actingScoutIds: (access.data?.scoutIds ?? []).filter((id) => !pending.has(id)),
       has,
       isLeader,
+      canManageBadges,
       parentOf,
       memberName: (id) => byId.get(id)?.displayName ?? 'Unknown member',
       uidName: (uid) => (uid ? (byUid.get(uid)?.displayName ?? 'Unknown member') : 'Not assigned'),

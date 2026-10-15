@@ -1,7 +1,7 @@
 import pytest
 
 from handlers import email_templates as tpl
-from handlers.email_recipients import MAX_RECIPIENTS, card_events, choose, leader_uids, parent_uids, wants_email
+from handlers.email_recipients import MAX_RECIPIENTS, badge_manager_uids, card_events, choose, parent_uids, wants_email
 
 URL = "https://example.web.app"
 
@@ -74,6 +74,8 @@ def test_consent_confirmation_content():
 
 ACCESS = {
     "lead": {"roles": ["leader"], "memberId": "m-lead"},
+    "sm": {"roles": ["leader", "scoutmaster"], "memberId": "m-sm"},
+    "solo-sm": {"roles": ["scoutmaster"], "memberId": "m-solo"},
     "chair": {"roles": ["advancement"], "memberId": "m-chair"},
     "mom": {"roles": ["parent"], "memberId": "m-mom", "scoutIds": ["s1"]},
     "pending": {"roles": ["parent"], "memberId": "m-pen", "scoutIds": ["s1"], "consentPendingScoutIds": ["s1"]},
@@ -84,8 +86,8 @@ ACCESS = {
 SCOUT = {"guardianIds": ["m-mom", "m-pen", "m-dad"]}
 
 
-def test_leaders_and_chairs_get_requests():
-    assert leader_uids(ACCESS) == ["chair", "dad-leader", "lead"]
+def test_only_scoutmasters_and_chairs_get_requests():
+    assert badge_manager_uids(ACCESS) == ["chair", "sm", "solo-sm"]  # not assistant leaders
 
 
 def test_only_confirmed_linked_parents_get_updates():

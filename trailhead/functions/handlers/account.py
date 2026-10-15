@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-LEADER_ROLES = {"leader", "advancement"}
+# Every role that counts as a troop leader. A Scoutmaster has every permission a leader has.
+LEADER_ROLES = {"leader", "scoutmaster", "advancement"}
+# Only these two may change merit badge records (the assigned counselor also signs their own badge).
+BADGE_MANAGER_ROLES = {"scoutmaster", "advancement"}
 
 
 def is_last_leader(uid: str, access: dict, others: dict[str, dict], other_member_ids: list[str]) -> bool:
