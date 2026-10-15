@@ -87,7 +87,7 @@ def create_invite(req: https_fn.CallableRequest) -> dict:
     return {"code": code, "path": path, "expiresAt": invite["expiresAt"].isoformat()}
 
 
-@https_fn.on_call()
+@https_fn.on_call(secrets=["RESEND_API_KEY"])
 def accept_invite(req: https_fn.CallableRequest) -> dict:
     """Join a troop with an invite. Someone already in the troop gets the invite's role added to their membership."""
     uid = require_uid(req)

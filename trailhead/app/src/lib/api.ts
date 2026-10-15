@@ -50,6 +50,9 @@ export const getInviteNotice = (troopId: string, code: string) =>
     code,
   });
 
+export const setEmailNotifications = (enabled: boolean) =>
+  call<{ enabled: boolean }, { enabled: boolean }>('set_email_notifications', { enabled });
+
 export const withdrawParentConsent = (troopId: string, scoutId: string) =>
   call<{ troopId: string; scoutId: string }, { ok: boolean }>('withdraw_parent_consent', { troopId, scoutId });
 

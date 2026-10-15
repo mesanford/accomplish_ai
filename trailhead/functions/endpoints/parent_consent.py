@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
 
 
-@https_fn.on_call()
+@https_fn.on_call(secrets=["RESEND_API_KEY"])
 def link_self_as_parent(req: https_fn.CallableRequest) -> dict:
     """A leader or advancement chair says an existing Scout is their child. They agree to the parent notice."""
     data = req.data or {}
@@ -51,7 +51,7 @@ def link_self_as_parent(req: https_fn.CallableRequest) -> dict:
     return {"ok": True}
 
 
-@https_fn.on_call()
+@https_fn.on_call(secrets=["RESEND_API_KEY"])
 def answer_pending_consent(req: https_fn.CallableRequest) -> dict:
     """A parent whose leader linked them to Scouts agrees to the notice (`consent` true) or declines (false).
 
