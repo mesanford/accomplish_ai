@@ -46,7 +46,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     heading: 'How we use it',
     items: [
       'To run Trailhead for your troop: planning paths to rank, recording sign-offs, managing blue cards and counselors, events, messages and the troop website.',
-      'To follow Youth Protection rules. Messages between an adult and a Scout always include a parent or a second adult with current Youth Protection training. Scouts can also message each other.',
+      'To follow Youth Protection rules. Messages are only between people in the same troop, and every conversation that includes a Scout also includes an adult. Scouts can message adults but not other Scouts, and only an adult can start a conversation with several Scouts. An adult in a conversation with a Scout must have current Youth Protection training, except a parent talking with their own children. The Scout\'s parent, or a second trained adult if the parent is not on Trailhead, is added automatically and can read every message.',
       'To build the report leaders use to enter advancement in Scoutbook. Leaders download it; we never send records to Scouting America ourselves.',
       'To send sign-in links by email.',
     ],
@@ -61,7 +61,17 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       'Messages are seen only by the people in the conversation. "Join us" requests are seen only by that troop\'s leaders.',
       'These limits are enforced on our servers, not only in the app.',
       'We, the operator, can access stored data. We look at a troop\'s information only to run and secure Trailhead, to answer a request from the troop or a family, to look into a safety concern, or when the law requires it.',
-      'Anything a leader publishes on the troop website is public. Website gallery photos that show a Scout appear only if the Scout\'s family gave media consent, and they come down if consent is withdrawn. Leaders are asked to use a cover photo and logo in which no Scout can be identified.',
+      'Anything a leader publishes on the troop website is public.',
+    ],
+  },
+  {
+    id: 'photos',
+    heading: 'Troop websites and photos',
+    items: [
+      "A photo that shows a Scout, including the website's cover photo and logo, is published only if every Scout in it has a parent's or guardian's media consent, or the leader confirms that no Scout can be identified in it.",
+      'If media consent is withdrawn, every photo on the website showing that Scout is taken down right away.',
+      'Before a photo is published, Trailhead removes hidden information stored in the file, such as the location where it was taken and camera details.',
+      'Photos of signed paper blue cards are never published. Only leaders and the Scout\'s family can see them.',
     ],
   },
   {
@@ -78,7 +88,9 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     heading: "Children's privacy",
     paragraphs: [
       "Scouts under 13 cannot have their own Trailhead login. Their information is entered by a troop leader or by their parent, and their parent reads troop messages for them. We collect only what advancement needs, which is why we ask for a birth month and year and never a full birth date.",
-      "A parent or guardian can review their child's information in Trailhead at any time, and can ask us to correct or delete it as described below.",
+      'When a parent or guardian joins Trailhead for their Scout, or adds their Scout, we show a notice of what we collect and how we use it, and we record that they agreed: who, which Scout, when, and which version of the notice. Media consent for website photos is a separate choice.',
+      'When a troop leader adds a Scout who may be under 13, the leader confirms that the Scout\'s parent or guardian has given the troop permission to keep the Scout\'s advancement records in Trailhead, and we record who confirmed and when.',
+      "A parent or guardian can review their child's information in Trailhead at any time, and can ask us to correct or delete it as described below. They can also withdraw consent from the Scout's page; that asks the troop to delete the Scout's information, and leaders are shown a notice to remove it.",
     ],
   },
   {
