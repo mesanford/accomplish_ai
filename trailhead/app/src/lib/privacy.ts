@@ -1,6 +1,6 @@
 /** The privacy policy's wording, kept apart from the page so it can be reviewed and edited in one place. */
 
-export const PRIVACY_EFFECTIVE = 'October 14, 2026';
+export const PRIVACY_EFFECTIVE = 'October 15, 2026';
 export const PRIVACY_OPERATOR = 'MM Sanford';
 /** Where privacy questions and deletion requests go. */
 export const PRIVACY_EMAIL: string | null = 'privacy@msanford.com';
@@ -108,7 +108,15 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: 'keep',
     heading: 'How long we keep it',
     paragraphs: [
-      "We keep a troop's information while the troop uses Trailhead. When a troop asks us to close its account, or after a verified deletion request, we delete the information within 30 days.",
+      'We keep information only as long as we need it, and delete it automatically on this schedule:',
+    ],
+    items: [
+      "A Scout's records (name, birth month and year, advancement, blue cards and photos of them, sign-offs, attendance, plans and consent records): deleted 12 months after a leader marks the Scout as having left the troop, or 12 months after the Scout turns 18, whichever comes first. Because we store only the birth month and year, we treat a Scout as 18 from the first day of the month after their 18th birthday month. A leader can also delete a Scout's records at any time.",
+      'Troop messages: a conversation and all of its messages are deleted 24 months after its last message.',
+      '"Join us" requests from a troop website: deleted 12 months after they were sent. Troop leaders can delete one sooner.',
+      'Daily counts of AI drafts: deleted after 30 days. Trailhead does not save the text of plan requests sent to Claude.',
+      "Inactive troops: if no one in a troop has used Trailhead for 18 months, the troop and everything in it are deleted, including its records, files, website and web address. People's sign-in accounts are not deleted; anyone can delete their own account from the Account page.",
+      'Deleted information is removed from our database right away. Deleted files, such as photos, can be recovered by us for up to 7 days and are then gone for good. We do not keep separate backups of the database. Google keeps service logs, which hold technical details such as IP addresses and record ids but not Scouts\' records, for up to 30 days.',
     ],
   },
   {
