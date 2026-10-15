@@ -1,6 +1,14 @@
 /** Turns a troop's chosen color into text and background colors that stay readable in light and dark. */
 
 export const DEFAULT_COLOR = '#4f6a2e';
+
+/** Suggested troop colors: Trailhead green and the Topo Map palette from the design system. */
+export const COLOR_PRESETS: { name: string; color: string }[] = [
+  { name: 'Trailhead green', color: DEFAULT_COLOR },
+  { name: 'Contour brown', color: '#7a4f24' },
+  { name: 'Water blue', color: '#2f6e9e' },
+  { name: 'Woodland', color: '#d3e3bc' },
+];
 const LIGHT_SURFACE = '#fffdf7';
 const DARK_SURFACE = '#20241c';
 

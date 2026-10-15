@@ -1,5 +1,6 @@
 import type { EditDraft, SiteDraft } from '../../lib/site';
 import { Field } from '../ui';
+import { ColorPresets } from './ColorPresets';
 import { ImageUpload } from './ImageUpload';
 import { StoredImage } from './StoredImage';
 
@@ -63,14 +64,17 @@ export function CoverSection({ troopId, draft, onChange }: Props) {
           ) : null}
         </div>
       </div>
-      <Field label="Theme color" htmlFor="site-color" hint="Used for headings and buttons on your site.">
-        <input
-          id="site-color"
-          type="color"
-          value={theme.color}
-          style={{ width: 64, height: 40, padding: 2 }}
-          onChange={(e) => onChange({ theme: { ...theme, color: e.target.value } })}
-        />
+      <Field label="Theme color" htmlFor="site-color" hint="Used for headings and buttons on your site. Pick a suggestion or any color.">
+        <div className="row">
+          <input
+            id="site-color"
+            type="color"
+            value={theme.color}
+            style={{ width: 64, height: 40, padding: 2 }}
+            onChange={(e) => onChange({ theme: { ...theme, color: e.target.value } })}
+          />
+          <ColorPresets value={theme.color} onPick={(color) => onChange({ theme: { ...theme, color } })} />
+        </div>
       </Field>
     </section>
   );

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrast, DEFAULT_COLOR, inkOn, paragraphs, safeUrl, siteColors, validColor } from '../siteTheme';
+import { COLOR_PRESETS, contrast, DEFAULT_COLOR, inkOn, paragraphs, safeUrl, siteColors, validColor } from '../siteTheme';
 
 describe('site theme', () => {
   it('falls back to the default for bad colors', () => {
@@ -18,6 +18,15 @@ describe('site theme', () => {
       const c = siteColors(color);
       expect(contrast(c.textLight, '#fffdf7')).toBeGreaterThanOrEqual(4.5);
       expect(contrast(c.textDark, '#20241c')).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(c.fill, c.ink)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('offers valid preset colors that stay readable', () => {
+    expect(COLOR_PRESETS[0].color).toBe(DEFAULT_COLOR);
+    for (const { color } of COLOR_PRESETS) {
+      expect(validColor(color)).toBe(color);
+      const c = siteColors(color);
       expect(contrast(c.fill, c.ink)).toBeGreaterThanOrEqual(4.5);
     }
   });
