@@ -179,3 +179,19 @@ export interface InterestForm {
 
 export const submitInterest = (slug: string, form: InterestForm) =>
   call<{ slug: string; form: InterestForm }, { ok: boolean }>('submit_interest', { slug, form });
+
+export interface RemoveScoutForm {
+  troopId: string;
+  scoutId: string;
+  /** The server refuses unless this is true; the page asks the person to confirm first. */
+  confirm: true;
+}
+
+export const removeScout = (form: RemoveScoutForm) =>
+  call<RemoveScoutForm, { removed: boolean; documents: number; files: number; photosTakenDown: number }>(
+    'remove_scout',
+    form,
+  );
+
+export const deleteAccount = () =>
+  call<{ confirm: true }, { deleted: boolean; troops: number }>('delete_account', { confirm: true });

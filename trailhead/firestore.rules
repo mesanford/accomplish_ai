@@ -72,10 +72,11 @@ service cloud.firestore {
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent']);
         allow delete: if false;
       }
-      // Private Scout details (birth month and year, rank dates).
+      // Private Scout details (birth month and year, rank dates). Only the remove_scout function deletes one.
       match /scoutRecords/{s} {
         allow read: if canSeeScout(t, s);
-        allow write: if isLeader(t);
+        allow create, update: if isLeader(t);
+        allow delete: if false;
       }
       // Progress id = {scoutId}_{awardId}, the same id as the Scout's blue card for that badge.
       match /progress/{p} {

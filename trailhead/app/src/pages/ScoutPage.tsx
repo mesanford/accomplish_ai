@@ -7,6 +7,7 @@ import { MediaConsent } from '../components/MediaConsent';
 import { PathSummary } from '../components/PathSummary';
 import { BlueCardList, ProgressList } from '../components/ProgressList';
 import { RankForm } from '../components/RankForm';
+import { RemoveScout } from '../components/RemoveScout';
 import { SignOffForm } from '../components/SignOffForm';
 import { Empty, formatDate, Loading, PageHeader } from '../components/ui';
 import { RANKS, rank } from '../lib/catalog';
@@ -94,6 +95,7 @@ export function ScoutPage() {
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={isLeader} />
       </section>
       <MediaConsent scout={scout} />
+      {isLeader && scout.kind === 'scout' ? <RemoveScout scout={scout} /> : null}
       {isLeader && record.data ? (
         <>
           {/* Full width: the requirement checklist needs room to read. */}
