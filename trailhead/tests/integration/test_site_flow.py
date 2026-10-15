@@ -44,8 +44,13 @@ def photo(name: str, scout_ids: list[str], no_scouts: bool = False) -> dict:
 def draft(**overrides) -> dict:
     base = {
         "slug": "troop-101-springfield",
-        "theme": {"color": "#4f6a2e", "logoPath": "sites/t1/draft/logo.png"},
-        "cover": {"heading": "Troop 101", "tagline": "Adventure", "photoPath": "sites/t1/draft/land.png"},
+        "theme": {"color": "#4f6a2e", "logoPath": "sites/t1/draft/logo.png", "logoNoScoutsShown": True},
+        "cover": {
+            "heading": "Troop 101",
+            "tagline": "Adventure",
+            "photoPath": "sites/t1/draft/land.png",
+            "photoNoScoutsShown": True,
+        },
         "about": "We camp every month.",
         "meeting": {"schedule": "Mondays, 7 pm", "place": "St. Mark's Hall", "address": "1 Main St"},
         "faq": [{"q": "Cost?", "a": "$60 a year."}],

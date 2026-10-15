@@ -75,6 +75,13 @@ def _draft_path(value: object, troop_id: str) -> str | None:
     return value
 
 
+def _tags(item: dict, ids_key: str, none_key: str) -> dict:
+    """Which Scouts an image shows (ids), or the leader's confirmation that none can be identified."""
+    raw = item.get(ids_key)
+    scout_ids = [s for s in raw if isinstance(s, str)] if isinstance(raw, list) else []
+    return {"scoutIds": list(dict.fromkeys(scout_ids)), "noScoutsShown": item.get(none_key) is True}
+
+
 def _items(value: object, limit: int, label: str) -> list[dict]:
     items = [i for i in value if isinstance(i, dict)] if isinstance(value, list) else []
     if len(items) > limit:
@@ -116,22 +123,25 @@ def validate_draft(draft: dict | None, troop_id: str) -> dict:
         path = _draft_path(item.get("path"), troop_id)
         if path is None:
             continue
-        scout_ids = [s for s in item.get("scoutIds") or [] if isinstance(s, str)]
         gallery.append(
             {
                 "path": path,
                 "caption": _text(item.get("caption"), "caption", "Each photo caption"),
-                "scoutIds": list(dict.fromkeys(scout_ids)),
-                "noScoutsShown": item.get("noScoutsShown") is True,
+                **_tags(item, "scoutIds", "noScoutsShown"),
             }
         )
     return {
         "slug": check_slug(draft.get("slug")),
-        "theme": {"color": color.lower(), "logoPath": _draft_path(theme.get("logoPath"), troop_id)},
+        "theme": {
+            "color": color.lower(),
+            "logoPath": _draft_path(theme.get("logoPath"), troop_id),
+            "logoTags": _tags(theme, "logoScoutIds", "logoNoScoutsShown"),
+        },
         "cover": {
             "heading": _text(cover.get("heading"), "heading", "The cover heading", required=True),
             "tagline": _text(cover.get("tagline"), "tagline", "The tagline"),
             "photoPath": _draft_path(cover.get("photoPath"), troop_id),
+            "photoTags": _tags(cover, "photoScoutIds", "photoNoScoutsShown"),
         },
         "about": _text(draft.get("about"), "about", '"About us"', required=True),
         "meeting": {

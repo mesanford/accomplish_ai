@@ -90,10 +90,22 @@ test('a leader builds the troop website, uploads photos and publishes it', async
   await leader.getByLabel('Add a photo').setInputFiles({ name: 'group.png', mimeType: 'image/png', buffer: PNG });
   await leader.getByLabel('Photo 2 caption').fill('Group hike');
 
+  // The cover photo follows the same rule: untagged, it is left out and the site falls back to the troop color.
+  await leader.getByLabel('Cover photo', { exact: true }).setInputFiles({ name: 'cover.png', mimeType: 'image/png', buffer: PNG });
+  await expect(leader.getByText('This cover photo will be left out until every Scout in it has media consent')).toBeVisible();
+
   await leader.getByRole('button', { name: 'Publish', exact: true }).click();
   await expect(leader.getByText('Published. Your site is at')).toBeVisible();
-  await expect(leader.getByText('1 photo was left out')).toBeVisible();
+  await expect(leader.getByText('2 images were left out')).toBeVisible();
   await expect(leader.getByText(/Group hike: Tag the Scouts in this photo/)).toBeVisible();
+  await expect(leader.getByText(/Cover photo: Tag the Scouts in this cover photo/)).toBeVisible();
+  await expect(leader.getByText(/The cover shows your troop color instead/)).toBeVisible();
+
+  // Confirming that no Scouts can be identified lets the cover photo publish on the next publish.
+  await leader.getByRole('checkbox', { name: 'No Scouts can be identified in the cover photo' }).check();
+  await expect(leader.getByText('This cover photo will be published.')).toBeVisible();
+  await leader.getByRole('button', { name: 'Publish', exact: true }).click();
+  await expect(leader.getByText('1 image was left out')).toBeVisible();
 
   const site = await readDoc(`publicSites/${SLUG}`);
   expect(site.status).toBe(200);
@@ -104,6 +116,9 @@ test('a leader builds the troop website, uploads photos and publishes it', async
   expect(gallery[0].mapValue.fields.caption).toEqual({ stringValue: 'Sam at the lake' });
   const photoUrl = gallery[0].mapValue.fields.url.stringValue as string;
   expect((await fetch(photoUrl)).status).toBe(200);
+  const coverUrl = (site.fields.cover as { mapValue: { fields: Record<string, Value> } }).mapValue.fields.photoUrl
+    .stringValue as string;
+  expect((await fetch(coverUrl)).status).toBe(200);
   expect(JSON.stringify(site.fields)).toContain('Fall campout');
   expect(JSON.stringify(site.fields)).not.toContain('"Sam"');
 

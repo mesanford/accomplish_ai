@@ -34,6 +34,31 @@ def test_draft_shape_is_checked_loosely():
     assert leader.set(DRAFT, {**GOOD, "cover": "not a map"}) == DENIED
 
 
+def test_draft_holds_the_scout_tags_for_the_cover_photo_and_logo():
+    leader = Client("leader")
+    tagged = {
+        **GOOD,
+        "theme": {"color": "#4f6a2e", "logoPath": "p", "logoScoutIds": ["s1"], "logoNoScoutsShown": False},
+        "cover": {
+            "heading": "T",
+            "tagline": "",
+            "photoPath": "p",
+            "photoScoutIds": [],
+            "photoNoScoutsShown": True,
+        },
+    }
+    assert leader.set(DRAFT, tagged) == OK
+    too_many = {
+        "heading": "T",
+        "tagline": "",
+        "photoPath": "p",
+        "photoScoutIds": [],
+        "photoNoScoutsShown": True,
+        "x": 1,
+    }
+    assert leader.set(DRAFT, {**GOOD, "cover": too_many}) == DENIED
+
+
 def test_published_record_is_server_only():
     path = f"{T}/site/published"
     assert Client("owner").set(path, {"slug": "troop-123", "gallery": []}) == OK

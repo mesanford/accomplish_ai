@@ -10,8 +10,16 @@ from firebase_functions import firestore_fn, https_fn
 
 from endpoints.site_files import MissingFile, delete_public_files, publish_files
 from fb import db, fail, require_leader, troop
+from handlers.images import UnreadableImage
 from handlers.site import InvalidSite, validate_draft
-from handlers.site_build import build_public_site, draft_files, filter_gallery, public_events, resolve_contacts
+from handlers.site_build import (
+    build_public_site,
+    draft_files,
+    filter_branding,
+    filter_gallery,
+    public_events,
+    resolve_contacts,
+)
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -28,6 +36,13 @@ def site_urls(public: dict) -> set[str]:
 def _upcoming(t) -> list[dict]:
     events = [d.to_dict() for d in t.collection("events").where("public", "==", True).stream()]
     return public_events(events, date.today())
+
+
+def _record(path: str | None, tags: dict, urls: dict[str, str]) -> dict | None:
+    """What the published record keeps about a cover photo or logo: its URL and the Scouts it shows."""
+    if not path:
+        return None
+    return {"url": urls[path], "scoutIds": tags["scoutIds"], "noScoutsShown": tags["noScoutsShown"]}
 
 
 def _owner(slug_snap) -> str | None:
@@ -52,10 +67,16 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
         raise fail(Code.ALREADY_EXISTS, TAKEN)
 
     gallery, left_out = filter_gallery(clean["gallery"], members)
+    clean, branding_left_out = filter_branding(clean, members)  # a cover photo or logo follows the gallery's rule
+    left_out = [*branding_left_out, *left_out]
     try:
         urls = publish_files(troop_id, draft_files(clean, gallery))
     except MissingFile:
         raise fail(Code.FAILED_PRECONDITION, "One of your images is missing. Upload it again, then publish.") from None
+    except UnreadableImage:
+        raise fail(
+            Code.FAILED_PRECONDITION, "One of your images can't be read. Upload it again, then publish."
+        ) from None
     troop_doc = t.get().to_dict() or {}
     public = build_public_site(clean, troop_id, troop_doc, urls, contacts, gallery, _upcoming(t))
     site_ref = db().collection("publicSites")
@@ -79,6 +100,8 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
             t.collection("site").document("published"),
             {
                 "slug": slug,
+                "cover": _record(clean["cover"]["photoPath"], clean["cover"]["photoTags"], urls),
+                "logo": _record(clean["theme"]["logoPath"], clean["theme"]["logoTags"], urls),
                 "gallery": [
                     {"url": urls[g["path"]], "scoutIds": g["scoutIds"], "noScoutsShown": g["noScoutsShown"]}
                     for g in gallery

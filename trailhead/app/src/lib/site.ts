@@ -4,8 +4,14 @@ import type { Member, Troop } from './types';
 /** troops/{t}/site/draft: what leaders edit. Only the publish_site function makes a public copy. */
 export interface SiteDraft {
   slug: string;
-  theme: { color: string; logoPath: string | null };
-  cover: { heading: string; tagline: string; photoPath: string | null };
+  theme: { color: string; logoPath: string | null; logoScoutIds: string[]; logoNoScoutsShown: boolean };
+  cover: {
+    heading: string;
+    tagline: string;
+    photoPath: string | null;
+    photoScoutIds: string[];
+    photoNoScoutsShown: boolean;
+  };
   about: string;
   meeting: { schedule: string; place: string; address: string | null };
   faq: { q: string; a: string }[];
@@ -69,8 +75,14 @@ export function siteAddress(origin: string, slug: string): string {
 export function emptyDraft(troop: Troop | null): SiteDraft {
   return {
     slug: suggestSlug(troop),
-    theme: { color: DEFAULT_COLOR, logoPath: null },
-    cover: { heading: troop ? `${troop.name}` : '', tagline: '', photoPath: null },
+    theme: { color: DEFAULT_COLOR, logoPath: null, logoScoutIds: [], logoNoScoutsShown: false },
+    cover: {
+      heading: troop ? `${troop.name}` : '',
+      tagline: '',
+      photoPath: null,
+      photoScoutIds: [],
+      photoNoScoutsShown: false,
+    },
     about: '',
     meeting: { schedule: '', place: '', address: null },
     faq: [],
@@ -133,16 +145,18 @@ export const CONSENT_LABELS: Record<ConsentState, [string, 'good' | 'bad' | 'war
   none: ['Media consent not recorded', 'warn'],
 };
 
-/** Whether a gallery photo will be published, judged the way the server judges it. */
-export function photoWillShow(item: GalleryItem, members: Member[]): boolean {
-  if (item.noScoutsShown) {
+/** Whether an image (gallery photo, cover photo or logo) will be published, judged the way the server judges it. */
+export function tagsWillShow(tags: { scoutIds: string[]; noScoutsShown: boolean }, members: Member[]): boolean {
+  if (tags.noScoutsShown) {
     return true;
   }
-  if (item.scoutIds.length === 0) {
+  if (tags.scoutIds.length === 0) {
     return false;
   }
-  return item.scoutIds.every((id) => consentState(members.find((m) => m.id === id)) === 'granted');
+  return tags.scoutIds.every((id) => consentState(members.find((m) => m.id === id)) === 'granted');
 }
+
+export const photoWillShow = (item: GalleryItem, members: Member[]): boolean => tagsWillShow(item, members);
 
 /** Builder sections change the draft through this: a shallow patch of top-level fields, or a function of the
  * latest draft (for changes that land after an upload finishes). */

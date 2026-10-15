@@ -15,25 +15,38 @@ log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
 
 
+def _shows(item: dict | None, scout_id: str) -> bool:
+    return bool(item) and scout_id in item.get("scoutIds", []) and not item.get("noScoutsShown")
+
+
 def _take_down_photos(troop_id: str, scout_id: str) -> int:
-    """Remove a Scout's photos from the live site at once, without waiting for the next publish."""
+    """Remove every image showing a Scout (gallery photos, the cover photo and the logo) from the live site at
+    once, without waiting for the next publish. Returns how many images came down."""
     t = troop(troop_id)
     record_ref = t.collection("site").document("published")
     record = record_ref.get().to_dict()
     if not record or not record.get("slug"):
         return 0
-    showing = {g["url"] for g in record.get("gallery", []) if scout_id in g["scoutIds"] and not g["noScoutsShown"]}
-    if not showing:
+    showing = {g["url"] for g in record.get("gallery", []) if _shows(g, scout_id)}
+    cover_down, logo_down = _shows(record.get("cover"), scout_id), _shows(record.get("logo"), scout_id)
+    if not (showing or cover_down or logo_down):
         return 0
     site_ref = db().collection("publicSites").document(record["slug"])
     public = site_ref.get().to_dict()
     if public is None:
         return 0
     gallery = [g for g in public.get("gallery", []) if g.get("url") not in showing]
-    site_ref.update({"gallery": gallery})
-    record_ref.update({"gallery": [g for g in record["gallery"] if g["url"] not in showing]})
-    delete_public_files(troop_id, keep_urls=site_urls({**public, "gallery": gallery}))
-    return len(showing)
+    cover, theme = dict(public.get("cover") or {}), dict(public.get("theme") or {})
+    changes: dict = {"gallery": gallery}
+    kept: dict = {"gallery": [g for g in record["gallery"] if g["url"] not in showing]}
+    if cover_down:
+        cover["photoUrl"], changes["cover"], kept["cover"] = None, cover, None
+    if logo_down:
+        theme["logoUrl"], changes["theme"], kept["logo"] = None, theme, None
+    site_ref.update(changes)
+    record_ref.update(kept)
+    delete_public_files(troop_id, keep_urls=site_urls({**public, "gallery": gallery, "cover": cover, "theme": theme}))
+    return len(showing) + int(cover_down) + int(logo_down)
 
 
 @https_fn.on_call()

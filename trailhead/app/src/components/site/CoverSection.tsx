@@ -1,7 +1,9 @@
 import type { EditDraft, SiteDraft } from '../../lib/site';
+import { useTroop } from '../../lib/troop';
 import { Field } from '../ui';
 import { ColorPresets } from './ColorPresets';
 import { ImageUpload } from './ImageUpload';
+import { ScoutTags } from './ScoutTags';
 import { StoredImage } from './StoredImage';
 
 interface Props {
@@ -10,8 +12,11 @@ interface Props {
   onChange: EditDraft;
 }
 
-/** Cover heading, tagline and photo, plus the theme color and logo. */
+/** Cover heading, tagline and photo, plus the theme color and logo. The cover photo and logo follow the same Scout
+ * tagging and media-consent rule as gallery photos. */
 export function CoverSection({ troopId, draft, onChange }: Props) {
+  const { members } = useTroop();
+  const scouts = members.filter((m) => m.kind === 'scout');
   const { cover, theme } = draft;
   return (
     <section className="card">
@@ -41,12 +46,27 @@ export function CoverSection({ troopId, draft, onChange }: Props) {
             kind="cover"
             label="Cover photo"
             hint="Use a photo where no Scout can be identified, such as a campsite or landscape."
-            onUploaded={(path) => onChange((d) => ({ cover: { ...d.cover, photoPath: path } }))}
+            onUploaded={(path) =>
+              onChange((d) => ({ cover: { ...d.cover, photoPath: path, photoScoutIds: [], photoNoScoutsShown: false } }))
+            }
           />
           {cover.photoPath ? (
-            <button type="button" className="btn quiet small" onClick={() => onChange({ cover: { ...cover, photoPath: null } })}>
-              Remove cover photo
-            </button>
+            <>
+              <ScoutTags
+                subject="the cover photo"
+                noun="cover photo"
+                tags={{ scoutIds: cover.photoScoutIds, noScoutsShown: cover.photoNoScoutsShown }}
+                scouts={scouts}
+                onChange={(t) => onChange({ cover: { ...cover, photoScoutIds: t.scoutIds, photoNoScoutsShown: t.noScoutsShown } })}
+              />
+              <button
+                type="button"
+                className="btn quiet small"
+                onClick={() => onChange({ cover: { ...cover, photoPath: null, photoScoutIds: [], photoNoScoutsShown: false } })}
+              >
+                Remove cover photo
+              </button>
+            </>
           ) : null}
         </div>
         <div className="stack">
@@ -55,12 +75,28 @@ export function CoverSection({ troopId, draft, onChange }: Props) {
             troopId={troopId}
             kind="logo"
             label="Logo"
-            onUploaded={(path) => onChange((d) => ({ theme: { ...d.theme, logoPath: path } }))}
+            hint="A troop emblem or logo. If it shows a Scout, the same media-consent rule applies."
+            onUploaded={(path) =>
+              onChange((d) => ({ theme: { ...d.theme, logoPath: path, logoScoutIds: [], logoNoScoutsShown: false } }))
+            }
           />
           {theme.logoPath ? (
-            <button type="button" className="btn quiet small" onClick={() => onChange({ theme: { ...theme, logoPath: null } })}>
-              Remove logo
-            </button>
+            <>
+              <ScoutTags
+                subject="the logo"
+                noun="logo"
+                tags={{ scoutIds: theme.logoScoutIds, noScoutsShown: theme.logoNoScoutsShown }}
+                scouts={scouts}
+                onChange={(t) => onChange({ theme: { ...theme, logoScoutIds: t.scoutIds, logoNoScoutsShown: t.noScoutsShown } })}
+              />
+              <button
+                type="button"
+                className="btn quiet small"
+                onClick={() => onChange({ theme: { ...theme, logoPath: null, logoScoutIds: [], logoNoScoutsShown: false } })}
+              >
+                Remove logo
+              </button>
+            </>
           ) : null}
         </div>
       </div>

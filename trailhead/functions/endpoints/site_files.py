@@ -6,6 +6,7 @@ import json
 import os
 from functools import cache
 
+from handlers.images import clean_image
 from handlers.site_build import DEFAULT_STORAGE_HOST, download_url, public_path
 
 
@@ -63,7 +64,8 @@ class MissingFile(Exception):
 
 
 def publish_files(troop_id: str, draft_paths: list[str]) -> dict[str, str]:
-    """Copy each draft file to sites/{t}/public/ and return {draft path: public URL}. Raises MissingFile."""
+    """Re-encode each draft image into sites/{t}/public/ (no EXIF, GPS or other metadata; see handlers.images)
+    and return {draft path: public URL}. Raises MissingFile, or UnreadableImage if a file isn't a real image."""
     b = bucket()
     urls: dict[str, str] = {}
     for path in draft_paths:
@@ -77,7 +79,8 @@ def publish_files(troop_id: str, draft_paths: list[str]) -> dict[str, str]:
         target_path = public_path(troop_id, path)
         target = b.blob(target_path)
         target.cache_control = "public, max-age=300"
-        target.upload_from_string(source.download_as_bytes(), content_type=content_type)
+        data, content_type = clean_image(source.download_as_bytes())
+        target.upload_from_string(data, content_type=content_type)
         urls[path] = download_url(bucket_name(), target_path, download_host())
     return urls
 
