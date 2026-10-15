@@ -11,7 +11,7 @@ from datetime import UTC, date, datetime, timedelta
 import pytest
 
 from tests.integration.test_functions import call, owner
-from tests.integration.test_membership_flow import new_scout, new_troop, ok
+from tests.integration.test_membership_flow import AGREE, new_scout, new_troop, ok
 from tests.rules.emulator import list_docs, read, reset
 from tests.rules.storage import Storage, reset_storage
 
@@ -96,7 +96,9 @@ def test_scouts_are_deleted_twelve_months_after_leaving_or_turning_eighteen(run)
 def test_scout_deletions_are_bounded_per_run(run):
     tid = new_troop("44")
     t = f"troops/{tid}"
-    ids = [new_scout(tid, "lead", f"S{n}", 2000) for n in range(3)]  # all over 19
+    ids = [new_scout(tid, "lead", f"S{n}", 2012) for n in range(3)]
+    for s in ids:  # add_scout only takes ages 10 to 17, so age the records directly: all over 19 now
+        owner.set(f"{t}/scoutRecords/{s}", {**read(f"{t}/scoutRecords/{s}"), "birthYear": 2000})
     assert run(scouts=2)["scouts"] == 2
     assert sum(read(f"{t}/members/{s}") is not None for s in ids) == 1
     assert run(scouts=2)["scouts"] == 1
@@ -149,5 +151,5 @@ def test_a_leader_deletes_a_lead_and_its_invite_still_works():
     assert call("delete_lead", "lead", {**args, "leadId": "nope"}).status_code == 404
     assert ok(call("delete_lead", "lead", args)) == {"deleted": True}
     assert read(f"{t}/leads/l1") is None
-    ok(call("accept_invite", "jordan", {"troopId": tid, "code": code, "displayName": "Jordan"}))
+    ok(call("accept_invite", "jordan", {"troopId": tid, "code": code, "displayName": "Jordan", **AGREE}))
     assert read(f"{t}/access/jordan") is not None
