@@ -93,7 +93,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     heading: "Children's privacy",
     paragraphs: [
       "Scouts under 13 cannot have their own Forthright login. Their information is entered by a troop leader or by their parent, and their parent reads troop messages for them. We collect only what advancement needs, which is why we ask for a birth month and year and never a full birth date.",
-      'When a parent or guardian joins Forthright for their Scout, or adds their Scout, we show a notice of what we collect and how we use it, and we record that they agreed: who, which Scout, when, and which version of the notice. Media consent for website photos is a separate choice.',
+      'When a parent or guardian joins Forthright for their Scout, adds their Scout, or is linked to their Scout by a troop leader, we show a notice of what we collect and how we use it, and we record that they agreed: who, which Scout, when, and which version of the notice. A parent a leader links sees nothing about that Scout until they agree, and declining removes the link. Media consent for website photos is a separate choice.',
       'When a troop leader adds a Scout who may be under 13, the leader confirms that the Scout\'s parent or guardian has given the troop permission to keep the Scout\'s advancement records in Forthright, and we record who confirmed and when.',
       "A parent or guardian can review their child's information in Forthright at any time, and can ask us to correct or delete it as described below. They can also withdraw consent from the Scout's page; that asks the troop to delete the Scout's information, and leaders are shown a notice to remove it.",
     ],
