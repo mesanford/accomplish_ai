@@ -94,6 +94,18 @@ def test_invite_from_a_lead_needs_no_scouts_and_marks_it():
     assert call("create_invite", "lead", {"troopId": tid, "role": "leader", "leadId": lead_id}).status_code == 400
     assert call("create_invite", "lead", {"troopId": tid, "role": "parent", "leadId": "ghost"}).status_code == 400
 
-    ok(call("accept_invite", "mom", {"troopId": tid, "code": invite["code"], "displayName": "Jordan"}))
+    ok(
+        call(
+            "accept_invite",
+            "mom",
+            {
+                "troopId": tid,
+                "code": invite["code"],
+                "displayName": "Jordan",
+                "consent": True,
+                "consentVersion": "2026-10-15",
+            },
+        )
+    )
     assert read(f"troops/{tid}/access/mom")["scoutIds"] == []
     assert read(f"troops/{tid}/leads/{lead_id}")["status"] == "joined"

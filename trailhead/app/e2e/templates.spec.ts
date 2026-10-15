@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createInviteLink, inOneYear, join, resetEmulators, signedIn } from './helpers';
+import { createInviteLink, inOneYear, joinAsParent, resetEmulators, signedIn } from './helpers';
 
 test.beforeAll(resetEmulators);
 
@@ -30,7 +30,7 @@ test('a leader adds starter templates and a parent starts a Scout from one', asy
 
   // The parent applies one to Sam, saves, and sees whether the plan works.
   const parent = await signedIn(browser, 'parent@example.com', parentInvite);
-  await join(parent, 'Jordan Parent');
+  await joinAsParent(parent, 'Jordan Parent');
   await parent.getByRole('link', { name: /Sam/ }).click();
   await parent.getByRole('link', { name: 'Plan a path' }).click();
   await parent.getByLabel('Start from a template').selectOption({ label: 'First summer at camp' });

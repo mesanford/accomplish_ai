@@ -8,7 +8,14 @@ from datetime import UTC, date, datetime
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
+from endpoints.consent import send_consent_confirmation, stage_leader_confirmation, stage_parent_consent
 from fb import db, fail, require_access, require_leader, require_uid, troop
+from handlers.consent import (
+    check_leader_confirmation,
+    check_parent_consent,
+    leader_confirmation_entry,
+    parent_consent_entry,
+)
 from handlers.membership import (
     InvalidInput,
     adult_member,
@@ -97,12 +104,15 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
         raise fail(EXISTS, "You're already a member of this troop.")
 
     @firestore.transactional
-    def accept(tx) -> str:
+    def accept(tx) -> tuple[str, list[str], dict | None]:
         invite_ref = t.collection("invites").document(code)
         snap = invite_ref.get(transaction=tx)
         invite = check_invite(snap.to_dict() if snap.exists else None, datetime.now(UTC))
         troop_doc = t.get(transaction=tx).to_dict()
         role = invite["role"]
+        consent = None
+        if role == "parent":
+            check_parent_consent(data)  # a parent can't join without agreeing to the notice
         if role == "scout":
             member_id = invite["scoutMemberId"]
             member_ref = t.collection("members").document(member_id)
@@ -120,18 +130,23 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
                 tx.update(
                     t.collection("members").document(scout_id), {"guardianIds": firestore.ArrayUnion([member_id])}
                 )
+            consent = parent_consent_entry(uid, member_id, datetime.now(UTC))
+            stage_parent_consent(tx, t, scout_ids, consent)
         tx.set(t.collection("access").document(uid), _access(member_id, [role], scout_ids, ypt))
         user = {"troops": {troop_id: _membership(troop_doc, member_id, [role])}}
         tx.set(db().collection("users").document(uid), user, merge=True)
-        tx.update(invite_ref, {"usedBy": uid, "usedAt": datetime.now(UTC)})
+        used = {"usedBy": uid, "usedAt": datetime.now(UTC)}
+        tx.update(invite_ref, {**used, "consentVersion": consent["version"]} if consent else used)
         if invite.get("leadId"):
             tx.update(t.collection("leads").document(invite["leadId"]), {"status": "joined"})
-        return member_id
+        return member_id, scout_ids, consent
 
     try:
-        member_id = accept(db().transaction())
+        member_id, scout_ids, consent = accept(db().transaction())
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
+    if consent:
+        send_consent_confirmation(troop_id, scout_ids, consent)
     return {"troopId": troop_id, "memberId": member_id}
 
 
@@ -151,12 +166,28 @@ def add_scout(req: https_fn.CallableRequest) -> dict:
     t = troop(troop_id)
     member_ref = t.collection("members").document()
     is_parent = "parent" in roles
+    now = datetime.now(UTC)
+    try:
+        if is_parent:
+            check_parent_consent(data)  # a parent adding their child agrees to the same notice
+        confirmed = not is_parent and check_leader_confirmation(data, record, now.date())
+    except InvalidInput as err:
+        raise fail(BAD, str(err)) from err
     if is_parent:
         member["guardianIds"] = [access["memberId"]]
     batch = db().batch()
     batch.set(member_ref, member)
     batch.set(t.collection("scoutRecords").document(member_ref.id), record)
+    consent = None
+    if is_parent:
+        consent = parent_consent_entry(req.auth.uid, access["memberId"], now)
+        stage_parent_consent(batch, t, [member_ref.id], consent)
+    elif confirmed:
+        entry = leader_confirmation_entry(req.auth.uid, access["memberId"], now)
+        stage_leader_confirmation(batch, t, member_ref.id, entry)
     if is_parent:
         batch.update(t.collection("access").document(req.auth.uid), {"scoutIds": firestore.ArrayUnion([member_ref.id])})
     batch.commit()
+    if consent:
+        send_consent_confirmation(troop_id, [member_ref.id], consent)
     return {"scoutId": member_ref.id}

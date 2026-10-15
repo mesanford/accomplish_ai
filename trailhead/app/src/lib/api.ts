@@ -47,9 +47,18 @@ export interface JoinForm {
   code: string;
   displayName: string;
   yptExpiresAt?: string;
+  /** A parent agrees to the notice. The server refuses a parent invite without it. */
+  consent?: boolean;
+  consentVersion?: string;
 }
 
 export const acceptInvite = (form: JoinForm) => call<JoinForm, { troopId: string }>('accept_invite', form);
+
+export const getInviteNotice = (troopId: string, code: string) =>
+  call<{ troopId: string; code: string }, { troopName: string; role: string }>('invite_notice', { troopId, code });
+
+export const withdrawParentConsent = (troopId: string, scoutId: string) =>
+  call<{ troopId: string; scoutId: string }, { ok: boolean }>('withdraw_parent_consent', { troopId, scoutId });
 
 export interface ScoutForm {
   troopId: string;
@@ -57,6 +66,11 @@ export interface ScoutForm {
   birthYear: number;
   birthMonth: number;
   currentRankId: string;
+  /** A leader confirms the family's permission for a Scout who may be under 13. */
+  leaderConfirmed?: boolean;
+  /** A parent adding their own child agrees to the notice. */
+  consent?: boolean;
+  consentVersion?: string;
 }
 
 export const addScout = (form: ScoutForm) => call<ScoutForm, { scoutId: string }>('add_scout', form);

@@ -24,7 +24,13 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
 1. A leader signs in and creates the troop. Leaders need a Youth Protection training expiry date.
 2. On **Roster**, the leader adds Scouts (birth month and year, current rank) and creates invite links for parents,
    Scouts 13 and older, counselors and other leaders. Each link works once and expires in 30 days.
-3. Parents open their link, sign in and see their Scouts. They can add a sibling themselves.
+3. Parents open their link, sign in, read a notice about what Trailhead keeps and tick a box to agree, then see their
+   Scouts. They can add a sibling themselves, agreeing to the notice again. A parent can withdraw consent from the
+   Scout's page, which tells leaders to remove the records. A leader adding a Scout who may be under 13 confirms the
+   family's permission. The server records each (`troops/{t}/consents/{scoutId}`, server-written, visible to leaders
+   and the family) with the notice version, in `CONSENT_NOTICE_VERSION`. Bump it when the notice's meaning changes.
+   The confirmation email COPPA's "email plus" method calls for isn't sent yet: `send_consent_confirmation` in
+   `functions/endpoints/consent.py` is the one place to add it.
 4. A Scout or parent plans a **path** to a rank. The planner checks it live and explains what won't work.
 5. From **Badges**, they start a blue card. A leader approves it and assigns a counselor under **Blue cards**.
 6. The counselor signs requirements and marks the badge complete under **Counseling**.

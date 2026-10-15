@@ -12,6 +12,7 @@ from endpoints.advancement import (
     on_signoff_created,
 )
 from endpoints.assistant import draft_path
+from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
 from endpoints.messaging import send_message
@@ -33,6 +34,7 @@ __all__ = [
     "create_troop",
     "draft_path",
     "draft_site_about",
+    "invite_notice",
     "move_to_custom_version",
     "on_attendance_written",
     "on_blue_card_written",
@@ -48,4 +50,5 @@ __all__ = [
     "set_scoutbook_entered",
     "submit_interest",
     "unpublish_site",
+    "withdraw_parent_consent",
 ]
