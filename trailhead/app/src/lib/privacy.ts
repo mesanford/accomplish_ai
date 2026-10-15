@@ -52,7 +52,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       'To run Forthright for your troop: planning paths to rank, recording sign-offs, managing blue cards and counselors, events, messages and the troop website.',
       'To follow Youth Protection rules. Messages are only between people in the same troop, and every conversation that includes a Scout also includes an adult. Scouts can message adults but not other Scouts, and only an adult can start a conversation with several Scouts. An adult in a conversation with a Scout must have current Youth Protection training, except a parent talking with their own children. The Scout\'s parent, or a second trained adult if the parent is not on Forthright, is added automatically and can read every message.',
       'To build the report leaders use to enter advancement in Scoutbook. Leaders download it; we never send records to Scouting America ourselves.',
-      'To send sign-in links by email.',
+      'To send email: sign-in links; a copy of the notice a parent agreed to; and blue card updates (a new request to the Scoutmaster and advancement chair; approval, counselor and completion to the Scout\'s parents; an assignment to the counselor). Scouts are not emailed. Anyone can turn blue card emails off on the Account page; consent confirmations are always sent.',
     ],
     notes: ['We do not sell personal information, use it for advertising, or share it with anyone for their own marketing.'],
   },
@@ -84,6 +84,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     heading: 'Companies that help us run Forthright',
     items: [
       'Google (Firebase and Google Cloud) hosts the app and stores its data in the United States, handles sign-in, stores photos and runs our server code.',
+      'Resend delivers our emails. It receives the recipient\'s email address and the email itself: a Scout\'s first name, the merit badge, the troop name and links back to Forthright. It never receives birth dates, messages, photos or last names.',
       'Anthropic provides Claude, the AI behind "Draft with AI" and the website About us helper. To draft a plan we send a Scout\'s birth month and year, current rank, rank dates, merit badges already earned, the goal rank and target date, and the words typed into the request box. For the About us helper we send the troop\'s name, unit number and council and the leader\'s notes. In both, we try to remove the names of people on your troop roster from what you type, but nicknames or misspellings may get through, so please don\'t include names, health, family or school details. Under Anthropic\'s commercial terms, this data is not used to train its models; Anthropic deletes it within 30 days unless it must keep it longer to enforce its usage policy or the law. AI drafts can be wrong: Forthright checks each plan against the advancement rules, and a person decides whether to use it.',
     ],
     notes: ['These companies process data for us under their contracts with us. They may keep limited data as their terms or the law require.'],
