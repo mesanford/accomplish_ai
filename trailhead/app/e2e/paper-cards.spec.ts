@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createInviteLink, inOneYear, join, resetEmulators, signedIn } from './helpers';
+import { createInviteLink, inOneYear, joinAsParent, resetEmulators, signedIn } from './helpers';
 
 // Run with the storage emulator too:
 //   firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead "npm --prefix app run e2e"
@@ -36,7 +36,7 @@ test('a leader works with a counselor outside the troop and records a paper blue
   await expect(leader.getByRole('link', { name: 'Sam', exact: true })).toBeVisible();
   const parentInvite = await createInviteLink(leader, 'parent', 'Sam');
   const parent = await signedIn(browser, 'paper-parent@example.com', parentInvite);
-  await join(parent, 'Jordan Parent');
+  await joinAsParent(parent, 'Jordan Parent');
 
   // A blue card for Chess; the counselor is outside the troop, so the leader signs for them.
   await leader.getByRole('link', { name: 'Badges', exact: true }).click();

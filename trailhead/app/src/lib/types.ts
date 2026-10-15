@@ -40,6 +40,17 @@ export interface Member {
   mediaConsent?: { granted: boolean; byMemberId: string; at?: Timestamp };
 }
 
+/** troops/{t}/consents/{scoutId}: written only by the server. */
+export interface ConsentDoc {
+  id: string;
+  /** One entry per parent who agreed to the notice. */
+  parentConsents?: { uid: string; memberId: string; at?: Timestamp; version: string }[];
+  /** A leader said the family gave the troop permission (Scouts who may be under 13). */
+  leaderConfirmation?: { uid: string; memberId: string; at?: Timestamp };
+  /** A parent asked for the Scout's records to be deleted. */
+  withdrawal?: { uid: string; memberId: string; at?: Timestamp };
+}
+
 export interface ScoutRecord {
   birthYear: number;
   birthMonth: number;

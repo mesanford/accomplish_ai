@@ -1,23 +1,40 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ConsentNotice } from '../components/ConsentNotice';
 import { HelpTip } from '../components/HelpTip';
 import { Field, Notice, PageHeader } from '../components/ui';
-import { acceptInvite, errorMessage } from '../lib/api';
+import { acceptInvite, errorMessage, getInviteNotice } from '../lib/api';
+import { CONSENT_NOTICE_VERSION } from '../lib/consent';
 
 export function Join() {
   const { troopId = '', code = '' } = useParams();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState('');
   const [ypt, setYpt] = useState('');
+  const [notice, setNotice] = useState<{ troopName: string; role: string } | null>(null);
+  const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    // If the invite can't be read here, the form still shows and the server explains the problem on submit.
+    getInviteNotice(troopId, code).then(setNotice, () => setNotice(null));
+  }, [troopId, code]);
+
+  const parentNotice = notice?.role === 'parent' ? notice : null;
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError('');
     try {
-      await acceptInvite({ troopId, code, displayName, yptExpiresAt: ypt || undefined });
+      await acceptInvite({
+        troopId,
+        code,
+        displayName,
+        yptExpiresAt: ypt || undefined,
+        ...(parentNotice ? { consent: agreed, consentVersion: CONSENT_NOTICE_VERSION } : {}),
+      });
       navigate(`/t/${troopId}`, { replace: true });
     } catch (err) {
       setError(errorMessage(err));
@@ -47,6 +64,15 @@ export function Join() {
           What is Youth Protection training?
           <HelpTip topic="ypt" />
         </p>
+        {parentNotice ? (
+          <>
+            <ConsentNotice troopName={parentNotice.troopName} />
+            <label className="check">
+              <input type="checkbox" required checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
+              I am this Scout's parent or guardian, and I agree.
+            </label>
+          </>
+        ) : null}
         <Notice kind="error">{error}</Notice>
         <div>
           <button className="btn" type="submit" disabled={busy}>

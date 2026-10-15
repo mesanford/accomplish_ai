@@ -78,6 +78,13 @@ service cloud.firestore {
         allow create, update: if isLeader(t);
         allow delete: if false;
       }
+      // Parental consent for a Scout: who agreed to which notice version and when, a leader's confirmation
+      // for a Scout who may be under 13, and a parent's withdrawal. Leaders and the Scout's family read it;
+      // only the server writes it.
+      match /consents/{s} {
+        allow read: if canSeeScout(t, s);
+        allow write: if false;
+      }
       // Progress id = {scoutId}_{awardId}, the same id as the Scout's blue card for that badge.
       match /progress/{p} {
         allow read: if canSeeScout(t, resource.data.scoutId) || isCounselorFor(t, p);

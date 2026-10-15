@@ -64,6 +64,15 @@ export async function join(page: Page, name: string, ypt?: string): Promise<void
   await page.getByRole('button', { name: 'Join troop' }).click();
 }
 
+/** A parent joins: they read the notice and tick the box that says they are the Scout's parent and agree. */
+export async function joinAsParent(page: Page, name: string): Promise<void> {
+  await expect(page.getByRole('heading', { name: 'Join your troop' })).toBeVisible();
+  await page.getByLabel('Your name').fill(name);
+  await expect(page.getByRole('heading', { name: 'Notice to parents and guardians' })).toBeVisible();
+  await page.getByRole('checkbox', { name: "I am this Scout's parent or guardian, and I agree." }).check();
+  await page.getByRole('button', { name: 'Join troop' }).click();
+}
+
 export function inOneYear(): string {
   const d = new Date();
   d.setFullYear(d.getFullYear() + 1);

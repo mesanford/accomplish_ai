@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createInviteLink, inOneYear, join, resetEmulators, signedIn } from './helpers';
+import { createInviteLink, inOneYear, join, joinAsParent, resetEmulators, signedIn } from './helpers';
 
 test.beforeAll(resetEmulators);
 
@@ -26,7 +26,7 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
 
   // Parent joins from the invite link, plans a path and starts a blue card.
   const parent = await signedIn(browser, 'parent@example.com', parentInvite);
-  await join(parent, 'Jordan Parent');
+  await joinAsParent(parent, 'Jordan Parent');
   await parent.getByRole('link', { name: /Sam/ }).click();
   await parent.getByRole('link', { name: 'Plan a path' }).click();
   await parent.getByLabel('Goal').selectOption('star');

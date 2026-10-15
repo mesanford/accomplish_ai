@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
 import { MediaConsent } from '../components/MediaConsent';
+import { ParentConsent } from '../components/ParentConsent';
 import { PathSummary } from '../components/PathSummary';
 import { BlueCardList, ProgressList } from '../components/ProgressList';
 import { RankForm } from '../components/RankForm';
@@ -94,6 +95,7 @@ export function ScoutPage() {
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={isLeader} />
       </section>
+      <ParentConsent scout={scout} />
       <MediaConsent scout={scout} />
       {isLeader && scout.kind === 'scout' ? <RemoveScout scout={scout} /> : null}
       {isLeader && record.data ? (
