@@ -65,11 +65,14 @@ service cloud.firestore {
       // Roster: names, roles, patrols. Shared with the whole troop.
       // mediaConsent (may photos of this Scout go on the public website) is written only by the
       // set_media_consent function, which checks the caller is a parent or a leader.
+      // leftAt (when a Scout left the troop; their records are deleted 12 months later) is written only by the
+      // mark_scout_left function, with the server's time, so it can't be backdated.
       match /members/{m} {
         allow read: if isMember(t);
-        allow create: if isLeader(t) && !('mediaConsent' in request.resource.data);
+        allow create: if isLeader(t) && !('mediaConsent' in request.resource.data)
+          && !('leftAt' in request.resource.data);
         allow update: if isLeader(t)
-          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent']);
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent', 'leftAt']);
         allow delete: if false;
       }
       // Private Scout details (birth month and year, rank dates). Only the remove_scout function deletes one.

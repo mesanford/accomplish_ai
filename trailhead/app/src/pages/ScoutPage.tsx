@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
+import { MarkLeft } from '../components/MarkLeft';
 import { MediaConsent } from '../components/MediaConsent';
 import { PathSummary } from '../components/PathSummary';
 import { BlueCardList, ProgressList } from '../components/ProgressList';
@@ -95,6 +96,7 @@ export function ScoutPage() {
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={isLeader} />
       </section>
       <MediaConsent scout={scout} />
+      {isLeader && scout.kind === 'scout' ? <MarkLeft scout={scout} /> : null}
       {isLeader && scout.kind === 'scout' ? <RemoveScout scout={scout} /> : null}
       {isLeader && record.data ? (
         <>

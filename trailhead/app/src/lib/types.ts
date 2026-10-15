@@ -38,6 +38,8 @@ export interface Member {
   yptExpiresAt?: Timestamp | null;
   /** May photos showing this Scout go on the public website? Written only by set_media_consent. */
   mediaConsent?: { granted: boolean; byMemberId: string; at?: Timestamp };
+  /** When a leader marked this Scout as having left the troop. Written only by mark_scout_left. */
+  leftAt?: Timestamp | null;
 }
 
 export interface ScoutRecord {

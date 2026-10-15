@@ -5,6 +5,7 @@ Logic lives in `handlers` and `trailhead_core`; Firestore wiring lives in `endpo
 """
 
 from endpoints.account import delete_account
+from endpoints.activity import mark_scout_left, record_activity
 from endpoints.advancement import (
     check_path_preview,
     on_attendance_written,
@@ -14,12 +15,14 @@ from endpoints.advancement import (
 )
 from endpoints.assistant import draft_path
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
+from endpoints.leads import delete_lead
 from endpoints.membership import accept_invite, add_scout, create_invite, create_troop
 from endpoints.messaging import send_message
 from endpoints.paper_cards import record_paper_blue_card
 from endpoints.prior import record_prior_advancement
 from endpoints.recruiting import submit_interest
 from endpoints.removal import remove_scout
+from endpoints.retention import apply_retention
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
 from endpoints.site import on_event_written_site, publish_site, unpublish_site
 from endpoints.site_about import draft_site_about
@@ -28,14 +31,17 @@ from endpoints.site_consent import set_media_consent
 __all__ = [
     "accept_invite",
     "add_scout",
+    "apply_retention",
     "archive_custom_award",
     "check_path_preview",
     "create_invite",
     "create_scoutbook_report",
     "create_troop",
     "delete_account",
+    "delete_lead",
     "draft_path",
     "draft_site_about",
+    "mark_scout_left",
     "move_to_custom_version",
     "on_attendance_written",
     "on_blue_card_written",
@@ -43,6 +49,7 @@ __all__ = [
     "on_path_written",
     "on_signoff_created",
     "publish_site",
+    "record_activity",
     "record_paper_blue_card",
     "record_prior_advancement",
     "remove_scout",
