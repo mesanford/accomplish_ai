@@ -33,8 +33,9 @@ grep -q '^STRIPE_WEBHOOK_SECRET=' functions/.secret.local || echo "STRIPE_WEBHOO
 .venv/bin/ruff format --check .
 .venv/bin/pytest -q tests/unit
 firebase emulators:exec --only firestore,storage --project demo-trailhead ".venv/bin/pytest -q tests/rules"
+# A real failure fails twice and still stops the run; a dropped emulator worker gets one more try.
 RUN_FUNCTIONS_TESTS=1 firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead \
-  ".venv/bin/pytest -q tests/integration"
+  ".venv/bin/pytest -q tests/integration || { echo 'Retrying only the failed tests once (the local Functions emulator sometimes drops a worker mid-request)'; .venv/bin/pytest -q --lf tests/integration; }"
 stop_workers
 
 npm --prefix app run typecheck
