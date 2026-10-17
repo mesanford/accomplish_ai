@@ -7,7 +7,7 @@ from datetime import UTC, date, datetime
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 
-from fb import db, fail, require_access, troop
+from fb import db, fail, kind_blocker, require_access, troop
 from handlers.activity_log import event_log_id
 from handlers.attendance import attendance_effects, mark_ready
 from handlers.paths import feasibility_doc, needs_recheck, path_from_doc, scout_from_docs
@@ -87,6 +87,10 @@ def on_attendance_written(event: Written) -> None:
         return
     event_doc = t.collection("events").document(event_id).get().to_dict() or {}
     member_doc = t.collection("members").document(member_id).get().to_dict() or {}
+    consent_doc = t.collection("consents").document(member_id).get().to_dict()
+    if kind_blocker(member_doc, consent_doc, "activity"):  # no credit or progress while consent is awaited
+        log_ref.delete()
+        return
     effects = attendance_effects(event_id, event_doc, {**member_doc, "id": member_id}, bool(after.get("present")))
     # Idempotent: the credit has a fixed id, is rewritten only when it differs, and goes when the Scout is not present.
     existing = log_ref.get().to_dict()

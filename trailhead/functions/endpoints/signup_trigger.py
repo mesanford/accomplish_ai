@@ -12,7 +12,7 @@ from firebase_functions import firestore_fn, https_fn
 from endpoints.advancement import Written, _before_after
 from endpoints.signup_core import Code, read_all, refs, write_promotions
 from endpoints.signup_mail import send_promoted
-from fb import db, fail, require_leader, troop
+from fb import db, fail, is_held, require_leader, troop
 from handlers import signups as rules
 
 log = logging.getLogger(__name__)
@@ -78,7 +78,7 @@ def import_rsvps(req: https_fn.CallableRequest) -> dict:
         added = 0
         for member_id in sorted(rsvps):
             member = members[member_id]
-            if member_id in signups or not member:
+            if member_id in signups or not member or is_held(member):
                 continue
             if config["audience"] == ("adults" if member.get("kind") == "scout" else "scouts"):
                 continue

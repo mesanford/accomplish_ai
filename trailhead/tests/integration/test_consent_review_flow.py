@@ -104,21 +104,59 @@ def test_only_a_parent_can_agree():
     assert call("review_consent_notice", "stranger", AGREE).status_code == 403
 
 
-def test_a_leader_reminds_parents_once_a_week_and_never_the_scouts():
+NOTE = "even though you turned off notification emails"
+
+
+def test_a_leader_reminds_parents_once_a_week_never_the_scouts_and_opted_out_parents_still_get_it():
     result = ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))
-    assert result["sent"] == 1 and result["optedOut"] == 1 and result["recentlyReminded"] == 0
-    [mail] = outbox("consent_review_reminder")
-    assert mail["to"] == email_of("mom")  # dad is up to date, quiet turned email off
-    assert mail["subject"] == "Forthright's notice for Ava and Ben changed" and "Jones" not in mail["text"]
-    assert read(f"{T}/consentReminders/mom")["version"] == CONSENT_NOTICE_VERSION
+    assert result["sent"] == 2 and result["recentlyReminded"] == 0
+    mails = {m["to"]: m for m in outbox("consent_review_reminder")}
+    assert set(mails) == {email_of("mom"), email_of("quiet")}  # dad is up to date; the Scouts are never emailed
+    assert mails[email_of("mom")]["subject"] == "Forthright's notice for Ava and Ben changed"
+    assert "Jones" not in mails[email_of("mom")]["text"]
+    assert NOTE not in mails[email_of("mom")]["text"]
+    assert NOTE in mails[email_of("quiet")]["text"]  # turned off notification emails: told why they still got this
+    record = read(f"{T}/consentReminders/mom")
+    assert record["version"] == CONSENT_NOTICE_VERSION and record["count"] == 1
 
     again = ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))
-    assert again["sent"] == 0 and again["recentlyReminded"] == 1
-    assert len(outbox("consent_review_reminder")) == 1
-
-    owner.set(f"{T}/consentReminders/mom", {"at": datetime.now(UTC) - timedelta(days=8), "version": OLD})
-    assert ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))["sent"] == 1
+    assert again["sent"] == 0 and again["recentlyReminded"] == 2
     assert len(outbox("consent_review_reminder")) == 2
+
+    back = {
+        "version": CONSENT_NOTICE_VERSION,
+        "count": 1,
+        "firstAt": LONG_AGO,
+        "lastAt": datetime.now(UTC) - timedelta(days=8),
+    }
+    owner.set(f"{T}/consentReminders/mom", back)
+    assert ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))["sent"] == 1
+    assert read(f"{T}/consentReminders/mom")["count"] == 2
+
+
+def test_no_more_than_four_emails_per_notice_version():
+    full = {"version": CONSENT_NOTICE_VERSION, "count": 4, "firstAt": LONG_AGO, "lastAt": LONG_AGO}
+    owner.set(f"{T}/consentReminders/mom", full)
+    owner.set(f"{T}/consentReminders/quiet", full)
+    assert ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))["sent"] == 0
+    owner.set(f"{T}/consentReminders/mom", {**full, "version": OLD})  # counted for an older version: starts again
+    assert ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))["sent"] == 1
+
+
+def test_the_daily_job_emails_out_of_date_parents_by_itself_and_not_twice():
+    os.environ.setdefault("FUNCTIONS_EMULATOR", "true")
+    os.environ.setdefault("GCLOUD_PROJECT", "demo-trailhead")
+    from endpoints.consent_notices import run_notices
+
+    now = datetime.now(UTC)
+    first = run_notices(now)
+    assert first["reviewEmails"] == 2 and len(outbox("consent_review_reminder")) == 2
+    assert run_notices(now + timedelta(hours=3))["reviewEmails"] == 0  # idempotent within the week
+    for week in (1, 2, 3, 4, 5):
+        run_notices(now + timedelta(days=7 * week))
+    assert len(outbox("consent_review_reminder")) == 8  # two parents, four emails each, then it stops
+    ok(call("review_consent_notice", "mom", AGREE))
+    assert run_notices(now + timedelta(days=60))["reviewEmails"] == 0  # an answer, or the cap, ends it
 
 
 def test_nobody_is_reminded_once_they_have_agreed_and_only_leaders_can_send():

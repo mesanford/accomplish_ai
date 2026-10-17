@@ -15,7 +15,7 @@ from firebase_admin import firestore
 from firebase_functions import options, scheduler_fn
 
 from endpoints.equipment_erase import equipment
-from endpoints.retention_rules import Budget, announcements, leads, ledger, scouts, threads, usage
+from endpoints.retention_rules import Budget, announcements, consent_requests, leads, ledger, scouts, threads, usage
 from endpoints.retention_troop import close_books, retire_troop
 from fb import db, troop
 from handlers.retention import dry_run, today_local, troop_due, troop_last_active
@@ -32,6 +32,7 @@ RULES = {
     "usage": usage,
     "ledger": ledger,
     "equipment": equipment,
+    "consentRequests": consent_requests,
 }
 
 
@@ -63,6 +64,7 @@ def run_retention(today: date, troop_dry_run: bool, budget: Budget | None = None
         "usage": 0,
         "ledger": 0,
         "equipment": 0,
+        "consentRequests": 0,
     }
     troops = [(s.id, s.to_dict() or {}) for s in db().collection("troops").stream()]  # read once; no long stream
     for troop_id, troop_doc in troops:

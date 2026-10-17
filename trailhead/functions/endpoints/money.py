@@ -13,7 +13,7 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import db, fail, require_access, troop
+from fb import db, fail, kind_blocker, require_access, troop
 from handlers.account_settings import settings_of
 from handlers.ledger import MAX_SCOUTS, account_doc, compute_account
 from handlers.membership import InvalidInput
@@ -98,6 +98,14 @@ def post(
         settings = settings_of(t.get(transaction=tx).to_dict())
         entries = {a: entries_for(tx, a) for a in dict.fromkeys(account_ids)}
         new = build(tx, settings, entries)
+        if (
+            created_by
+        ):  # a person is posting (not Stripe or the nightly job): no new entries for a Scout awaiting consent
+            for account_id in dict.fromkeys(e["scoutId"] for e in new):
+                member = t.collection("members").document(account_id).get(transaction=tx).to_dict()
+                consent = t.collection("consents").document(account_id).get(transaction=tx).to_dict()
+                if reason := kind_blocker(member, consent, "accounts"):
+                    raise InvalidInput(reason)
         for e in new:
             if e["scoutId"] not in entries:
                 entries[e["scoutId"]] = entries_for(tx, e["scoutId"])

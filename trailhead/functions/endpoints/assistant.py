@@ -10,7 +10,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.advancement import _scout_record
-from fb import db, fail, require_access, troop
+from fb import db, fail, require_access, require_not_held, troop
 from handlers.assistant import (
     DAILY_DRAFT_LIMIT,
     TROOP_MONTHLY_DRAFT_LIMIT,
@@ -88,6 +88,7 @@ def draft_path(req: https_fn.CallableRequest) -> dict:
     data = req.data or {}
     troop_id, scout_id, goal_id = data.get("troopId"), data.get("scoutId"), data.get("goalAwardId")
     require_access(req, troop_id, scout_id=scout_id)
+    require_not_held(troop(troop_id), [scout_id])  # nothing about a Scout goes to the AI before a parent agrees
     catalog = load_catalog()
     if goal_id not in catalog.ranks or catalog.ranks[goal_id].order == 0:
         raise fail(Code.INVALID_ARGUMENT, "Choose a rank as the goal.")

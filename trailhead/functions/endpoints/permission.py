@@ -9,7 +9,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.signup_core import Code, args, bad, read_all, refs
-from fb import db, fail, require_access, troop
+from fb import db, fail, refuse_if_blocked, require_access, require_not_held, troop
 from handlers import signups as rules
 from handlers.roles import acts_for
 from handlers.signups import PENDING, SignupError
@@ -30,6 +30,9 @@ def approve_permission(req: https_fn.CallableRequest) -> dict:
     if "parent" not in access.get("roles", []) or not acts_for(access, member_id):
         raise fail(Code.PERMISSION_DENIED, "Only a parent of this Scout can give permission.")
     t = troop(troop_id)
+    require_not_held(t, [member_id])
+    if str(data.get("healthNote") or "").strip():
+        refuse_if_blocked(t, member_id, "health")
     r = refs(t, event_id)
     name = (t.collection("members").document(access["memberId"]).get().to_dict() or {}).get("displayName", "")
     signer, now = {"memberId": access["memberId"], "name": name}, datetime.now(UTC)

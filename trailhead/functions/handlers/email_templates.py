@@ -145,17 +145,73 @@ def consent_confirmation(scouts: list[str], troop: str, when: str, version: str,
     return Email(f"You agreed to Forthright's notice for {names}", text, html)
 
 
-def consent_review_reminder(scouts: list[str], troop: str, troop_id: str, app_url: str) -> Email:
-    """Asks a parent who agreed to an older notice to read the current one. Sent only when a leader asks."""
+def opt_out_note(names: str) -> str:
+    return (
+        "You're getting this even though you turned off notification emails, because it's about your consent for "
+        f"{names}'s information."
+    )
+
+
+def _consent_mail(
+    subject: str, lines: list[str], button: tuple[str, str], app_url: str, names: str, opted_out: bool
+) -> Email:
+    """Emails about a parent's consent. They go out whatever the parent's notification choice, so the footer says so
+    instead of offering an opt-out; a parent who turned notifications off is told why they still got this."""
+    privacy = f"{app_url}/privacy"
+    note = [opt_out_note(names)] if opted_out else []
+    footer = [
+        *note,
+        "We send emails about your consent whatever your notification choice, so there is a record of what you were "
+        "asked. If you didn't expect this, you can ignore it; nothing is agreed unless you agree.",
+    ]
+    text = "\n\n".join([*lines, *note, f"{button[0]}: {button[1]}", f"Privacy policy: {privacy}", footer[-1]])
+    html = _page([escape(line) for line in [*lines, *note]], button, [escape(footer[-1])])
+    return Email(subject, text, html)
+
+
+def consent_review_reminder(
+    scouts: list[str], troop: str, troop_id: str, app_url: str, opted_out: bool = False
+) -> Email:
+    """Asks a parent who agreed to an older notice to read the current one (daily job, or a leader asks)."""
     names = join_names(scouts)
-    return _notification(
+    return _consent_mail(
         f"Forthright's notice for {names} changed",
         [
             f"{troop} uses Forthright, and the notice to parents and guardians for {names} has changed since you "
             "agreed to it.",
-            "Please read what changed and tell us if you agree. You can keep using Forthright either way. "
-            "If you don't agree, you can withdraw your consent from your Scout's page.",
+            "Please read what changed and tell us if you agree. You can keep using Forthright either way. Until you "
+            "agree, the troop can't add the new kinds of information the notice now covers for "
+            f"{names}. If you don't agree, you can withdraw your consent from your Scout's page.",
         ],
         ("Review the notice", f"{app_url}/t/{troop_id}"),
         app_url,
+        names,
+        opted_out,
+    )
+
+
+def consent_request(
+    scout: str, parent: str, troop: str, link: str, app_url: str, reminder: bool = False, opted_out: bool = False
+) -> Email:
+    """Sent straight to a parent: the troop wants to keep their Scout's records and needs this parent to agree."""
+    subject = f"{troop} needs your permission for {scout} on Forthright"
+    if reminder:
+        subject = f"Reminder: {subject}"
+    return _consent_mail(
+        subject,
+        [
+            f"Hello {parent},",
+            f"{troop} uses Forthright, run by MM Sanford, to track advancement. {scout} is under 13, so only a "
+            "parent or guardian can give permission. Until a parent agrees, the troop keeps nothing about "
+            f"{scout} in Forthright except {scout}'s name and birth month and year.",
+            "If you agree, the troop will keep their name, birth month and year, rank and advancement, sign-offs, "
+            "blue cards, plans, patrol, activity, gear they borrow, event sign-ups and attendance, health notes you "
+            "add, Scout account entries and troop messages. Open the link to sign in with this email address, read "
+            "the full notice, and agree or decline.",
+            f"If nobody answers within 30 days, the troop deletes {scout} and your contact details from Forthright.",
+        ],
+        ("Read the notice and answer", link),
+        app_url,
+        scout,
+        opted_out,
     )

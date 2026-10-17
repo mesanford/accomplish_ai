@@ -18,3 +18,26 @@ export const CONSENT_CHANGELOG: Record<string, string[]> = {
     'Equipment: we keep a record of the troop gear your Scout borrows.',
   ],
 };
+
+/**
+ * The notice version that first covered each kind of Scout data. Until a parent has agreed to that version or a
+ * later one, the troop can't add NEW data of that kind for the Scout (what is already stored stays). Keep equal to
+ * DATA_KINDS in functions/handlers/consent_kinds.py (a test checks they match).
+ */
+export const DATA_KINDS_ADDED: Record<string, string> = {
+  accounts: '2026-10-16.1',
+  health: '2026-10-16.1',
+  patrols: '2026-10-17.1',
+  activity: '2026-10-17.1',
+  equipment: '2026-10-17.1',
+};
+
+export const DATA_KIND_WORDS: Record<string, string> = {
+  accounts: 'Scout account entries',
+  health: 'health notes',
+  patrols: 'patrol assignments',
+  activity: 'activity log entries',
+  equipment: 'equipment loans',
+};
+
+export const UPDATED_REASON = 'Waiting for a parent to agree to the updated notice.';

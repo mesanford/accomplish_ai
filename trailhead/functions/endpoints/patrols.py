@@ -10,7 +10,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.erase import commit, delete_op, update_op
-from fb import fail, require_leader, troop
+from fb import fail, refuse_if_blocked, require_leader, troop
 from handlers.membership import InvalidInput
 from handlers.patrols import MAX_PATROLS, check_officers, name_taken, parse_patrol, plan_assign, plan_delete
 
@@ -87,6 +87,11 @@ def assign_patrol(req: https_fn.CallableRequest) -> dict:
     ids = data.get("scoutIds")
     if not isinstance(ids, list) or not all(isinstance(i, str) for i in ids):
         raise fail(Code.INVALID_ARGUMENT, "Choose at least one Scout.")
+    if data.get("patrolId"):
+        for scout_id in dict.fromkeys(ids):
+            refuse_if_blocked(
+                t, scout_id, "patrols"
+            )  # taking a Scout out of a patrol collects nothing, so only adding is blocked
     try:
         plan = plan_assign(ids, data.get("patrolId"), _docs(t.collection("members")), _docs(t.collection("patrols")))
     except InvalidInput as err:

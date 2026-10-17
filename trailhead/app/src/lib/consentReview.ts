@@ -1,5 +1,5 @@
 import { CONSENT_NOTICE_VERSION } from './consent';
-import { CONSENT_CHANGELOG } from './consentChangelog';
+import { CONSENT_CHANGELOG, DATA_KINDS_ADDED } from './consentChangelog';
 import type { ConsentDoc, Member } from './types';
 
 /** Sort key for versions like "2026-10-17.1": the date, then the number of that day's change. Missing sorts first. */
@@ -73,6 +73,24 @@ export function changesSince(version?: string, current = CONSENT_NOTICE_VERSION)
     .filter((v) => compareVersions(v, version) > 0 && compareVersions(v, current) <= 0)
     .sort(compareVersions)
     .flatMap((v) => CONSENT_CHANGELOG[v]);
+}
+
+/** The newest notice version any parent agreed to for the Scout, or undefined if none has. */
+export function latestParentVersion(doc: ConsentDoc | null | undefined): string | undefined {
+  const versions = (doc?.parentConsents ?? []).filter((e) => e.memberId).map((e) => e.version);
+  return versions.length === 0 ? undefined : versions.reduce((a, b) => (compareVersions(b, a) > 0 ? b : a));
+}
+
+/** Kinds of data that must wait for this Scout: those added after the notice their parents last agreed to. */
+export function blockedKinds(doc: ConsentDoc | null | undefined): string[] {
+  if (!(doc?.parentConsents ?? []).some((e) => e.memberId)) {
+    return [];
+  }
+  const latest = latestParentVersion(doc);
+  return Object.entries(DATA_KINDS_ADDED)
+    .filter(([, added]) => isOlder(latest, added))
+    .map(([kind]) => kind)
+    .sort();
 }
 
 /** The oldest of these versions, so a parent's card lists everything they have not seen. */

@@ -10,6 +10,7 @@ from firebase_admin import firestore, initialize_app
 from firebase_functions import https_fn, options
 
 from handlers.account import BADGE_MANAGER_ROLES, LEADER_ROLES
+from handlers.consent_kinds import HOLD_MESSAGE, is_held, kind_blocker
 from handlers.roles import acts_for
 
 initialize_app()
@@ -83,3 +84,26 @@ def require_badge_manager(req: https_fn.CallableRequest, troop_id: str | None) -
             "Only the Scoutmaster or advancement chair can change merit badge records.",
         )
     return access
+
+
+def refuse_if_held(member: dict | None) -> None:
+    """Stop any write of Scout data for a Scout who is waiting for parent consent."""
+    if is_held(member):
+        raise fail(https_fn.FunctionsErrorCode.FAILED_PRECONDITION, HOLD_MESSAGE)
+
+
+def refuse_if_blocked(t, scout_id: str, kind: str) -> None:
+    """Stop a write of one kind of Scout data (accounts, health, patrols, activity, equipment) that must wait."""
+    member = t.collection("members").document(scout_id).get().to_dict()
+    if not member or member.get("kind") != "scout":
+        return
+    consent = t.collection("consents").document(scout_id).get().to_dict()
+    reason = kind_blocker(member, consent, kind)
+    if reason:
+        raise fail(https_fn.FunctionsErrorCode.FAILED_PRECONDITION, reason)
+
+
+def require_not_held(t, scout_ids) -> None:
+    """Refuse if any of these Scouts is waiting for parent consent. `t` is the troop reference."""
+    for scout_id in dict.fromkeys(s for s in scout_ids if isinstance(s, str) and s):
+        refuse_if_held(t.collection("members").document(scout_id).get().to_dict())

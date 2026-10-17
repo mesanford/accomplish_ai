@@ -26,6 +26,8 @@ def stage_parent_consent(write, t, scout_ids: list[str], entry: dict) -> None:
     """Add a parent's consent to each Scout's record. `write` is a transaction or a batch."""
     for scout_id in scout_ids:
         write.set(consent_ref(t, scout_id), {"parentConsents": firestore.ArrayUnion([entry])}, merge=True)
+        # A parent agreeing lifts the hold on a Scout who was waiting for a first consent.
+        write.set(t.collection("members").document(scout_id), {"consentHold": firestore.DELETE_FIELD}, merge=True)
 
 
 def stage_leader_confirmation(write, t, scout_id: str, entry: dict) -> None:
@@ -68,11 +70,16 @@ def invite_notice(req: https_fn.CallableRequest) -> dict:
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     member = t.collection("access").document(uid).get().exists
-    return {
+    notice = {
         "troopName": (t.get().to_dict() or {}).get("name", "Your troop"),
         "role": invite["role"],
         "alreadyMember": member,
     }
+    if invite.get("requestScoutId"):  # an email request for a Scout: the parent can agree or decline
+        scout = t.collection("members").document(invite["requestScoutId"]).get().to_dict() or {}
+        notice["scoutFirstName"] = tpl.first_name(scout.get("displayName"))
+        notice["emailLocked"] = bool(invite.get("emailLock"))
+    return notice
 
 
 @https_fn.on_call()

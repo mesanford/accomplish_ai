@@ -7,7 +7,7 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import fail, require_access, troop
+from fb import HOLD_MESSAGE, fail, is_held, require_access, troop
 from handlers.messaging import participant_uids, pending_links, people_from_members
 from trailhead_core import YPTViolation, plan_delivery
 
@@ -43,6 +43,8 @@ def send_message(req: https_fn.CallableRequest) -> dict:
     people = people_from_members(members, pending)
     if sender_id not in people or any(r not in people for r in recipient_ids):
         raise fail(BAD, "One of the recipients isn't in this troop.")
+    if any(is_held(members.get(r)) for r in recipient_ids):
+        raise fail(BAD, HOLD_MESSAGE)
     second_adults = (t.get().to_dict() or {}).get("yptCopyMemberIds", [])
     try:
         delivery = plan_delivery(

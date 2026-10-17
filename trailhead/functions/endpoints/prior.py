@@ -7,7 +7,7 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import can_manage_badges, db, fail, require_leader, troop
+from fb import can_manage_badges, db, fail, require_leader, require_not_held, troop
 from handlers.membership import InvalidInput
 from handlers.prior import check_prior, completed_doc, keep_existing, partial_doc
 from trailhead_core.catalog import badge_version, load_catalog
@@ -31,6 +31,7 @@ def record_prior_advancement(req: https_fn.CallableRequest) -> dict:
             "Only the Scoutmaster or advancement chair can record merit badges. Leaders can still record ranks.",
         )
     t = troop(troop_id)
+    require_not_held(t, [scout_id])
     record_ref = t.collection("scoutRecords").document(scout_id or "-")
     record = record_ref.get().to_dict()
     if record is None:

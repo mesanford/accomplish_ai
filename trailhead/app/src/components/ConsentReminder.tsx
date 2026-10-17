@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { errorMessage, type ReminderResult, sendConsentReminders } from '../lib/api';
+import { UPDATED_REASON } from '../lib/consentChangelog';
 import { joinList } from '../lib/formCheck';
 import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
@@ -10,10 +11,7 @@ import { Notice } from './ui';
 export function reminderMessage(r: ReminderResult): string {
   const parts = [r.sent === 0 ? 'No reminders were sent.' : `Sent ${r.sent} ${r.sent === 1 ? 'reminder' : 'reminders'}.`];
   if (r.recentlyReminded > 0) {
-    parts.push(`${r.recentlyReminded} already got one in the last 7 days.`);
-  }
-  if (r.optedOut > 0) {
-    parts.push(`${r.optedOut} turned off email.`);
+    parts.push(`${r.recentlyReminded} already got one in the last 7 days, or all four.`);
   }
   if (r.noAddress > 0) {
     parts.push(`${r.noAddress} have no email address on file.`);
@@ -52,7 +50,9 @@ export function ConsentReminder({ stale, scouts }: { stale: Map<string, string[]
       {waiting.length > 0 ? (
         <p>
           The parent notice changed. {plural(waiting.length, 'Scout has', 'Scouts have')} a parent who hasn't reviewed it:{' '}
-          {joinList(waiting.map((s) => s.displayName))}. They can keep using Forthright until they answer.
+          {joinList(waiting.map((s) => s.displayName))}. {UPDATED_REASON} New entries of the kinds the update added are
+          paused for these Scouts; what is already stored stays. Forthright emails these parents on its own, then once a
+          week, up to four times. The parents can keep using Forthright until they answer.
         </p>
       ) : null}
       <div className="row">

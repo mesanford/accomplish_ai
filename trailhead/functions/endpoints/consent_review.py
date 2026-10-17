@@ -9,7 +9,6 @@ import logging
 from collections import defaultdict
 from datetime import UTC, datetime
 
-from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.consent import consent_ref, send_consent_confirmation, stage_parent_consent
@@ -18,7 +17,7 @@ from fb import db, fail, require_access, require_leader
 from fb import troop as troop_ref
 from handlers import email_templates as tpl
 from handlers.consent import CONSENT_NOTICE_VERSION, check_parent_consent, parent_consent_entry
-from handlers.consent_review import MAX_REMINDERS, out_of_date_parents, reminder_due
+from handlers.consent_review import MAX_REMINDERS, next_reminder_record, out_of_date_parents, reminder_due
 from handlers.email_recipients import parent_uids, wants_email
 from handlers.membership import InvalidInput
 from handlers.roles import acts_for
@@ -75,37 +74,40 @@ def waiting_parents(t) -> dict[str, list[str]]:
     return dict(sorted(waiting.items()))
 
 
-@https_fn.on_call(secrets=["RESEND_API_KEY"])
-def send_consent_reminders(req: https_fn.CallableRequest) -> dict:
-    """A leader emails each parent who has not reviewed the current notice. Parents only, never Scouts.
-
-    Skips parents who turned notifications off, and anyone reminded in the last 7 days.
-    """
-    troop_id = req.data.get("troopId") if isinstance(req.data, dict) else None
-    require_leader(req, troop_id)
-    t, now = troop_ref(troop_id), datetime.now(UTC)
+def remind_parents(t, troop_id: str, now: datetime, cap: int = MAX_REMINDERS) -> dict:
+    """Email each parent who has not reviewed the current notice, on the schedule: at once, then every 7 days, at most
+    four per notice version. Sent whatever the parent's notification choice (with a note if they turned it off).
+    The leader's button and the daily job both run this, so they share the limits."""
     waiting = waiting_parents(t)
     troop_name = (t.get().to_dict() or {}).get("name", "Your troop")
-    result = {"sent": 0, "recentlyReminded": 0, "optedOut": 0, "noAddress": 0, "remaining": 0}
+    result = {"sent": 0, "recentlyReminded": 0, "noAddress": 0, "remaining": 0}
     for position, (uid, names) in enumerate(waiting.items()):
-        if position >= MAX_REMINDERS:
-            result["remaining"] = len(waiting) - MAX_REMINDERS
+        if position >= cap:
+            result["remaining"] = len(waiting) - cap
             break
-        if not wants_email(db().collection("users").document(uid).get().to_dict()):
-            result["optedOut"] += 1
-            continue
         reminder = t.collection("consentReminders").document(uid)
-        last = (reminder.get().to_dict() or {}).get("at")
-        if not reminder_due(last, now):
+        record = reminder.get().to_dict()
+        if not reminder_due(record, CONSENT_NOTICE_VERSION, now):
             result["recentlyReminded"] += 1
             continue
         address = address_of(uid)
         if not address:
             result["noAddress"] += 1
             continue
-        email = tpl.consent_review_reminder(names, troop_name, troop_id, app_url())
+        off = not wants_email(db().collection("users").document(uid).get().to_dict())
+        email = tpl.consent_review_reminder(names, troop_name, troop_id, app_url(), opted_out=off)
         if send_all("consent_review_reminder", [address], email):
-            reminder.set({"at": firestore.SERVER_TIMESTAMP, "version": CONSENT_NOTICE_VERSION})
+            reminder.set(next_reminder_record(record, CONSENT_NOTICE_VERSION, now))
             result["sent"] += 1
+    return result
+
+
+@https_fn.on_call(secrets=["RESEND_API_KEY"])
+def send_consent_reminders(req: https_fn.CallableRequest) -> dict:
+    """A leader emails the parents who have not reviewed the current notice. Parents only, never Scouts. The daily job
+    does this by itself; this button sends sooner, within the same limits (one email a week, four per version)."""
+    troop_id = req.data.get("troopId") if isinstance(req.data, dict) else None
+    require_leader(req, troop_id)
+    result = remind_parents(troop_ref(troop_id), troop_id, datetime.now(UTC))
     log.info("consent reminders troop=%s %s", troop_id, result)
     return result

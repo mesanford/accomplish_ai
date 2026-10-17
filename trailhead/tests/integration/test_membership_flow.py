@@ -1,6 +1,7 @@
 """End-to-end: a leader creates a troop, adds a Scout, invites a parent, and the parent joins."""
 
 import os
+from datetime import date
 
 import pytest
 
@@ -36,8 +37,11 @@ AGREE = {"consent": True, "consentVersion": NOTICE}
 
 def new_scout(tid: str, caller: str, name: str, year: int) -> str:
     form = {"troopId": tid, "displayName": name, "birthYear": year, "birthMonth": 3, "currentRankId": "first-class"}
-    # Leaders confirm permission for Scouts who may be under 13; parents agree to the notice.
-    form |= {"leaderConfirmed": True, "consent": True, "consentVersion": NOTICE}
+    # A Scout under 13 needs a parent to consent by email: the leader gives a parent's name and email (the Scout then
+    # waits, and the test's parent agrees through an invite). Parents adding their own child agree to the notice.
+    form |= {"consent": True, "consentVersion": NOTICE}
+    if caller == "lead" and year >= date.today().year - 13:
+        form["parents"] = [{"name": "Pat Parent", "email": f"{name.split()[0].lower()}.parent@example.test"}]
     return ok(call("add_scout", caller, form))["scoutId"]
 
 
@@ -164,16 +168,18 @@ def test_invite_notice_names_the_troop_and_role():
     assert call("invite_notice", "mom", {"troopId": tid, "code": "nope"}).status_code == 400
 
 
-def test_leader_confirms_permission_for_a_scout_who_may_be_under_13():
+def test_a_leader_cannot_confirm_permission_for_a_new_scout_under_13():
     tid = new_troop("15")
     form = {"troopId": tid, "displayName": "Ava", "birthYear": 2015, "birthMonth": 3, "currentRankId": "scout"}
     assert call("add_scout", "lead", form).status_code == 400
-    assert call("add_scout", "lead", {**form, "leaderConfirmed": False}).status_code == 400
-    sid = ok(call("add_scout", "lead", {**form, "leaderConfirmed": True}))["scoutId"]
-    confirmation = read(f"troops/{tid}/consents/{sid}")["leaderConfirmation"]
-    assert confirmation["uid"] == "lead"
-    assert confirmation["at"]
-    # A Scout who is 13 or older needs no confirmation, and none is recorded.
+    assert call("add_scout", "lead", {**form, "leaderConfirmed": True}).status_code == 400  # no longer an option
+    assert call("add_scout", "lead", {**form, "parents": [{"name": "Pat", "email": "not an email"}]}).status_code == 400
+    # A parent's name and email is what a leader gives; the Scout then waits. No leader confirmation is recorded.
+    parents = [{"name": "Pat Parent", "email": "pat@example.test"}]
+    sid = ok(call("add_scout", "lead", {**form, "parents": parents}))["scoutId"]
+    assert read(f"troops/{tid}/members/{sid}")["consentHold"] is True
+    assert "leaderConfirmation" not in (read(f"troops/{tid}/consents/{sid}") or {})
+    # A Scout who is 13 or older needs no parent email, and none is recorded.
     older = ok(call("add_scout", "lead", {**form, "displayName": "Max", "birthYear": 2010}))["scoutId"]
     assert read(f"troops/{tid}/consents/{older}") is None
 

@@ -1,9 +1,10 @@
 import { collection } from 'firebase/firestore';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { AdultRow } from '../components/AdultRow';
 import { ConsentReminder } from '../components/ConsentReminder';
+import { ConsentRequestPanel } from '../components/ConsentRequestPanel';
 import { InviteForm } from '../components/InviteForm';
 import { ScoutQuartermaster } from '../components/ScoutQuartermaster';
 import { GuideBlock } from '../components/GuideBlock';
@@ -11,16 +12,18 @@ import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { ColorSwatch } from '../components/patrols/PatrolCard';
 import { Empty, Notice, PageHeader } from '../components/ui';
+import { syncConsentHolds } from '../lib/api';
 import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
 import { consentSummary } from '../lib/consent';
-import { staleByScout } from '../lib/consentReview';
+import { UPDATED_REASON } from '../lib/consentChangelog';
+import { blockedKinds, staleByScout } from '../lib/consentReview';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
 import { usePatrols } from '../lib/patrolHooks';
 import { filterByPatrol, NO_PATROL, officeOf } from '../lib/patrols';
 import { useTroop } from '../lib/troop';
-import type { Access, ConsentDoc, Member, ScoutRecord } from '../lib/types';
+import type { Access, ConsentDoc, ConsentRequest, Member, ScoutRecord } from '../lib/types';
 
 export function Roster() {
   const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
@@ -29,6 +32,14 @@ export function Roster() {
   const patrols = usePatrols().data;
   const consentsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/consents`) : null), [isLeader, troopId]);
   const consents = useQuery<ConsentDoc>(consentsQuery, `${troopId}/consents/${isLeader}`);
+  const requestsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/consentRequests`) : null), [isLeader, troopId]);
+  const requests = useQuery<ConsentRequest>(requestsQuery, `${troopId}/consentRequests/${isLeader}`);
+  useEffect(() => {
+    // Mark Scouts who only a parent can consent for (older Scouts with just a leader's confirmation too).
+    if (isLeader) {
+      syncConsentHolds(troopId).catch(() => undefined);
+    }
+  }, [isLeader, troopId]);
   const recordsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/scoutRecords`) : null), [isLeader, troopId]);
   const records = useQuery<ScoutRecord & { id: string }>(recordsQuery, `${troopId}/scoutRecords/${isLeader}`);
   const accessQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/access`) : null), [isLeader, troopId]);
@@ -114,6 +125,18 @@ export function Roster() {
           <ul className="list">
             {shownScouts.map((s) => {
               const consent = consentOf(s);
+              if (s.consentHold) {
+                // A Scout waiting for a parent shows only a name and the waiting status.
+                return (
+                  <li key={s.id}>
+                    <span>
+                      <Link to={`/t/${troopId}/scouts/${s.id}`}>{s.displayName}</Link>
+                    </span>
+                    <ConsentRequestPanel scout={s} request={requests.data.find((r) => r.id === s.id)} />
+                  </li>
+                );
+              }
+              const paused = blockedKinds(consents.data.find((c) => c.id === s.id)).length > 0;
               return (
                 <li key={s.id}>
                   <span>
@@ -129,7 +152,9 @@ export function Roster() {
                   </span>
                   <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>
-                  {stale.has(s.id) ? <span className="pill warn">Parent hasn't reviewed the new notice</span> : null}
+                  {stale.has(s.id) ? (
+                    <span className="pill warn">{paused ? UPDATED_REASON : "Parent hasn't reviewed the new notice"}</span>
+                  ) : null}
                   <ScoutQuartermaster scout={s} />
                 </li>
               );

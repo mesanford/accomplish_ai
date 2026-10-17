@@ -6,7 +6,7 @@ from datetime import UTC, date, datetime
 
 from firebase_functions import https_fn
 
-from fb import db, fail, require_badge_manager, troop
+from fb import db, fail, require_badge_manager, require_not_held, troop
 from handlers.membership import InvalidInput
 from handlers.paper_cards import already_started, card_doc, check_paper_card, progress_doc, signoff_doc
 from trailhead_core.catalog import badge_version, load_catalog
@@ -22,6 +22,7 @@ def record_paper_blue_card(req: https_fn.CallableRequest) -> dict:
     troop_id, scout_id = data.get("troopId"), data.get("scoutId")
     access = require_badge_manager(req, troop_id)
     t = troop(troop_id)
+    require_not_held(t, [scout_id])
     record = t.collection("scoutRecords").document(scout_id or "-").get().to_dict()
     if record is None:
         raise fail(https_fn.FunctionsErrorCode.NOT_FOUND, "That Scout isn't on the roster.")

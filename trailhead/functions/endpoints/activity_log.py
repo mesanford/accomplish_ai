@@ -14,7 +14,7 @@ from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 
 from endpoints.erase import commit, delete_op
-from fb import db, fail, is_leader, require_access, require_leader, troop
+from fb import db, fail, is_leader, kind_blocker, refuse_if_blocked, require_access, require_leader, troop
 from handlers.activity_log import (
     MAX_PENDING,
     credit_inputs_changed,
@@ -47,7 +47,16 @@ def on_event_written_activity_log(event: firestore_fn.Event[firestore_fn.Change[
     members = {
         d.id: d.to_dict() or {} for d in db().get_all([t.collection("members").document(m) for m in marked]) if d.exists
     }
-    present = {m for m in marked if members.get(m, {}).get("kind") == "scout"}
+    consents = {
+        d.id: d.to_dict() or {}
+        for d in db().get_all([t.collection("consents").document(m) for m in marked])
+        if d.exists
+    }
+    present = {
+        m
+        for m in marked
+        if members.get(m, {}).get("kind") == "scout" and not kind_blocker(members[m], consents.get(m), "activity")
+    }
     existing = {d.id: d.to_dict() for d in t.collection("logs").where("eventId", "==", event_id).stream()}
     plan = plan_event_logs(event_id, after, present, existing)
     batch = db().batch()
@@ -64,6 +73,7 @@ def _scout(t, scout_id) -> dict:
     member = t.collection("members").document(str(scout_id or "-")).get().to_dict()
     if member is None or member.get("kind") != "scout":
         raise fail(Code.NOT_FOUND, "That Scout isn't on the roster.")
+    refuse_if_blocked(t, str(scout_id), "activity")
     return member
 
 

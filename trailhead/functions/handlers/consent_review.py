@@ -6,11 +6,10 @@ the notice version they saw. Entries are only ever added. A parent's latest entr
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from handlers.consent import CONSENT_NOTICE_VERSION
 
-REMINDER_DAYS = 7  # a parent gets at most one reminder this often
 MAX_REMINDERS = 40  # parents emailed by one "send a reminder" click
 
 
@@ -48,5 +47,23 @@ def out_of_date_parents(
     return sorted(m for m in dict.fromkeys(guardian_ids) if m in latest and is_older(latest[m], current))
 
 
-def reminder_due(last_sent: datetime | None, now: datetime) -> bool:
-    return last_sent is None or now - last_sent >= timedelta(days=REMINDER_DAYS)
+def reminder_due(record: dict | None, version: str, now: datetime) -> bool:
+    """May this parent be emailed about the notice change? `record` is consentReminders/{uid}:
+    {version, count, firstAt, lastAt}. The first email goes at once, then one every 7 days, at most four per
+    version; counting starts again when the version changes. The leader's button and the daily job share it."""
+    from handlers.consent_requests import email_due
+
+    if not record or record.get("version") != version:
+        return True
+    return email_due(record.get("count", 0), record.get("lastAt"), now)
+
+
+def next_reminder_record(record: dict | None, version: str, now: datetime) -> dict:
+    """The record to save after one email went out."""
+    same = bool(record) and record.get("version") == version
+    return {
+        "version": version,
+        "count": (record.get("count", 0) if same else 0) + 1,
+        "firstAt": record.get("firstAt", now) if same else now,
+        "lastAt": now,
+    }

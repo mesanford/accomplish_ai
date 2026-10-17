@@ -62,6 +62,19 @@ export interface Member {
   leftAt?: Timestamp | null;
   /** The Scout's patrol (a Scout is in at most one). Written only by the assign_patrol function. */
   patrolId?: string;
+  /** True while a Scout who only a parent can consent for (under 13) is waiting for a parent to agree. Server-only. */
+  consentHold?: boolean;
+}
+
+export type ParentRequestStatus = 'emailed' | 'agreed' | 'declined' | 'noAnswer';
+
+/** troops/{t}/consentRequests/{scoutId}: the parents a leader entered for a Scout. Leaders read it; the server writes it. */
+export interface ConsentRequest {
+  id: string;
+  kind: 'consent' | 'invite';
+  deletesScout: boolean;
+  deleteAfter?: Timestamp;
+  parents: { pid: string; name: string; email: string; status: ParentRequestStatus; sentCount: number; lastSentAt?: Timestamp }[];
 }
 
 /** troops/{t}/consents/{scoutId}: written only by the server. */

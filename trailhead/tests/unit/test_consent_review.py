@@ -59,12 +59,14 @@ def test_nobody_is_listed_without_a_consent_or_after_a_withdrawal():
 
 
 def test_a_reminder_goes_at_most_once_every_seven_days():
-    assert reminder_due(None, NOW)
-    assert not reminder_due(NOW - timedelta(days=6, hours=23), NOW)
-    assert reminder_due(NOW - timedelta(days=7), NOW)
+    version = "2026-10-17.1"
+    assert reminder_due(None, version, NOW)
+    once = {"version": version, "count": 1, "lastAt": NOW - timedelta(days=6, hours=23)}
+    assert not reminder_due(once, version, NOW)
+    assert reminder_due({**once, "lastAt": NOW - timedelta(days=7)}, version, NOW)
 
 
 def test_the_reminder_email_names_only_first_names_and_links_to_the_troop():
     email = consent_review_reminder(["Riley", "Sam"], "Troop 9", "tn", "https://app.example")
     assert email.subject == "Forthright's notice for Riley and Sam changed"
-    assert "https://app.example/t/tn" in email.text and "turn these emails off" in email.text
+    assert "https://app.example/t/tn" in email.text and "even though you turned off" not in email.text
