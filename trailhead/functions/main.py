@@ -16,12 +16,16 @@ from endpoints.advancement import (
 from endpoints.assistant import draft_path
 from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
+from endpoints.event_fees import charge_event_fees
+from endpoints.event_reminders import send_event_reminders
+from endpoints.feeds import calendar_feed, get_calendar_feed, reset_calendar_feed
 from endpoints.leads import delete_lead
 from endpoints.membership import accept_invite, create_invite, create_troop
 from endpoints.messaging import send_message
 from endpoints.notify import on_blue_card_notify
 from endpoints.paper_cards import record_paper_blue_card
 from endpoints.parent_consent import answer_pending_consent, link_self_as_parent
+from endpoints.permission import approve_permission
 from endpoints.pilot import request_pilot
 from endpoints.prior import record_prior_advancement
 from endpoints.recruiting import submit_interest
@@ -30,6 +34,8 @@ from endpoints.retention import apply_retention
 from endpoints.roles import set_member_roles
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
 from endpoints.scouts import add_scout
+from endpoints.signup_trigger import import_rsvps, on_event_written_signups
+from endpoints.signups import cancel_signup, sign_up_for_event
 from endpoints.site import on_event_written_site, publish_site, unpublish_site
 from endpoints.site_about import draft_site_about
 from endpoints.site_consent import set_media_consent
@@ -39,7 +45,11 @@ __all__ = [
     "add_scout",
     "answer_pending_consent",
     "apply_retention",
+    "approve_permission",
     "archive_custom_award",
+    "calendar_feed",
+    "cancel_signup",
+    "charge_event_fees",
     "check_path_preview",
     "create_invite",
     "create_scoutbook_report",
@@ -48,6 +58,8 @@ __all__ = [
     "delete_lead",
     "draft_path",
     "draft_site_about",
+    "get_calendar_feed",
+    "import_rsvps",
     "invite_notice",
     "link_self_as_parent",
     "mark_scout_left",
@@ -55,6 +67,7 @@ __all__ = [
     "on_attendance_written",
     "on_blue_card_notify",
     "on_blue_card_written",
+    "on_event_written_signups",
     "on_event_written_site",
     "on_path_written",
     "on_signoff_created",
@@ -64,12 +77,15 @@ __all__ = [
     "record_prior_advancement",
     "remove_scout",
     "request_pilot",
+    "reset_calendar_feed",
     "save_custom_award",
+    "send_event_reminders",
     "send_message",
     "set_member_roles",
     "set_email_notifications",
     "set_media_consent",
     "set_scoutbook_entered",
+    "sign_up_for_event",
     "submit_interest",
     "unpublish_site",
     "withdraw_parent_consent",

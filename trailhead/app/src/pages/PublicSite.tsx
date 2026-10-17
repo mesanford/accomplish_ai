@@ -82,7 +82,7 @@ export function PublicSite() {
         <div className="site-wrap site-body">
           <About text={site.about} />
           <Meeting meeting={site.meeting} />
-          <Events events={site.events} />
+          <Events events={site.events} slug={site.slug || slug} />
           <Gallery photos={site.gallery} />
           <Faq items={site.faq} />
           <Contacts contacts={site.contacts} />

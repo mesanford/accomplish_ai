@@ -1,6 +1,7 @@
 import { addDoc, collection, orderBy, query } from 'firebase/firestore';
 import { type FormEvent, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FeedLink } from '../components/events/FeedLink';
 import { RequirementPicker } from '../components/RequirementPicker';
 import { RequirementRef } from '../components/RequirementRef';
 import { GuideBlock } from '../components/GuideBlock';
@@ -12,6 +13,7 @@ import { stillNeeded } from '../lib/formCheck';
 import { awardName, BADGES } from '../lib/catalog';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { formatFee, spotsLine } from '../lib/eventSignups';
 import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 import type { TroopEvent } from '../lib/types';
@@ -142,6 +144,7 @@ export function Events() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Events" />
+      <FeedLink />
       {isLeader ? (
         <GuideBlock
           id="events"
@@ -166,11 +169,15 @@ export function Events() {
           {events.data.map((ev) => (
             <li key={ev.id}>
               <div className="stack" style={{ gap: 2 }}>
-                <strong>{ev.title}</strong>
+                <Link to={`/t/${troopId}/events/${ev.id}`}>
+                  <strong>{ev.title}</strong>
+                </Link>
                 <span className="muted small">
                   {formatDate(ev.start)}
                   {ev.place ? ` · ${ev.place}` : ''}
                   {ev.public ? ' · On the troop website' : ''}
+                  {ev.feeCents ? ` · Fee ${formatFee(ev.feeCents)}` : ''}
+                  {ev.signups?.enabled ? ` · ${spotsLine(ev.signupCounts?.held ?? 0, ev.signups.capacity, ev.signupCounts?.waitlist ?? 0)}` : ''}
                   {ev.logValues?.nights ? ` · ${plural(ev.logValues.nights, 'night')}` : ''}
                   {ev.logValues?.miles ? ` · ${plural(ev.logValues.miles, 'mile')}` : ''}
                   {ev.logValues?.serviceHours ? ` · ${plural(ev.logValues.serviceHours, 'service hour')}` : ''}
@@ -183,7 +190,7 @@ export function Events() {
                 </span>
               </div>
               {isLeader ? (
-                <Link className="btn secondary small" to={`/t/${troopId}/events/${ev.id}`}>
+                <Link className="btn secondary small" to={`/t/${troopId}/events/${ev.id}/attendance`}>
                   Attendance
                 </Link>
               ) : null}

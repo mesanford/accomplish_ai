@@ -11,6 +11,7 @@ import { Counseling } from './pages/Counseling';
 import { CustomAwardPage } from './pages/CustomAwardPage';
 import { CustomAwards } from './pages/CustomAwards';
 import { CreateTroop } from './pages/CreateTroop';
+import { EventPage } from './pages/EventPage';
 import { Events } from './pages/Events';
 import { FinishSignIn } from './pages/FinishSignIn';
 import { HelpPage } from './pages/Help';
@@ -106,7 +107,8 @@ const router = createBrowserRouter([
       { path: 'scoutbook', element: <Scoutbook /> },
       { path: 'counseling', element: <Counseling /> },
       { path: 'events', element: <Events /> },
-      { path: 'events/:eventId', element: <AttendancePage /> },
+      { path: 'events/:eventId', element: <EventPage /> },
+      { path: 'events/:eventId/attendance', element: <AttendancePage /> },
       { path: 'recruiting', element: <Recruiting /> },
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },

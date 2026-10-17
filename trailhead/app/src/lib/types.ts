@@ -1,5 +1,7 @@
 import type { Timestamp } from 'firebase/firestore';
 
+import type { SignupSettings } from './eventSignups';
+
 export type Role = 'leader' | 'scoutmaster' | 'advancement' | 'counselor' | 'committee' | 'parent' | 'scout';
 
 export interface Membership {
@@ -156,6 +158,18 @@ export interface TroopEvent {
   /** Listed on the troop's public website (title, date and place only). */
   public?: boolean;
   place?: string;
+  /** Optional last day, and clock times (HH:MM, in the troop's time zone). Used by the calendar feeds. */
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
+  /** Event fee in cents. */
+  feeCents?: number;
+  /** Sign-up settings (see eventSignups.ts). */
+  signups?: SignupSettings;
+  /** Written only by the server. */
+  signupCounts?: { held: number; going: number; waitingPermission: number; waitlist: number };
+  feesPending?: { count: number; amountCents: number };
+  feesPosted?: { count: number; amountCents: number };
 }
 
 export interface Thread {

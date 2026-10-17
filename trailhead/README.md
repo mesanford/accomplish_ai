@@ -66,6 +66,17 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     clock, after which the Scout's records are deleted (or 12 months after they turn 18, if sooner). Leaders can
     delete a "Join us" request at any time (`delete_lead`). Opening a troop calls `record_activity`, which keeps
     `troops/{t}.lastActiveAt`; a troop nobody opens for 18 months is deleted (dry run until the operator turns it on).
+14. **Events 2.0.** A leader turns on sign-ups for an event (Scouts, adults or both; a number of spots with an
+    automatic waitlist; a deadline; short questions) and may set a fee, times and a last day. Parents sign up their own
+    Scouts, Scouts 13 and older sign themselves up, adults sign themselves up, and a parent's sign-up counts as
+    permission. A Scout who signs up alone, or whom a leader adds, waits for a parent to approve in the app
+    (`approve_permission`, with an optional health note only leaders read). Sign-ups live in
+    `troops/{t}/events/{e}/signups/{memberId}` and are written only by the callables `sign_up_for_event`,
+    `cancel_signup`, `approve_permission` and `import_rsvps`. Fees are charged by `charge_event_fees`; the hand-off to
+    Scout accounts is the seam described in `functions/handlers/event_fees.py`. `send_event_reminders` emails
+    signed-up families two days ahead (once per event date). Every member gets a private calendar feed
+    (`get_calendar_feed`, served at `/cal/{token}.ics` by `calendar_feed` through a Hosting rewrite); the public
+    website has `/cal/site/{slug}.ics`.
 
 ## Setup
 
