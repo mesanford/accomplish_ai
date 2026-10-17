@@ -3,7 +3,12 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Notice, PageHeader } from '../components/ui';
 import { announcementEmailsOn, ANNOUNCEMENT_EMAIL_LABEL } from '../lib/announcements';
-import { deleteAccount, errorMessage, setEmailAnnouncements, setEmailNotifications } from '../lib/api';
+import {
+  deleteAccount,
+  errorMessage,
+  setEmailAnnouncements,
+  setEmailNotifications,
+} from '../lib/api';
 import { signOutUser, useAuth } from '../lib/auth';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
@@ -20,21 +25,31 @@ export function Account() {
   const [saving, setSaving] = useState(false);
   const [mailError, setMailError] = useState('');
   const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user]);
-  const prefs = useDoc<{ emailNotifications?: boolean; emailAnnouncements?: boolean }>(userRef).data;
-  const emailOn = emailNotificationsOn(prefs);
-  const announcementsOn = announcementEmailsOn(prefs);
+  const prefs = useDoc<{ emailNotifications?: boolean; emailAnnouncements?: boolean }>(
+    userRef,
+  ).data;
+  // Shows the new setting while it saves, so the box doesn't flick back until the user record updates.
+  const [pending, setPending] = useState<{ notifications?: boolean; announcements?: boolean }>({});
+  const emailOn = pending.notifications ?? emailNotificationsOn(prefs);
+  const announcementsOn = pending.announcements ?? announcementEmailsOn(prefs);
 
   async function changeAnnouncements(enabled: boolean) {
-    await changeEmail(enabled, setEmailAnnouncements);
+    await changeEmail(enabled, setEmailAnnouncements, 'announcements');
   }
 
-  async function changeEmail(enabled: boolean, save: (on: boolean) => Promise<unknown> = setEmailNotifications) {
+  async function changeEmail(
+    enabled: boolean,
+    save: (on: boolean) => Promise<unknown> = setEmailNotifications,
+    key: 'notifications' | 'announcements' = 'notifications',
+  ) {
     setSaving(true);
     setMailError('');
+    setPending((p) => ({ ...p, [key]: enabled }));
     try {
       await save(enabled);
     } catch (err) {
       setMailError(errorMessage(err));
+      setPending((p) => ({ ...p, [key]: undefined }));
     } finally {
       setSaving(false);
     }
@@ -60,10 +75,17 @@ export function Account() {
       <section className="card stack">
         <h2>Email</h2>
         <label className="check">
-          <input type="checkbox" checked={emailOn} disabled={saving} onChange={(e) => changeEmail(e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={emailOn}
+            disabled={saving}
+            onChange={(e) => changeEmail(e.target.checked)}
+          />
           {EMAIL_NOTIFICATIONS_LABEL}
         </label>
-        <p className="small muted">Emails that confirm a consent you gave are always sent, because they are your record.</p>
+        <p className="small muted">
+          Emails that confirm a consent you gave are always sent, because they are your record.
+        </p>
         <label className="check">
           <input
             type="checkbox"
@@ -73,7 +95,9 @@ export function Account() {
           />
           {ANNOUNCEMENT_EMAIL_LABEL}
         </label>
-        <p className="small muted">Leaders choose when to email an announcement. Scouts are never emailed.</p>
+        <p className="small muted">
+          Leaders choose when to email an announcement. Scouts are never emailed.
+        </p>
         <Notice kind="error">{mailError}</Notice>
       </section>
       <section className="card stack">
@@ -97,14 +121,19 @@ export function Account() {
               ))}
             </ul>
             <p className="small">
-              <strong>{CANNOT_UNDO}</strong> If you are the only leader of a troop, you will need to invite another
-              leader first.
+              <strong>{CANNOT_UNDO}</strong> If you are the only leader of a troop, you will need to
+              invite another leader first.
             </p>
             <div className="row">
               <button type="button" className="btn danger" disabled={busy} onClick={remove}>
                 {busy ? 'Deleting…' : 'Yes, permanently delete my account'}
               </button>
-              <button type="button" className="btn quiet" disabled={busy} onClick={() => setOpen(false)}>
+              <button
+                type="button"
+                className="btn quiet"
+                disabled={busy}
+                onClick={() => setOpen(false)}
+              >
                 Keep my account
               </button>
             </div>
@@ -113,8 +142,9 @@ export function Account() {
         ) : (
           <>
             <p className="small">
-              This removes your sign-in and your place in your troops. Your Scouts' records stay with the troop. To
-              remove a Scout, ask a troop leader to use Remove from troop on the Scout's page.
+              This removes your sign-in and your place in your troops. Your Scouts' records stay
+              with the troop. To remove a Scout, ask a troop leader to use Remove from troop on the
+              Scout's page.
             </p>
             <div className="row">
               <button type="button" className="btn danger small" onClick={() => setOpen(true)}>
