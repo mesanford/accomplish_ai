@@ -406,6 +406,21 @@ service cloud.firestore {
         allow read: if canSeeMoney(t);
         allow write: if false;
       }
+      // Card payments (Stripe Checkout on the troop's own Stripe account). Only the create_checkout function and the
+      // stripe_webhook function write them; a family reads its own Scouts' payment status, and the people who see
+      // every account see every payment. The troop's Stripe connection is on the troop document under `payments`.
+      match /payments/{p} {
+        allow read: if canSeeAccount(t, resource.data.scoutId);
+        allow write: if false;
+      }
+    }
+    // Server-only: which troop and payment a Stripe payment intent belongs to, for refunds and disputes.
+    match /stripeLookup/{id} {
+      allow read, write: if false;
+    }
+    // Emulator-only test switches (payments mode and the fake Stripe address). Never readable or writable by clients.
+    match /_test/{id} {
+      allow read, write: if false;
     }
   }
 }

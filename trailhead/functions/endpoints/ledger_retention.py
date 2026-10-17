@@ -12,6 +12,7 @@ from firebase_admin import firestore
 from endpoints.entries import settle
 from endpoints.erase import commit, delete_op, update_op
 from endpoints.money import post
+from endpoints.payment_records import forget_payer_ops, purge_ops, removal_ops
 from handlers.ledger import account_doc, compute_account
 from handlers.ledger_lifecycle import anonymized, former_id, ledger_cutoff, plan_purge
 from handlers.removal import chunked
@@ -44,6 +45,7 @@ def close_scout_account(troop_id: str, scout_id: str, t) -> int:
     entries = _entries(t, scout_id)
     account = t.collection("accounts").document(scout_id)
     if not entries:
+        commit(removal_ops(t, scout_id, None))  # only checkouts that never paid can be left
         account.delete()
         return 0
     if compute_account(entries).balance:
@@ -52,6 +54,7 @@ def close_scout_account(troop_id: str, scout_id: str, t) -> int:
     ref = _former_ref(t, scout_id)
     name = (t.collection("members").document(scout_id).get().to_dict() or {}).get("displayName", "")
     ops = [update_op(t.collection("ledger").document(i), anonymized(e, ref, name)) for i, e in entries.items()]
+    ops += removal_ops(t, scout_id, ref)  # card payment records follow their ledger entries
     # Recompute the reference account from every entry already moved to it, including any from an earlier run.
     moved = _entries(t, former_id(ref))
     moved |= {i: {**e, **anonymized(e, ref, name)} for i, e in entries.items()}
@@ -68,7 +71,7 @@ def forget_author_ops(t, uid: str) -> list:
     """Writes that take a deleted account's name off the ledger entries it recorded. The entries stay."""
     query = t.collection("ledger").where("createdBy", "==", uid)
     fields = {"createdBy": "former-member", "createdByName": FORMER_MEMBER}
-    return [update_op(d.reference, fields) for d in query.stream()]
+    return [update_op(d.reference, fields) for d in query.stream()] + forget_payer_ops(t, uid)
 
 
 def purge(t, troop_id: str, today: date, limit: int) -> tuple[int, int]:
@@ -94,5 +97,6 @@ def purge(t, troop_id: str, today: date, limit: int) -> tuple[int, int]:
         else:
             summary = account_doc(account_id, compute_account(left), len(left))
             account.set({**summary, "updatedAt": firestore.SERVER_TIMESTAMP}, merge=True)
+    commit(purge_ops(t, today, limit))  # card payment records go on the same 7-year rule
     log.info("retention rule=ledger troop=%s due=%d deleted=%d accounts=%d", troop_id, due, deleted, len(accounts))
     return due, deleted

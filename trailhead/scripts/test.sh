@@ -18,6 +18,10 @@ trap stop_workers EXIT
 # never calls either service (the emulator always logs email instead of sending), so stand-ins will do.
 [[ -f functions/.secret.local ]] || echo "ANTHROPIC_API_KEY=emulator-never-calls-anthropic" > functions/.secret.local
 grep -q '^RESEND_API_KEY=' functions/.secret.local || echo "RESEND_API_KEY=emulator-never-calls-resend" >> functions/.secret.local
+# Card payments: the emulator only ever talks to the fake Stripe server the tests start (see tests/integration/fake_stripe.py).
+# The webhook secret stand-in is the one tests sign fake deliveries with.
+grep -q '^STRIPE_SECRET_KEY=' functions/.secret.local || echo "STRIPE_SECRET_KEY=sk_test_emulator-never-calls-stripe" >> functions/.secret.local
+grep -q '^STRIPE_WEBHOOK_SECRET=' functions/.secret.local || echo "STRIPE_WEBHOOK_SECRET=whsec_emulator_stand_in" >> functions/.secret.local
 
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
