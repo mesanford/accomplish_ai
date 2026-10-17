@@ -10,6 +10,7 @@ import { LayoutSection } from '../components/site/LayoutSection';
 import { PagesSection } from '../components/site/PagesSection';
 import { MeetingSection } from '../components/site/MeetingSection';
 import { GuideBlock } from '../components/GuideBlock';
+import { DomainPanel } from '../components/site/DomainPanel';
 import { PublishPanel } from '../components/site/PublishPanel';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
@@ -125,6 +126,7 @@ export function Website() {
         onPublish={onPublish}
         onUnpublish={onUnpublish}
       />
+      <DomainPanel troopId={troopId} site={troop?.site} />
       <CoverSection troopId={troopId} draft={draft} onChange={edit} />
       <LayoutSection draft={draft} onChange={edit} />
       <AboutSection troopId={troopId} draft={draft} onChange={edit} />

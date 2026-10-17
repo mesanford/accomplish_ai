@@ -19,6 +19,8 @@ from endpoints.campaigns import post_sales, save_account_settings, save_campaign
 from endpoints.charges import charge_attendees, post_charge
 from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
+from endpoints.domains import add_domain, check_domain, remove_domain
+from endpoints.domains_sync import sync_domains
 from endpoints.entries import record_payment, reverse_entry, settle_account
 from endpoints.event_fees import charge_event_fees
 from endpoints.event_reminders import send_event_reminders
@@ -47,6 +49,10 @@ from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 
 __all__ = [
+    "add_domain",
+    "check_domain",
+    "remove_domain",
+    "sync_domains",
     "settle_account",
     "save_campaign",
     "save_account_settings",

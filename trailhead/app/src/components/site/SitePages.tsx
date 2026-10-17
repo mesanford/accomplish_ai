@@ -3,6 +3,7 @@ import { CALENDAR_FEED_READY, calendarFeedPath, groupByMonth, monthLabel } from 
 import { categoryLabel, fileKind, formatSize } from '../../lib/siteDocs';
 import type { PublicSite } from '../../lib/types';
 import { safeUrl } from '../../lib/siteTheme';
+import { siteBase } from '../../lib/troopDomain';
 import { formatDate } from '../ui';
 import { PageBlocks } from './PageBlocks';
 import { Section } from './SiteSections';
@@ -10,7 +11,7 @@ import { Section } from './SiteSections';
 function BackLink({ site }: { site: PublicSite }) {
   return (
     <p>
-      <Link to={`/s/${site.slug}`}>Back to {site.troopName}</Link>
+      <Link to={siteBase(site.slug) || '/'}>Back to {site.troopName}</Link>
     </p>
   );
 }

@@ -31,3 +31,6 @@ echo "Loading badge and rank content…"
 
 echo "Deploying rules, indexes, functions and hosting…"
 firebase deploy --project "$project" --only firestore,storage,functions,hosting
+
+echo "Deploying the troop sites Hosting site (skipped unless TRAILHEAD_TROOPS_SITE is set)…"
+scripts/deploy_troops_site.sh "$project"

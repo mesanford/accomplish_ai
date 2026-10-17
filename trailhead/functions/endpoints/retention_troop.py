@@ -15,6 +15,7 @@ from datetime import date
 from firebase_admin import firestore
 from google.api_core.exceptions import NotFound
 
+from endpoints.domains import release_troop_domains
 from endpoints.erase import delete_folder
 from endpoints.site_files import bucket
 from fb import db, troop
@@ -78,6 +79,7 @@ def retire_troop(troop_id: str, today: date, dry_run: bool) -> bool:
         return False
 
     files = sum(delete_folder(p) for p in _prefixes(troop_id))
+    release_troop_domains(troop_id)
     for ref in _site_refs(troop_id, troop_doc):
         ref.delete()
     for uid in _logins(t):

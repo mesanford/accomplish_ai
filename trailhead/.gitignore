@@ -20,3 +20,5 @@ app/.env.production
 .venv
 functions/venv
 app/node_modules
+app/dist-troops/
+.firebase.troops.json

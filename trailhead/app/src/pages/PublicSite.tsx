@@ -66,8 +66,12 @@ function Missing() {
   );
 }
 
-export function PublicSite() {
-  const { slug = '', page } = useParams();
+/** A troop's public site. On Forthright's address the slug and page come from the URL; on a troop's own domain
+ * the slug is passed in and the URL's first part is the page. */
+export function PublicSite({ slug: fixedSlug, page: fixedPage }: { slug?: string; page?: string }) {
+  const params = useParams();
+  const slug = fixedSlug ?? params.slug ?? '';
+  const page = fixedPage ?? params.page;
   const ref = useMemo(() => doc(db, 'publicSites', slug.toLowerCase()), [slug]);
   const { data: site, loading } = useDoc<Site>(ref);
   usePageMeta(pageTitle(site, page), site ? describe(site) : 'This troop page could not be found.');
