@@ -108,3 +108,24 @@ test('the features page fits a phone screen', async ({ browser }) => {
   ).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= 375)).toBe(true);
 });
+
+test('"Join the pilot" in the top bar goes to the pilot form from any public page', async ({
+  browser,
+}) => {
+  const page = await (
+    await browser.newContext({ viewport: { width: 375, height: 800 } })
+  ).newPage();
+  await page.goto('/features');
+  const bar = page.getByRole('navigation', { name: 'Forthright' });
+  await expect(bar.getByRole('link', { name: 'Join the pilot' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= 375)).toBe(true);
+  await bar.getByRole('link', { name: 'Join the pilot' }).click();
+  await expect(page).toHaveURL(/\/#pilot$/);
+  await expect(page.getByRole('heading', { name: 'How the pilot works' })).toBeInViewport();
+
+  // Already on the home page, it scrolls down to the form.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.goto('/');
+  await bar.getByRole('link', { name: 'Join the pilot' }).click();
+  await expect(page.getByRole('heading', { name: 'How the pilot works' })).toBeInViewport();
+});

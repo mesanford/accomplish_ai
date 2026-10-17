@@ -295,6 +295,28 @@
   text-decoration: underline;
   text-underline-offset: 6px;
 }
+.l-btn-small {
+  font-size: 14px;
+  padding: 7px 12px;
+}
+.l-nav a {
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .l-bar img {
+    width: 100px;
+    height: auto;
+  }
+  .l-nav {
+    gap: 10px;
+  }
+  .l-btn-small {
+    padding: 6px 10px;
+  }
+  .l-nav .l-link {
+    font-size: 14px;
+  }
+}
 .l-more {
   margin-top: 12px;
   font-weight: 600;
@@ -414,5 +436,11 @@
   .l-cat-head {
     position: sticky;
     top: 16px;
+  }
+}
+/* The narrowest phones: Sign in stays on the page itself (hero and closing buttons), so the bar keeps one line. */
+@media (max-width: 360px) {
+  .l-bar-signin {
+    display: none;
   }
 }

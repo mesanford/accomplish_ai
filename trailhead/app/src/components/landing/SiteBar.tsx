@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import lockupDark from '../../assets/forthright-lockup-dark.svg';
 import lockup from '../../assets/forthright-lockup.svg';
 
-/** The top bar of the public pages: the logo (home), Features and Sign in. */
+/** The top bar of the public pages: the logo (home), Features, Sign in and Join the pilot (the pilot form on "/"). */
 export function SiteBar() {
   return (
     <div className="l-bar">
@@ -16,8 +16,11 @@ export function SiteBar() {
         <NavLink className="l-link" to="/features">
           Features
         </NavLink>
-        <Link className="l-link" to="/signin">
+        <Link className="l-link l-bar-signin" to="/signin">
           Sign in
+        </Link>
+        <Link className="l-btn l-btn-small" to="/#pilot">
+          Join the pilot
         </Link>
       </nav>
     </div>
