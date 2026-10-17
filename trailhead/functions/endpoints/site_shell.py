@@ -3,6 +3,10 @@
 The app is a single-page app, so every address returns the same index.html and chat apps would show Forthright's
 title. Hosting rewrites /s/** to this function, which reads the published site, fetches the app's own index.html
 and puts the troop's title, description and cover image in its head. Browsers then load the app as usual.
+
+A troop's own domain (see endpoints/domains.py) is served by a second Hosting site whose every path comes here.
+Those requests are told apart by their host: it is looked up in `domains/{host}`, and the troop's site is served at
+"/" and "/{page}". The head carries a `forthright-site` marker so the app shows the site without its sign-in pages.
 """
 
 from __future__ import annotations
@@ -15,6 +19,7 @@ import urllib.request
 from firebase_functions import https_fn
 
 from fb import db
+from handlers import domain_serving as serving
 from handlers.site_meta import clean_host, has_page, inject_meta, meta_tags, parse_path
 
 log = logging.getLogger(__name__)
@@ -49,9 +54,58 @@ def load_shell() -> str | None:
     return html
 
 
+NOT_SET_UP = (
+    '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
+    '<meta name="viewport" content="width=device-width, initial-scale=1" />'
+    '<meta name="robots" content="noindex" /><title>This site isn\'t set up yet</title>'
+    "<style>body{font:18px/1.5 system-ui,sans-serif;max-width:32rem;margin:15vh auto;padding:0 1rem;color:#222}</style>"
+    "</head><body><h1>This site isn't set up yet</h1>"
+    "<p>This web address isn't showing a troop website right now. If it's your troop's, a leader can finish "
+    "setting it up in Forthright.</p></body></html>"
+)
+HTML = {"Content-Type": "text/html; charset=utf-8"}
+
+
+def _extra_hosts() -> tuple[str, ...]:
+    return tuple(h.strip().lower() for h in os.environ.get("TRAILHEAD_APP_HOSTS", "").split(",") if h.strip())
+
+
+def _lookup_domain(host: str) -> dict | None:
+    snap = db().collection("domains").document(host).get()
+    return snap.to_dict() if snap.exists else None
+
+
+def _lookup_site(slug: str) -> dict | None:
+    snap = db().collection("publicSites").document(slug).get()
+    return snap.to_dict() if snap.exists else None
+
+
+def serve_custom_domain(host: str, path: str, shell_loader=load_shell) -> https_fn.Response:
+    """A request for a troop's own domain: its site at "/" and "/{page}", or a plain page when nothing is set up."""
+    outcome = serving.resolve(host, path, _lookup_domain, _lookup_site)
+    if isinstance(outcome, serving.Redirect):
+        target = f"https://{outcome.host}/{path.lstrip('/')}"
+        return https_fn.Response("", status=301, headers={"Location": target})
+    if isinstance(outcome, serving.Refused) and outcome.reason == "asset":
+        return https_fn.Response("Not found", status=404, headers={"Content-Type": "text/plain; charset=utf-8"})
+    if isinstance(outcome, serving.Refused) and outcome.reason == "unknown":
+        return https_fn.Response(NOT_SET_UP, status=404, headers={**HTML, "Cache-Control": "no-store"})
+    shell = shell_loader()
+    if shell is None:
+        return https_fn.Response("Try again in a moment.", status=503, headers={"Retry-After": "30"})
+    if isinstance(outcome, serving.Refused):  # a page this site doesn't have: the app shows its own "not found"
+        return https_fn.Response(shell, status=404, headers=HTML)
+    tags = meta_tags(outcome.site, outcome.slug, outcome.page, host, "https", custom=True)
+    headers = {**HTML, "Cache-Control": "public, max-age=60, s-maxage=300"}
+    return https_fn.Response(inject_meta(shell, tags), status=200, headers=headers)
+
+
 @https_fn.on_request(memory=256, timeout_sec=15)
 def site_shell(req: https_fn.Request) -> https_fn.Response:
     """The app shell with a troop's link-preview tags. If the site isn't published, the plain shell with a 404."""
+    request_host = serving.request_host(req.headers.get("X-Forwarded-Host"), req.headers.get("Host"))
+    if request_host and not serving.is_app_host(request_host, _extra_hosts()):
+        return serve_custom_domain(request_host, req.path)
     shell = load_shell()
     if shell is None:
         log.warning("site shell unavailable")

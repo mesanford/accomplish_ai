@@ -65,7 +65,11 @@ def clean_host(host: str | None) -> str | None:
     return host if host and HOST_RE.match(host) else None
 
 
-def meta_tags(site: dict, slug: str, page: str | None, host: str | None, scheme: str = "https") -> str:
+def meta_tags(
+    site: dict, slug: str, page: str | None, host: str | None, scheme: str = "https", custom: bool = False
+) -> str:
+    """The head tags for a troop page. On a troop's own domain (`custom`) the address has no /s/{slug} part, and a
+    marker tells the app which troop it is showing."""
     image = _web_url((site.get("cover") or {}).get("photoUrl")) or _web_url((site.get("theme") or {}).get("logoUrl"))
     title, description = page_title(site, page), describe(site)
     tags = [
@@ -78,9 +82,11 @@ def meta_tags(site: dict, slug: str, page: str | None, host: str | None, scheme:
         f'<meta name="twitter:card" content="{"summary_large_image" if image else "summary"}" />',
     ]
     if host:
-        path = f"/s/{slug}" + (f"/{page}" if page else "")
+        path = ("" if custom else f"/s/{slug}") + (f"/{page}" if page else "") or "/"
         url = escape(f"{scheme}://{host}{path}", quote=True)
         tags += [f'<link rel="canonical" href="{url}" />', f'<meta property="og:url" content="{url}" />']
+    if custom:
+        tags += [f'<meta name="forthright-site" content="{escape(slug, quote=True)}" />']
     if image:
         tags += [f'<meta property="og:image" content="{escape(image, quote=True)}" />']
     return "\n    ".join(tags)

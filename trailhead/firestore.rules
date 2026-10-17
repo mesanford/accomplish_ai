@@ -64,6 +64,10 @@ service cloud.firestore {
     match /slugs/{slug} {
       allow read, write: if false;
     }
+    // Which troop owns each custom domain a troop points at its website. Server-only; site_shell reads it.
+    match /domains/{host} {
+      allow read, write: if false;
+    }
     // Requests to join the pilot, and their daily counters. Written only by request_pilot; no client reads or writes them.
     // Calendar feed lookups by token. Server-only.
     match /calendarFeeds/{token} {
@@ -372,6 +376,11 @@ service cloud.firestore {
             && (!('scoutIds' in d) || (d.scoutIds is list && d.scoutIds.size() <= 60))
             && (!('noScoutsShown' in d) || d.noScoutsShown is bool);
         }
+      }
+      // The troop's own domain: its status and the DNS records to add. Leaders read it; only the domain functions write it.
+      match /site/domain {
+        allow read: if isLeader(t);
+        allow write: if false;
       }
       // What the live site shows (which Scouts each public photo includes). Server-only.
       match /site/published {

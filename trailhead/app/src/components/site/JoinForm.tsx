@@ -1,7 +1,15 @@
+import { forthrightUrl } from '../../lib/troopDomain';
 import { type FormEvent, useState } from 'react';
 import { errorMessage, type InterestForm, submitInterest } from '../../lib/api';
 
-const EMPTY: InterestForm = { name: '', email: '', phone: '', scoutAge: '', message: '', website: '' };
+const EMPTY: InterestForm = {
+  name: '',
+  email: '',
+  phone: '',
+  scoutAge: '',
+  message: '',
+  website: '',
+};
 
 function Input({
   id,
@@ -23,7 +31,15 @@ function Input({
   );
 }
 
-export function JoinForm({ slug, intro, troopName }: { slug: string; intro?: string; troopName: string }) {
+export function JoinForm({
+  slug,
+  intro,
+  troopName,
+}: {
+  slug: string;
+  intro?: string;
+  troopName: string;
+}) {
   const [form, setForm] = useState<InterestForm>(EMPTY);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -52,12 +68,20 @@ export function JoinForm({ slug, intro, troopName }: { slug: string; intro?: str
       {intro ? <p style={{ whiteSpace: 'pre-line' }}>{intro}</p> : null}
       {sent ? (
         <div className="site-ok" role="status">
-          <strong>Thank you.</strong> We got your message and a leader from {troopName} will be in touch soon.
+          <strong>Thank you.</strong> We got your message and a leader from {troopName} will be in
+          touch soon.
         </div>
       ) : (
         <form className="site-form" onSubmit={submit}>
           <Input id="join-name" label="Parent or guardian name">
-            <input id="join-name" required maxLength={80} autoComplete="name" value={form.name} onChange={set('name')} />
+            <input
+              id="join-name"
+              required
+              maxLength={80}
+              autoComplete="name"
+              value={form.name}
+              onChange={set('name')}
+            />
           </Input>
           <Input id="join-email" label="Email">
             <input
@@ -71,17 +95,35 @@ export function JoinForm({ slug, intro, troopName }: { slug: string; intro?: str
             />
           </Input>
           <Input id="join-phone" label="Phone (optional)">
-            <input id="join-phone" type="tel" maxLength={30} autoComplete="tel" value={form.phone} onChange={set('phone')} />
+            <input
+              id="join-phone"
+              type="tel"
+              maxLength={30}
+              autoComplete="tel"
+              value={form.phone}
+              onChange={set('phone')}
+            />
           </Input>
           <Input id="join-age" label="Scout's age or grade" hint="For example 11, or 6th grade.">
             <input id="join-age" maxLength={30} value={form.scoutAge} onChange={set('scoutAge')} />
           </Input>
           <Input id="join-message" label="Anything you'd like us to know">
-            <textarea id="join-message" maxLength={1000} value={form.message} onChange={set('message')} />
+            <textarea
+              id="join-message"
+              maxLength={1000}
+              value={form.message}
+              onChange={set('message')}
+            />
           </Input>
           <div className="site-trap" aria-hidden="true">
             <label htmlFor="join-website">Leave this empty</label>
-            <input id="join-website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
+            <input
+              id="join-website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={form.website}
+              onChange={set('website')}
+            />
           </div>
           {error ? (
             <div className="site-err" role="alert">
@@ -94,7 +136,8 @@ export function JoinForm({ slug, intro, troopName }: { slug: string; intro?: str
             </button>
           </div>
           <p className="site-muted small">
-            We only use this to reply to you. Only this troop's leaders see it. <a href="/privacy">Privacy policy</a>
+            We only use this to reply to you. Only this troop's leaders see it.{' '}
+            <a href={forthrightUrl('/privacy')}>Privacy policy</a>
           </p>
         </form>
       )}

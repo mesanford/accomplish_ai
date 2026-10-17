@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { bannerShows } from '../../lib/siteCalendar';
+import { forthrightUrl, siteBase } from '../../lib/troopDomain';
 import { safeUrl, siteColors } from '../../lib/siteTheme';
 import type { PublicSite } from '../../lib/types';
 import '../../site.css';
@@ -23,7 +24,7 @@ export function SiteFrame({ site, children }: { site?: PublicSite; children: Rea
       {children}
       <footer className="site-footer">
         <p>
-          Made with <a href="/">Forthright</a> · <a href="/privacy">Privacy</a>
+          Made with <a href={forthrightUrl('/')}>Forthright</a> · <a href={forthrightUrl('/privacy')}>Privacy</a>
         </p>
       </footer>
     </div>
@@ -38,8 +39,8 @@ interface NavProps {
 
 export function SiteHeader({ site, page }: NavProps) {
   const logo = safeUrl(site.theme?.logoUrl);
-  const home = `/s/${site.slug}`;
-  const anchor = (id: string) => (page ? `${home}#${id}` : `#${id}`);
+  const home = siteBase(site.slug);
+  const anchor = (id: string) => (page ? `${home || '/'}#${id}` : `#${id}`);
   const sections: [string, string, boolean][] = [
     ['about', 'About', Boolean(site.about)],
     ['meetings', 'Meetings', Boolean(site.meeting?.schedule || site.meeting?.place)],
@@ -50,7 +51,7 @@ export function SiteHeader({ site, page }: NavProps) {
   return (
     <header className="site-header">
       <div className="site-wrap site-header-row">
-        <Link className="site-id" to={home}>
+        <Link className="site-id" to={home || '/'}>
           {logo ? <img src={logo} alt="" className="site-logo" /> : null}
           <span className="site-name">
             {site.troopName}

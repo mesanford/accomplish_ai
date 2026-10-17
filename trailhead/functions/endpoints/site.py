@@ -8,6 +8,7 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 
+from endpoints.domains import release_troop_domains, retarget_domains
 from endpoints.site_documents import publish_documents
 from endpoints.site_files import MissingFile, delete_public_files, publish_files
 from fb import db, fail, require_leader, troop
@@ -114,6 +115,7 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
         )
 
     claim(db().transaction())
+    retarget_domains(troop_id, slug)  # a troop domain follows the site if its web address changed
     delete_public_files(troop_id, keep_urls=site_urls(public))
     log.info("site published troop=%s slug=%s photos=%d left_out=%d", troop_id, slug, len(gallery), len(left_out))
     return {"url": f"/s/{slug}", "slug": slug, "leftOut": left_out}
@@ -139,6 +141,7 @@ def unpublish_site(req: https_fn.CallableRequest) -> dict:
         tx.delete(t.collection("site").document("published"))
 
     take_down(db().transaction())
+    release_troop_domains(troop_id)  # the troop's own domain shows the published site, so it goes too
     delete_public_files(troop_id)
     return {"published": False}
 

@@ -101,3 +101,57 @@ months after this is first deployed.
 
 Before the first production deploy, note that the Scout rule applies to existing records straight away: a Scout who
 turned 18 more than 12 months ago is deleted on the first night.
+
+## Troop domains (a troop's own web address)
+
+A leader can show the troop website at a domain they own, such as `troop101springfield.org` (Website page, "Use your
+own domain"). Forthright attaches the domain to one dedicated Hosting site; every request to that site goes to the
+`site_shell` function, which looks the request's host up in `domains/{host}` and serves that troop's published site at
+`/` and `/{page}`. Unknown hosts get a plain "This site isn't set up yet" page. The feature is **off until you turn it
+on**, and staging and tests never call the live API.
+
+### One-time setup (per project)
+
+1. **Create the Hosting site** (once; the id must be 30 characters or fewer and globally unique):
+   `firebase hosting:sites:create forthright-troops --project <project-id>`. Do not connect any domain to it by hand.
+2. **Give the functions' service account permission.** The functions run as the project's default compute service
+   account (`<project-number>-compute@developer.gserviceaccount.com`; check under Cloud Functions, `add_domain`,
+   Details). Grant it **Firebase Hosting Admin** (`roles/firebasehosting.admin`), which covers the custom-domain
+   calls. Nothing broader is required:
+   `gcloud projects add-iam-policy-binding <project-id> --member=serviceAccount:<account> --role=roles/firebasehosting.admin`.
+   The Firebase Hosting API (`firebasehosting.googleapis.com`) must be enabled (it is for any Firebase project).
+3. **Settings** in `functions/.env.<project-id>` (the production file has them commented out):
+
+   | Setting                 | Meaning                                                                                                   |
+   | ----------------------- | --------------------------------------------------------------------------------------------------------- |
+   | `DOMAINS_MODE`          | `off` (default: leaders are told it isn't turned on), `log` (a built-in fake; nothing is called) or `live` |
+   | `TRAILHEAD_TROOPS_SITE` | The Hosting site id from step 1, for example `forthright-troops`                                          |
+   | `TRAILHEAD_APP_HOSTS`   | Optional, comma-separated extra hostnames to treat as Forthright's own (not a troop's domain)             |
+
+   Try `DOMAINS_MODE=log` on staging first: a domain whose first label ends in `-dns`, `-cert` or `-live` shows that
+   stage, so you can click through every state without owning a domain.
+4. **Deploy.** `scripts/deploy.sh` now also runs `scripts/deploy_troops_site.sh`, which copies the built app without
+   `index.html` into `app/dist-troops` and deploys it to the troops site with two rewrites (`/cal/**` to
+   `calendar_feed`, everything else to `site_shell`). It skips quietly when `TRAILHEAD_TROOPS_SITE` is not set. The
+   `sync_domains` scheduled function (every hour) is deployed with the other functions.
+
+### How a leader's domain goes live
+
+The leader enters the domain; Forthright registers it with the Hosting API and shows the exact DNS records to add:
+a TXT record that proves ownership, A records that point the domain at Hosting, and sometimes a certificate (ACME)
+record. Status moves **waiting for DNS, verifying, issuing certificate, live**. The leader presses "Check again", and
+`sync_domains` checks hourly. The certificate usually takes under an hour and can take 24. A domain still not live
+after 7 days is detached and the Website page tells the leader. Removing the domain, unpublishing the site and the
+18-month troop deletion all detach it. If Hosting refuses to release a domain, the record is kept as `pendingRemoval`
+(and no longer served) and the hourly job retries.
+
+### Limits and costs
+
+- Each custom domain belongs to one Hosting site. Hosting documents a limit of **20 subdomains per apex domain** (for
+  certificate minting); troops use different apex domains, so this does not bind. No overall per-site domain limit
+  is documented: before onboarding many troops, ask Firebase support for the figure for your project, and watch the
+  `add_domain` logs for quota errors. A project may have up to 36 Hosting sites.
+- Hosting charges for storage and data transfer only (10 GB/month free, then $0.15 per GB on Blaze), plus one
+  `site_shell` invocation per page view. Nothing is charged per domain.
+- If the limits ever bind, put a CDN or proxy in front instead (Cloudflare for SaaS custom hostnames, or a Cloud Load
+  Balancer with Certificate Manager). `endpoints/hosting_client.py` is the only file that talks to the provider.
