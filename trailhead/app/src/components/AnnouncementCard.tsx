@@ -20,7 +20,7 @@ function Paragraphs({ text }: { text: string }) {
 interface Props {
   post: Announcement;
   unread: boolean;
-  /** The poster or the Scoutmaster. */
+  /** The poster, a Scoutmaster or an advancement chair. */
   canManage: boolean;
 }
 

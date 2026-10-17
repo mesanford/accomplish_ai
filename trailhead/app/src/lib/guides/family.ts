@@ -45,7 +45,7 @@ export const PARENT_GUIDE: RoleGuide = {
       steps: [
         'A Scout 13 or older can sign up on their own. If the event needs permission, they wait with their spot held.',
         'Open the event. Under Sign up, give permission for your Scout. You can add a health note at the same time.',
-        'Only a parent of the Scout can give permission. A leader cannot do it for you.',
+        'Only a parent of the Scout can give permission in the app. A leader cannot do it for you. If your family is not on Forthright, give the leader a signed paper slip.',
       ],
     },
     {

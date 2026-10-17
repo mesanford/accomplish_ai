@@ -43,7 +43,7 @@ from endpoints.paper_cards import record_paper_blue_card
 from endpoints.parent_consent import answer_pending_consent, link_self_as_parent
 from endpoints.patrols import assign_patrol, delete_patrol, save_patrol
 from endpoints.payments import connect_stripe, disconnect_stripe, payments_status
-from endpoints.permission import approve_permission
+from endpoints.permission import approve_permission, record_paper_permission
 from endpoints.pilot import request_pilot
 from endpoints.prior import record_prior_advancement
 from endpoints.push import register_push_device, remove_push_device
@@ -125,6 +125,7 @@ __all__ = [
     "publish_site",
     "record_activity",
     "record_paper_blue_card",
+    "record_paper_permission",
     "record_prior_advancement",
     "register_push_device",
     "remove_push_device",

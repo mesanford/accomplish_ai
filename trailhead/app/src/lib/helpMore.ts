@@ -23,7 +23,7 @@ export const HELP_MORE = {
   },
   eventSignups: {
     title: 'Event sign-ups',
-    body: 'Families sign up on the event page. You choose the number of spots, a deadline and who can sign up. When spots run out, the next people go on a waitlist and move up when someone cancels. A parent can be asked to give permission for each Scout.',
+    body: 'Families sign up on the event page. You choose the number of spots, a deadline and who can sign up. When spots run out, the next people go on a waitlist and move up when someone cancels. A parent can be asked to give permission for each Scout. If the parents are not on Forthright, a leader can record a signed paper slip.',
   },
   healthNote: {
     title: 'Health or emergency note',
@@ -43,7 +43,7 @@ export const HELP_MORE = {
   },
   announcements: {
     title: 'Announcements and newsletters',
-    body: 'One-way posts to the people you choose. They are not conversations, so replies go through Messages. Scouts are never emailed. To post to an audience that includes Scouts, you need current Youth Protection training.',
+    body: 'One-way posts to the people you choose. They are not conversations, so replies go through Messages. Scouts are never emailed. To post to an audience that includes Scouts, you need current Youth Protection training. The poster, a Scoutmaster or an advancement chair can edit or delete a post.',
   },
   patrols: {
     title: 'Patrols',

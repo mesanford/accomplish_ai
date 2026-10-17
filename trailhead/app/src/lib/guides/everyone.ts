@@ -19,7 +19,7 @@ export const EVERYONE_GUIDE: RoleGuide = {
         'Open Events and click the event. If sign-ups are on, you see a Sign up section.',
         'Each event shows its spots, deadline, any fee and whether permission is needed.',
         'When it is full, you go on a waitlist. The first person waiting moves up when someone cancels, and gets an email.',
-        'A parent gives permission for a Scout when the event asks for it. A health note is read only by troop leaders.',
+        'A parent gives permission for a Scout when the event asks for it. A leader can record a signed paper slip instead. A health note is read only by troop leaders.',
         'If there is a fee, the treasurer charges it to the Scout\'s account.',
       ],
     },

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from handlers.account import LEADER_ROLES
+from handlers.account import BADGE_MANAGER_ROLES, LEADER_ROLES
 from handlers.membership import InvalidInput
 from handlers.roles import as_date
 
@@ -36,8 +36,8 @@ def can_post(access: dict) -> bool:
 
 
 def can_manage(access: dict, uid: str, announcement: dict) -> bool:
-    """The poster or the Scoutmaster may edit, pin or delete."""
-    return announcement.get("postedByUid") == uid or "scoutmaster" in access.get("roles", [])
+    """The poster, a Scoutmaster or an advancement chair may edit, pin or delete."""
+    return announcement.get("postedByUid") == uid or bool(BADGE_MANAGER_ROLES & set(access.get("roles", [])))
 
 
 def has_current_ypt(member: dict | None, today: date) -> bool:

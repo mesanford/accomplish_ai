@@ -12,18 +12,19 @@ export const LEADER_GUIDE: RoleGuide = {
     'Every document, including ones set to leaders only.',
     'Join us requests and the draft of the troop website.',
     "The Equipment list, who has borrowed what, and each item's repair log.",
+    'Every announcement, if you are the Scoutmaster or advancement chair. You can also edit or delete any of them.',
     'Scout accounts, if you are the Scoutmaster or advancement chair. You can look but not change them.',
   ],
   cannot: [
     'Change merit badge records, unless you are the Scoutmaster or advancement chair. Other leaders can see them and can sign ranks and troop awards.',
     'See Scout accounts, unless you are also the Scoutmaster, advancement chair or treasurer.',
-    "Give permission for someone else's Scout to go to an event. Only a parent of that Scout can.",
+    "Approve permission in the app for someone else's Scout. Only a parent of that Scout can. You can record a signed paper slip instead.",
     'Sign off requirements or post to Scouts without current Youth Protection training.',
   ],
   tasks: [
     {
       task: 'Set up the troop',
-      steps: ['Open Roster.', 'Add each Scout with their birth month, year and current rank.', 'Invite parents with an invite link.', 'Use Events to add your next meeting or campout.'],
+      steps: ['When you create the troop, pick your role: Scoutmaster, leader, advancement chair or committee chair. Each gives you the leader role, so you can give out roles.', 'Open Roster.', 'Add each Scout with their birth month, year and current rank.', 'Invite parents with an invite link.', 'Use Events to add your next meeting or campout.'],
     },
     {
       task: 'Invite a parent or counselor',

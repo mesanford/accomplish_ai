@@ -29,6 +29,9 @@ export const cancelSignup = (who: Who) => call<Who, { promoted: number }>('cance
 export const approvePermission = (form: Who & { healthNote?: string }) =>
   call<Who & { healthNote?: string }, { status: SignupStatus }>('approve_permission', form);
 
+/** A leader records that a signed paper permission slip was received. A leader cannot approve in the app for a parent. */
+export const recordPaperPermission = (who: Who) => call<Who, { status: SignupStatus }>('record_paper_permission', who);
+
 export const importRsvps = (troopId: string, eventId: string) =>
   call<{ troopId: string; eventId: string }, { imported: number }>('import_rsvps', { troopId, eventId });
 

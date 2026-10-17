@@ -37,6 +37,7 @@ ACCESS = {
     "dad": {"memberId": "m-dad", "roles": ["parent"], "scoutIds": ["s2"]},
     "pend": {"memberId": "m-pend", "roles": ["parent"], "scoutIds": ["s1"], "consentPendingScoutIds": ["s1"]},
     "com": {"memberId": "m-com", "roles": ["committee"]},
+    "chair": {"memberId": "m-chair", "roles": ["leader", "advancement"]},
     "scout1": {"memberId": "s1", "roles": ["scout"], "scoutIds": ["s1"]},
 }
 
@@ -82,9 +83,15 @@ def test_sign_up_documents_of_any_shape_are_read():
     assert aud.signed_up_ids(docs) == {"m-a", "m-b", "m-e"}
 
 
-def test_readers_always_include_the_poster_and_scoutmasters():
+def test_readers_always_include_the_poster_scoutmasters_and_advancement_chairs():
     a = resolve({"type": "parents"})
-    assert aud.readers(a, "com", ACCESS) == ["com", "dad", "lead", "mom", "pend"]
+    assert aud.readers(a, "com", ACCESS) == ["chair", "com", "dad", "lead", "mom", "pend"]
+
+
+def test_only_a_scoutmaster_or_advancement_chair_is_a_post_manager():
+    assert aud.is_post_manager(ACCESS["lead"]) and aud.is_post_manager(ACCESS["chair"])
+    assert not aud.is_post_manager({"roles": ["leader"]}) and not aud.is_post_manager({"roles": ["committee"]})
+    assert not aud.is_post_manager(None)
 
 
 def test_email_goes_to_adults_only_never_scouts_and_never_the_poster():
@@ -122,7 +129,9 @@ def test_who_can_post_and_who_can_change_a_post():
     post = {"postedByUid": "com"}
     assert can_manage({"roles": ["committee"]}, "com", post)
     assert can_manage({"roles": ["leader", "scoutmaster"]}, "lead", post)
+    assert can_manage({"roles": ["leader", "advancement"]}, "chair", post)
     assert not can_manage({"roles": ["leader"]}, "asst", post)
+    assert not can_manage({"roles": ["treasurer"]}, "tess", post)
 
 
 def test_posting_to_scouts_needs_training_that_has_not_expired():

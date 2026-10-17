@@ -23,6 +23,26 @@ export interface SignupSettings {
   questions?: SignupQuestion[];
 }
 
+/** How permission was given: `app` is a parent in Forthright, `paper` is a leader recording a signed slip. */
+export interface SignupPermission {
+  state: 'not_needed' | 'pending' | 'approved';
+  method?: 'app' | 'paper';
+  byName?: string;
+  at?: Timestamp;
+}
+
+/** What to say about who gave permission, or null when there is nothing to say. `day` is the date it happened. */
+export function permissionText(p: SignupPermission, day = ''): string | null {
+  if (p.state !== 'approved' || !p.byName) {
+    return null;
+  }
+  const on = day ? ` on ${day}` : '';
+  if (p.method === 'paper') {
+    return `Paper permission slip received (recorded by ${p.byName}${on}).`;
+  }
+  return `Permission given by ${p.byName}${on}.`;
+}
+
 /** events/{e}/signups/{memberId}. Written only by the server. */
 export interface Signup {
   id: string;
@@ -30,7 +50,7 @@ export interface Signup {
   kind: 'scout' | 'adult';
   spot: 'held' | 'waitlist';
   status: SignupStatus;
-  permission: { state: 'not_needed' | 'pending' | 'approved'; byName?: string; at?: Timestamp };
+  permission: SignupPermission;
   answers: Record<string, string>;
   signedUpAt?: Timestamp;
 }

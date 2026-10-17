@@ -20,7 +20,8 @@ export const LEADER_TROOP_TASKS: GuideTask[] = [
     task: 'Manage the waitlist and permission',
     steps: [
       'When all spots are taken, the next people go on a waitlist. The first person waiting moves up when someone cancels, and gets an email.',
-      'A Scout waiting for permission keeps their spot. Only a parent of that Scout can give permission, not a leader.',
+      'A Scout waiting for permission keeps their spot. A parent of that Scout gives permission in the app. You cannot approve for them.',
+      'If the parents are not on Forthright, get a signed paper slip. Then press "Record paper slip" next to the Scout. It shows "Paper permission slip received" with your name and the date.',
       'In the Roster section of the event you can add or remove people, and close or reopen sign-ups.',
       'Health notes parents add show next to their Scout. Only leaders can read them. Families cannot read them back.',
     ],
@@ -51,7 +52,7 @@ export const LEADER_TROOP_TASKS: GuideTask[] = [
       'Choose Announcement or Newsletter. A newsletter can have up to six sections and link up to ten events.',
       'Choose who it is for: the troop, parents, adults, leaders, parents of chosen Scouts, parents of a patrol, or everyone signed up for an event.',
       'Tick "Pin to the top" or the email box if you want. Scouts are never emailed. A troop can email five a day.',
-      'To reach Scouts you need current Youth Protection training. The poster or a Scoutmaster can edit, pin or delete a post.',
+      'To reach Scouts you need current Youth Protection training. The poster, a Scoutmaster or an advancement chair can edit, pin or delete a post.',
     ],
   },
   {

@@ -11,7 +11,7 @@ export const COMMITTEE_GUIDE: RoleGuide = {
   cannot: [
     'See the Roster, blue cards, Scout accounts or health notes.',
     'Change advancement records, accounts or Equipment.',
-    'Edit or delete a post that someone else wrote. A Scoutmaster can.',
+    'Edit or delete a post that someone else wrote. A Scoutmaster or advancement chair can.',
   ],
   tasks: [
     {

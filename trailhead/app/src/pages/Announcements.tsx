@@ -68,7 +68,7 @@ export function Announcements() {
               key={p.id}
               post={p}
               unread={isUnread(p, seenOnArrival.current ?? lastSeenMs, uid)}
-              canManage={p.postedByUid === uid || Boolean(access?.roles.includes('scoutmaster'))}
+              canManage={p.postedByUid === uid || Boolean(access?.roles.some((r) => r === 'scoutmaster' || r === 'advancement'))}
             />
           ))}
         </ul>

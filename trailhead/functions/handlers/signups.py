@@ -29,6 +29,8 @@ from handlers.signup_config import (  # noqa: F401  (re-exported: callers use `h
 
 HELD, WAITLIST = "held", "waitlist"
 NOT_NEEDED, PENDING, APPROVED = "not_needed", "pending", "approved"
+# How permission was given: a parent in the app, or a leader recording a signed paper slip.
+APP, PAPER = "app", "paper"
 GOING, WAITING, ON_WAITLIST = "going", "waiting_permission", "waitlist"
 LEADER_ROLES = {"leader", "scoutmaster", "advancement"}
 
@@ -109,7 +111,13 @@ def new_signup(
         if how == "parent":
             if not gave_permission:
                 raise SignupError("Tick the box to give permission for your Scout to go.")
-            permission = {"state": APPROVED, "byMemberId": signer["memberId"], "byName": signer["name"], "at": now}
+            permission = {
+                "state": APPROVED,
+                "method": APP,
+                "byMemberId": signer["memberId"],
+                "byName": signer["name"],
+                "at": now,
+            }
         else:
             permission = {"state": PENDING}
     doc = {
@@ -140,10 +148,20 @@ def after_promotion(signup: dict) -> dict:
     return {**moved, "status": status_of(moved)}
 
 
-def with_permission(signup: dict, signer: dict, now: datetime) -> dict:
-    perm = {"state": APPROVED, "byMemberId": signer["memberId"], "byName": signer["name"], "at": now}
+def with_permission(signup: dict, signer: dict, now: datetime, method: str = APP) -> dict:
+    """The sign-up once permission is given. `method` is "app" for a parent, or "paper" when a leader records a slip."""
+    perm = {"state": APPROVED, "method": method, "byMemberId": signer["memberId"], "byName": signer["name"], "at": now}
     changed = {**signup, "permission": perm}
     return {**changed, "status": status_of(changed)}
+
+
+def paper_blocker(signup: dict | None) -> str | None:
+    """Why a leader can't record a paper slip for this sign-up, or None. Only a sign-up waiting for permission."""
+    if signup is None:
+        return "That sign-up was not found."
+    if (signup.get("permission") or {}).get("state") != PENDING:
+        return "This sign-up is not waiting for permission."
+    return None
 
 
 def needing_permission(signups: dict[str, dict]) -> list[str]:

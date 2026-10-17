@@ -1,8 +1,8 @@
 import { collection } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { errorMessage } from '../../lib/api';
-import { audienceAllows, STATUS_LABELS, type Signup, type SignupStatus } from '../../lib/eventSignups';
-import { cancelSignup, signUpForEvent } from '../../lib/eventsApi';
+import { audienceAllows, permissionText, STATUS_LABELS, type Signup, type SignupStatus } from '../../lib/eventSignups';
+import { cancelSignup, recordPaperPermission, signUpForEvent } from '../../lib/eventsApi';
 import { db } from '../../lib/firebase';
 import { useQuery } from '../../lib/hooks';
 import { useTroop } from '../../lib/troop';
@@ -16,7 +16,23 @@ interface Note {
 
 const ORDER: SignupStatus[] = ['waiting_permission', 'going', 'waitlist'];
 
-function Row({ signup, event, note, onRemove }: { signup: Signup; event: TroopEvent; note?: string; onRemove: () => void }) {
+function when(at: { toDate?: () => Date } | undefined): string {
+  return at?.toDate ? at.toDate().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+}
+
+function Row({
+  signup,
+  event,
+  note,
+  onRemove,
+  onPaper,
+}: {
+  signup: Signup;
+  event: TroopEvent;
+  note?: string;
+  onRemove: () => void;
+  onPaper: () => void;
+}) {
   const { memberName } = useTroop();
   const name = memberName(signup.memberId);
   const answers = (event.signups?.questions ?? []).filter((q) => signup.answers?.[q.id]);
@@ -32,13 +48,20 @@ function Row({ signup, event, note, onRemove }: { signup: Signup; event: TroopEv
           </span>
         ))}
         {note ? <span className="small">Health or emergency note: {note}</span> : null}
-        {signup.permission.state === 'approved' && signup.permission.byName ? (
-          <span className="muted small">Permission given by {signup.permission.byName}</span>
+        {permissionText(signup.permission, when(signup.permission.at)) ? (
+          <span className="muted small">{permissionText(signup.permission, when(signup.permission.at))}</span>
         ) : null}
       </div>
-      <button type="button" className="btn secondary small" onClick={onRemove}>
-        Remove {name}
-      </button>
+      <div className="row">
+        {signup.permission.state === 'pending' ? (
+          <button type="button" className="btn secondary small" onClick={onPaper}>
+            Record paper slip for {name}
+          </button>
+        ) : null}
+        <button type="button" className="btn secondary small" onClick={onRemove}>
+          Remove {name}
+        </button>
+      </div>
     </li>
   );
 }
@@ -88,6 +111,7 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
                   event={event}
                   note={noteOf.get(s.memberId)}
                   onRemove={() => run(() => cancelSignup({ troopId, eventId: event.id, memberId: s.memberId }))}
+                  onPaper={() => run(() => recordPaperPermission({ troopId, eventId: event.id, memberId: s.memberId }))}
                 />
               ))}
             </ul>
@@ -112,7 +136,7 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
           {pick ? `Add ${memberName(pick)}` : 'Add'}
         </button>
       </div>
-      <p className="small muted">A Scout you add still needs a parent to give permission if the event asks for it.</p>
+      <p className="small muted">A Scout you add still needs permission if the event asks for it. A parent gives it in the app, or you record a signed paper slip.</p>
     </div>
   );
 }

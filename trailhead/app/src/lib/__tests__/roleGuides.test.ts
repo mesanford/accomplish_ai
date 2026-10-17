@@ -121,6 +121,20 @@ describe('role guides: everyone and leaders', () => {
     }
   });
 
+  it('explains paper permission slips and that leaders cannot approve in the app', () => {
+    const t = text('leader');
+    expect(t).toContain('record paper slip');
+    expect(t).toContain('paper permission slip received');
+    expect(guide('leader').cannot.join(' ')).toMatch(/Approve permission in the app/);
+    expect(text('parent')).toContain('signed paper slip');
+  });
+
+  it('tells a new troop creator to pick a role and that advancement chairs manage posts', () => {
+    expect(text('leader')).toContain('pick your role');
+    expect(text('leader')).toContain('an advancement chair can edit, pin or delete');
+    expect(text('committee')).toContain('advancement chair can');
+  });
+
   it('keeps leaders away from money unless they are the Scoutmaster or advancement chair', () => {
     expect(guide('leader').cannot.join(' ')).toMatch(/Scout accounts, unless you are also the Scoutmaster, advancement chair or treasurer/);
   });

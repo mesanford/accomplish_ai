@@ -86,6 +86,17 @@ def test_no_client_can_write_a_sign_up_even_for_their_own_scout():
         assert who.delete(path) == DENIED
 
 
+def test_no_client_can_record_a_paper_permission_slip_directly():
+    # Only the record_paper_permission function writes "paper" permission, after checking the caller is a leader.
+    seed()
+    path = f"{EVENT}/signups/s1"
+    paper = signup(
+        "s1", status="going", permission={"state": "approved", "method": "paper", "byMemberId": "m-leader"}
+    )
+    for who in (leader, assistant, chair, parent, scout1, counselor, stranger):
+        assert who.set(path, paper) == DENIED
+
+
 def test_a_family_cannot_approve_permission_or_jump_the_waitlist_itself():
     seed()
     path = f"{EVENT}/signups/s1"

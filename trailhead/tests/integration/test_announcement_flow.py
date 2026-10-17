@@ -52,7 +52,7 @@ def posted(response) -> dict:
 def seeded():
     reset()
     requests.delete(f"{AUTH}/emulator/v1/projects/{PROJECT}/accounts", timeout=10)
-    users = [{"localId": u, "email": email_of(u)} for u in [*ADULTS, "scout1"]]
+    users = [{"localId": u, "email": email_of(u)} for u in [*ADULTS, "scout1", "chair"]]
     url = f"{AUTH}/identitytoolkit.googleapis.com/v1/projects/{PROJECT}/accounts:batchCreate"
     requests.post(url, json={"users": users}, headers={"Authorization": "Bearer owner"}, timeout=10).raise_for_status()
     owner.set(T, {"name": "Troop 9", "unitNumber": "9"})
@@ -248,3 +248,37 @@ def test_people_who_join_later_can_read_the_last_twelve_months_for_their_audienc
     # Gaining a role later opens that role's recent posts too.
     owner.set(f"{T}/access/newbie", {"memberId": "m-newbie", "roles": ["parent", "leader"], "scoutIds": ["s2"]})
     wait_for(lambda: "newbie" in read(f"{T}/announcements/{leaders_only}")["readerUids"])
+
+
+def add_advancement_chair() -> None:
+    member = {"kind": "adult", "displayName": "Chair Person", "uid": "chair", "roles": ["advancement"]}
+    owner.set(f"{T}/members/m-chair", member)
+    access = {"memberId": "m-chair", "roles": ["advancement"], "scoutIds": [], "yptExpiresAt": FUTURE}
+    owner.set(f"{T}/access/chair", access)
+
+
+def test_the_advancement_chair_reads_edits_and_deletes_any_post():
+    add_advancement_chair()
+    result = posted(post("com", audience={"type": "adults"}))["announcementId"]
+    # A reader like the Scoutmaster, whatever the audience.
+    assert "chair" in read(f"{T}/announcements/{result}")["readerUids"]
+    parents_only = posted(post("com", audience={"type": "parents"}))["announcementId"]
+    assert "chair" in read(f"{T}/announcements/{parents_only}")["readerUids"]
+    edit = {"troopId": "tn", "announcementId": parents_only, "title": "Changed", "body": "New day."}
+    assert call("edit_announcement", "chair", edit).status_code == 200
+    assert call("delete_announcement", "chair", {"troopId": "tn", "announcementId": parents_only}).status_code == 200
+    assert call("delete_announcement", "asst", {"troopId": "tn", "announcementId": result}).status_code == 403
+
+
+def test_an_advancement_chair_who_arrives_later_can_read_recent_posts_outside_their_audience():
+    from tests.integration.test_functions import wait_for
+
+    recent = posted(post(audience={"type": "parents"}))["announcementId"]
+    old = posted(post(audience={"type": "parents"}))["announcementId"]
+    owner.set(
+        f"{T}/announcements/{old}",
+        {**read(f"{T}/announcements/{old}"), "createdAt": datetime.now(UTC) - timedelta(days=400)},
+    )
+    add_advancement_chair()
+    wait_for(lambda: "chair" in read(f"{T}/announcements/{recent}")["readerUids"])
+    assert "chair" not in read(f"{T}/announcements/{old}")["readerUids"]  # older than 12 months
