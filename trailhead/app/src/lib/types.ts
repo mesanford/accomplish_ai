@@ -187,6 +187,8 @@ export interface TroopEvent {
   feeCents?: number;
   /** Sign-up settings (see eventSignups.ts). */
   signups?: SignupSettings;
+  /** Health form needed: Parts A and B, or A, B and C (see healthForm.ts). */
+  healthForm?: 'ab' | 'abc';
   /** Written only by the server. */
   signupCounts?: { held: number; going: number; waitingPermission: number; waitlist: number };
   feesPending?: { count: number; amountCents: number };

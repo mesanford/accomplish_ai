@@ -5,6 +5,7 @@ import { ScoutActivity } from '../components/activity/ScoutActivity';
 import { AccountStatement } from '../components/AccountStatement';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
+import { HealthFormCard } from '../components/HealthFormCard';
 import { LinkAsParent } from '../components/LinkAsParent';
 import { MarkLeft } from '../components/MarkLeft';
 import { MediaConsent } from '../components/MediaConsent';
@@ -101,6 +102,7 @@ export function ScoutPage() {
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={canManageBadges} />
       </section>
+      <HealthFormCard memberId={scoutId} name={scout.displayName} />
       <AccountStatement scoutId={scoutId} />
       <LinkAsParent scout={scout} />
       <ParentConsent scout={scout} />

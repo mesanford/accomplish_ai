@@ -6,6 +6,7 @@ import { AdultRow } from '../components/AdultRow';
 import { InviteForm } from '../components/InviteForm';
 import { ScoutQuartermaster } from '../components/ScoutQuartermaster';
 import { GuideBlock } from '../components/GuideBlock';
+import { HealthPills } from '../components/HealthPills';
 import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { ColorSwatch } from '../components/patrols/PatrolCard';
@@ -14,6 +15,7 @@ import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
 import { consentSummary } from '../lib/consent';
 import { db } from '../lib/firebase';
+import { useHealthForms } from '../lib/healthHooks';
 import { useQuery } from '../lib/hooks';
 import { usePatrols } from '../lib/patrolHooks';
 import { filterByPatrol, NO_PATROL, officeOf } from '../lib/patrols';
@@ -24,6 +26,7 @@ export function Roster() {
   const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
   const [added, setAdded] = useState('');
   const [patrolFilter, setPatrolFilter] = useState('');
+  const { forms: healthForms } = useHealthForms();
   const patrols = usePatrols().data;
   const consentsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/consents`) : null), [isLeader, troopId]);
   const consents = useQuery<ConsentDoc>(consentsQuery, `${troopId}/consents/${isLeader}`);
@@ -124,6 +127,7 @@ export function Roster() {
                   </span>
                   <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>
+                  <HealthPills form={healthForms.get(s.id)} />
                   <ScoutQuartermaster scout={s} />
                 </li>
               );
@@ -138,7 +142,7 @@ export function Roster() {
         </h2>
         <ul className="list">
           {adults.map((a) => (
-            <AdultRow key={a.id} adult={a} scouts={scouts} pendingScoutIds={pending.get(a.id) ?? []} />
+            <AdultRow key={a.id} adult={a} scouts={scouts} pendingScoutIds={pending.get(a.id) ?? []} health={healthForms.get(a.id)} />
           ))}
         </ul>
       </section>

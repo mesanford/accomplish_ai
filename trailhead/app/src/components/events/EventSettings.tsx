@@ -9,6 +9,7 @@ import {
   type SignupQuestion,
 } from '../../lib/eventSignups';
 import { db } from '../../lib/firebase';
+import { type FormNeed, NEED_LABELS } from '../../lib/healthForm';
 import type { TroopEvent } from '../../lib/types';
 import { Field, Notice } from '../ui';
 import { QuestionEditor } from './QuestionEditor';
@@ -26,6 +27,7 @@ export function EventSettings({ troopId, event }: { troopId: string; event: Troo
   const [startTime, setStartTime] = useState(event.startTime ?? '');
   const [endTime, setEndTime] = useState(event.endTime ?? '');
   const [endDate, setEndDate] = useState(event.endDate ?? '');
+  const [healthForm, setHealthForm] = useState<FormNeed | ''>(event.healthForm ?? '');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -51,6 +53,7 @@ export function EventSettings({ troopId, event }: { troopId: string; event: Troo
     try {
       await updateDoc(doc(db, `troops/${troopId}/events/${event.id}`), {
         feeCents: cents,
+        healthForm: healthForm || deleteField(),
         startTime: startTime || deleteField(),
         endTime: endTime || deleteField(),
         endDate: endDate || deleteField(),
@@ -86,6 +89,16 @@ export function EventSettings({ troopId, event }: { troopId: string; event: Troo
       </div>
       <Field label="Fee per Scout, in dollars" htmlFor="es-fee" hint="Leave empty if there is no fee.">
         <input id="es-fee" inputMode="decimal" value={fee} onChange={(e) => setFee(e.target.value)} placeholder="25" />
+      </Field>
+      <Field label="Health form needed" htmlFor="es-health" hint="Families and leaders see who is missing it or will have it expire by the last day.">
+        <select id="es-health" value={healthForm} onChange={(e) => setHealthForm(e.target.value as FormNeed | '')}>
+          <option value="">None</option>
+          {(Object.keys(NEED_LABELS) as FormNeed[]).map((k) => (
+            <option key={k} value={k}>
+              {NEED_LABELS[k]}
+            </option>
+          ))}
+        </select>
       </Field>
       <label className="check">
         <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />

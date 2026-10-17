@@ -8,6 +8,7 @@ import { useDoc } from '../../lib/hooks';
 import { useTroop } from '../../lib/troop';
 import type { TroopEvent } from '../../lib/types';
 import { Field, Notice, todayIso } from '../ui';
+import { EventHealth } from './EventHealth';
 import { SignupForm } from './SignupForm';
 
 function when(at: { toDate?: () => Date } | undefined): string {
@@ -83,6 +84,7 @@ export function PersonSignup({ troopId, event, memberId, name, full }: Props) {
   return (
     <section className="card stack" aria-label={`Sign-up for ${name}`}>
       <h3>{name}</h3>
+      <EventHealth event={event} memberId={memberId} />
       {signup ? (
         <>
           <p>

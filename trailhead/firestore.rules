@@ -38,6 +38,12 @@ service cloud.firestore {
     // quartermaster role grants nothing else.
     function canManageGear(t) { return isLeader(t) || hasRole(t, 'quartermaster'); }
     function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
+    // Health form dates (BSA Annual Health and Medical Record), never medical details. A person, a Scout's linked
+    // parent and leaders read them; only the record_health_form function writes them (it stamps who and when).
+    function canRecordHealth(t, m) {
+      return exists(/databases/$(database)/documents/troops/$(t)/members/$(m))
+        && (isLeader(t) || actsFor(t, m) || (isMember(t) && access(t).memberId == m));
+    }
     function card(t, cardId) { return get(/databases/$(database)/documents/troops/$(t)/blueCards/$(cardId)).data; }
     function isCounselorFor(t, cardId) {
       return hasRole(t, 'counselor')
@@ -243,6 +249,16 @@ service cloud.firestore {
           allow write: if false;
         }
       }
+      // Health form dates: {partsAB, partC}, each {date, byMemberId, at}. Doc id = member id. Server-written; erased
+      // with the person.
+      match /healthForms/{m} {
+        allow read: if canRecordHealth(t, m);
+        allow write: if false;
+      }
+      // Which Youth Protection reminders were sent. Server-only, so no one can reset or read them.
+      match /yptReminders/{m} {
+        allow read, write: if false;
+      }
       match /counselors/{c} {
         allow read: if isMember(t);
         allow write: if isLeader(t);
@@ -260,6 +276,7 @@ service cloud.firestore {
           return (!('signups' in d)
               || (d.signups is map && d.signups.get('questions', []) is list && d.signups.get('questions', []).size() <= 6))
             && (!('feeCents' in d) || (d.feeCents is int && d.feeCents >= 0 && d.feeCents <= 1000000))
+            && (!('healthForm' in d) || d.healthForm in ['ab', 'abc'])
             && (!('logKind' in d) || d.logKind in ['campout', 'service', 'hike', 'other'])
             && (!('logValues' in d) || validLogValues(d.logValues));
         }
