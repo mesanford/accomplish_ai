@@ -102,14 +102,16 @@ service cloud.firestore {
       // Roster: names, roles, patrols. Shared with the whole troop.
       // mediaConsent (may photos of this Scout go on the public website) is written only by the
       // set_media_consent function, which checks the caller is a parent or a leader.
+      // patrolId (the Scout's patrol) is written only by the assign_patrol and delete_patrol functions, which keep
+      // each patrol's leader and assistant in step with who is in it.
       // leftAt (when a Scout left the troop; their records are deleted 12 months later) is written only by the
       // mark_scout_left function, with the server's time, so it can't be backdated.
       match /members/{m} {
         allow read: if isMember(t);
         allow create: if isLeader(t) && !('mediaConsent' in request.resource.data)
-          && !('leftAt' in request.resource.data);
+          && !('leftAt' in request.resource.data) && !('patrolId' in request.resource.data);
         allow update: if isLeader(t)
-          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent', 'leftAt']);
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent', 'leftAt', 'patrolId']);
         allow delete: if false;
       }
       // Private Scout details (birth month and year, rank dates). Only the remove_scout function deletes one.
@@ -250,7 +252,16 @@ service cloud.firestore {
         function okSettings(d) {
           return (!('signups' in d)
               || (d.signups is map && d.signups.get('questions', []) is list && d.signups.get('questions', []).size() <= 6))
-            && (!('feeCents' in d) || (d.feeCents is int && d.feeCents >= 0 && d.feeCents <= 1000000));
+            && (!('feeCents' in d) || (d.feeCents is int && d.feeCents >= 0 && d.feeCents <= 1000000))
+            && (!('logKind' in d) || d.logKind in ['campout', 'service', 'hike', 'other'])
+            && (!('logValues' in d) || validLogValues(d.logValues));
+        }
+        // What each Scout who is marked present earns: nights camped, service hours and miles hiked.
+        function validLogValues(v) {
+          return v is map && v.keys().hasOnly(['nights', 'miles', 'serviceHours'])
+            && v.get('nights', 0) is number && v.get('nights', 0) >= 0 && v.get('nights', 0) <= 60
+            && v.get('miles', 0) is number && v.get('miles', 0) >= 0 && v.get('miles', 0) <= 2000
+            && v.get('serviceHours', 0) is number && v.get('serviceHours', 0) >= 0 && v.get('serviceHours', 0) <= 1000;
         }
         function serverOwned() { return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor']; }
 
@@ -285,8 +296,16 @@ service cloud.firestore {
       match /calendarTokens/{uid} {
         allow read, write: if false;
       }
+      // Activity credits (camping nights, service hours, miles): one per Scout per event, plus manual entries. Leaders
+      // read all; a family and a Scout 13 or older read their own. Only the server writes them, so a family can't
+      // credit itself: its manual entries wait for a leader as pending.
       match /logs/{id} {
         allow read: if canSeeScout(t, resource.data.scoutId);
+        allow write: if false;
+      }
+      // Patrols: shared with the whole troop, written only by save_patrol, assign_patrol and delete_patrol.
+      match /patrols/{id} {
+        allow read: if isMember(t);
         allow write: if false;
       }
       // Messages are only created by the send_message function, which applies Youth Protection rules.

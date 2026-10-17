@@ -13,7 +13,7 @@ from handlers.membership import InvalidInput
 from handlers.roles import as_date
 
 POSTER_ROLES = LEADER_ROLES | {"committee"}
-AUDIENCES = ("troop", "parents", "adults", "leaders", "parentsOf", "event")
+AUDIENCES = ("troop", "parents", "adults", "leaders", "parentsOf", "patrolParents", "event")
 KINDS = ("announcement", "newsletter")
 MAX_EMAILED_PER_DAY = 5  # emailed announcements per troop per day
 MAX_EMAIL_RECIPIENTS = 200  # people emailed by one announcement
@@ -114,6 +114,10 @@ def parse_audience(value) -> dict:
         if len(set(ids)) > MAX_SCOUTS:
             raise InvalidInput(f"Choose up to {MAX_SCOUTS} Scouts.")
         audience["scoutIds"] = list(dict.fromkeys(ids))
+    if kind == "patrolParents":
+        if not isinstance(value.get("patrolId"), str) or not value["patrolId"]:
+            raise InvalidInput("Choose a patrol.")
+        audience["patrolId"] = value["patrolId"]
     if kind == "event":
         if not isinstance(value.get("eventId"), str) or not value["eventId"]:
             raise InvalidInput("Choose an event.")

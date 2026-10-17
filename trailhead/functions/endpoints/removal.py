@@ -11,6 +11,7 @@ from endpoints.erase import commit, delete_files, delete_folder, delete_op, upda
 from endpoints.ledger_retention import close_scout_account
 from endpoints.site_consent import _take_down_photos as take_down_photos
 from fb import db, fail, require_leader, troop
+from handlers.patrols import plan_erase
 from handlers.removal import (
     card_folder,
     plan_access,
@@ -74,6 +75,10 @@ def _plan_ops(t, scout_id: str, scout_uid: str | None) -> tuple[list, list[str],
 
     usage = t.collection("usage")
     ops += [delete_op(usage.document(i)) for i in usage_ids(scout_uid, [d.id for d in usage.list_documents()])]
+
+    # A patrol that named this Scout as its leader or assistant no longer does.
+    patrols = _docs(t.collection("patrols"))
+    ops += [update_op(t.collection("patrols").document(p), f) for p, f in plan_erase(scout_id, patrols).items()]
 
     draft_ref = t.collection("site").document("draft")
     gallery, files = plan_draft_gallery(scout_id, draft_ref.get().to_dict())

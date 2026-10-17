@@ -6,6 +6,12 @@ Logic lives in `handlers` and `trailhead_core`; Firestore wiring lives in `endpo
 
 from endpoints.account import delete_account, set_email_announcements, set_email_notifications
 from endpoints.activity import mark_scout_left, record_activity
+from endpoints.activity_log import (
+    add_activity_entry,
+    delete_activity_entry,
+    on_event_written_activity_log,
+    review_activity_entry,
+)
 from endpoints.advancement import (
     check_path_preview,
     on_attendance_written,
@@ -30,6 +36,7 @@ from endpoints.messaging import send_message
 from endpoints.notify import on_blue_card_notify
 from endpoints.paper_cards import record_paper_blue_card
 from endpoints.parent_consent import answer_pending_consent, link_self_as_parent
+from endpoints.patrols import assign_patrol, delete_patrol, save_patrol
 from endpoints.permission import approve_permission
 from endpoints.pilot import request_pilot
 from endpoints.prior import record_prior_advancement
@@ -49,6 +56,13 @@ from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 
 __all__ = [
+    "add_activity_entry",
+    "assign_patrol",
+    "delete_activity_entry",
+    "delete_patrol",
+    "on_event_written_activity_log",
+    "review_activity_entry",
+    "save_patrol",
     "settle_account",
     "save_campaign",
     "save_account_settings",

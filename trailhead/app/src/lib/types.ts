@@ -56,6 +56,8 @@ export interface Member {
   mediaConsent?: { granted: boolean; byMemberId: string; at?: Timestamp };
   /** When a leader marked this Scout as having left the troop. Written only by mark_scout_left. */
   leftAt?: Timestamp | null;
+  /** The Scout's patrol (a Scout is in at most one). Written only by the assign_patrol function. */
+  patrolId?: string;
 }
 
 /** troops/{t}/consents/{scoutId}: written only by the server. */
@@ -167,6 +169,8 @@ export interface TroopEvent {
   title: string;
   start: string;
   logValues?: { nights?: number; miles?: number; serviceHours?: number };
+  /** What kind of activity this is, for the Scouts' activity logs (see activity.ts). */
+  logKind?: 'campout' | 'service' | 'hike' | 'other';
   linkedRequirements?: { awardId: string; reqId: string }[];
   /** Listed on the troop's public website (title, date and place only). */
   public?: boolean;

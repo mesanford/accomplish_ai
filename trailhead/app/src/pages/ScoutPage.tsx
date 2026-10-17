@@ -1,6 +1,7 @@
 import { collection, doc, query, where } from 'firebase/firestore';
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ScoutActivity } from '../components/activity/ScoutActivity';
 import { AccountStatement } from '../components/AccountStatement';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
@@ -95,6 +96,7 @@ export function ScoutPage() {
           <CustomProgress progress={custom} scoutName={scout.displayName} />
         </section>
       ) : null}
+      {scout.kind === 'scout' ? <ScoutActivity scoutId={scoutId} rankDates={record.data?.rankDates} /> : null}
       <section className="stack">
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={canManageBadges} />

@@ -66,6 +66,13 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     clock, after which the Scout's records are deleted (or 12 months after they turn 18, if sooner). Leaders can
     delete a "Join us" request at any time (`delete_lead`). Opening a troop calls `record_activity`, which keeps
     `troops/{t}.lastActiveAt`; a troop nobody opens for 18 months is deleted (dry run until the operator turns it on).
+    **Patrols and activity logs.** Leaders make patrols (`save_patrol`, `assign_patrol`, `delete_patrol`): a Scout's
+    patrol is `patrolId` on their member document, and a patrol names its patrol leader and assistant. An event's
+    *Activity log* (kind, nights, service hours, miles) credits each Scout marked present: `on_attendance_written` and
+    `on_event_written_activity_log` keep one server-owned document per Scout per event in `troops/{t}/logs`
+    (`{eventId}_{scoutId}`), recomputed when attendance or the event changes. Leaders add manual entries
+    (`add_activity_entry`); a parent or a Scout 13+ submits one that waits for `review_activity_entry`. The
+    **Activity report** page totals nights, service hours and miles per Scout and patrol and exports CSV.
 14. **Events 2.0.** A leader turns on sign-ups for an event (Scouts, adults or both; a number of spots with an
     automatic waitlist; a deadline; short questions) and may set a fee, times and a last day. Parents sign up their own
     Scouts, Scouts 13 and older sign themselves up, adults sign themselves up, and a parent's sign-up counts as

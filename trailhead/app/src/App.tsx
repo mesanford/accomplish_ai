@@ -26,6 +26,7 @@ import { Announcements } from './pages/Announcements';
 import { Messages } from './pages/Messages';
 import { NotFound, RouteError } from './pages/NotFound';
 import { PathEditor } from './pages/PathEditor';
+import { Patrols } from './pages/Patrols';
 import { PathTemplates } from './pages/PathTemplates';
 import { PostCharge } from './pages/PostCharge';
 import { PublicSite } from './pages/PublicSite';
@@ -40,6 +41,7 @@ import { Scoutbook } from './pages/Scoutbook';
 import { ScoutStatement } from './pages/ScoutStatement';
 import { SignIn } from './pages/SignIn';
 import { ThreadPage } from './pages/ThreadPage';
+import { TroopReportPage } from './pages/TroopReport';
 import { TroopHome } from './pages/TroopHome';
 import { Documents } from './pages/Documents';
 import { Website } from './pages/Website';
@@ -105,6 +107,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <TroopHome /> },
       { path: 'roster', element: <Roster /> },
+      { path: 'patrols', element: <Patrols /> },
+      { path: 'activity-report', element: <TroopReportPage /> },
       { path: 'scouts/:scoutId', element: <ScoutPage /> },
       { path: 'scouts/:scoutId/path', element: <PathEditor /> },
       { path: 'scouts/:scoutId/earlier', element: <PriorAdvancement /> },

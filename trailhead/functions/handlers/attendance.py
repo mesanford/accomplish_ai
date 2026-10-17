@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from handlers.activity_log import event_log_doc
+
 
 @dataclass
 class AttendanceEffects:
@@ -15,17 +17,7 @@ def attendance_effects(event_id: str, event: dict, member: dict, present: bool) 
     """Only Scouts who were present get logs and ready requirements."""
     if not present or member.get("kind") != "scout":
         return AttendanceEffects(log=None)
-    values = {k: v for k, v in (event.get("logValues") or {}).items() if v}
-    log = None
-    if values:
-        log = {
-            "scoutId": member["id"],
-            "eventId": event_id,
-            "date": event.get("start"),
-            "nights": values.get("nights", 0),
-            "miles": values.get("miles", 0),
-            "serviceHours": values.get("serviceHours", 0),
-        }
+    log = event_log_doc(event_id, event, member["id"])
     ready = [(r["awardId"], r["reqId"]) for r in event.get("linkedRequirements", [])]
     return AttendanceEffects(log=log, ready=ready)
 
