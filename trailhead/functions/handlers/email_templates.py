@@ -143,3 +143,19 @@ def consent_confirmation(scouts: list[str], troop: str, when: str, version: str,
         ["You get this email because you agreed to the notice. We always send it, as a record of your choice."],
     )
     return Email(f"You agreed to Forthright's notice for {names}", text, html)
+
+
+def consent_review_reminder(scouts: list[str], troop: str, troop_id: str, app_url: str) -> Email:
+    """Asks a parent who agreed to an older notice to read the current one. Sent only when a leader asks."""
+    names = join_names(scouts)
+    return _notification(
+        f"Forthright's notice for {names} changed",
+        [
+            f"{troop} uses Forthright, and the notice to parents and guardians for {names} has changed since you "
+            "agreed to it.",
+            "Please read what changed and tell us if you agree. You can keep using Forthright either way. "
+            "If you don't agree, you can withdraw your consent from your Scout's page.",
+        ],
+        ("Review the notice", f"{app_url}/t/{troop_id}"),
+        app_url,
+    )

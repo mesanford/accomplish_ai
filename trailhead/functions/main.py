@@ -26,6 +26,7 @@ from endpoints.campaigns import post_sales, save_account_settings, save_campaign
 from endpoints.charges import charge_attendees, post_charge
 from endpoints.checkout import create_checkout
 from endpoints.consent import invite_notice, withdraw_parent_consent
+from endpoints.consent_review import review_consent_notice, send_consent_reminders
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.domains import add_domain, check_domain, remove_domain
 from endpoints.domains_sync import sync_domains
@@ -147,6 +148,8 @@ __all__ = [
     "submit_interest",
     "unpublish_site",
     "withdraw_parent_consent",
+    "review_consent_notice",
+    "send_consent_reminders",
     "payments_status",
     "connect_stripe",
     "disconnect_stripe",

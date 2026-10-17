@@ -74,6 +74,25 @@ export const linkSelfAsParent = (troopId: string, scoutId: string, agree: Consen
 export const answerPendingConsent = (troopId: string, agree: ConsentAnswer) =>
   call<{ troopId: string } & ConsentAnswer, { ok: boolean }>('answer_pending_consent', { troopId, ...agree });
 
+/** A parent who agreed to an older notice agrees to the current one. Adds a new consent entry; nothing is replaced. */
+export const reviewConsentNotice = (troopId: string, consentVersion: string) =>
+  call<{ troopId: string; consent: boolean; consentVersion: string }, { ok: boolean; reviewed: string[] }>(
+    'review_consent_notice',
+    { troopId, consent: true, consentVersion },
+  );
+
+export interface ReminderResult {
+  sent: number;
+  recentlyReminded: number;
+  optedOut: number;
+  noAddress: number;
+  remaining: number;
+}
+
+/** A leader emails parents who have not reviewed the current notice (at most once a week each). */
+export const sendConsentReminders = (troopId: string) =>
+  call<{ troopId: string }, ReminderResult>('send_consent_reminders', { troopId });
+
 export interface RolesForm {
   troopId: string;
   memberId: string;

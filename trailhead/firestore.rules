@@ -134,7 +134,12 @@ service cloud.firestore {
         allow read: if canSeeScout(t, s);
         allow write: if false;
       }
-      // Progress id = {scoutId}_{awardId}, the same id as the Scout's blue card for that badge.
+      // When a leader last sent each parent a "the notice changed" reminder (id = the parent's uid), for the
+      // once-a-week limit. Server-only.
+      match /consentReminders/{u} {
+        allow read, write: if false;
+      }
+      // Progress id = {scoutId}_{awardId},the same id as the Scout's blue card for that badge.
       match /progress/{p} {
         allow read: if canSeeScout(t, resource.data.scoutId) || isCounselorFor(t, p);
         allow write: if false;

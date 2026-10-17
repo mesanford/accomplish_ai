@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { AdultRow } from '../components/AdultRow';
+import { ConsentReminder } from '../components/ConsentReminder';
 import { InviteForm } from '../components/InviteForm';
 import { ScoutQuartermaster } from '../components/ScoutQuartermaster';
 import { GuideBlock } from '../components/GuideBlock';
@@ -13,6 +14,7 @@ import { Empty, Notice, PageHeader } from '../components/ui';
 import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
 import { consentSummary } from '../lib/consent';
+import { staleByScout } from '../lib/consentReview';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
 import { usePatrols } from '../lib/patrolHooks';
@@ -50,6 +52,8 @@ export function Roster() {
       waitingScouts.has(s.id),
     );
   const withdrawn = scouts.filter((s) => consentOf(s).withdrawn);
+  // Scouts with a parent whose latest consent is for an older version of the notice.
+  const stale = staleByScout(consents.data, members);
   return (
     <>
       <PageHeader eyebrow="Troop" title="Roster" />
@@ -101,6 +105,7 @@ export function Roster() {
             .
           </Notice>
         ) : null}
+        <ConsentReminder stale={stale} scouts={scouts} />
         {scouts.length === 0 ? (
           <NextStep action="Go to the form" onClick={() => document.getElementById('scout-name')?.focus()}>No Scouts yet. Add your first Scout with the form below.</NextStep>
         ) : shownScouts.length === 0 ? (
@@ -124,6 +129,7 @@ export function Roster() {
                   </span>
                   <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>
+                  {stale.has(s.id) ? <span className="pill warn">Parent hasn't reviewed the new notice</span> : null}
                   <ScoutQuartermaster scout={s} />
                 </li>
               );
