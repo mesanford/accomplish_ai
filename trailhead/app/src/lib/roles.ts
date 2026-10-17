@@ -28,7 +28,7 @@ const SHORT_NAMES: Record<Role, string> = {
 };
 
 /** Roles that sign off, counsel or message Scouts, so they need current Youth Protection training. */
-const TRAINED_ROLES: Role[] = ['leader', 'scoutmaster', 'advancement', 'counselor', 'committee'];
+export const TRAINED_ROLES: Role[] = ['leader', 'scoutmaster', 'advancement', 'counselor', 'committee'];
 
 const sameSet = (a: Role[], b: Role[]) => a.length === b.length && a.every((r) => b.includes(r));
 

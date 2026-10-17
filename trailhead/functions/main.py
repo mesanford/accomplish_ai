@@ -35,6 +35,7 @@ from endpoints.equipment_photo import on_inventory_deleted, set_item_photo
 from endpoints.event_fees import charge_event_fees
 from endpoints.event_reminders import send_event_reminders
 from endpoints.feeds import calendar_feed, get_calendar_feed, reset_calendar_feed
+from endpoints.health_forms import record_health_form
 from endpoints.leads import delete_lead
 from endpoints.membership import accept_invite, create_invite, create_troop
 from endpoints.messaging import send_message
@@ -62,6 +63,8 @@ from endpoints.site_consent import set_media_consent
 from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 from endpoints.stripe_webhook import stripe_webhook
+from endpoints.ypt_reminders import send_ypt_reminders
+from endpoints.ypt_self import set_my_ypt
 
 __all__ = [
     "add_domain",
@@ -124,6 +127,7 @@ __all__ = [
     "post_announcement",
     "publish_site",
     "record_activity",
+    "record_health_form",
     "record_paper_blue_card",
     "record_prior_advancement",
     "register_push_device",
@@ -135,8 +139,10 @@ __all__ = [
     "save_custom_award",
     "send_event_reminders",
     "send_message",
+    "send_ypt_reminders",
     "set_item_photo",
     "set_member_roles",
+    "set_my_ypt",
     "set_scout_quartermaster",
     "set_email_announcements",
     "set_email_notifications",

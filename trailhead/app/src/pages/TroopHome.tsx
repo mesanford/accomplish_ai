@@ -6,6 +6,7 @@ import { GettingStarted } from '../components/GettingStarted';
 import { HelpTip } from '../components/HelpTip';
 import { HomeAnnouncement } from '../components/HomeAnnouncement';
 import { NextStep } from '../components/NextStep';
+import { YptAlert } from '../components/YptAlert';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
 import { blueCardAction, noScoutsText } from '../lib/homeCopy';
@@ -91,6 +92,7 @@ export function TroopHome() {
       <PageHeader eyebrow={`Unit ${troop?.unitNumber ?? ''}`} title={troop?.name ?? 'Troop'} />
       <GettingStarted />
       <HomeAnnouncement />
+      {isLeader ? <YptAlert /> : null}
       {isLeader ? <LeadAlert /> : null}
       {isLeader ? <LeaderSummary /> : null}
       {has('counselor') ? (

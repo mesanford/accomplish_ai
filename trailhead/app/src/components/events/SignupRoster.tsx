@@ -3,6 +3,8 @@ import { useMemo, useState } from 'react';
 import { errorMessage } from '../../lib/api';
 import { audienceAllows, STATUS_LABELS, type Signup, type SignupStatus } from '../../lib/eventSignups';
 import { cancelSignup, signUpForEvent } from '../../lib/eventsApi';
+import { eventProblems, problemText } from '../../lib/healthForm';
+import { useHealthForms } from '../../lib/healthHooks';
 import { db } from '../../lib/firebase';
 import { useQuery } from '../../lib/hooks';
 import { useTroop } from '../../lib/troop';
@@ -16,7 +18,7 @@ interface Note {
 
 const ORDER: SignupStatus[] = ['waiting_permission', 'going', 'waitlist'];
 
-function Row({ signup, event, note, onRemove }: { signup: Signup; event: TroopEvent; note?: string; onRemove: () => void }) {
+function Row({ signup, event, note, health, onRemove }: { signup: Signup; event: TroopEvent; note?: string; health?: string; onRemove: () => void }) {
   const { memberName } = useTroop();
   const name = memberName(signup.memberId);
   const answers = (event.signups?.questions ?? []).filter((q) => signup.answers?.[q.id]);
@@ -31,6 +33,7 @@ function Row({ signup, event, note, onRemove }: { signup: Signup; event: TroopEv
             {q.label}: {signup.answers[q.id]}
           </span>
         ))}
+        {health ? <span className="small"><span className="pill bad">Health form</span> {health}</span> : null}
         {note ? <span className="small">Health or emergency note: {note}</span> : null}
         {signup.permission.state === 'approved' && signup.permission.byName ? (
           <span className="muted small">Permission given by {signup.permission.byName}</span>
@@ -52,6 +55,8 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
   const signups = useQuery<Signup>(signupsQ, `${base}/signups`);
   const notes = useQuery<Note>(notesQ, `${base}/signupNotes`);
   const [pick, setPick] = useState('');
+  const [onlyMissing, setOnlyMissing] = useState(false);
+  const { forms, loading: formsLoading } = useHealthForms();
   const [error, setError] = useState('');
   const settings = event.signups;
   const noteOf = new Map(notes.data.map((n) => [n.id, n.note]));
@@ -69,12 +74,22 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
     }
   }
   const when = (s: Signup) => s.signedUpAt?.toMillis?.() ?? 0;
+  const lastDay = event.endDate || event.start;
+  /** What is missing or expired for this event's last day, or '' when nothing is needed or all is in order. */
+  const healthOf = (id: string) =>
+    event.healthForm && !formsLoading ? problemText(eventProblems(event.healthForm, forms.get(id), lastDay)) : '';
   return (
     <div className="stack">
       <Notice kind="error">{error}</Notice>
+      {event.healthForm ? (
+        <label className="check">
+          <input type="checkbox" checked={onlyMissing} onChange={(e) => setOnlyMissing(e.target.checked)} />
+          Show only people missing a health form
+        </label>
+      ) : null}
       {signups.data.length === 0 ? <Empty>No one has signed up yet.</Empty> : null}
       {ORDER.map((status) => {
-        const rows = signups.data.filter((s) => s.status === status).sort((a, b) => when(a) - when(b));
+        const rows = signups.data.filter((s) => s.status === status && (!onlyMissing || healthOf(s.memberId))).sort((a, b) => when(a) - when(b));
         return rows.length === 0 ? null : (
           <section key={status} className="stack" aria-label={STATUS_LABELS[status]}>
             <h3>
@@ -87,6 +102,7 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
                   signup={s}
                   event={event}
                   note={noteOf.get(s.memberId)}
+                  health={healthOf(s.memberId)}
                   onRemove={() => run(() => cancelSignup({ troopId, eventId: event.id, memberId: s.memberId }))}
                 />
               ))}

@@ -18,6 +18,7 @@ import { CreateTroop } from './pages/CreateTroop';
 import { EventPage } from './pages/EventPage';
 import { Events } from './pages/Events';
 import { FinishSignIn } from './pages/FinishSignIn';
+import { HealthForms } from './pages/HealthForms';
 import { HelpPage } from './pages/Help';
 import { Home } from './pages/Home';
 import { Join } from './pages/Join';
@@ -35,6 +36,7 @@ import { PaperCard } from './pages/PaperCard';
 import { Payments } from './pages/Payments';
 import { PriorAdvancement } from './pages/PriorAdvancement';
 import { PrivacyPage } from './pages/Privacy';
+import { Recharter } from './pages/Recharter';
 import { Recruiting } from './pages/Recruiting';
 import { RecordPayment } from './pages/RecordPayment';
 import { Roster } from './pages/Roster';
@@ -126,6 +128,8 @@ const router = createBrowserRouter([
       { path: 'awards/:awardId', element: <CustomAwardPage /> },
       { path: 'blue-cards', element: <BlueCards /> },
       { path: 'scoutbook', element: <Scoutbook /> },
+      { path: 'recharter', element: <Recharter /> },
+      { path: 'health', element: <HealthForms /> },
       { path: 'counseling', element: <Counseling /> },
       { path: 'events', element: <Events /> },
       { path: 'events/:eventId', element: <EventPage /> },

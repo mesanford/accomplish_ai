@@ -45,6 +45,8 @@ def _adult_ops(t, uid: str, member_id: str) -> list:
     threads = _docs(t.collection("threads").where("memberIds", "array_contains", member_id))
     for thread_id, fields in plan_threads(member_id, uid, threads).items():
         ops.append(update_op(t.collection("threads").document(thread_id), fields))
+    # Health form dates and the record of which Youth Protection reminders were sent.
+    ops += [delete_op(t.collection(c).document(member_id)) for c in ("healthForms", "yptReminders")]
     ops += holder_ops(t, member_id, "adult")  # gear loans and requests keep only "Former member"
 
     name = (t.collection("members").document(member_id).get().to_dict() or {}).get("displayName", "")

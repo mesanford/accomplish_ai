@@ -2,6 +2,7 @@ import { doc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DeviceSettings } from '../components/DeviceSettings';
+import { MyYpt } from '../components/MyYpt';
 import { Notice, PageHeader } from '../components/ui';
 import { announcementEmailsOn, ANNOUNCEMENT_EMAIL_LABEL } from '../lib/announcements';
 import {
@@ -101,6 +102,7 @@ export function Account() {
         </p>
         <Notice kind="error">{mailError}</Notice>
       </section>
+      <MyYpt />
       <DeviceSettings />
       <section className="card stack">
         <h2>Delete my account</h2>

@@ -29,6 +29,8 @@ Code = https_fn.FunctionsErrorCode
 KEYED_BY_FIELD = ("progress", "blueCards", "signoffs", "logs")
 # Event sub-collections keyed by the person: sign-ups, leader-only health notes and fee status.
 EVENT_PRIVATE = ("signups", "signupNotes", "feeStatus")
+# Troop collections keyed by the person's member id: health form dates.
+KEYED_BY_ID = ("healthForms",)
 
 
 def _docs(query) -> dict[str, dict]:
@@ -51,6 +53,7 @@ def _plan_ops(t, scout_id: str, scout_uid: str | None) -> tuple[list, list[str],
     for name in KEYED_BY_FIELD:
         ops += [delete_op(d.reference) for d in t.collection(name).where("scoutId", "==", scout_id).stream()]
     ops += [delete_op(ref) for ref in _per_event_refs(t, scout_id)]
+    ops += [delete_op(t.collection(name).document(scout_id)) for name in KEYED_BY_ID]
     ops += holder_ops(t, scout_id, "scout")  # gear loans and requests keep only "Former Scout"
 
     access = plan_access(scout_id, _docs(t.collection("access")))

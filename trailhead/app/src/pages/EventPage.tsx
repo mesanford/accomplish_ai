@@ -11,6 +11,7 @@ import { Empty, formatDate, Loading, Notice, PageHeader } from '../components/ui
 import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { audienceAllows, AUDIENCE_LABELS, formatFee, spotsLine } from '../lib/eventSignups';
+import { NEED_LABELS } from '../lib/healthForm';
 import { importRsvps } from '../lib/eventsApi';
 import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
@@ -35,6 +36,7 @@ function Details({ event }: { event: TroopEvent }) {
         {event.place ? ` · ${event.place}` : ''}
       </li>
       {event.feeCents ? <li>Fee: {formatFee(event.feeCents)} per Scout</li> : null}
+      {event.healthForm ? <li>Health form needed: {NEED_LABELS[event.healthForm]}</li> : null}
       {(event.linkedRequirements ?? []).map((r) => (
         <li key={`${r.awardId}-${r.reqId}`}>
           Covers {awardName(r.awardId)} <RequirementRef awardId={r.awardId} reqId={r.reqId} />
