@@ -72,4 +72,4 @@ def on_blue_card_notify(event: Written) -> None:
     try:
         notify_card(event.params["troopId"], event.params["cardId"], before, after)
     except Exception:
-        log.error("blue card email failed")
+        log.exception("blue card email failed")
