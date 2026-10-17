@@ -16,6 +16,7 @@ import { FinishSignIn } from './pages/FinishSignIn';
 import { HelpPage } from './pages/Help';
 import { Home } from './pages/Home';
 import { Join } from './pages/Join';
+import { Landing } from './pages/Landing';
 import { Messages } from './pages/Messages';
 import { NotFound, RouteError } from './pages/NotFound';
 import { PathEditor } from './pages/PathEditor';
@@ -48,15 +49,35 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 const authed = (page: ReactNode) => <RequireAuth>{page}</RequireAuth>;
 
+/** At "/": signed-in people see their troops in the app; signed-out visitors see the marketing page. */
+function Root() {
+  const { user, ready } = useAuth();
+  if (!ready) {
+    return (
+      <AppLayout>
+        <Loading />
+      </AppLayout>
+    );
+  }
+  return user ? (
+    <AppLayout>
+      <Home />
+    </AppLayout>
+  ) : (
+    <Landing />
+  );
+}
+
 const router = createBrowserRouter([
   // Any failure or unknown address shows a plain page, never the router's developer error screen.
   // The public troop website has its own look and needs no sign-in, so it sits outside the app layout.
   { path: '/s/:slug', element: <PublicSite />, errorElement: <RouteError /> },
+  // The marketing page is full width, so "/" sits outside the app layout too and wraps Home in it when signed in.
+  { path: '/', element: <Root />, errorElement: <RouteError /> },
   {
     element: <AppLayout />,
     errorElement: <RouteError />,
     children: [
-      { path: '/', element: authed(<Home />) },
       { path: '/signin', element: <SignIn /> },
       { path: '/privacy', element: <PrivacyPage /> },
       { path: '/account', element: authed(<Account />) },

@@ -22,6 +22,7 @@ from endpoints.messaging import send_message
 from endpoints.notify import on_blue_card_notify
 from endpoints.paper_cards import record_paper_blue_card
 from endpoints.parent_consent import answer_pending_consent, link_self_as_parent
+from endpoints.pilot import request_pilot
 from endpoints.prior import record_prior_advancement
 from endpoints.recruiting import submit_interest
 from endpoints.removal import remove_scout
@@ -62,6 +63,7 @@ __all__ = [
     "record_paper_blue_card",
     "record_prior_advancement",
     "remove_scout",
+    "request_pilot",
     "save_custom_award",
     "send_message",
     "set_member_roles",
