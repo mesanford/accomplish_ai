@@ -16,9 +16,18 @@ export PYTHONPYCACHEPREFIX="$(cd ../.. && pwd)/.deps.nosync/trailhead/pycache"
 
 # The Functions emulator leaves its Python workers running after it exits, and they pile up over many runs.
 # Stop this checkout's workers after each emulator run and whenever the script ends.
-workers="$(cd functions/venv && pwd -P)/bin/functions-framework" # the real path, which is what the workers show
+# Workers show the path the venv was created at (its scripts' #! line), which can differ from the real path when a
+# parent folder is a symlink (~/Documents/Products -> ~/Products). Match the part that's the same either way.
+workers=".deps.nosync/trailhead/functions-venv/bin/functions-framework"
 stop_workers() { pkill -f "$workers" || true; }
-trap stop_workers EXIT
+stop_workers # leftovers from an earlier run that didn't finish
+# Even per batch, stop the run if workers pile up or memory runs low (see scripts/memory_watchdog.sh).
+WATCHDOG_WORKERS="$workers" scripts/memory_watchdog.sh "$$" &
+watchdog=$!
+trap 'stop_workers; kill "$watchdog" 2>/dev/null || true' EXIT
+# The integration and browser tests run a few files at a time, each batch in its own emulator, so only the workers
+# for one batch's functions are alive at once. One emulator for every file kept ~100 workers and used 10-20 GB.
+batch_size=${TEST_BATCH_SIZE:-4}
 
 # The plan assistant declares the ANTHROPIC_API_KEY secret and the email senders declare RESEND_API_KEY. The emulator
 # never calls either service (the emulator always logs email instead of sending), so stand-ins will do.
@@ -34,11 +43,23 @@ grep -q '^STRIPE_WEBHOOK_SECRET=' functions/.secret.local || echo "STRIPE_WEBHOO
 .venv/bin/pytest -q tests/unit
 firebase emulators:exec --only firestore,storage --project demo-trailhead ".venv/bin/pytest -q tests/rules"
 # A real failure fails twice and still stops the run; a dropped emulator worker gets one more try.
-RUN_FUNCTIONS_TESTS=1 firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead \
-  ".venv/bin/pytest -q tests/integration || { echo 'Retrying only the failed tests once (the local Functions emulator sometimes drops a worker mid-request)'; .venv/bin/pytest -q --lf tests/integration; }"
-stop_workers
+integration=(tests/integration/test_*.py)
+for ((i = 0; i < ${#integration[@]}; i += batch_size)); do
+  batch="${integration[*]:i:batch_size}"
+  echo "== Integration: $batch"
+  RUN_FUNCTIONS_TESTS=1 firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead \
+    ".venv/bin/pytest -q $batch || { echo 'Retrying only the failed tests once (the local Functions emulator sometimes drops a worker mid-request)'; .venv/bin/pytest -q --lf $batch; }"
+  stop_workers
+done
 
 npm --prefix app run typecheck
 npm --prefix app test
 npm --prefix app run build
-firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead "npm --prefix app run e2e"
+e2e=(app/e2e/*.spec.ts)
+e2e=("${e2e[@]#app/}") # Playwright runs from app/
+for ((i = 0; i < ${#e2e[@]}; i += batch_size)); do
+  batch="${e2e[*]:i:batch_size}"
+  echo "== Browser: $batch"
+  firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead "npm --prefix app run e2e -- $batch"
+  stop_workers
+done
