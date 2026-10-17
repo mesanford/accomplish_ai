@@ -1,9 +1,18 @@
 import { expect, test } from '@playwright/test';
-import { createInviteLink, inOneYear, join, joinAsParent, resetEmulators, signedIn } from './helpers';
+import {
+  createInviteLink,
+  inOneYear,
+  join,
+  joinAsParent,
+  resetEmulators,
+  signedIn,
+} from './helpers';
 
 test.beforeAll(resetEmulators);
 
-test('a leader, a parent and a counselor take a Scout through a merit badge', async ({ browser }) => {
+test('a leader, a parent and a counselor take a Scout through a merit badge', async ({
+  browser,
+}) => {
   // Leader creates the troop and adds a Scout.
   const leader = await signedIn(browser, 'leader@example.com');
   await leader.getByRole('link', { name: 'Create a troop' }).click();
@@ -72,7 +81,9 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await expect(counselor.getByText('Requirements © Scouting America')).toBeVisible();
   // Completing with requirements unsigned asks first, in the page, and says how many are signed.
   await counselor.getByRole('button', { name: 'Mark Chess complete' }).click();
-  await expect(counselor.getByText('Only 1 of 3 requirements are signed. Mark Chess complete anyway?')).toBeVisible();
+  await expect(
+    counselor.getByText('Only 1 of 3 requirements are signed. Mark Chess complete anyway?'),
+  ).toBeVisible();
   await counselor.getByRole('button', { name: 'Keep working' }).click();
   await expect(counselor.getByRole('heading', { name: 'Completed' })).toBeHidden();
   await counselor.getByRole('button', { name: 'Mark Chess complete' }).click();
@@ -86,7 +97,9 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
 
   // Leader messages Sam; Sam has no login, so the parent is added automatically and replies.
   await leader.getByRole('link', { name: 'Messages' }).click();
-  await expect(leader.getByText(/Scouts can message adult leaders, not other Scouts/)).toBeVisible();
+  await expect(
+    leader.getByText(/Scouts can message adult leaders, not other Scouts/),
+  ).toBeVisible();
   await leader.getByRole('button', { name: 'New message' }).click();
   await leader.getByRole('checkbox', { name: 'Sam' }).check();
   await leader.getByLabel('Message').fill('Great work on Chess!');
@@ -109,11 +122,14 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await expect(leader.getByText('1 of 1 Scout present')).toBeVisible();
 });
 
-test('an unknown address shows a plain page, and sign-in is skipped when already signed in', async ({ browser }) => {
+test('an unknown address shows a plain page, and sign-in is skipped when already signed in', async ({
+  browser,
+}) => {
   const leader = await signedIn(browser, 'lost@example.com');
   await leader.goto('/no/such/page');
   await expect(leader.getByRole('heading', { name: "We couldn't find that page" })).toBeVisible();
   await leader.getByRole('link', { name: 'Go home' }).click();
+  await leader.waitForURL((url) => url.pathname === '/'); // let that navigation finish before starting another
   await leader.goto('/signin?next=%2Fcreate');
   await expect(leader.getByRole('heading', { name: 'Create a troop' })).toBeVisible();
 });

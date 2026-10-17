@@ -7,6 +7,9 @@ set -euo pipefail
 # proxy settings, as deleting an Auth user does. Telling it to use no proxy skips that lookup. Linux is unaffected.
 export NO_PROXY='*' no_proxy='*'
 cd "$(dirname "$0")/.."
+# Compiled Python goes outside the checkout, next to the dependencies, so iCloud doesn't sync it. This also reaches
+# the Functions emulator's workers, which inherit the environment.
+export PYTHONPYCACHEPREFIX="$(cd ../.. && pwd)/.deps.nosync/trailhead/pycache"
 
 # The Functions emulator leaves its Python workers running after it exits, and they pile up over many runs.
 # Stop this checkout's workers after each emulator run and whenever the script ends.

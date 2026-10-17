@@ -4,14 +4,25 @@ import { defineConfig, devices } from '@playwright/test';
 //   firebase emulators:exec --only auth,firestore,functions,storage --project demo-trailhead "npm --prefix app run e2e"
 export default defineConfig({
   testDir: 'e2e',
+  // A *.nosync folder, which iCloud never syncs; Playwright deletes and recreates it on every run.
+  outputDir: 'test-results.nosync',
   timeout: 180_000,
   expect: { timeout: 20_000 },
   fullyParallel: false,
   workers: 1,
   reporter: [['list']],
-  use: { baseURL: 'http://localhost:5180', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
+  use: {
+    baseURL: 'http://localhost:5180',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+  },
   // Uses your installed Google Chrome. Set PW_CHANNEL=chromium to use Playwright's own browser instead.
-  projects: [{ name: 'chrome', use: { ...devices['Desktop Chrome'], channel: process.env.PW_CHANNEL ?? 'chrome' } }],
+  projects: [
+    {
+      name: 'chrome',
+      use: { ...devices['Desktop Chrome'], channel: process.env.PW_CHANNEL ?? 'chrome' },
+    },
+  ],
   webServer: [
     {
       command: 'npm run dev -- --port 5180 --strictPort',

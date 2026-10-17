@@ -7,11 +7,14 @@ requires-python = ">=3.12"
 [tool.pytest.ini_options]
 pythonpath = ["functions"]
 testpaths = ["tests"]
+# Caches live in *.nosync folders, which iCloud never syncs (this checkout is in an iCloud-synced Documents folder).
+cache_dir = ".pytest_cache.nosync"
 markers = ["emulator: needs the Firestore emulator (run through `firebase emulators:exec`)"]
 
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+cache-dir = ".ruff_cache.nosync"
 extend-exclude = [".venv", "functions/venv"]
 
 [tool.ruff.lint]
