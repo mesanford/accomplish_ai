@@ -63,6 +63,7 @@ def _leave_troop(troop_id: str, uid: str, access: dict) -> int:
 
     ops = [delete_op(d.reference) for d in t.collection("invites").where("usedBy", "==", uid).stream()]
     usage = t.collection("usage")
+    ops.append(delete_op(t.collection("announcementReads").document(uid)))  # when this login last read announcements
     ops += [delete_op(usage.document(i)) for i in usage_ids(uid, [d.id for d in usage.list_documents()])]
     if is_scout:
         # A Scout's records belong to the troop: only the login is unlinked. A leader can remove the Scout.
@@ -110,4 +111,15 @@ def set_email_notifications(req: https_fn.CallableRequest) -> dict:
     if not isinstance(enabled, bool):
         raise fail(Code.INVALID_ARGUMENT, "Choose on or off.")
     db().collection("users").document(uid).set({"emailNotifications": enabled}, merge=True)
+    return {"enabled": enabled}
+
+
+@https_fn.on_call()
+def set_email_announcements(req: https_fn.CallableRequest) -> dict:
+    """Turn emailed troop announcements and newsletters on or off. Separate from the blue card emails."""
+    uid = require_uid(req)
+    enabled = (req.data or {}).get("enabled")
+    if not isinstance(enabled, bool):
+        raise fail(Code.INVALID_ARGUMENT, "Choose on or off.")
+    db().collection("users").document(uid).set({"emailAnnouncements": enabled}, merge=True)
     return {"enabled": enabled}

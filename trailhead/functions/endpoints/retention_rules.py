@@ -14,8 +14,10 @@ from endpoints.erase import commit, delete_op
 from endpoints.leads import erase_lead
 from endpoints.removal import erase_scout
 from handlers.retention import (
+    ANNOUNCEMENT_MONTHS,
     LEAD_MONTHS,
     THREAD_MONTHS,
+    announcement_due,
     lead_due,
     plan_scouts,
     plan_usage,
@@ -34,6 +36,7 @@ class Budget:
     scouts: int = 20
     threads: int = 200
     leads: int = 500
+    announcements: int = 500
     usage: int = 2000
     troops: int = 2
     seconds: float = 420
@@ -136,4 +139,20 @@ def usage(t, troop_id: str, today: date, budget: Budget) -> tuple[int, int]:
     commit([delete_op(usage.document(i)) for i in due])
     budget.usage -= len(due)
     log.info("retention rule=usage troop=%s due=%d deleted=%d", troop_id, len(due), len(due))
+    return len(due), len(due)
+
+
+def announcements(t, troop_id: str, today: date, budget: Budget) -> tuple[int, int]:
+    """Announcements and newsletters, 24 months after posting."""
+    if budget.announcements <= 0:
+        log.info("retention rule=announcements troop=%s skipped=budget", troop_id)
+        return 0, 0
+    cutoff = query_cutoff(today, ANNOUNCEMENT_MONTHS)
+    old = (
+        t.collection("announcements").where("createdAt", "<", cutoff).order_by("createdAt").limit(budget.announcements)
+    )
+    due = [s.reference for s in old.stream() if announcement_due(s.to_dict(), today)]
+    commit([delete_op(ref) for ref in due])
+    budget.announcements -= len(due)
+    log.info("retention rule=announcements troop=%s due=%d deleted=%d", troop_id, len(due), len(due))
     return len(due), len(due)

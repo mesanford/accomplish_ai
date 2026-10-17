@@ -5,6 +5,7 @@ The schedule (the privacy policy states it in plain words):
   comes first. Only the birth month and year are known, so a Scout counts as 18 from the first day of the month
   after their 18th birthday month. A Scout with missing or unreadable birth data is never deleted by the age rule.
 - A conversation: 24 months after its last message.
+- An announcement or newsletter: 24 months after it was posted.
 - A "Join us" request (lead): 12 months after it was sent.
 - A daily draft counter (`usage`): more than 30 days after its day.
 - A whole troop: 18 months after anyone in it last used the app (see `endpoints/activity.py`).
@@ -22,6 +23,7 @@ from zoneinfo import ZoneInfo
 SCOUT_MONTHS = 12
 THREAD_MONTHS = 24
 LEAD_MONTHS = 12
+ANNOUNCEMENT_MONTHS = 24
 USAGE_DAYS = 30
 TROOP_MONTHS = 18
 ADULT_AGE = 18
@@ -115,6 +117,11 @@ def thread_due(thread: dict, newest_message_at, today: date) -> bool:
 
 def lead_due(lead: dict, today: date) -> bool:
     return is_due(local_date(lead.get("createdAt")), LEAD_MONTHS, today)
+
+
+def announcement_due(announcement: dict, today: date) -> bool:
+    """24 months after it was posted, whether or not it was edited since."""
+    return is_due(local_date(announcement.get("createdAt")), ANNOUNCEMENT_MONTHS, today)
 
 
 def usage_day(doc_id: str) -> date | None:

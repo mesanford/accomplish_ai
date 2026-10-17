@@ -71,10 +71,13 @@ def send_all(
     post: Post = http_post,
     env=os.environ,
     record: Callable[[str, str, Email], None] | None = None,
+    cap: int = MAX_RECIPIENTS,
 ) -> int:
-    """Send `email` to each address as its own message. Returns how many went out (or would have, in log mode)."""
+    """Send `email` to each address as its own message. Returns how many went out (or would have, in log mode).
+
+    At most `cap` people get it (20 unless the caller, such as announcements, sets its own limit)."""
     try:
-        recipients = list(dict.fromkeys(a for a in addresses if a))[:MAX_RECIPIENTS]
+        recipients = list(dict.fromkeys(a for a in addresses if a))[:cap]
         if not recipients:
             return 0
         if email_mode(env) != "send":
