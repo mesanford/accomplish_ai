@@ -6,6 +6,9 @@ set -euo pipefail
 # On macOS, a forked Functions emulator worker crashes (SIGSEGV) when an HTTP call makes Python ask the system for its
 # proxy settings, as deleting an Auth user does. Telling it to use no proxy skips that lookup. Linux is unaffected.
 export NO_PROXY='*' no_proxy='*'
+# macOS also kills a forked worker when the Objective-C runtime's fork-safety check trips during a network call
+# (seen as "Request to function failed: Error: read ECONNRESET" and a trigger that never finishes). Linux is unaffected.
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 cd "$(dirname "$0")/.."
 # Compiled Python goes outside the checkout, next to the dependencies, so iCloud doesn't sync it. This also reaches
 # the Functions emulator's workers, which inherit the environment.
