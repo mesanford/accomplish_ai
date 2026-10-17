@@ -21,6 +21,7 @@ import { FinishSignIn } from './pages/FinishSignIn';
 import { HelpPage } from './pages/Help';
 import { Home } from './pages/Home';
 import { Join } from './pages/Join';
+import { Features } from './pages/Features';
 import { Landing } from './pages/Landing';
 import { Announcements } from './pages/Announcements';
 import { Messages } from './pages/Messages';
@@ -90,6 +91,7 @@ const router = createBrowserRouter([
   { path: '/s/:slug/:page', element: <PublicSite />, errorElement: <RouteError /> },
   // The marketing page is full width, so "/" sits outside the app layout too and wraps Home in it when signed in.
   { path: '/', element: <Root />, errorElement: <RouteError /> },
+  { path: '/features', element: <Features />, errorElement: <RouteError /> },
   {
     element: <AppLayout />,
     errorElement: <RouteError />,

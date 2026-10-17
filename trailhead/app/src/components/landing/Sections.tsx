@@ -8,6 +8,9 @@ export function WhoItHelps() {
         <div>
           <p className="l-label">What it does</p>
           <h2 id="who-title">One place for everyone who helps a Scout advance</h2>
+          <p className="l-more">
+            <Link to="/features">See every feature</Link>
+          </p>
         </div>
         <ul className="l-rows">
           {WHO_IT_HELPS.map((row) => (
@@ -70,7 +73,8 @@ export function LandingFooter({ email }: { email: string }) {
     <footer className="l-footer">
       <div className="l-wrap">
         <p>
-          <Link to="/privacy">Privacy policy</Link> · Contact <a href={`mailto:${email}`}>{email}</a>
+          <Link to="/privacy">Privacy policy</Link> · Contact{' '}
+          <a href={`mailto:${email}`}>{email}</a>
         </p>
         <p className="l-small">{DISCLAIMER}</p>
       </div>

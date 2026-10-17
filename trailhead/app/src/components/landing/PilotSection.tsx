@@ -4,7 +4,17 @@ import { errorMessage, requestPilot } from '../../lib/api';
 import { EMPTY_PILOT, PILOT_ROLES, type PilotForm, pilotProblem } from '../../lib/pilotForm';
 import { PILOT_STEPS } from './content';
 
-function Row({ id, label, hint, children }: { id: string; label: string; hint?: string; children: React.ReactNode }) {
+function Row({
+  id,
+  label,
+  hint,
+  children,
+}: {
+  id: string;
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="l-field">
       <label htmlFor={id}>{label}</label>
@@ -44,17 +54,33 @@ function PilotFormView() {
   if (sent) {
     return (
       <div className="l-ok" role="status">
-        <strong>Thank you.</strong> We got your request. We will email you soon to set up your troop.
+        <strong>Thank you.</strong> We got your request. We will email you soon to set up your
+        troop.
       </div>
     );
   }
   return (
     <form className="l-form" onSubmit={submit} noValidate>
       <Row id="pilot-name" label="Your name">
-        <input id="pilot-name" required maxLength={80} autoComplete="name" value={form.name} onChange={set('name')} />
+        <input
+          id="pilot-name"
+          required
+          maxLength={80}
+          autoComplete="name"
+          value={form.name}
+          onChange={set('name')}
+        />
       </Row>
       <Row id="pilot-email" label="Email">
-        <input id="pilot-email" type="email" required maxLength={120} autoComplete="email" value={form.email} onChange={set('email')} />
+        <input
+          id="pilot-email"
+          type="email"
+          required
+          maxLength={120}
+          autoComplete="email"
+          value={form.email}
+          onChange={set('email')}
+        />
       </Row>
       <Row id="pilot-unit" label="Troop or unit number" hint="For example 303.">
         <input id="pilot-unit" required maxLength={40} value={form.unit} onChange={set('unit')} />
@@ -75,7 +101,13 @@ function PilotFormView() {
       </Row>
       <div className="l-trap" aria-hidden="true">
         <label htmlFor="pilot-website">Leave this empty</label>
-        <input id="pilot-website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
+        <input
+          id="pilot-website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.website}
+          onChange={set('website')}
+        />
       </div>
       {error ? (
         <div className="l-err" role="alert">
@@ -88,7 +120,8 @@ function PilotFormView() {
         </button>
       </div>
       <p className="l-hint">
-        We use your name and email only to reply about the pilot. <Link to="/privacy">Privacy policy</Link>
+        We use your name and email only to reply about the pilot.{' '}
+        <Link to="/privacy">Privacy policy</Link>
       </p>
     </form>
   );
