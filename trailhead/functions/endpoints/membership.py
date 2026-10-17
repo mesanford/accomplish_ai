@@ -9,9 +9,12 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.consent import send_consent_confirmation, stage_parent_consent
+from endpoints.consent_requests import request_ref
 from endpoints.join_again import add_invite_role
+from endpoints.mailer import address_of
 from fb import db, fail, require_leader, require_uid, troop
 from handlers.consent import check_parent_consent, parent_consent_entry
+from handlers.consent_requests import AGREED, settle, with_status
 from handlers.membership import (
     InvalidInput,
     adult_member,
@@ -105,6 +108,14 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
         snap = invite_ref.get(transaction=tx)
         invite = check_invite(snap.to_dict() if snap.exists else None, datetime.now(UTC))
         troop_doc = t.get(transaction=tx).to_dict()
+        lock = invite.get("emailLock")  # a link emailed to one parent works only for that address
+        if lock and (address_of(uid) or "").lower() != lock:
+            raise InvalidInput(
+                "This link was sent to a different email address. Sign in with the address your troop used."
+            )
+        request = None
+        if invite.get("requestScoutId"):
+            request = request_ref(t, invite["requestScoutId"]).get(transaction=tx).to_dict()
         existing = t.collection("access").document(uid).get(transaction=tx)
         role = invite["role"]
         consent = None
@@ -137,6 +148,9 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
             tx.set(t.collection("access").document(uid), _access(member_id, [role], scout_ids, ypt))
             user = {"troops": {troop_id: _membership(troop_doc, member_id, [role])}}
             tx.set(db().collection("users").document(uid), user, merge=True)
+        if request and consent:  # this parent agreed: the Scout has consent, so the other parents stop being emailed
+            agreed = settle(with_status(request, invite["requestPid"], AGREED), datetime.now(UTC))
+            tx.set(request_ref(t, invite["requestScoutId"]), agreed)
         used = {"usedBy": uid, "usedAt": datetime.now(UTC)}
         tx.update(invite_ref, {**used, "consentVersion": consent["version"]} if consent else used)
         if invite.get("leadId"):

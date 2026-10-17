@@ -10,7 +10,7 @@ from firebase_functions import https_fn
 
 from endpoints.signup_core import Code, args, bad, read_all, refs, write_promotions
 from endpoints.signup_mail import send_permission_needed, send_promoted
-from fb import db, fail, is_leader, require_access, troop
+from fb import db, fail, is_leader, refuse_if_blocked, refuse_if_held, require_access, troop
 from handlers import signups as rules
 from handlers.signups import PENDING, SignupError
 
@@ -36,6 +36,9 @@ def sign_up_for_event(req: https_fn.CallableRequest) -> dict:
     member = t.collection("members").document(member_id).get().to_dict()
     if member is None:
         raise fail(Code.NOT_FOUND, "That person is not in the troop.")
+    refuse_if_held(member)
+    if str(data.get("healthNote") or "").strip():
+        refuse_if_blocked(t, member_id, "health")
     now = datetime.now(UTC)
     zone = rules.troop_zone(t.get().to_dict())
 

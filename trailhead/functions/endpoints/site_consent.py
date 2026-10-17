@@ -8,7 +8,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.site_files import delete_public_files
-from fb import db, fail, is_leader, require_access, require_uid, troop
+from fb import db, fail, is_leader, refuse_if_held, require_access, require_uid, troop
 from handlers.roles import acts_for
 from handlers.site_build import site_urls
 from handlers.site_pages import drop_image_urls
@@ -76,6 +76,7 @@ def set_media_consent(req: https_fn.CallableRequest) -> dict:
     member = member_ref.get().to_dict()
     if member is None or member.get("kind") != "scout":
         raise fail(Code.NOT_FOUND, "That Scout isn't on the roster.")
+    refuse_if_held(member)
     member_ref.update(
         {"mediaConsent": {"granted": granted, "byMemberId": access["memberId"], "at": firestore.SERVER_TIMESTAMP}}
     )

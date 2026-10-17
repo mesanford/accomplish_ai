@@ -6,10 +6,11 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import UTC, date, datetime
 
 from firebase_admin import firestore
 
+from endpoints.consent_requests import expire_requests
 from endpoints.erase import commit, delete_op
 from endpoints.leads import erase_lead
 from endpoints.ledger_retention import purge
@@ -70,6 +71,13 @@ def scouts(t, troop_id: str, today: date, budget: Budget) -> tuple[int, int]:
         "retention rule=scouts troop=%s due=%d left=%d age=%d failed=%d", troop_id, len(due), *reasons.values(), failed
     )
     return len(due), sum(reasons.values())
+
+
+def consent_requests(t, troop_id: str, today: date, budget: Budget) -> tuple[int, int]:
+    """Waiting Scouts nobody agreed for in 30 days, or declined by every parent, go with the contact details."""
+    due, done = expire_requests(t, troop_id, datetime.now(UTC))
+    log.info("retention rule=consentRequests troop=%s due=%d deleted=%d", troop_id, due, done)
+    return due, done
 
 
 def _delete_thread(ref) -> int:

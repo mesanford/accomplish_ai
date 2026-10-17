@@ -103,7 +103,7 @@ def test_invite_from_a_lead_needs_no_scouts_and_marks_it():
                 "code": invite["code"],
                 "displayName": "Jordan",
                 "consent": True,
-                "consentVersion": "2026-10-17.1",
+                "consentVersion": "2026-10-18.1",
             },
         )
     )

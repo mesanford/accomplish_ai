@@ -119,5 +119,5 @@ def test_consent_confirmation_goes_to_the_parent_even_if_notifications_are_off()
     assert recipients("consent_confirmation", 1) == {email_of("pending")}
     [mail] = outbox("consent_confirmation")
     assert mail["subject"] == "You agreed to Forthright's notice for Ava"
-    assert "2026-10-17.1" in mail["text"] and "/privacy" in mail["text"]
+    assert "2026-10-18.1" in mail["text"] and "/privacy" in mail["text"]
     assert "Jones" not in mail["text"]

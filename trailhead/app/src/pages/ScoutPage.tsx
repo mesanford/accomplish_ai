@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ScoutActivity } from '../components/activity/ScoutActivity';
 import { AccountStatement } from '../components/AccountStatement';
+import { ConsentRequestPanel } from '../components/ConsentRequestPanel';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
 import { HealthFormCard } from '../components/HealthFormCard';
@@ -21,13 +22,21 @@ import { isCustomAward } from '../lib/customAwards';
 import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
-import type { BlueCard, PathDoc, Progress, ScoutRecord } from '../lib/types';
+import type { BlueCard, ConsentRequest, PathDoc, Progress, ScoutRecord } from '../lib/types';
 
 export function ScoutPage() {
   const { scoutId = '' } = useParams();
   const { troopId, members, isLeader, canManageBadges, visibleScoutIds, uidName, parentOf } = useTroop();
   const scout = members.find((m) => m.id === scoutId);
-  const allowed = visibleScoutIds.includes(scoutId);
+  const visible = visibleScoutIds.includes(scoutId);
+  // A Scout waiting for a parent's consent shows only a name and the waiting status: nothing else is read or shown.
+  const held = scout?.consentHold === true;
+  const allowed = visible && !held;
+  const requestRef = useMemo(
+    () => (visible && held && isLeader ? doc(db, `troops/${troopId}/consentRequests/${scoutId}`) : null),
+    [visible, held, isLeader, troopId, scoutId],
+  );
+  const request = useDoc<ConsentRequest>(requestRef);
   const base = `troops/${troopId}`;
   const recordRef = useMemo(
     () => (allowed ? doc(db, `${base}/scoutRecords/${scoutId}`) : null),
@@ -55,8 +64,16 @@ export function ScoutPage() {
   if (!scout) {
     return <Loading />;
   }
-  if (!allowed) {
+  if (!visible) {
     return <Empty>You can only see your own Scouts.</Empty>;
+  }
+  if (held) {
+    return (
+      <>
+        <PageHeader eyebrow="Scout" title={scout.displayName} />
+        <ConsentRequestPanel scout={scout} request={request.data ?? undefined} />
+      </>
+    );
   }
   const current = record.data ? rank(record.data.currentRankId) : undefined;
   const earned = RANKS.filter((r) => record.data?.rankDates?.[r.id]);

@@ -6,7 +6,8 @@ import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
 import { PRIVACY_EMAIL } from '../lib/privacy';
 import { useTroop } from '../lib/troop';
-import type { ConsentDoc, Member } from '../lib/types';
+import type { ConsentDoc, ConsentRequest, Member } from '../lib/types';
+import { statusWords } from './ConsentRequestPanel';
 import { formatDate, Notice } from './ui';
 
 /** Parent consent for a Scout: leaders see its status, and a parent can withdraw it. */
@@ -14,6 +15,9 @@ export function ParentConsent({ scout }: { scout: Member }) {
   const { troopId, parentOf, isLeader } = useTroop();
   const ref = useMemo(() => doc(db, `troops/${troopId}/consents/${scout.id}`), [troopId, scout.id]);
   const consent = useDoc<ConsentDoc>(ref);
+  // The parents a leader emailed, and how each answered (leaders only; deleted after 30 days).
+  const requestRef = useMemo(() => (isLeader ? doc(db, `troops/${troopId}/consentRequests/${scout.id}`) : null), [isLeader, troopId, scout.id]);
+  const request = useDoc<ConsentRequest>(requestRef).data;
   const [asking, setAsking] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -76,6 +80,16 @@ export function ParentConsent({ scout }: { scout: Member }) {
             </button>
           </div>
         </div>
+      ) : null}
+      {isLeader && request && request.parents.length > 0 ? (
+        <ul className="list" aria-label="Parents emailed">
+          {request.parents.map((p) => (
+            <li key={p.pid}>
+              <span>{p.name}</span>
+              <span className="pill">{statusWords(request, p.pid)}</span>
+            </li>
+          ))}
+        </ul>
       ) : null}
       <Notice kind="error">{error}</Notice>
     </section>

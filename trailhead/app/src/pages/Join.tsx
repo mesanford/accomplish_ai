@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ConsentNotice } from '../components/ConsentNotice';
 import { HelpTip } from '../components/HelpTip';
 import { Field, Notice, PageHeader } from '../components/ui';
-import { acceptInvite, errorMessage, getInviteNotice } from '../lib/api';
+import { acceptInvite, declineConsentRequest, errorMessage, getInviteNotice } from '../lib/api';
 import { CONSENT_NOTICE_VERSION } from '../lib/consent';
 
 export function Join() {
@@ -11,7 +11,8 @@ export function Join() {
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState('');
   const [ypt, setYpt] = useState('');
-  const [notice, setNotice] = useState<{ troopName: string; role: string; alreadyMember: boolean } | null>(null);
+  const [notice, setNotice] = useState<Awaited<ReturnType<typeof getInviteNotice>> | null>(null);
+  const [declined, setDeclined] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -24,6 +25,19 @@ export function Join() {
   const parentNotice = notice?.role === 'parent' ? notice : null;
   const existing = notice?.alreadyMember === true;
   const joinLabel = existing ? 'Accept invite' : 'Join troop';
+
+  async function decline() {
+    setBusy(true);
+    setError('');
+    try {
+      await declineConsentRequest(troopId, code);
+      setDeclined(true);
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -44,9 +58,27 @@ export function Join() {
     }
   }
 
+  if (declined) {
+    return (
+      <>
+        <PageHeader eyebrow="Invitation" title="Thank you for answering" />
+        <p>
+          You chose not to agree. We won't email you about {notice?.scoutFirstName ?? 'this Scout'} again, and you are not
+          linked to them. If you change your mind, ask a troop leader to send a new link.
+        </p>
+      </>
+    );
+  }
+
   return (
     <>
       <PageHeader eyebrow="Invitation" title="Join your troop" />
+      {notice?.scoutFirstName ? (
+        <p>
+          {notice.troopName} asked you to review the notice for {notice.scoutFirstName}. Only a parent or guardian can give
+          permission. Until a parent agrees, the troop keeps nothing else about {notice.scoutFirstName} in Forthright.
+        </p>
+      ) : null}
       {existing ? (
         <p className="muted">
           You are already in {notice?.troopName}. Accepting this invite adds a role to your membership. You keep the roles
@@ -87,10 +119,15 @@ export function Join() {
           </>
         ) : null}
         <Notice kind="error">{error}</Notice>
-        <div>
+        <div className="row">
           <button className="btn" type="submit" disabled={busy}>
             {busy ? 'Joining…' : joinLabel}
           </button>
+          {notice?.scoutFirstName ? (
+            <button type="button" className="btn quiet" disabled={busy} onClick={decline}>
+              I don't agree
+            </button>
+          ) : null}
         </div>
       </form>
     </>

@@ -48,7 +48,10 @@ export interface JoinForm {
 export const acceptInvite = (form: JoinForm) => call<JoinForm, { troopId: string }>('accept_invite', form);
 
 export const getInviteNotice = (troopId: string, code: string) =>
-  call<{ troopId: string; code: string }, { troopName: string; role: string; alreadyMember: boolean }>('invite_notice', {
+  call<
+    { troopId: string; code: string },
+    { troopName: string; role: string; alreadyMember: boolean; scoutFirstName?: string; emailLocked?: boolean }
+  >('invite_notice', {
     troopId,
     code,
   });
@@ -76,6 +79,24 @@ export const linkSelfAsParent = (troopId: string, scoutId: string, agree: Consen
 export const answerPendingConsent = (troopId: string, agree: ConsentAnswer) =>
   call<{ troopId: string } & ConsentAnswer, { ok: boolean }>('answer_pending_consent', { troopId, ...agree });
 
+/** A parent who agreed to an older notice agrees to the current one. Adds a new consent entry; nothing is replaced. */
+export const reviewConsentNotice = (troopId: string, consentVersion: string) =>
+  call<{ troopId: string; consent: boolean; consentVersion: string }, { ok: boolean; reviewed: string[] }>(
+    'review_consent_notice',
+    { troopId, consent: true, consentVersion },
+  );
+
+export interface ReminderResult {
+  sent: number;
+  recentlyReminded: number;
+  noAddress: number;
+  remaining: number;
+}
+
+/** A leader emails parents who have not reviewed the current notice (at most once a week each). */
+export const sendConsentReminders = (troopId: string) =>
+  call<{ troopId: string }, ReminderResult>('send_consent_reminders', { troopId });
+
 export interface RolesForm {
   troopId: string;
   memberId: string;
@@ -88,14 +109,47 @@ export interface RolesForm {
 export const setMemberRoles = (form: RolesForm) =>
   call<RolesForm, { roles: string[]; pendingScoutIds: string[] }>('set_member_roles', form);
 
+export interface ParentContact {
+  name: string;
+  email: string;
+}
+
+export interface ConsentRequestSent {
+  sent: number;
+  tooSoon?: number;
+}
+
+/** Email one or more parents a link to review the notice and agree (or invite another parent). */
+export const setConsentParents = (troopId: string, scoutId: string, parents: ParentContact[]) =>
+  call<{ troopId: string; scoutId: string; parents: ParentContact[] }, { sent: number; kind: string }>('set_consent_parents', {
+    troopId,
+    scoutId,
+    parents,
+  });
+
+/** Send the email again to parents who haven't answered (at most one a week each, four in all). */
+export const resendConsentRequest = (troopId: string, scoutId: string) =>
+  call<{ troopId: string; scoutId: string }, ConsentRequestSent>('resend_consent_request', { troopId, scoutId });
+
+/** Cancel the wait: a Scout added with the request is deleted; an older Scout stays as "needs parent consent". */
+export const cancelConsentRequest = (troopId: string, scoutId: string) =>
+  call<{ troopId: string; scoutId: string }, { removed: boolean }>('cancel_consent_request', { troopId, scoutId });
+
+/** A parent says they don't agree, from the link in their email. */
+export const declineConsentRequest = (troopId: string, code: string) =>
+  call<{ troopId: string; code: string }, { ok: boolean; removed: boolean }>('decline_consent_request', { troopId, code });
+
+/** Mark Scouts who need a parent's consent (leaders; safe to repeat). */
+export const syncConsentHolds = (troopId: string) => call<{ troopId: string }, { held: number }>('sync_consent_holds', { troopId });
+
 export interface ScoutForm {
   troopId: string;
   displayName: string;
   birthYear: number;
   birthMonth: number;
   currentRankId: string;
-  /** A leader confirms the family's permission for a Scout who may be under 13. */
-  leaderConfirmed?: boolean;
+  /** A Scout under 13 needs a parent: the leader gives each parent or guardian's name and email (1 to 4). */
+  parents?: ParentContact[];
   /** A parent adding their own child agrees to the notice. */
   consent?: boolean;
   consentVersion?: string;

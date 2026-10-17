@@ -1,11 +1,12 @@
 import { type FormEvent, useState } from 'react';
-import { addScout, errorMessage } from '../lib/api';
+import { addScout, errorMessage, type ParentContact } from '../lib/api';
 import { RANKS } from '../lib/catalog';
 import { CONSENT_NOTICE_VERSION, mayBeUnder13 } from '../lib/consent';
 import { stillNeeded } from '../lib/formCheck';
 import { useTroop } from '../lib/troop';
 import { ConsentNotice } from './ConsentNotice';
 import { HelpTip } from './HelpTip';
+import { emptyParent, filledParents, ParentEmailFields, parentsProblem } from './ParentEmailFields';
 import { Field, Notice } from './ui';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -18,13 +19,14 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
   const [rank, setRank] = useState('scout');
   const [confirmed, setConfirmed] = useState(false);
   const [mine, setMine] = useState(false);
+  const [parents, setParents] = useState<ParentContact[]>([emptyParent()]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState('');
   // A parent adding their own child agrees to the notice, and so does a leader who ticks "This is my child".
-  // Otherwise a leader confirms the family's permission for a Scout who may be under 13.
+  // Otherwise, for a Scout who may be under 13, a leader gives the parents' emails and each parent agrees by email.
   const isParent = isLeader ? mine : has('parent');
-  const needsLeaderBox = !isParent && mayBeUnder13(Number(year), Number(month), new Date());
+  const needsParentEmail = !isParent && mayBeUnder13(Number(year), Number(month), new Date());
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -42,8 +44,13 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
       setError('Enter the birth year as four digits, like 2013.');
       return;
     }
-    if ((isParent || needsLeaderBox) && !confirmed) {
-      setError(isParent ? 'Tick the box to agree before adding your Scout.' : "Tick the box to confirm the family's permission.");
+    if (isParent && !confirmed) {
+      setError('Tick the box to agree before adding your Scout.');
+      return;
+    }
+    const parentProblem = needsParentEmail ? parentsProblem(parents) : null;
+    if (parentProblem) {
+      setError(parentProblem);
       return;
     }
     setBusy(true);
@@ -56,9 +63,14 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
         currentRankId: rank,
         ...(isParent ? { consent: confirmed, consentVersion: CONSENT_NOTICE_VERSION } : {}),
         ...(isLeader && mine ? { isMyChild: true } : {}),
-        ...(needsLeaderBox ? { leaderConfirmed: confirmed } : {}),
+        ...(needsParentEmail ? { parents: filledParents(parents) } : {}),
       });
-      setDone(`Added ${name.trim()}.`);
+      setDone(
+        needsParentEmail
+          ? `Added ${name.trim()}. We emailed the parent. ${name.trim()} stays a name on the roster until a parent agrees.`
+          : `Added ${name.trim()}.`,
+      );
+      setParents([emptyParent()]);
       setName('');
       setYear('');
       setConfirmed(false);
@@ -125,12 +137,15 @@ export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: 
           </label>
         </>
       ) : null}
-      {needsLeaderBox ? (
-        <label className="check">
-          <input type="checkbox" required checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />
-          This Scout's parent or guardian has given the troop permission to keep their advancement records in Forthright,
-          for example on their youth application.
-        </label>
+      {needsParentEmail ? (
+        <>
+          <p className="small">
+            This Scout may be under 13, so only a parent or guardian can give permission. We email them a link to read the
+            notice and agree. Until a parent agrees, nothing else is kept for this Scout. If nobody answers in 30 days, the
+            Scout and the email addresses are deleted.
+          </p>
+          <ParentEmailFields parents={parents} onChange={setParents} idPrefix="add-parent" />
+        </>
       ) : null}
       <Notice kind="error">{error}</Notice>
       <Notice kind="ok">{done}</Notice>

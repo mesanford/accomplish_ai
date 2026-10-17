@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import fail, require_access, troop
+from fb import fail, refuse_if_blocked, require_access, troop
 from handlers.health_forms import can_record, entry, parse_record
 from handlers.membership import InvalidInput
 
@@ -38,6 +38,8 @@ def record_health_form(req: https_fn.CallableRequest) -> dict:
     member = t.collection("members").document(member_id).get().to_dict()
     if member is None or member.get("leftAt"):
         raise fail(Code.NOT_FOUND, "That person isn't on the roster.")
+    if member.get("kind") == "scout":
+        refuse_if_blocked(t, member_id, "healthForms")  # waits for a parent to agree to the notice that covers it
     ref = t.collection("healthForms").document(member_id)
     ref.set({part: entry(day, access["memberId"], firestore.SERVER_TIMESTAMP)}, merge=True)
     log.info("health form date recorded part=%s", part)  # never the person's name or the date

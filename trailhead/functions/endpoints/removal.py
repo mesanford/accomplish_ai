@@ -115,11 +115,12 @@ def erase_scout(troop_id: str, scout_id: str, scout_uid: str | None) -> dict:
         [
             delete_op(t.collection("paths").document(scout_id)),
             delete_op(t.collection("consents").document(scout_id)),
+            delete_op(t.collection("consentRequests").document(scout_id)),  # the parents contact details
             delete_op(t.collection("scoutRecords").document(scout_id)),
             delete_op(t.collection("members").document(scout_id)),
         ]
     )
-    return {"removed": True, "documents": len(ops) + 4, "files": files, "photosTakenDown": photos, "ledgerKept": kept}
+    return {"removed": True, "documents": len(ops) + 5, "files": files, "photosTakenDown": photos, "ledgerKept": kept}
 
 
 @https_fn.on_call(timeout_sec=300, memory=512)

@@ -5,7 +5,7 @@ from __future__ import annotations
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import fail, require_access
+from fb import fail, kind_blocker, require_access
 from handlers.equipment import can_manage, check_out_blocker
 from handlers.membership import InvalidInput
 
@@ -30,6 +30,9 @@ def read_recipient(tx, t, kind: str, recipient_id: str) -> dict:
         member = t.collection("members").document(recipient_id).get(transaction=tx).to_dict()
         if member is None:
             raise InvalidInput("That person isn't in the troop.")
+        consent = t.collection("consents").document(recipient_id).get(transaction=tx).to_dict()
+        if reason := kind_blocker(member, consent, "equipment"):
+            raise InvalidInput(reason)
         scout = {"scoutId": recipient_id} if member.get("kind") == "scout" else {}
         return {"label": member.get("displayName", "Member"), "toMemberId": recipient_id, **scout}
     event = t.collection("events").document(recipient_id).get(transaction=tx).to_dict()

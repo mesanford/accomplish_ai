@@ -30,6 +30,15 @@ service cloud.firestore {
         && !(scoutId in access(t).get('consentPendingScoutIds', []));
     }
     function canSeeScout(t, scoutId) { return isLeader(t) || actsFor(t, scoutId); }
+    // A Scout who only a parent can consent for (under 13, or age unknown) is "waiting" until a parent agrees:
+    // the server sets `consentHold` on the member and clears it when a parent agrees. While it is set, no client
+    // may write anything else about the Scout: sign-offs, plans, blue cards, attendance, RSVPs or private details.
+    // The other kinds of data that need a newer consent (accounts, health notes, patrols, activity logs, gear loans)
+    // are written only by server functions, which check the notice version themselves.
+    function isHeld(t, scoutId) {
+      return exists(/databases/$(database)/documents/troops/$(t)/members/$(scoutId))
+        && get(/databases/$(database)/documents/troops/$(t)/members/$(scoutId)).data.get('consentHold', false) == true;
+    }
     // Scout accounts. The treasurer, Scoutmaster and advancement chair see every account; a family sees only its
     // own Scouts' (a Scout 13 or older acts for themselves). Counselors and other leaders see none.
     function canSeeMoney(t) { return hasRole(t, 'treasurer') || hasRole(t, 'scoutmaster') || hasRole(t, 'advancement'); }
@@ -122,20 +131,28 @@ service cloud.firestore {
       match /members/{m} {
         allow read: if isMember(t);
         // yptExpiresAt, yptUpdatedBy and yptUpdatedAt (Youth Protection training) are written only by the server:
-        // set_my_ypt (the adult) and set_member_roles (a leader).
+        // set_my_ypt (the adult) and set_member_roles (a leader). consentHold is server-only too, and a Scout is
+        // created only by add_scout, which sets it when needed.
         allow create: if isLeader(t) && !('mediaConsent' in request.resource.data)
           && !('leftAt' in request.resource.data) && !('patrolId' in request.resource.data)
-          && !request.resource.data.keys().hasAny(['yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt']);
+          && !request.resource.data.keys().hasAny(['yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt', 'consentHold'])
+          && request.resource.data.get('kind', '') != 'scout';
         allow update: if isLeader(t)
           && !request.resource.data.diff(resource.data).affectedKeys()
-            .hasAny(['mediaConsent', 'leftAt', 'patrolId', 'yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt']);
+            .hasAny(['mediaConsent', 'leftAt', 'patrolId', 'yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt', 'consentHold']);
         allow delete: if false;
       }
       // Private Scout details (birth month and year, rank dates). Only the remove_scout function deletes one.
       match /scoutRecords/{s} {
         allow read: if canSeeScout(t, s);
-        allow create, update: if isLeader(t);
+        allow create, update: if isLeader(t) && !isHeld(t, s);
         allow delete: if false;
+      }
+      // The parents a leader entered for a Scout awaiting consent (names, emails, who answered). Leaders read it;
+      // only the server writes it. Deleted after 30 days.
+      match /consentRequests/{s} {
+        allow read: if isLeader(t);
+        allow write: if false;
       }
       // Parental consent for a Scout: who agreed to which notice version and when, a leader's confirmation
       // for a Scout who may be under 13, and a parent's withdrawal. Leaders and the Scout's family read it;
@@ -144,7 +161,12 @@ service cloud.firestore {
         allow read: if canSeeScout(t, s);
         allow write: if false;
       }
-      // Progress id = {scoutId}_{awardId}, the same id as the Scout's blue card for that badge.
+      // When a leader last sent each parent a "the notice changed" reminder (id = the parent's uid), for the
+      // once-a-week limit. Server-only.
+      match /consentReminders/{u} {
+        allow read, write: if false;
+      }
+      // Progress id = {scoutId}_{awardId},the same id as the Scout's blue card for that badge.
       match /progress/{p} {
         allow read: if canSeeScout(t, resource.data.scoutId) || isCounselorFor(t, p);
         allow write: if false;
@@ -160,6 +182,7 @@ service cloud.firestore {
               || (isLeader(t) && request.resource.data.onBehalfOf is string
                   && request.resource.data.onBehalfOf.size() > 0 && request.resource.data.onBehalfOf.size() <= 80))
           && request.resource.data.status == 'pending'
+          && !isHeld(t, request.resource.data.scoutId)
           && yptCurrent(t)
           && ((isLeader(t) && (isRankOrTroopAward(request.resource.data.awardId) || canManageBadges(t)))
               || (isCounselorFor(t, request.resource.data.scoutId + '_' + request.resource.data.awardId)
@@ -171,10 +194,10 @@ service cloud.firestore {
       // server writes feasibility.
       match /paths/{scoutId} {
         allow read, delete: if canSeeScout(t, scoutId);
-        allow create: if canSeeScout(t, scoutId)
+        allow create: if canSeeScout(t, scoutId) && !isHeld(t, scoutId)
           && request.resource.data.scoutId == scoutId
           && !('feasibility' in request.resource.data);
-        allow update: if canSeeScout(t, scoutId)
+        allow update: if canSeeScout(t, scoutId) && !isHeld(t, scoutId)
           && request.resource.data.scoutId == scoutId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['feasibility']);
       }
@@ -205,11 +228,13 @@ service cloud.firestore {
       match /blueCards/{id} {
         allow read: if canSeeScout(t, resource.data.scoutId) || resource.data.counselorUid == request.auth.uid;
         allow create: if (actsFor(t, request.resource.data.scoutId) || canManageBadges(t))
+          && !isHeld(t, request.resource.data.scoutId)
           && id == request.resource.data.scoutId + '_' + request.resource.data.awardId
           && request.resource.data.keys().hasOnly(['scoutId', 'awardId', 'versionId', 'status', 'requestedAt'])
           && request.resource.data.status == 'requested';
-        allow update: if (canManageBadges(t) && (leaderTransition() || photosOnly()))
-          || (resource.data.counselorUid == request.auth.uid && counselorTransition());
+        allow update: if !isHeld(t, resource.data.scoutId)
+          && ((canManageBadges(t) && (leaderTransition() || photosOnly()))
+          || (resource.data.counselorUid == request.auth.uid && counselorTransition()));
         allow delete: if false;
 
         function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
@@ -315,11 +340,11 @@ service cloud.firestore {
         // Earlier RSVPs, kept as they were. New sign-ups use /signups.
         match /rsvps/{memberId} {
           allow read: if isMember(t);
-          allow write: if isLeader(t) || actsFor(t, memberId) || access(t).memberId == memberId;
+          allow write: if !isHeld(t, memberId) && (isLeader(t) || actsFor(t, memberId) || access(t).memberId == memberId);
         }
         match /attendance/{memberId} {
           allow read: if isMember(t);
-          allow write: if isLeader(t);
+          allow write: if isLeader(t) && !isHeld(t, memberId);
         }
       }
       // Calendar feed tokens. Secret: server-only, never readable by any client.

@@ -5,7 +5,7 @@ from __future__ import annotations
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import db, fail, require_leader, troop
+from fb import db, fail, require_leader, require_not_held, troop
 from handlers.custom_awards import check_award_id, clean_award, move_progress, new_award_id, plan_save
 from handlers.membership import InvalidInput
 
@@ -95,6 +95,7 @@ def move_to_custom_version(req: https_fn.CallableRequest) -> dict:
             raise InvalidInput("Choose a Scout and a version.")
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
+    require_not_held(troop(troop_id), [scout_id])
     ref = _award_ref(troop_id, award_id)
     progress_ref = troop(troop_id).collection("progress").document(f"{scout_id}_{award_id}")
 

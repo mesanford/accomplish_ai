@@ -1,8 +1,10 @@
 import { collection } from 'firebase/firestore';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { AdultRow } from '../components/AdultRow';
+import { ConsentReminder } from '../components/ConsentReminder';
+import { ConsentRequestPanel } from '../components/ConsentRequestPanel';
 import { InviteForm } from '../components/InviteForm';
 import { ScoutQuartermaster } from '../components/ScoutQuartermaster';
 import { GuideBlock } from '../components/GuideBlock';
@@ -11,16 +13,19 @@ import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { ColorSwatch } from '../components/patrols/PatrolCard';
 import { Empty, Notice, PageHeader } from '../components/ui';
+import { syncConsentHolds } from '../lib/api';
 import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
 import { consentSummary } from '../lib/consent';
+import { UPDATED_REASON } from '../lib/consentChangelog';
+import { blockedKinds, staleByScout } from '../lib/consentReview';
 import { db } from '../lib/firebase';
 import { useHealthForms } from '../lib/healthHooks';
 import { useQuery } from '../lib/hooks';
 import { usePatrols } from '../lib/patrolHooks';
 import { filterByPatrol, NO_PATROL, officeOf } from '../lib/patrols';
 import { useTroop } from '../lib/troop';
-import type { Access, ConsentDoc, Member, ScoutRecord } from '../lib/types';
+import type { Access, ConsentDoc, ConsentRequest, Member, ScoutRecord } from '../lib/types';
 
 export function Roster() {
   const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
@@ -28,21 +33,53 @@ export function Roster() {
   const [patrolFilter, setPatrolFilter] = useState('');
   const { forms: healthForms } = useHealthForms();
   const patrols = usePatrols().data;
-  const consentsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/consents`) : null), [isLeader, troopId]);
+  const consentsQuery = useMemo(
+    () => (isLeader ? collection(db, `troops/${troopId}/consents`) : null),
+    [isLeader, troopId],
+  );
   const consents = useQuery<ConsentDoc>(consentsQuery, `${troopId}/consents/${isLeader}`);
-  const recordsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/scoutRecords`) : null), [isLeader, troopId]);
-  const records = useQuery<ScoutRecord & { id: string }>(recordsQuery, `${troopId}/scoutRecords/${isLeader}`);
-  const accessQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/access`) : null), [isLeader, troopId]);
+  const requestsQuery = useMemo(
+    () => (isLeader ? collection(db, `troops/${troopId}/consentRequests`) : null),
+    [isLeader, troopId],
+  );
+  const requests = useQuery<ConsentRequest>(
+    requestsQuery,
+    `${troopId}/consentRequests/${isLeader}`,
+  );
+  useEffect(() => {
+    // Mark Scouts who only a parent can consent for (older Scouts with just a leader's confirmation too).
+    if (isLeader) {
+      syncConsentHolds(troopId).catch(() => undefined);
+    }
+  }, [isLeader, troopId]);
+  const recordsQuery = useMemo(
+    () => (isLeader ? collection(db, `troops/${troopId}/scoutRecords`) : null),
+    [isLeader, troopId],
+  );
+  const records = useQuery<ScoutRecord & { id: string }>(
+    recordsQuery,
+    `${troopId}/scoutRecords/${isLeader}`,
+  );
+  const accessQuery = useMemo(
+    () => (isLeader ? collection(db, `troops/${troopId}/access`) : null),
+    [isLeader, troopId],
+  );
   const logins = useQuery<Access>(accessQuery, `${troopId}/access/${isLeader}`);
   // Parents a leader linked who have not yet agreed to the parent notice, and the Scouts they are waiting on.
   const pending = pendingLinks(logins.data);
   const waitingScouts = new Set([...pending.values()].flat());
-  const waitingFor = (scoutId: string) => [...pending].filter(([, ids]) => ids.includes(scoutId)).map(([memberId]) => memberId);
-  const rankOf = (id: string) => rank(records.data.find((r) => r.id === id)?.currentRankId ?? '')?.name;
-  const scouts = members.filter((m) => m.kind === 'scout').sort((a, b) => a.displayName.localeCompare(b.displayName));
+  const waitingFor = (scoutId: string) =>
+    [...pending].filter(([, ids]) => ids.includes(scoutId)).map(([memberId]) => memberId);
+  const rankOf = (id: string) =>
+    rank(records.data.find((r) => r.id === id)?.currentRankId ?? '')?.name;
+  const scouts = members
+    .filter((m) => m.kind === 'scout')
+    .sort((a, b) => a.displayName.localeCompare(b.displayName));
   const shownScouts = filterByPatrol(scouts, patrolFilter);
   const patrolOf = (id: string) => patrols.find((p) => p.id === id);
-  const adults = members.filter((m) => m.kind === 'adult').sort((a, b) => a.displayName.localeCompare(b.displayName));
+  const adults = members
+    .filter((m) => m.kind === 'adult')
+    .sort((a, b) => a.displayName.localeCompare(b.displayName));
   if (!isLeader) {
     return <Empty>Only leaders can manage the roster.</Empty>;
   }
@@ -53,6 +90,8 @@ export function Roster() {
       waitingScouts.has(s.id),
     );
   const withdrawn = scouts.filter((s) => consentOf(s).withdrawn);
+  // Scouts with a parent whose latest consent is for an older version of the notice.
+  const stale = staleByScout(consents.data, members);
   return (
     <>
       <PageHeader eyebrow="Troop" title="Roster" />
@@ -74,7 +113,12 @@ export function Roster() {
             <label htmlFor="roster-patrol" className="small">
               Show
             </label>
-            <select id="roster-patrol" value={patrolFilter} onChange={(e) => setPatrolFilter(e.target.value)} style={{ width: 'auto' }}>
+            <select
+              id="roster-patrol"
+              value={patrolFilter}
+              onChange={(e) => setPatrolFilter(e.target.value)}
+              style={{ width: 'auto' }}
+            >
               <option value="">All patrols</option>
               {patrols.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -104,14 +148,35 @@ export function Roster() {
             .
           </Notice>
         ) : null}
+        <ConsentReminder stale={stale} scouts={scouts} />
         {scouts.length === 0 ? (
-          <NextStep action="Go to the form" onClick={() => document.getElementById('scout-name')?.focus()}>No Scouts yet. Add your first Scout with the form below.</NextStep>
+          <NextStep
+            action="Go to the form"
+            onClick={() => document.getElementById('scout-name')?.focus()}
+          >
+            No Scouts yet. Add your first Scout with the form below.
+          </NextStep>
         ) : shownScouts.length === 0 ? (
           <Empty>No Scouts in this patrol yet.</Empty>
         ) : (
           <ul className="list">
             {shownScouts.map((s) => {
               const consent = consentOf(s);
+              if (s.consentHold) {
+                // A Scout waiting for a parent shows only a name and the waiting status.
+                return (
+                  <li key={s.id}>
+                    <span>
+                      <Link to={`/t/${troopId}/scouts/${s.id}`}>{s.displayName}</Link>
+                    </span>
+                    <ConsentRequestPanel
+                      scout={s}
+                      request={requests.data.find((r) => r.id === s.id)}
+                    />
+                  </li>
+                );
+              }
+              const paused = blockedKinds(consents.data.find((c) => c.id === s.id)).length > 0;
               return (
                 <li key={s.id}>
                   <span>
@@ -120,14 +185,24 @@ export function Roster() {
                     {patrolOf(s.patrolId ?? '') ? (
                       <span className="muted small">
                         {' · '}
-                        <ColorSwatch color={patrolOf(s.patrolId ?? '')?.color} /> {patrolOf(s.patrolId ?? '')?.name}
-                        {officeOf(s.id, patrolOf(s.patrolId ?? '')) ? ` (${officeOf(s.id, patrolOf(s.patrolId ?? ''))})` : ''}
+                        <ColorSwatch color={patrolOf(s.patrolId ?? '')?.color} />{' '}
+                        {patrolOf(s.patrolId ?? '')?.name}
+                        {officeOf(s.id, patrolOf(s.patrolId ?? ''))
+                          ? ` (${officeOf(s.id, patrolOf(s.patrolId ?? ''))})`
+                          : ''}
                       </span>
                     ) : null}
                   </span>
-                  <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
+                  <span className="muted small">
+                    {parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}
+                  </span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>
                   <HealthPills form={healthForms.get(s.id)} />
+                  {stale.has(s.id) ? (
+                    <span className="pill warn">
+                      {paused ? UPDATED_REASON : "Parent hasn't reviewed the new notice"}
+                    </span>
+                  ) : null}
                   <ScoutQuartermaster scout={s} />
                 </li>
               );
@@ -142,11 +217,20 @@ export function Roster() {
         </h2>
         <ul className="list">
           {adults.map((a) => (
-            <AdultRow key={a.id} adult={a} scouts={scouts} pendingScoutIds={pending.get(a.id) ?? []} health={healthForms.get(a.id)} />
+            <AdultRow
+              key={a.id}
+              adult={a}
+              scouts={scouts}
+              pendingScoutIds={pending.get(a.id) ?? []}
+              health={healthForms.get(a.id)}
+            />
           ))}
         </ul>
       </section>
-      <div className="grid" style={{ alignItems: 'start', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+      <div
+        className="grid"
+        style={{ alignItems: 'start', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}
+      >
         <section className="card">
           <h2>Add a Scout</h2>
           <AddScoutForm troopId={troopId} onAdded={setAdded} />

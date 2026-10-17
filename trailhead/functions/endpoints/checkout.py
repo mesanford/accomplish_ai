@@ -16,7 +16,7 @@ from firebase_functions import https_fn
 
 from endpoints.payments import SECRETS, app_base, connection, require_on
 from endpoints.stripe_api import Stripe, StripeError, in_emulator
-from fb import db, fail, require_access, troop
+from fb import db, fail, refuse_if_blocked, require_access, troop
 from handlers import payments as pay
 from handlers.account_settings import settings_of
 from handlers.ledger import compute_account
@@ -91,6 +91,7 @@ def create_checkout(req: https_fn.CallableRequest) -> dict:
     member = t.collection("members").document(scout_id).get().to_dict()
     if not member or member.get("kind") != "scout":
         raise fail(Code.INVALID_ARGUMENT, "Choose a Scout in this troop.")
+    refuse_if_blocked(t, scout_id, "accounts")
     entries = {d.id: d.to_dict() for d in t.collection("ledger").where("scoutId", "==", scout_id).stream()}
     settings = settings_of(troop_doc)
     try:

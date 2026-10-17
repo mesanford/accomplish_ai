@@ -5,11 +5,13 @@ import { AddScoutForm } from '../components/AddScoutForm';
 import { GettingStarted } from '../components/GettingStarted';
 import { HelpTip } from '../components/HelpTip';
 import { HomeAnnouncement } from '../components/HomeAnnouncement';
+import { NoticeUpdateCard } from '../components/NoticeUpdateCard';
 import { NextStep } from '../components/NextStep';
 import { YptAlert } from '../components/YptAlert';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { db } from '../lib/firebase';
 import { blueCardAction, noScoutsText } from '../lib/homeCopy';
+import { useStaleScouts } from '../lib/consentHooks';
 import { useQuery } from '../lib/hooks';
 import { useNewLeadCount } from '../lib/leads';
 import { useTroop } from '../lib/troop';
@@ -49,8 +51,32 @@ function LeadAlert() {
   }
   return (
     <Link className="card link" to={`/t/${troopId}/recruiting`}>
-      <h3>{count === 1 ? '1 family wants to hear about the troop' : `${count} families want to hear about the troop`}</h3>
-      <span className="muted small">They filled in the Join us form on your website. Open this to reply and invite them.</span>
+      <h3>
+        {count === 1
+          ? '1 family wants to hear about the troop'
+          : `${count} families want to hear about the troop`}
+      </h3>
+      <span className="muted small">
+        They filled in the Join us form on your website. Open this to reply and invite them.
+      </span>
+    </Link>
+  );
+}
+
+function NoticeAlert() {
+  const { troopId } = useTroop();
+  const count = useStaleScouts().size;
+  if (count === 0) {
+    return null;
+  }
+  return (
+    <Link className="card link" to={`/t/${troopId}/roster`}>
+      <h3>
+        {count === 1
+          ? "1 Scout has a parent who hasn't reviewed the new notice"
+          : `${count} Scouts have a parent who hasn't reviewed the new notice`}
+      </h3>
+      <span className="muted small">Open the Roster to see who, and to send them a reminder.</span>
     </Link>
   );
 }
@@ -58,7 +84,11 @@ function LeadAlert() {
 function LeaderSummary() {
   const { troopId, canManageBadges } = useTroop();
   const pendingQuery = useMemo(
-    () => query(collection(db, 'troops', troopId, 'blueCards'), where('status', 'in', ['requested', 'approved'])),
+    () =>
+      query(
+        collection(db, 'troops', troopId, 'blueCards'),
+        where('status', 'in', ['requested', 'approved']),
+      ),
     [troopId],
   );
   const pending = useQuery<BlueCard>(pendingQuery, `${troopId}/pending-cards`);
@@ -93,7 +123,9 @@ export function TroopHome() {
       <GettingStarted />
       <HomeAnnouncement />
       {isLeader ? <YptAlert /> : null}
+      <NoticeUpdateCard />
       {isLeader ? <LeadAlert /> : null}
+      {isLeader ? <NoticeAlert /> : null}
       {isLeader ? <LeaderSummary /> : null}
       {has('counselor') ? (
         <div className="row">
@@ -112,7 +144,9 @@ export function TroopHome() {
             Add your Scout
             <HelpTip topic="birthMonth" label="why we ask about age" />
           </h2>
-          <p className="muted small">If your Scout isn't listed above, add them here. They'll be linked to you.</p>
+          <p className="muted small">
+            If your Scout isn't listed above, add them here. They'll be linked to you.
+          </p>
           <AddScoutForm troopId={troopId} />
         </section>
       ) : null}

@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { createInviteLink, inOneYear, joinAsParent, resetEmulators, signedIn } from './helpers';
+import { consentLinkFor } from './consentEmail';
+import { inOneYear, joinAsParent, resetEmulators, signedIn } from './helpers';
 
 test.beforeAll(resetEmulators);
 
@@ -14,22 +15,24 @@ test('a young Scout needs a leader confirmation, a parent agrees to the notice, 
   await expect(leader.getByRole('heading', { name: 'Troop 202' })).toBeVisible();
   await leader.getByRole('link', { name: 'Roster' }).click();
 
-  // A Scout who may be under 13 needs the leader's confirmation; a 14-year-old does not.
-  const confirm = leader.getByRole('checkbox', { name: /parent or guardian has given the troop permission/ });
+  // A Scout who may be under 13 needs a parent's email (no leader confirmation); a 14-year-old needs none.
+  const parentEmail = leader.locator('#add-parent-email-0');
   await leader.getByLabel("Scout's name").fill('Riley');
   await leader.getByLabel('Birth month').selectOption('1');
   await leader.getByLabel('Birth year').fill(String(new Date().getFullYear() - 10));
-  await expect(confirm).toBeVisible();
+  await expect(parentEmail).toBeVisible();
+  await expect(leader.getByRole('checkbox', { name: /has given the troop permission/ })).toHaveCount(0);
   await leader.getByLabel('Birth year').fill('2012');
-  await expect(confirm).toBeHidden();
+  await expect(parentEmail).toBeHidden();
   await leader.getByLabel('Birth year').fill(String(new Date().getFullYear() - 10));
-  await confirm.check();
+  await leader.locator('#add-parent-name-0').fill('Jordan Parent');
+  await parentEmail.fill('consent-parent@example.com');
   await leader.getByRole('button', { name: 'Add Scout' }).click();
   await expect(leader.getByRole('link', { name: 'Riley', exact: true })).toBeVisible();
-  await expect(leader.getByText('Leader confirmed permission')).toBeVisible();
+  await expect(leader.getByText('Waiting for parent consent')).toBeVisible();
 
   // The parent reads the notice for this troop and cannot join without agreeing.
-  const invite = await createInviteLink(leader, 'parent', 'Riley');
+  const invite = await consentLinkFor('consent-parent@example.com');
   const parent = await signedIn(browser, 'consent-parent@example.com', invite);
   await expect(parent.getByRole('heading', { name: 'Join your troop' })).toBeVisible();
   await expect(parent.getByText(/Troop 202 uses Forthright, run by MM Sanford/)).toBeVisible();
