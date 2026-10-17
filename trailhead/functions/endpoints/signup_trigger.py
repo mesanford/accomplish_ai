@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from datetime import UTC, datetime
 
 from firebase_admin import firestore
@@ -32,11 +33,21 @@ def on_event_written_signups(event: Written) -> None:
         doc, signups = read_all(tx, r)
         return doc, signups, write_promotions(tx, r, doc, signups)
 
-    try:
-        doc, signups, promoted = run(db().transaction())
-        send_promoted(troop_id, event_id, doc, promoted, signups)
-    except Exception:
-        log.exception("waitlist promotion failed")
+    # A sign-up landing at the same moment can make the transaction give up; try again so no one is left waiting.
+    for attempt in range(3):
+        try:
+            doc, signups, promoted = run(db().transaction())
+        except Exception:
+            if attempt == 2:
+                log.exception("waitlist promotion failed")
+                return
+            time.sleep(0.5 * (attempt + 1))
+            continue
+        try:
+            send_promoted(troop_id, event_id, doc, promoted, signups)
+        except Exception:
+            log.exception("waitlist promotion emails failed")
+        return
 
 
 @https_fn.on_call()
