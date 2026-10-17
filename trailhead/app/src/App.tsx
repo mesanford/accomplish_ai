@@ -29,6 +29,7 @@ import { PathTemplates } from './pages/PathTemplates';
 import { PostCharge } from './pages/PostCharge';
 import { PublicSite } from './pages/PublicSite';
 import { PaperCard } from './pages/PaperCard';
+import { Payments } from './pages/Payments';
 import { PriorAdvancement } from './pages/PriorAdvancement';
 import { PrivacyPage } from './pages/Privacy';
 import { Recruiting } from './pages/Recruiting';
@@ -128,6 +129,7 @@ const router = createBrowserRouter([
       { path: 'accounts/charge', element: <PostCharge /> },
       { path: 'accounts/payment', element: <RecordPayment /> },
       { path: 'accounts/settings', element: <AccountSettings /> },
+      { path: 'accounts/payments', element: <Payments /> },
       { path: 'accounts/campaigns/:campaignId', element: <CampaignPage /> },
       { path: 'accounts/scouts/:scoutId', element: <ScoutStatement /> },
       { path: 'help', element: <HelpPage /> },

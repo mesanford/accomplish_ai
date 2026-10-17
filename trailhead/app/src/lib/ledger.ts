@@ -4,6 +4,8 @@ import type { Timestamp } from 'firebase/firestore';
 
 export type EntryType = 'sale' | 'charge' | 'payment' | 'adjustment' | 'transfer';
 export type PayMethod = 'cash' | 'check' | 'other' | 'credit';
+/** A card payment is posted only by the server, when Stripe says the money moved. */
+export type EntryMethod = PayMethod | 'card';
 
 /** troops/{t}/ledger/{id}. Credit is positive, a charge negative, in whole cents. Never edited by a person. */
 export interface LedgerEntry {
@@ -15,7 +17,9 @@ export interface LedgerEntry {
   date: string;
   /** A charge paid from account credit when it was posted. Otherwise it stays open until paid. */
   fromCredit?: boolean;
-  method?: PayMethod;
+  method?: EntryMethod;
+  /** A card payment or card refund: the payment record it belongs to. */
+  paymentId?: string;
   /** Open charge id to the cents this payment put toward it. */
   covers?: Record<string, number>;
   /** A payment from account credit: how much credit it used. */

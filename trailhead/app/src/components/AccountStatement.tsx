@@ -5,6 +5,7 @@ import { useLedger, useMoneyAccess } from '../lib/moneyHooks';
 import { useTroop } from '../lib/troop';
 import { EntryList } from './EntryList';
 import { Total } from './Money';
+import { PayOnline } from './PayOnline';
 import { SettleAccount } from './SettleAccount';
 import { Empty, formatDate, Loading, Notice } from './ui';
 
@@ -49,6 +50,7 @@ export function AccountStatement({ scoutId, heading = 'Scout account' }: { scout
           ))}
         </ul>
       ) : null}
+      <PayOnline scoutId={scoutId} open={open} owed={state.owed} />
       {settings.creditPolicy ? (
         <p className="small muted">
           <strong>What account credit can pay for:</strong> {settings.creditPolicy}

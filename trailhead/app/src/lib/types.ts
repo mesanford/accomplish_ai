@@ -3,6 +3,7 @@ import type { PublicPage } from './sitePages';
 
 import type { SignupSettings } from './eventSignups';
 import type { AccountSettings } from './campaigns';
+import type { TroopPayments } from './payments';
 
 export type Role =
   | 'leader'
@@ -33,6 +34,8 @@ export interface Troop {
   site?: { slug?: string; published?: boolean; publishedAt?: Timestamp | null };
   /** The troop's Scout account rules. Written only by save_account_settings. */
   accounts?: Partial<AccountSettings>;
+  /** The troop's own Stripe account for card payments. Written only by the server. */
+  payments?: TroopPayments;
 }
 
 export interface Access {

@@ -24,6 +24,7 @@ from firebase_functions import https_fn
 
 from endpoints.money import post
 from endpoints.payment_records import LOOKUP  # payment intent id -> {troopId, paymentId}, for refunds and disputes
+from endpoints.payments import sync_account
 from fb import db, troop
 from handlers.ledger import ADJUSTMENT, compute_account
 from handlers.membership import InvalidInput
@@ -74,6 +75,7 @@ def credit(action: Action) -> str:
     scout_id, outcome = record["scoutId"], {}
 
     def build(tx, settings, entries):
+        outcome.clear()  # a retried transaction starts over
         current = ref.get(transaction=tx).to_dict() or {}
         if current.get("ledgerEntryId"):
             outcome["already"] = True
@@ -129,6 +131,7 @@ def refund(action: Action) -> str:
     scout_id, outcome = record["scoutId"], {}
 
     def build(tx, settings, entries):
+        outcome.clear()  # a retried transaction starts over
         current = ref.get(transaction=tx).to_dict() or {}
         try:
             new, done = refund_entries(entries[scout_id], current, ref.id, action.refunded)
@@ -183,33 +186,7 @@ def simple(action: Action) -> str:
     return "updated"
 
 
-def account(action: Action) -> str:
-    """Keep the troop's charges-enabled status in step with Stripe, or forget an account that left the platform."""
-    if not action.account:
-        return "ignored"
-    troops = db().collection("troops").where("payments.stripeAccountId", "==", action.account).stream()
-    count = 0
-    for snap in troops:
-        saved = (snap.to_dict() or {}).get("payments") or {}
-        if action.kind == "account":
-            fields = {f"payments.{k}": v for k, v in action.details.items()}
-            fields["payments.updatedAt"] = firestore.SERVER_TIMESTAMP
-        else:
-            previous = sorted({*(saved.get("previousAccountIds") or []), action.account})
-            fields = {
-                "payments": {
-                    "mode": saved.get("mode"),
-                    "generation": int(saved.get("generation") or 0) + 1,
-                    "previousAccountIds": previous,
-                    "disconnectedAt": firestore.SERVER_TIMESTAMP,
-                }
-            }
-        snap.reference.update(fields)
-        count += 1
-    return f"troops:{count}"
-
-
-HANDLERS = {"paid": credit, "refund": refund, "account": account, "deauthorized": account}
+HANDLERS = {"paid": credit, "refund": refund, "account": sync_account, "deauthorized": sync_account}
 
 
 def handle(event: dict) -> str:

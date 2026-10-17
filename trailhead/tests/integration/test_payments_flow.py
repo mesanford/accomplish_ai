@@ -245,7 +245,10 @@ def test_refunds_reverse_the_payment_and_disputes_are_kept(fake):
     charge = open_charge(tid, sam, 3500, "Fall campout")
     pid = ok(call("create_checkout", "mom", {"troopId": tid, "scoutId": sam, "chargeIds": [charge]}))["paymentId"]
     refund = {"id": "ch_1", "payment_intent": f"pi_{pid}", "amount_refunded": 3500}
-    assert deliver("charge.refunded", refund, "acct_fake_1").status_code == 500  # before the payment: Stripe retries
+    # Before the payment is recorded there is no lookup yet; the charge's metadata (copied from the payment intent)
+    # names the record, and the webhook asks Stripe to retry.
+    early = {**refund, "metadata": {"troopId": tid, "paymentId": pid}}
+    assert deliver("charge.refunded", early, "acct_fake_1").status_code == 500
 
     deliver("checkout.session.completed", paid_session(tid, pid, fake), "acct_fake_1")
     partial = deliver("charge.refunded", {**refund, "amount_refunded": 1000}, "acct_fake_1")

@@ -86,6 +86,16 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     the summary read-only, and families see their own Scouts' statements. Only these functions write money
     documents. Removing a Scout keeps their entries for 7 years under a reference number; the nightly job then
     deletes entries 7 years past their date. Forthright records payments; it never takes or holds money.
+15. **Card payments (off by default).** With `PAYMENTS_MODE` set to `test` or `live`, the treasurer connects the
+    troop's own Stripe account from Account settings (Stripe Connect, Standard: `connect_stripe`,
+    `disconnect_stripe`, `payments_status`), and a parent who agreed to the consent notice sees **Pay online** on
+    their Scout's statement (`create_checkout`, Stripe-hosted Checkout as a direct charge on the troop's account;
+    the amount always comes from the ledger). `stripe_webhook` posts one card payment per paid session through the
+    same ledger transaction as `record_payment`, posts a "Card refund" reversal for refunds, and keeps disputes on
+    `troops/{t}/payments/{id}` for the treasurer's **Card payments** list and reconciliation CSV. No Forthright fee;
+    the troop may add Stripe's fee as a labeled line. The tests use a fake Stripe server
+    (`tests/integration/fake_stripe.py`, `app/e2e/fakeStripe.ts`) switched on by the emulator-only `_test/payments`
+    document. Setup is in DEPLOY.md.
 
 ## Setup
 
@@ -168,7 +178,7 @@ migration once, after deploying. It gives the role to each troop's creator and i
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.
 - Automatic Scoutbook Plus import (needs Scouting America certification) and the blue card PDF.
-- Offline sign-off at camp (data already caches locally for reading) and card payments (Scout accounts record
-  payments made outside Forthright).
+- Offline sign-off at camp (data already caches locally for reading). Card payments are built but off until a
+  troop asks for them (see DEPLOY.md).
 - Deleting a whole troop yourself. Leaders can remove a Scout (`remove_scout`) and anyone can delete their account (`delete_account`), but removing a troop and its website is still by email request, as the privacy policy explains.
 - Removing a Scout takes every live website photo that shows them down, but keeps draft photos that also show other Scouts. Their tag points at nobody, so the next publish leaves those photos out until a leader fixes the tags.

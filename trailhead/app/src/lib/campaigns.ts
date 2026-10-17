@@ -34,6 +34,10 @@ export interface AccountSettings {
   defaultRule: CreditRule;
   creditPolicy: string;
   leavingDefault: 'general' | 'sibling';
+  /** Card payments: add Stripe's processing fee for the family to pay. */
+  cardFee: boolean;
+  /** Card payments: families may pay any amount toward the balance, not only open charges. */
+  allowPrepay: boolean;
 }
 
 /** The committee has not chosen yet, so the cautious choices: profit stays with the troop, no negative balances. */
@@ -42,6 +46,8 @@ export const DEFAULT_SETTINGS: AccountSettings = {
   defaultRule: { kind: 'percent', value: 0 },
   creditPolicy: '',
   leavingDefault: 'general',
+  cardFee: false,
+  allowPrepay: false,
 };
 
 export function settingsOf(saved: Partial<AccountSettings> | undefined): AccountSettings {

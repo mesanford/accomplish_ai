@@ -17,7 +17,7 @@ from firebase_functions import https_fn
 from endpoints.mailer import app_url
 from endpoints.money import TREASURER, require_treasurer
 from endpoints.stripe_api import Config, Stripe, StripeError, config, in_emulator
-from fb import fail, require_access, troop
+from fb import db, fail, require_access, troop
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -156,3 +156,29 @@ def disconnect_stripe(req: https_fn.CallableRequest) -> dict:
     )
     log.info("stripe disconnected troop=%s", troop_id)
     return {"disconnected": True}
+
+
+def sync_account(action) -> str:
+    """Keep the troop's charges-enabled status in step with Stripe, or forget an account that left the platform."""
+    if not action.account:
+        return "ignored"
+    troops = db().collection("troops").where("payments.stripeAccountId", "==", action.account).stream()
+    count = 0
+    for snap in troops:
+        saved = (snap.to_dict() or {}).get("payments") or {}
+        if action.kind == "account":
+            fields = {f"payments.{k}": v for k, v in action.details.items()}
+            fields["payments.updatedAt"] = firestore.SERVER_TIMESTAMP
+        else:
+            previous = sorted({*(saved.get("previousAccountIds") or []), action.account})
+            fields = {
+                "payments": {
+                    "mode": saved.get("mode"),
+                    "generation": int(saved.get("generation") or 0) + 1,
+                    "previousAccountIds": previous,
+                    "disconnectedAt": firestore.SERVER_TIMESTAMP,
+                }
+            }
+        snap.reference.update(fields)
+        count += 1
+    return f"troops:{count}"
