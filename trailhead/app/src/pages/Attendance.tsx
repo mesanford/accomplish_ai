@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { RequirementRef } from '../components/RequirementRef';
 import { GuideBlock } from '../components/GuideBlock';
 import { HelpTip } from '../components/HelpTip';
+import { FeesPanel } from '../components/events/FeesPanel';
 import { Empty, formatDate, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
@@ -88,6 +89,7 @@ export function AttendancePage() {
           ))}
         </ul>
       )}
+      {event.data ? <FeesPanel troopId={troopId} event={event.data} /> : null}
     </>
   );
 }

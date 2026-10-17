@@ -9,6 +9,7 @@ from firebase_admin import auth, firestore
 from firebase_functions import https_fn
 
 from endpoints.erase import commit, delete_op, update_op
+from endpoints.feeds import cleanup_ops as feed_cleanup_ops
 from fb import db, fail, require_uid, troop
 from handlers.account import is_last_leader, last_leader_message, plan_contacts
 from handlers.removal import plan_threads, usage_ids
@@ -38,6 +39,7 @@ def _adult_ops(t, uid: str, member_id: str) -> list:
     for event in t.collection("events").list_documents():
         ops.append(delete_op(event.collection("rsvps").document(member_id)))
         ops.append(delete_op(event.collection("attendance").document(member_id)))
+        ops += [delete_op(event.collection(c).document(member_id)) for c in ("signups", "signupNotes", "feeStatus")]
     threads = _docs(t.collection("threads").where("memberIds", "array_contains", member_id))
     for thread_id, fields in plan_threads(member_id, uid, threads).items():
         ops.append(update_op(t.collection("threads").document(thread_id), fields))
@@ -65,6 +67,7 @@ def _leave_troop(troop_id: str, uid: str, access: dict) -> int:
     usage = t.collection("usage")
     ops.append(delete_op(t.collection("announcementReads").document(uid)))  # when this login last read announcements
     ops += [delete_op(usage.document(i)) for i in usage_ids(uid, [d.id for d in usage.list_documents()])]
+    ops += feed_cleanup_ops(t, uid)
     if is_scout:
         # A Scout's records belong to the troop: only the login is unlinked. A leader can remove the Scout.
         for thread in t.collection("threads").where("participantUids", "array_contains", uid).stream():

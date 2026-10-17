@@ -24,6 +24,8 @@ log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
 # Collections whose documents carry the Scout's id in a `scoutId` field.
 KEYED_BY_FIELD = ("progress", "blueCards", "signoffs", "logs")
+# Event sub-collections keyed by the person: sign-ups, leader-only health notes and fee status.
+EVENT_PRIVATE = ("signups", "signupNotes", "feeStatus")
 
 
 def _docs(query) -> dict[str, dict]:
@@ -36,6 +38,7 @@ def _per_event_refs(t, scout_id: str) -> list:
     for event in t.collection("events").list_documents():
         refs.append(event.collection("attendance").document(scout_id))
         refs.append(event.collection("rsvps").document(scout_id))
+        refs += [event.collection(c).document(scout_id) for c in EVENT_PRIVATE]  # sign-ups, notes, fee status
     return refs
 
 

@@ -27,6 +27,13 @@
     ],
     "rewrites": [
       {
+        "source": "/cal/**",
+        "function": {
+          "functionId": "calendar_feed",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "/s/**",
         "function": {
           "functionId": "site_shell",

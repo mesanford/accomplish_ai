@@ -51,7 +51,7 @@ export function Meeting({ meeting }: { meeting: PublicSite['meeting'] }) {
   );
 }
 
-export function Events({ events }: { events?: PublicSite['events'] }) {
+export function Events({ events, slug }: { events?: PublicSite['events']; slug?: string }) {
   if (!events || events.length === 0) {
     return null;
   }
@@ -66,6 +66,11 @@ export function Events({ events }: { events?: PublicSite['events'] }) {
           </li>
         ))}
       </ul>
+      {slug ? (
+        <p className="site-muted">
+          <a href={`/cal/site/${encodeURIComponent(slug)}.ics`}>Add these events to your calendar</a>
+        </p>
+      ) : null}
     </Section>
   );
 }

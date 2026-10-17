@@ -58,7 +58,10 @@ function Missing() {
   return (
     <main className="site-wrap site-missing" id="site-main">
       <h1>We couldn't find that page</h1>
-      <p>The link may be mistyped, or the troop may have taken its page down. Check the address and try again.</p>
+      <p>
+        The link may be mistyped, or the troop may have taken its page down. Check the address and
+        try again.
+      </p>
     </main>
   );
 }
@@ -106,13 +109,17 @@ function Home({ site, slug }: { site: Site; slug: string }) {
       <div className="site-wrap site-body">
         <About text={site.about} />
         <Meeting meeting={site.meeting} />
-        <Events events={site.events} />
+        <Events events={site.events} slug={site.slug || slug} />
         <PublicDocuments documents={site.documents} />
         <Gallery photos={site.gallery} />
         <Faq items={site.faq} />
         <Contacts contacts={site.contacts} />
         {site.recruiting?.open ? (
-          <JoinForm slug={site.slug || slug} intro={site.recruiting.intro} troopName={site.troopName} />
+          <JoinForm
+            slug={site.slug || slug}
+            intro={site.recruiting.intro}
+            troopName={site.troopName}
+          />
         ) : null}
       </div>
     </>

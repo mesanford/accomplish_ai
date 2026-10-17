@@ -6,13 +6,10 @@ export interface CalendarEvent {
   place?: string | null;
 }
 
-/**
- * CALENDAR FEED SPOT. Another change adds an iCal feed at /s/{slug}/calendar.ics. When that route exists in this
- * build, set CALENDAR_FEED_READY to true and the calendar page shows a "Subscribe" link to it. Until then no link
- * is shown, so visitors never meet a dead one.
- */
-export const CALENDAR_FEED_READY = false;
-export const calendarFeedPath = (slug: string): string => `/s/${slug}/calendar.ics`;
+/** The troop's public iCal feed of its public events, served by the `calendar_feed` function. */
+export const CALENDAR_FEED_READY = true;
+export const calendarFeedPath = (slug: string): string =>
+  `/cal/site/${encodeURIComponent(slug)}.ics`;
 
 /** "2026-11" for an ISO date, or null when the date is not valid. */
 function monthKey(iso: string): string | null {
@@ -21,13 +18,18 @@ function monthKey(iso: string): string | null {
 
 export function monthLabel(key: string): string {
   const [year, month] = key.split('-').map(Number);
-  return new Date(year, month - 1, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  return new Date(year, month - 1, 1).toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
 }
 
 /** Events grouped by month in date order. Events with an unreadable date are left out. */
 export function groupByMonth(events: CalendarEvent[]): [string, CalendarEvent[]][] {
   const groups = new Map<string, CalendarEvent[]>();
-  for (const event of [...events].sort((a, b) => a.start.localeCompare(b.start) || a.title.localeCompare(b.title))) {
+  for (const event of [...events].sort(
+    (a, b) => a.start.localeCompare(b.start) || a.title.localeCompare(b.title),
+  )) {
     const key = monthKey(event.start);
     if (key) {
       groups.set(key, [...(groups.get(key) ?? []), event]);
@@ -37,7 +39,10 @@ export function groupByMonth(events: CalendarEvent[]): [string, CalendarEvent[]]
 }
 
 /** Whether the home page banner should show today: it has text, and its end date has not passed. */
-export function bannerShows(banner: { text?: string; endDate?: string | null } | null | undefined, today: string): boolean {
+export function bannerShows(
+  banner: { text?: string; endDate?: string | null } | null | undefined,
+  today: string,
+): boolean {
   if (!banner?.text?.trim()) {
     return false;
   }

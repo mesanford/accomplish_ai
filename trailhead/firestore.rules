@@ -61,6 +61,10 @@ service cloud.firestore {
       allow read, write: if false;
     }
     // Requests to join the pilot, and their daily counters. Written only by request_pilot; no client reads or writes them.
+    // Calendar feed lookups by token. Server-only.
+    match /calendarFeeds/{token} {
+      allow read, write: if false;
+    }
     match /pilotRequests/{id} {
       allow read, write: if false;
     }
@@ -224,9 +228,40 @@ service cloud.firestore {
         allow read: if isMember(t);
         allow write: if isLeader(t);
       }
+      // Events. A leader writes the details and the sign-up settings (the `signups` map, feeCents, startTime, endTime,
+      // endDate). The server owns signupCounts, feesPending, feesPosted and reminderSentFor.
       match /events/{e} {
         allow read: if isMember(t);
-        allow write: if isLeader(t);
+        allow create: if isLeader(t) && !request.resource.data.keys().hasAny(serverOwned()) && okSettings(request.resource.data);
+        allow update: if isLeader(t) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(serverOwned())
+          && okSettings(request.resource.data);
+        allow delete: if isLeader(t);
+
+        function okSettings(d) {
+          return (!('signups' in d)
+              || (d.signups is map && d.signups.get('questions', []) is list && d.signups.get('questions', []).size() <= 6))
+            && (!('feeCents' in d) || (d.feeCents is int && d.feeCents >= 0 && d.feeCents <= 1000000));
+        }
+        function serverOwned() { return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor']; }
+
+        // Sign-ups: written only by the sign_up_for_event, cancel_signup, approve_permission and import_rsvps
+        // functions, so a family can't move itself off a waitlist or approve its own Scout. Leaders read them all;
+        // a family reads only its own Scouts' and an adult only their own.
+        match /signups/{memberId} {
+          allow read: if isLeader(t) || actsFor(t, memberId) || (isMember(t) && access(t).memberId == memberId);
+          allow write: if false;
+        }
+        // Health and emergency notes a parent adds: leaders only. Not even the family reads them back.
+        match /signupNotes/{memberId} {
+          allow read: if isLeader(t);
+          allow write: if false;
+        }
+        // Whether a fee was charged to a Scout. Leaders only; server-written.
+        match /feeStatus/{memberId} {
+          allow read: if isLeader(t);
+          allow write: if false;
+        }
+        // Earlier RSVPs, kept as they were. New sign-ups use /signups.
         match /rsvps/{memberId} {
           allow read: if isMember(t);
           allow write: if isLeader(t) || actsFor(t, memberId) || access(t).memberId == memberId;
@@ -235,6 +270,10 @@ service cloud.firestore {
           allow read: if isMember(t);
           allow write: if isLeader(t);
         }
+      }
+      // Calendar feed tokens. Secret: server-only, never readable by any client.
+      match /calendarTokens/{uid} {
+        allow read, write: if false;
       }
       match /logs/{id} {
         allow read: if canSeeScout(t, resource.data.scoutId);
