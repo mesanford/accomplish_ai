@@ -9,6 +9,8 @@ The schedule (the privacy policy states it in plain words):
 - A "Join us" request (lead): 12 months after it was sent.
 - A daily draft counter (`usage`): more than 30 days after its day.
 - A whole troop: 18 months after anyone in it last used the app (see `endpoints/activity.py`).
+- A Scout account entry: 7 years after its date, even after the Scout was removed (their entries are anonymized
+  then; see `handlers/ledger_lifecycle.py`).
 
 "N months after" a date is the same day N months later. When that day doesn't exist (31 March + 1 month,
 29 February + 12 months), it is the first day of the following month, so records are kept a little longer rather

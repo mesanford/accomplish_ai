@@ -116,7 +116,7 @@ function LeaderTools({ troopId, event }: { troopId: string; event: TroopEvent })
 
 export function EventPage() {
   const { eventId = '' } = useParams();
-  const { troopId, access, actingScoutIds, members, isLeader } = useTroop();
+  const { troopId, access, actingScoutIds, members, isLeader, has } = useTroop();
   const ref = useMemo(() => doc(db, `troops/${troopId}/events/${eventId}`), [troopId, eventId]);
   const live = useDoc<TroopEvent>(ref);
   // Remembers the leader's choice, so turning sign-ups on doesn't snap the settings shut before "Saved." shows.
@@ -176,7 +176,6 @@ export function EventPage() {
               <SignupRoster troopId={troopId} event={event} />
             </section>
           ) : null}
-          <FeesPanel troopId={troopId} event={event} />
           <details
             className="card"
             open={settingsOpen ?? !s?.enabled}
@@ -187,6 +186,7 @@ export function EventPage() {
           </details>
         </>
       ) : null}
+      {isLeader || has('treasurer') ? <FeesPanel troopId={troopId} event={event} /> : null}
     </>
   );
 }

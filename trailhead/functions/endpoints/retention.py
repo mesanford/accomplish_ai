@@ -14,7 +14,7 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import options, scheduler_fn
 
-from endpoints.retention_rules import Budget, announcements, leads, scouts, threads, usage
+from endpoints.retention_rules import Budget, announcements, leads, ledger, scouts, threads, usage
 from endpoints.retention_troop import retire_troop
 from fb import db, troop
 from handlers.retention import dry_run, today_local, troop_due, troop_last_active
@@ -23,7 +23,14 @@ log = logging.getLogger(__name__)
 DRY_RUN_ENV = "TRAILHEAD_RETENTION_DRY_RUN"
 
 
-RULES = {"scouts": scouts, "threads": threads, "leads": leads, "announcements": announcements, "usage": usage}
+RULES = {
+    "scouts": scouts,
+    "threads": threads,
+    "leads": leads,
+    "announcements": announcements,
+    "usage": usage,
+    "ledger": ledger,
+}
 
 
 def _apply_rules(troop_id: str, today: date, budget: Budget) -> dict[str, int]:
@@ -44,7 +51,16 @@ def _apply_rules(troop_id: str, today: date, budget: Budget) -> dict[str, int]:
 def run_retention(today: date, troop_dry_run: bool, budget: Budget | None = None) -> dict:
     """Apply the whole schedule once. Returns counts, for tests and the summary log."""
     budget = budget or Budget()
-    totals = {"troops": 0, "troopsDue": 0, "scouts": 0, "threads": 0, "leads": 0, "announcements": 0, "usage": 0}
+    totals = {
+        "troops": 0,
+        "troopsDue": 0,
+        "scouts": 0,
+        "threads": 0,
+        "leads": 0,
+        "announcements": 0,
+        "usage": 0,
+        "ledger": 0,
+    }
     troops = [(s.id, s.to_dict() or {}) for s in db().collection("troops").stream()]  # read once; no long stream
     for troop_id, troop_doc in troops:
         if budget.out_of_time():

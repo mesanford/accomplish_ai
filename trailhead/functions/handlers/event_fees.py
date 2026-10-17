@@ -16,12 +16,7 @@ from handlers.signups import GOING, status_of
 log = logging.getLogger(__name__)
 
 # INTEGRATION SEAM: where the Scout accounts helper may live. The first module that imports and has `post_charges` wins.
-POST_CHARGES_MODULES = (
-    "handlers.accounts",
-    "endpoints.accounts",
-    "handlers.scout_accounts",
-    "endpoints.scout_accounts",
-)
+POST_CHARGES_MODULES = ("endpoints.charges",)
 WHO = ("going", "attendees")
 
 

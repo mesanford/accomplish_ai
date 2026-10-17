@@ -27,6 +27,7 @@ function TroopNav() {
     [`${base}/messages`, 'Messages', true],
     [`${base}/documents`, 'Documents', true],
     [`${base}/website`, 'Website', isLeader],
+    [`${base}/accounts`, 'Accounts', has('treasurer', 'scoutmaster', 'advancement')],
     [`${base}/help`, 'Help', true],
   ];
   return (

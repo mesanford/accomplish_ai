@@ -15,8 +15,11 @@ from endpoints.advancement import (
 )
 from endpoints.announcements import delete_announcement, edit_announcement, post_announcement
 from endpoints.assistant import draft_path
+from endpoints.campaigns import post_sales, save_account_settings, save_campaign
+from endpoints.charges import charge_attendees, post_charge
 from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
+from endpoints.entries import record_payment, reverse_entry, settle_account
 from endpoints.event_fees import charge_event_fees
 from endpoints.event_reminders import send_event_reminders
 from endpoints.feeds import calendar_feed, get_calendar_feed, reset_calendar_feed
@@ -44,6 +47,14 @@ from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 
 __all__ = [
+    "settle_account",
+    "save_campaign",
+    "save_account_settings",
+    "reverse_entry",
+    "record_payment",
+    "post_sales",
+    "post_charge",
+    "charge_attendees",
     "accept_invite",
     "add_scout",
     "answer_pending_consent",

@@ -7,8 +7,9 @@ from datetime import UTC, datetime
 
 from firebase_functions import https_fn
 
+from endpoints.money import require_treasurer
 from endpoints.signup_core import Code, refs
-from fb import fail, require_leader, troop
+from fb import fail, troop
 from handlers import signups as rules
 from handlers.event_fees import FeeError, fee_cents, post_fees, scouts_to_charge
 from trailhead_core.dates import human
@@ -19,14 +20,14 @@ CLAIMED = ("posting", "posted", "pending")  # a Scout in any of these states is 
 
 @https_fn.on_call()
 def charge_event_fees(req: https_fn.CallableRequest) -> dict:
-    """Leaders: "Charge going Scouts" (who = "going") or "Charge attendees" (who = "attendees").
+    """The treasurer: "Charge going Scouts" (who = "going") or "Charge attendees" (who = "attendees").
 
     INTEGRATION SEAM: `post_fees` (handlers/event_fees.py) calls the accounts helper `post_charges` when it exists.
     Until then the charge is kept as pending: `feeStatus/{scoutId}` says "pending" and the event gets `feesPending`.
     """
     data = req.data or {}
     troop_id, event_id = data.get("troopId"), data.get("eventId")
-    require_leader(req, troop_id)
+    require_treasurer(req, troop_id)  # every money write is the treasurer's, like the rest of Scout accounts
     if not isinstance(event_id, str) or not event_id:
         raise fail(Code.INVALID_ARGUMENT, "Choose an event.")
     t = troop(troop_id)

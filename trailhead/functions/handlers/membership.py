@@ -6,8 +6,9 @@ from datetime import UTC, date, datetime, time, timedelta
 
 from trailhead_core.catalog import load_catalog
 
-ROLES = ("leader", "scoutmaster", "advancement", "counselor", "committee", "parent", "scout")
-# Roles that sign off, counsel or message Scouts need current Youth Protection training.
+ROLES = ("leader", "scoutmaster", "advancement", "counselor", "committee", "treasurer", "parent", "scout")
+# Roles that sign off, counsel or message Scouts need current Youth Protection training. The treasurer keeps Scout
+# accounts and is not a leader, so does not need it for that role alone.
 YPT_ROLES = {"leader", "scoutmaster", "advancement", "counselor", "committee"}
 INVITE_DAYS = 30
 

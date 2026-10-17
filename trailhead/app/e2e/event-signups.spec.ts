@@ -71,7 +71,7 @@ test('a parent signs up a Scout and approves permission; a leader sees the roste
   expect(await parent.evaluate(() => document.documentElement.scrollWidth <= 375)).toBe(true);
   await expect(parent.getByText(/Asthma, inhaler/)).toBeHidden(); // the family can't read the note back
 
-  // The leader sees who is going, the answer and the note, and can charge the fee.
+  // The leader sees who is going, the answer and the note.
   await leader.reload();
   const roster = leader.getByRole('region', { name: 'Roster' });
   await expect(roster.getByRole('heading', { name: 'Going (1)' })).toBeVisible();
@@ -79,10 +79,9 @@ test('a parent signs up a Scout and approves permission; a leader sees the roste
   await expect(
     roster.getByText('Health or emergency note: Asthma, inhaler in the blue bag'),
   ).toBeVisible();
-  await leader.getByRole('button', { name: 'Charge going Scouts' }).click();
-  await expect(leader.getByText(/1 charge saved/)).toBeVisible();
-  await leader.getByRole('button', { name: 'Charge going Scouts' }).click();
-  await expect(leader.getByText('No one new to charge. Each Scout is charged once.')).toBeVisible();
+  // Charging the fee is the treasurer's job (covered in the integration tests); the leader is told so.
+  await expect(leader.getByText('The treasurer charges this fee to Scout accounts.')).toBeVisible();
+  await expect(leader.getByRole('button', { name: 'Charge going Scouts' })).toBeHidden();
 
   // A leader adds Riley to a second event; Riley waits until the parent gives permission.
   await addEvent(leader, 'November hike');

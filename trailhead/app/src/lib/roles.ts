@@ -1,7 +1,7 @@
 import type { Access, Role } from './types';
 
 /** The roles a leader can give an adult, in the order the app lists them. */
-export const ADULT_ROLES: Role[] = ['leader', 'scoutmaster', 'advancement', 'counselor', 'committee', 'parent'];
+export const ADULT_ROLES: Role[] = ['leader', 'scoutmaster', 'advancement', 'counselor', 'committee', 'treasurer', 'parent'];
 
 export const ROLE_LABELS: Record<Role, string> = {
   leader: 'Leader',
@@ -9,6 +9,7 @@ export const ROLE_LABELS: Record<Role, string> = {
   advancement: 'Advancement chair',
   counselor: 'Merit badge counselor',
   committee: 'Committee member',
+  treasurer: 'Treasurer',
   parent: 'Parent or guardian',
   scout: 'Scout',
 };
@@ -19,6 +20,7 @@ const SHORT_NAMES: Record<Role, string> = {
   advancement: 'advancement chair',
   counselor: 'counselor',
   committee: 'committee member',
+  treasurer: 'treasurer',
   parent: 'parent',
   scout: 'Scout',
 };

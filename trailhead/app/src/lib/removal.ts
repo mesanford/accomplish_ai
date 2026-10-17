@@ -22,6 +22,7 @@ export const SCOUT_DELETES = [
 export const SCOUT_KEPT = [
   'Parents and their logins stay. They just no longer see this Scout.',
   'Messages already sent stay in their conversations, but this Scout is taken out of them.',
+  "Their Scout account entries stay in the troop's books for 7 years, with their name replaced by a reference number. Any balance moves to the troop's general fund.",
 ];
 
 export const ACCOUNT_DELETES = [
@@ -35,4 +36,5 @@ export const ACCOUNT_KEPT = [
   "Your Scouts' records stay with the troop. They belong to the troop, not to your account. To remove a Scout, ask a troop leader to use Remove from troop.",
   "Sign-offs you made stay in the Scouts' records, because they show who signed.",
   'Messages you sent stay in their conversations.',
+  "Scout account entries stay in the troop's books for 7 years. Entries you recorded as treasurer no longer show your name.",
 ];

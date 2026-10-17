@@ -30,7 +30,7 @@ CONFIG = {
     ],
 }
 ANSWERS = {"size": "M", "diet": "none"}
-USERS = ["lead", "mom", "dad", "scout1", "ref", "outsider"]
+USERS = ["lead", "mom", "dad", "scout1", "ref", "outsider", "treas"]
 
 
 def mail(uid: str) -> str:
@@ -75,7 +75,14 @@ def seeded():
         guardian = ["m-dad"] if sid == "s3" else ["m-mom"]
         owner.set(f"{T}/members/{sid}", {"kind": "scout", "displayName": name, "guardianIds": guardian})
         owner.set(f"{T}/scoutRecords/{sid}", {"birthYear": year, "birthMonth": 1, "currentRankId": "scout"})
-    adults = {"lead": ["leader"], "mom": ["parent"], "dad": ["parent"], "ref": ["committee"], "outsider": ["committee"]}
+    adults = {
+        "lead": ["leader"],
+        "mom": ["parent"],
+        "dad": ["parent"],
+        "ref": ["committee"],
+        "outsider": ["committee"],
+        "treas": ["treasurer"],
+    }
     for uid, roles in adults.items():
         owner.set(f"{T}/members/m-{uid}", {"kind": "adult", "displayName": uid.title(), "uid": uid, "roles": roles})
         access = {"memberId": f"m-{uid}", "roles": roles, "scoutIds": []}
@@ -215,26 +222,28 @@ def test_earlier_rsvps_can_be_imported_once():
     assert read(f"{EV}/rsvps/s2") == {"going": True}  # kept as it was
 
 
-def test_fees_are_charged_once_and_recorded_as_pending_until_accounts_exist():
+def test_the_treasurer_charges_fees_to_scout_accounts_once():
     owner.set(EV, event(feeCents=2500, signups={**CONFIG, "capacity": 5}))
     go("mom", "s2", permission=True)
     go("scout1", "s1")  # waiting for permission: not charged as "going"
     charge = {"troopId": "tn", "eventId": "e1", "who": "going"}
     assert call("charge_event_fees", "mom", charge).status_code == 403
-    assert call("charge_event_fees", "lead", {**charge, "who": "nobody"}).status_code == 400
-    assert call("charge_event_fees", "lead", charge).json()["result"] == {"charged": 1, "state": "pending"}
-    assert call("charge_event_fees", "lead", charge).json()["result"] == {"charged": 0, "state": None}
-    assert read(f"{EV}/feeStatus/s2")["state"] == "pending" and read(f"{EV}/feeStatus/s1") is None
-    assert read(EV)["feesPending"] == {"count": 1, "amountCents": 2500, "at": read(EV)["feesPending"]["at"]}
+    assert call("charge_event_fees", "lead", charge).status_code == 403  # money is the treasurer's
+    assert call("charge_event_fees", "treas", {**charge, "who": "nobody"}).status_code == 400
+    assert call("charge_event_fees", "treas", charge).json()["result"] == {"charged": 1, "state": "posted"}
+    assert call("charge_event_fees", "treas", charge).json()["result"] == {"charged": 0, "state": None}
+    assert read(f"{EV}/feeStatus/s2")["state"] == "posted" and read(f"{EV}/feeStatus/s1") is None
+    assert read(EV)["feesPosted"]["count"] == 1
+    assert read(f"{T}/accounts/s2")["openChargesCents"] == 2500  # no credit yet, so the charge stays open
 
     owner.set(f"{EV}/attendance/s2", {"present": True})
     owner.set(f"{EV}/attendance/s3", {"present": True})
-    assert call("charge_event_fees", "lead", {**charge, "who": "attendees"}).json()["result"]["charged"] == 1
-    assert read(f"{EV}/feeStatus/s3")["state"] == "pending" and read(EV)["feesPending"]["count"] == 2
+    assert call("charge_event_fees", "treas", {**charge, "who": "attendees"}).json()["result"]["charged"] == 1
+    assert read(f"{EV}/feeStatus/s3")["state"] == "posted" and read(EV)["feesPosted"]["count"] == 2
 
 
 def test_charging_needs_a_fee():
-    assert call("charge_event_fees", "lead", {"troopId": "tn", "eventId": "e1", "who": "going"}).status_code == 400
+    assert call("charge_event_fees", "treas", {"troopId": "tn", "eventId": "e1", "who": "going"}).status_code == 400
 
 
 def test_the_reminder_goes_to_signed_up_families_once(monkeypatch):

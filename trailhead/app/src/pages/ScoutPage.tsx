@@ -1,6 +1,7 @@
 import { collection, doc, query, where } from 'firebase/firestore';
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { AccountStatement } from '../components/AccountStatement';
 import { CustomProgress } from '../components/CustomProgress';
 import { CustomSignOff } from '../components/CustomSignOff';
 import { LinkAsParent } from '../components/LinkAsParent';
@@ -98,6 +99,7 @@ export function ScoutPage() {
         <h2>Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={canManageBadges} />
       </section>
+      <AccountStatement scoutId={scoutId} />
       <LinkAsParent scout={scout} />
       <ParentConsent scout={scout} />
       <MediaConsent scout={scout} />

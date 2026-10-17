@@ -2,8 +2,17 @@ import type { Timestamp } from 'firebase/firestore';
 import type { PublicPage } from './sitePages';
 
 import type { SignupSettings } from './eventSignups';
+import type { AccountSettings } from './campaigns';
 
-export type Role = 'leader' | 'scoutmaster' | 'advancement' | 'counselor' | 'committee' | 'parent' | 'scout';
+export type Role =
+  | 'leader'
+  | 'scoutmaster'
+  | 'advancement'
+  | 'counselor'
+  | 'committee'
+  | 'treasurer'
+  | 'parent'
+  | 'scout';
 
 export interface Membership {
   name: string;
@@ -22,6 +31,8 @@ export interface Troop {
   council?: string;
   /** The public website's state. Written only by the server. */
   site?: { slug?: string; published?: boolean; publishedAt?: Timestamp | null };
+  /** The troop's Scout account rules. Written only by save_account_settings. */
+  accounts?: Partial<AccountSettings>;
 }
 
 export interface Access {
@@ -84,7 +95,8 @@ export interface Progress {
   needsReview?: string[];
 }
 
-export type CardStatus = 'requested' | 'approved' | 'counselor_assigned' | 'in_progress' | 'complete' | 'cancelled';
+export type CardStatus =
+  'requested' | 'approved' | 'counselor_assigned' | 'in_progress' | 'complete' | 'cancelled';
 
 export interface BlueCard {
   id: string;
@@ -242,7 +254,12 @@ export interface PublicSite {
   unitNumber: string;
   council?: string;
   theme?: { color?: string; logoUrl?: string | null };
-  cover?: { heading?: string; tagline?: string; photoUrl?: string | null; layout?: 'band' | 'centered' | 'split' };
+  cover?: {
+    heading?: string;
+    tagline?: string;
+    photoUrl?: string | null;
+    layout?: 'band' | 'centered' | 'split';
+  };
   /** A home page banner; the page hides it after endDate. */
   announcement?: { text: string; endDate?: string | null } | null;
   about?: string;
