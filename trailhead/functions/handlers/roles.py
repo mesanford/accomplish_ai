@@ -16,6 +16,7 @@ ROLE_WORDS = {
     "counselor": "a counselor",
     "committee": "a committee member",
     "treasurer": "the treasurer",
+    "quartermaster": "the quartermaster",
     "parent": "a parent",
 }
 NO_LEADER = "A troop needs at least one leader. Make someone else a leader or advancement chair first."
@@ -37,8 +38,8 @@ def parse_roles(value) -> list[str]:
         raise InvalidInput("Pick at least one role.")
     if not set(value) <= set(ADULT_ROLES):
         raise InvalidInput(
-            "Pick roles from the list: leader, Scoutmaster, advancement chair, counselor, committee, treasurer "
-            "or parent."
+            "Pick roles from the list: leader, Scoutmaster, advancement chair, counselor, committee, treasurer, "
+            "quartermaster or parent."
         )
     return in_order(value)
 

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { AdultRow } from '../components/AdultRow';
 import { InviteForm } from '../components/InviteForm';
+import { ScoutQuartermaster } from '../components/ScoutQuartermaster';
 import { GuideBlock } from '../components/GuideBlock';
 import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
@@ -82,6 +83,7 @@ export function Roster() {
                   </span>
                   <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>
+                  <ScoutQuartermaster scout={s} />
                 </li>
               );
             })}

@@ -35,8 +35,8 @@ def _scout_ids(data: dict, scouts: set[str]) -> list[str]:
 
 @https_fn.on_call()
 def set_member_roles(req: https_fn.CallableRequest) -> dict:
-    """Set an adult's roles (leader, Scoutmaster, advancement, counselor, committee, treasurer, parent). Never a
-    Scout's.
+    """Set an adult's roles (leader, Scoutmaster, advancement, counselor, committee, treasurer, quartermaster,
+    parent). Never a Scout's.
 
     Roles that sign off or message Scouts need a current Youth Protection date. Adding "parent" links the chosen
     Scouts but records no consent: the parent agrees themselves the next time they open the troop. Removing

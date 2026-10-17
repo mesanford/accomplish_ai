@@ -42,6 +42,8 @@ import { SignIn } from './pages/SignIn';
 import { ThreadPage } from './pages/ThreadPage';
 import { TroopHome } from './pages/TroopHome';
 import { Documents } from './pages/Documents';
+import { Equipment } from './pages/Equipment';
+import { EquipmentItem } from './pages/EquipmentItem';
 import { Website } from './pages/Website';
 
 /** Sends signed-out visitors to sign in, then back to where they were going (such as an invite link). */
@@ -124,6 +126,8 @@ const router = createBrowserRouter([
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
       { path: 'documents', element: <Documents /> },
+      { path: 'equipment', element: <Equipment /> },
+      { path: 'equipment/:itemId', element: <EquipmentItem /> },
       { path: 'website', element: <Website /> },
       { path: 'accounts', element: <Accounts /> },
       { path: 'accounts/charge', element: <PostCharge /> },

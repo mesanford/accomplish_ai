@@ -11,6 +11,7 @@ export type Role =
   | 'counselor'
   | 'committee'
   | 'treasurer'
+  | 'quartermaster'
   | 'parent'
   | 'scout';
 

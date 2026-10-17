@@ -164,6 +164,10 @@ migration once, after deploying. It gives the role to each troop's creator and i
   and cover image to the app's `index.html`. Any rewrite for `/s/*/calendar.ics` must come before `/s/**` in
   `firebase.json`. Set `TRAILHEAD_SITE_ORIGIN` if the app is not at `https://<project-id>.web.app`.
 
+## Equipment and library
+
+The Equipment page is the troop's gear and library catalog. The quartermaster role (an adult, or a Scout 13 or older) and the leaders add items, check them out to a person or an event, check them in with a condition note and keep a repair log. Everyone in the troop can search the catalog and request an item for an event; parents see what their Scout has checked out. Data lives in `troops/{t}/inventory`, `checkouts`, `equipmentRequests` and `maintenance`; loans and requests are written only by functions (`check_out_item`, `check_in_item`, `request_item`, `decide_request`). Erasing a Scout or deleting an adult's account keeps their loans as "Former Scout" or "Former member". The nightly job deletes closed loans, answered requests and repair notes after 7 years.
+
 ## Not built yet
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.
