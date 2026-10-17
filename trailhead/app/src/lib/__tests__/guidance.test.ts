@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { GLOSSARY, HELP } from '../help';
 import { ROLE_GUIDES } from '../roleGuides';
-import { leaderChecklist, parentChecklist, progress, readHidden, writeHidden } from '../guidance';
+import {
+  leaderChecklist,
+  parentChecklist,
+  progress,
+  quartermasterChecklist,
+  readHidden,
+  treasurerChecklist,
+  writeHidden,
+} from '../guidance';
 
 function memoryStorage(): Storage {
   const data = new Map<string, string>();
@@ -72,6 +80,28 @@ describe('getting started', () => {
   });
 });
 
+describe('getting started for new roles', () => {
+  it('gives the treasurer four steps, ticked from real data', () => {
+    const none = { settingsSaved: false, fundraisers: 0, charges: 0, payments: 0 };
+    expect(progress(treasurerChecklist('/t/a', none))).toEqual({ done: 0, total: 4, complete: false });
+    const some = treasurerChecklist('/t/a', { ...none, settingsSaved: true, charges: 2 });
+    expect(some.filter((i) => i.done).map((i) => i.id)).toEqual(['settings', 'charge']);
+    expect(progress(treasurerChecklist('/t/a', { settingsSaved: true, fundraisers: 1, charges: 1, payments: 1 })).complete).toBe(true);
+  });
+
+  it('sends the treasurer to the account pages', () => {
+    const links = treasurerChecklist('/t/a', { settingsSaved: false, fundraisers: 0, charges: 0, payments: 0 }).map((i) => i.to);
+    expect(links).toEqual(['/t/a/accounts/settings', '/t/a/accounts/campaigns/new', '/t/a/accounts/charge', '/t/a/accounts/payment']);
+  });
+
+  it('gives the quartermaster three steps that all point at Equipment', () => {
+    const items = quartermasterChecklist('/t/a', { items: 1, checkouts: 0, repairNotes: 0 });
+    expect(items.map((i) => i.done)).toEqual([true, false, false]);
+    expect(items.every((i) => i.to === '/t/a/equipment')).toBe(true);
+    expect(progress(quartermasterChecklist('/t/a', { items: 1, checkouts: 1, repairNotes: 1 })).complete).toBe(true);
+  });
+});
+
 describe('help copy', () => {
   it('has a title and body for every entry, with only scouting.org links', () => {
     for (const [key, entry] of Object.entries(HELP) as [string, { title: string; body: string; learnMore?: string }][]) {
@@ -91,6 +121,15 @@ describe('help copy', () => {
   });
 
   it('has a guide for each role', () => {
-    expect(ROLE_GUIDES.map((g) => g.id)).toEqual(['leader', 'parent', 'scout', 'counselor']);
+    expect(ROLE_GUIDES.map((g) => g.id)).toEqual([
+      'leader',
+      'treasurer',
+      'quartermaster',
+      'committee',
+      'parent',
+      'scout',
+      'counselor',
+      'everyone',
+    ]);
   });
 });

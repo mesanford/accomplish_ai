@@ -6,6 +6,7 @@ import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { markAnnouncementsSeen, useAnnouncementFeed } from '../lib/announcementFeed';
 import { isUnread } from '../lib/announcements';
 import { useTroop } from '../lib/troop';
+import { HelpTip } from '../components/HelpTip';
 
 /** Troop announcements and newsletters: a feed, newest first with pinned posts on top, and a form for leaders. */
 export function Announcements() {
@@ -28,6 +29,7 @@ export function Announcements() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Announcements">
+        <HelpTip topic="announcements" />
         {canPost ? (
           <button type="button" className="btn" onClick={() => setComposing((c) => !c)}>
             {composing ? 'Close' : 'New announcement'}

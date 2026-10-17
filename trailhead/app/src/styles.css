@@ -161,7 +161,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: v
 /* On phones the explanation is a sheet at the bottom of the screen, so it never runs off the edge. */
 @media (max-width: 640px) { .help-tip { position: static; } .help-pop { position: fixed; top: auto; bottom: 16px; left: 16px; right: 16px; width: auto; max-height: 60vh; overflow-y: auto; font-size: 16px; } }
 .guide { background: var(--accent-soft); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
-.guide ol, .guide-steps { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+.guide ol, .guide-steps, .guide-list { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
 .guide-collapsed { display: flex; justify-content: flex-end; }
 .getting-started { border-left: 4px solid var(--accent); }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }

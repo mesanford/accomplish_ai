@@ -48,6 +48,19 @@ export interface FamilyData {
   blueCards: number;
 }
 
+export interface TreasurerData {
+  settingsSaved: boolean;
+  fundraisers: number;
+  charges: number;
+  payments: number;
+}
+
+export interface QuartermasterData {
+  items: number;
+  checkouts: number;
+  repairNotes: number;
+}
+
 export function leaderChecklist(base: string, d: LeaderData): ChecklistItem[] {
   return [
     { id: 'scouts', label: 'Add your Scouts', hint: 'Start with a name, birth month and year, and current rank.', to: `${base}/roster`, done: d.scouts > 0 },
@@ -64,6 +77,23 @@ export function parentChecklist(base: string, d: FamilyData): ChecklistItem[] {
     { id: 'scout', label: 'Add or find your Scout', hint: 'Your Scout should be listed under "Your Scouts". If not, add them.', to: base, done: d.scouts > 0 },
     { id: 'path', label: 'Plan a path', hint: 'Open your Scout and press "Plan a path" to set a goal.', to: base, done: d.paths > 0 },
     { id: 'card', label: 'Start a blue card', hint: 'Pick a merit badge on the Badges page.', to: `${base}/badges`, done: d.blueCards > 0 },
+  ];
+}
+
+export function treasurerChecklist(base: string, d: TreasurerData): ChecklistItem[] {
+  return [
+    { id: 'settings', label: 'Check the account settings', hint: 'Set the fundraiser credit rule and what account credit can pay for.', to: `${base}/accounts/settings`, done: d.settingsSaved },
+    { id: 'fundraiser', label: 'Start a fundraiser', hint: "Enter each Scout's sales and post their credit.", to: `${base}/accounts/campaigns/new`, done: d.fundraisers > 0 },
+    { id: 'charge', label: 'Post a charge', hint: 'For dues, camp fees or anything a family owes.', to: `${base}/accounts/charge`, done: d.charges > 0 },
+    { id: 'payment', label: 'Record a payment', hint: 'Cash, a check or another payment the troop received.', to: `${base}/accounts/payment`, done: d.payments > 0 },
+  ];
+}
+
+export function quartermasterChecklist(base: string, d: QuartermasterData): ChecklistItem[] {
+  return [
+    { id: 'item', label: 'Add your first piece of gear', hint: 'A tent, a stove or a library book. Start with a name and a quantity.', to: `${base}/equipment`, done: d.items > 0 },
+    { id: 'checkout', label: 'Check an item out', hint: 'Lend it to a person or an event, with a due date.', to: `${base}/equipment`, done: d.checkouts > 0 },
+    { id: 'repair', label: 'Write a repair note', hint: 'Open an item and add what was done or what is wrong.', to: `${base}/equipment`, done: d.repairNotes > 0 },
   ];
 }
 

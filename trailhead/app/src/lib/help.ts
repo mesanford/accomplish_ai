@@ -3,6 +3,8 @@
  * Written for busy volunteers who may not know Scouting words or app habits:
  * short sentences, say what happens and why it matters.
  */
+import { HELP_MORE, MORE_GLOSSARY } from './helpMore';
+
 export interface HelpEntry {
   title: string;
   body: string;
@@ -10,7 +12,7 @@ export interface HelpEntry {
   learnMore?: string;
 }
 
-export const HELP = {
+const BASE_HELP = {
   blueCard: {
     title: 'Blue card',
     body: 'The Application for Merit Badge, a paper form. In Forthright it is a request the Scoutmaster or advancement chair approves, then a counselor is assigned. A Scout needs one before starting a merit badge.',
@@ -85,7 +87,7 @@ export const HELP = {
   },
   roles: {
     title: 'Who can do what',
-    body: 'The Scoutmaster and advancement chair manage everything, including blue cards and merit badges. A troop can have more than one Scoutmaster. Other leaders manage the troop and sign ranks, but cannot change merit badge records. Counselors sign off merit badges for Scouts assigned to them. Parents see and plan for their own Scouts. Scouts 13 and older can sign in for themselves. One person can hold several roles, such as a leader who is also a parent.',
+    body: 'The Scoutmaster and advancement chair manage everything, including blue cards and merit badges. A troop can have more than one Scoutmaster. Other leaders manage the troop and sign ranks, but cannot change merit badge records. Counselors sign off merit badges for Scouts assigned to them. Parents see and plan for their own Scouts. Scouts 13 and older can sign in for themselves. The treasurer keeps Scout accounts. The quartermaster keeps the troop gear. Committee members can post announcements. One person can hold several roles, such as a leader who is also a parent.',
   },
   birthMonth: {
     title: 'Why birth month and year?',
@@ -143,6 +145,8 @@ export const HELP = {
   },
 } satisfies Record<string, HelpEntry>;
 
+export const HELP = { ...BASE_HELP, ...HELP_MORE };
+
 export type HelpKey = keyof typeof HELP;
 
 /** Scouting words used in the app, in plain language. */
@@ -161,4 +165,5 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
   { term: 'Scoutmaster conference', meaning: HELP.scoutmasterConference.body },
   { term: 'Sign-off', meaning: HELP.signOff.body },
   { term: 'YPT', meaning: HELP.ypt.body },
-];
+  ...MORE_GLOSSARY,
+].sort((a, b) => a.term.localeCompare(b.term));

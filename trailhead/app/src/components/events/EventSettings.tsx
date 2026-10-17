@@ -12,6 +12,7 @@ import { db } from '../../lib/firebase';
 import type { TroopEvent } from '../../lib/types';
 import { Field, Notice } from '../ui';
 import { QuestionEditor } from './QuestionEditor';
+import { HelpTip } from '../HelpTip';
 
 /** A leader's settings for an event: times, fee and sign-ups. */
 export function EventSettings({ troopId, event }: { troopId: string; event: TroopEvent }) {
@@ -91,6 +92,7 @@ export function EventSettings({ troopId, event }: { troopId: string; event: Troo
         <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
         Turn on sign-ups
       </label>
+      <HelpTip topic="eventSignups" />
       {enabled ? (
         <div className="stack">
           <Field label="Who can sign up" htmlFor="es-audience">

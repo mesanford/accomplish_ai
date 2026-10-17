@@ -9,6 +9,7 @@ import { useAccounts, useLedger, useMoneyAccess, useRosterScouts } from '../lib/
 import { usePayments } from '../lib/paymentsHooks';
 import { downloadCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
+import { HelpTip } from '../components/HelpTip';
 
 /** The troop summary: money held in Scout accounts, open charges, every Scout's balance, and the export. */
 export function Accounts() {
@@ -39,6 +40,7 @@ export function Accounts() {
   return (
     <>
       <PageHeader eyebrow="Scout accounts" title="Accounts">
+        <HelpTip topic="scoutAccounts" />
         {payments.on && payments.connected ? (
           <Link className="btn quiet small" to={`${base}/payments`}>
             Card payments

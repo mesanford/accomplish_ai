@@ -9,6 +9,20 @@ export function noScoutsText(roles: Role[]): string {
   if (roles.includes('counselor')) {
     return 'You are not linked to any Scouts as a family member. Scouts a leader assigns to you for a merit badge are under Your merit badge Scouts.';
   }
+  if (roles.includes('treasurer') || roles.includes('quartermaster') || roles.includes('committee')) {
+    const jobs: string[] = [];
+    if (roles.includes('treasurer')) {
+      jobs.push('Scout accounts are under Accounts');
+    }
+    if (roles.includes('quartermaster')) {
+      jobs.push('the troop gear is under Equipment');
+    }
+    if (roles.includes('committee')) {
+      jobs.push('announcements are under Announcements');
+    }
+    const text = jobs.join(', and ');
+    return `No Scouts are linked to you as a family member. ${text.charAt(0).toUpperCase()}${text.slice(1)}. The Help page explains what you can see.`;
+  }
   return 'No Scouts are linked to you yet. Ask a leader if this looks wrong.';
 }
 
