@@ -27,7 +27,7 @@ def call(name: str, uid: str, data: dict) -> requests.Response:
     return requests.post(url, json={"data": data}, headers={"Authorization": f"Bearer {token(uid)}"}, timeout=60)
 
 
-def wait_for(fn, timeout=30):
+def wait_for(fn, timeout=90):  # a cold Functions emulator worker loads every function first, slow on a busy machine
     end = time.time() + timeout
     while time.time() < end:
         value = fn()

@@ -20,7 +20,7 @@ pytestmark = pytest.mark.skipif(
 owner = Client("owner")
 
 
-def wait_for(fn, timeout=30):
+def wait_for(fn, timeout=90):  # a cold Functions emulator worker loads every function first, slow on a busy machine
     end = time.time() + timeout
     while time.time() < end:
         value = fn()
@@ -32,7 +32,7 @@ def wait_for(fn, timeout=30):
 
 def call(name: str, uid: str, data: dict) -> requests.Response:
     url = f"{FUNCTIONS}/{PROJECT}/us-central1/{name}"
-    return requests.post(url, json={"data": data}, headers={"Authorization": f"Bearer {token(uid)}"}, timeout=30)
+    return requests.post(url, json={"data": data}, headers={"Authorization": f"Bearer {token(uid)}"}, timeout=90)
 
 
 @pytest.fixture(autouse=True)
