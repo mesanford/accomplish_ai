@@ -45,7 +45,7 @@ def set_member_roles(req: https_fn.CallableRequest) -> dict:
     """
     data = req.data or {}
     troop_id, member_id = data.get("troopId"), data.get("memberId")
-    require_leader(req, troop_id)
+    caller = require_leader(req, troop_id)
     if not isinstance(member_id, str) or not member_id:
         raise fail(Code.INVALID_ARGUMENT, "Choose a person.")
     try:
@@ -73,7 +73,8 @@ def set_member_roles(req: https_fn.CallableRequest) -> dict:
         today, expires, extra = date.today(), member.get("yptExpiresAt"), {}
         if data.get("yptExpiresAt"):
             expires = parse_ypt(data["yptExpiresAt"], [], today)
-            extra = {"yptExpiresAt": expires}
+            by = "self" if caller["memberId"] == member_id else caller["memberId"]
+            extra = {"yptExpiresAt": expires, "yptUpdatedBy": by, "yptUpdatedAt": firestore.SERVER_TIMESTAMP}
         blocker = ypt_blocker(added, expires, member.get("displayName", "This person"), today)
         if blocker:
             raise InvalidInput(blocker)

@@ -56,6 +56,8 @@ export interface Member {
   roles?: Role[];
   guardianIds?: string[];
   yptExpiresAt?: Timestamp | null;
+  /** Who entered the training date: 'self', or the member id of the leader who did. Written only by the server. */
+  yptUpdatedBy?: string;
   /** May photos showing this Scout go on the public website? Written only by set_media_consent. */
   mediaConsent?: { granted: boolean; byMemberId: string; at?: Timestamp };
   /** When a leader marked this Scout as having left the troop. Written only by mark_scout_left. */

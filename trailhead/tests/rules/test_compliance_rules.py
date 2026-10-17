@@ -93,3 +93,18 @@ def test_leaders_set_an_events_health_form_requirement_and_others_cannot():
     assert leader.set(f"{T}/events/e1", {"title": "Camp", "start": "2026-12-01", "healthForm": "everything"}) == DENIED
     assert leader.set(f"{T}/events/e1", {"title": "Camp", "start": "2026-12-01", "healthForm": True}) == DENIED
     assert parent.set(f"{T}/events/e1", {"title": "Camp", "start": "2026-12-01", "healthForm": "ab"}) == DENIED
+
+
+def test_no_client_writes_training_dates_directly():
+    """yptExpiresAt, yptUpdatedBy and yptUpdatedAt change only through set_my_ypt and set_member_roles."""
+    owner.set(f"{T}/members/m-asst", {"kind": "adult", "displayName": "Asst", "roles": ["leader"]})
+    soon = datetime(2027, 1, 1, tzinfo=UTC)
+    for field, value in (("yptExpiresAt", soon), ("yptUpdatedBy", "self"), ("yptUpdatedAt", soon)):
+        member = {"kind": "adult", "displayName": "Asst", "roles": ["leader"], field: value}
+        assert leader.set(f"{T}/members/m-asst", member) == DENIED  # even a leader
+        assert assistant.set(f"{T}/members/m-asst", member) == DENIED  # even the adult themselves
+        assert leader.create(f"{T}/members/m-new", member) == DENIED
+        assert (
+            assistant.set(f"{T}/access/assistant", {"memberId": "m-asst", "roles": ["leader"], field: value}) == DENIED
+        )
+    assert leader.set(f"{T}/members/m-asst", {"kind": "adult", "displayName": "Asst B.", "roles": ["leader"]}) == OK

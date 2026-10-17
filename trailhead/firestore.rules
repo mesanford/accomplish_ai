@@ -121,10 +121,14 @@ service cloud.firestore {
       // mark_scout_left function, with the server's time, so it can't be backdated.
       match /members/{m} {
         allow read: if isMember(t);
+        // yptExpiresAt, yptUpdatedBy and yptUpdatedAt (Youth Protection training) are written only by the server:
+        // set_my_ypt (the adult) and set_member_roles (a leader).
         allow create: if isLeader(t) && !('mediaConsent' in request.resource.data)
-          && !('leftAt' in request.resource.data) && !('patrolId' in request.resource.data);
+          && !('leftAt' in request.resource.data) && !('patrolId' in request.resource.data)
+          && !request.resource.data.keys().hasAny(['yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt']);
         allow update: if isLeader(t)
-          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['mediaConsent', 'leftAt', 'patrolId']);
+          && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['mediaConsent', 'leftAt', 'patrolId', 'yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt']);
         allow delete: if false;
       }
       // Private Scout details (birth month and year, rank dates). Only the remove_scout function deletes one.

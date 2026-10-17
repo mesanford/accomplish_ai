@@ -1,8 +1,8 @@
 """Youth Protection training reminders: who is reminded and when. No Firestore calls here.
 
-An adult is reminded 30 days and 7 days before their training expires, and on the day it lapses (the day after the
-expiry date, the first day `has_current_ypt` is false). The Scoutmaster gets a weekly list of adults whose training
-has lapsed or runs out within 30 days.
+An adult is reminded 30 days and 7 days before their training expires, and on the expiry date itself (training is still
+current through that date, as `has_current_ypt` says; the final notice says it expires today). The Scoutmaster gets
+a weekly list of adults whose training has lapsed or runs out within 30 days.
 
 Idempotency: `troops/{t}/yptReminders/{memberId}` records `{expiresOn, sent: [stage, ...]}`. A stage is sent once
 per expiry date. A new expiry date (the adult renewed) starts a fresh list. A person first seen late gets only the
@@ -23,7 +23,9 @@ LAPSED = "lapsed"
 STAGES = (SOON, WEEK, LAPSED)  # least to most urgent
 EXPIRING_DAYS = 30
 WEEK_DAYS = 7
-LAPSE_NOTICE_DAYS = 14  # a lapse notice is sent only this long after the lapse; older lapses are in the weekly list
+LAPSE_NOTICE_DAYS = (
+    14  # a final notice is sent up to this many days after the expiry date; older lapses are in the weekly list
+)
 MAX_LISTED = 50  # names in one weekly email
 
 CURRENT, EXPIRING, LAPSED_STATUS, MISSING = "current", "expiring", "lapsed", "missing"
@@ -51,8 +53,10 @@ def reached(expires: date | None, today: date) -> list[str]:
     if expires is None:
         return []
     left = (expires - today).days
-    if left >= 0:
+    if left > 0:
         return [s for s, limit in ((SOON, EXPIRING_DAYS), (WEEK, WEEK_DAYS)) if left <= limit]
+    if left == 0:
+        return [SOON, WEEK, LAPSED]
     return [LAPSED] if -left <= LAPSE_NOTICE_DAYS else []
 
 

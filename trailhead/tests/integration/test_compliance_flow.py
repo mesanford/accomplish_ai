@@ -243,3 +243,49 @@ def test_deleting_an_adults_account_erases_their_dates_and_reminder_record(run):
     assert read(f"{T}/yptReminders/m-seven") is None
     assert read(f"{T}/members/m-seven") is None
     assert read(f"{T}/yptReminders/m-thirty") is not None  # others' records stay
+
+
+# --- an adult enters their own training date ---
+
+
+def own_date(uid: str, days: int, troop=TID):
+    day = (NOW + timedelta(days=days)).date().isoformat()
+    return call("set_my_ypt", uid, {"troopId": troop, "yptExpiresAt": day})
+
+
+def test_an_adult_enters_their_own_date_on_the_member_and_the_access_record():
+    response = own_date("lapsed", 365)
+    assert response.status_code == 200, response.text
+    for path in (f"{T}/members/m-lapsed", f"{T}/access/lapsed"):
+        doc = read(path)
+        assert doc["yptExpiresAt"] and doc["yptUpdatedBy"] == "self" and doc["yptUpdatedAt"]
+    assert read(f"{T}/members/m-lapsed")["yptExpiresAt"] == read(f"{T}/access/lapsed")["yptExpiresAt"]
+
+
+def test_dates_in_the_past_or_over_three_years_away_are_refused_and_scouts_and_strangers_cannot():
+    before = read(f"{T}/members/m-seven")
+    assert own_date("seven", -1).status_code == 400
+    assert own_date("seven", 365 * 3 + 30).status_code == 400
+    assert call("set_my_ypt", "seven", {"troopId": TID, "yptExpiresAt": "soon"}).status_code == 400
+    assert read(f"{T}/members/m-seven") == before
+    assert own_date("scout1", 100).status_code == 403
+    assert own_date("stranger", 100).status_code == 403
+
+
+def test_a_new_date_restarts_the_reminders_and_a_leaders_change_is_recorded_as_theirs(run):
+    run()
+    assert own_date("seven", 8).status_code == 200
+    run(NOW + timedelta(days=1))  # 7 days out on the new date
+    assert sent("ypt_7") == ["seven", "seven"]
+    day = (NOW + timedelta(days=300)).date().isoformat()
+    roles = {"troopId": TID, "memberId": "m-seven", "roles": ["counselor"], "yptExpiresAt": day}
+    assert call("set_member_roles", "lead", roles).status_code == 200
+    assert read(f"{T}/members/m-seven")["yptUpdatedBy"] == "m-lead"
+    assert own_date("seven", 200).status_code == 200
+    assert read(f"{T}/members/m-seven")["yptUpdatedBy"] == "self"
+
+
+def test_the_expiry_date_itself_gets_the_final_notice(run):
+    owner.set(f"{T}/members/m-fine", {**read(f"{T}/members/m-fine"), "yptExpiresAt": ypt(0)})
+    run()
+    assert sent("ypt_lapsed") == ["fine", "lapsed"]

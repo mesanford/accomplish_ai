@@ -6,6 +6,7 @@ import pytest
 
 from handlers.health_forms import can_record, parse_record
 from handlers.membership import InvalidInput
+from handlers.ypt_dates import parse_own_date
 from handlers.ypt_messages import adult_email, adult_push, weekly_email, weekly_push
 from handlers.ypt_reminders import (
     CURRENT,
@@ -44,8 +45,8 @@ def test_status_windows():
         (date(2026, 11, 1), [SOON]),  # 30 days out
         (date(2026, 11, 23), [SOON]),  # 8 days out
         (date(2026, 11, 24), [SOON, WEEK]),  # 7 days out
-        (date(2026, 12, 1), [SOON, WEEK]),  # the last valid day
-        (date(2026, 12, 2), [LAPSED]),  # the day it lapses
+        (date(2026, 12, 1), [SOON, WEEK, LAPSED]),  # the expiry date: the final notice goes out today
+        (date(2026, 12, 2), [LAPSED]),  # a day late (catch-up after an outage)
         (date(2026, 12, 15), [LAPSED]),  # 14 days late: still told
         (date(2026, 12, 16), []),  # older lapses are left to the weekly list
     ],
@@ -132,19 +133,35 @@ def test_attention_lists_lapsed_missing_and_expiring_adults_most_urgent_first():
     assert [(r["name"], r["status"]) for r in rows] == [("None", MISSING), ("Late", LAPSED_STATUS), ("Soon", EXPIRING)]
 
 
-def test_adult_emails_name_only_the_adults_own_date_and_link_to_the_troop():
+def test_adult_emails_name_the_date_and_link_to_the_account_page():
     for stage in (SOON, WEEK, LAPSED):
         mail = adult_email(stage, EXPIRES, date(2026, 11, 1), "t1", "https://app.test")
-        assert "Dec 1, 2026" in mail.text and "https://app.test/t/t1" in mail.text
-        assert "Youth Protection" in mail.subject
-    assert "lapsed" in adult_email(LAPSED, EXPIRES, date(2026, 12, 2), "t1", "https://app.test").subject
+        assert "Dec 1, 2026" in mail.text and "Update your date in Forthright: https://app.test/account" in mail.text
+        assert "Youth Protection" in mail.subject and "ask a troop leader" not in mail.text.lower()
     assert "in 30 days" in adult_email(SOON, EXPIRES, date(2026, 11, 1), "t1", "https://app.test").text
+
+
+def test_the_final_notice_says_expires_today_on_the_expiry_date_and_expired_after():
+    today = adult_email(LAPSED, EXPIRES, EXPIRES, "t1", "https://app.test")
+    assert today.subject == "Your Youth Protection training expires today"
+    assert "expires today" in today.text
+    late = adult_email(LAPSED, EXPIRES, date(2026, 12, 3), "t1", "https://app.test")
+    assert late.subject == "Your Youth Protection training has expired" and "expired on Dec 1, 2026" in late.text
+
+
+def test_an_adult_may_enter_a_date_from_today_to_three_years_ahead():
+    today = date(2026, 10, 17)
+    assert parse_own_date("2026-10-17", today) == datetime(2026, 10, 17, 23, 59, tzinfo=UTC)
+    assert parse_own_date("2029-10-17", today).year == 2029
+    for bad in ("2026-10-16", "2029-10-18", "soon", "", None, 20271001, "2027-02-30"):
+        with pytest.raises(InvalidInput):
+            parse_own_date(bad, today)
 
 
 def test_pushes_carry_no_name_and_no_date():
     for stage in (SOON, WEEK, LAPSED):
         shown = adult_push(stage, "t1")
-        assert "2026" not in shown.body and shown.path == "/t/t1"
+        assert "2026" not in shown.body and shown.path == "/account"
     note = weekly_push(3, "t1")
     assert note.body == "3 adults need to renew training." and note.path == "/t/t1/roster"
     assert weekly_push(1, "t1").body == "1 adult needs to renew training."

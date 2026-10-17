@@ -14,7 +14,7 @@ from handlers.ypt_reminders import LAPSED, LAPSED_STATUS, MAX_LISTED, MISSING, W
 from trailhead_core.dates import human
 
 KIND = "ypt"
-RENEW = "Take the Youth Protection course again at my.scouting.org. Then ask a troop leader to enter your new date."
+UPDATE = "Update your date in Forthright"
 
 
 def _days(expires: date, today: date) -> str:
@@ -25,15 +25,24 @@ def _days(expires: date, today: date) -> str:
 
 
 def adult_email(stage: str, expires: date, today: date, troop_id: str, app_url: str) -> Email:
-    link = ("Open Forthright", f"{app_url}/t/{troop_id}")
+    """Every email links to the Account page, where the adult enters their new date themselves."""
+    link = (UPDATE, f"{app_url}/account")
+    renew = "Take the Youth Protection course again at my.scouting.org. Then update your date in Forthright."
+    if stage == LAPSED and expires >= today:
+        lines = [
+            f"Your Youth Protection training expires today, {human(expires)}.",
+            "After today you can't message Scouts or sign off requirements in Forthright until you renew it.",
+            renew,
+        ]
+        return _notification("Your Youth Protection training expires today", lines, link, app_url)
     if stage == LAPSED:
         lines = [
-            f"Your Youth Protection training lapsed on {human(expires)}.",
+            f"Your Youth Protection training expired on {human(expires)}.",
             "Until you renew it you can't message Scouts or sign off requirements in Forthright.",
-            RENEW,
+            renew,
         ]
-        return _notification("Your Youth Protection training has lapsed", lines, link, app_url)
-    lines = [f"Your Youth Protection training expires on {human(expires)}, {_days(expires, today)}.", RENEW]
+        return _notification("Your Youth Protection training has expired", lines, link, app_url)
+    lines = [f"Your Youth Protection training expires on {human(expires)}, {_days(expires, today)}.", renew]
     subject = "Your Youth Protection training expires soon"
     if stage == WEEK:
         subject = "Your Youth Protection training expires in a week"
@@ -41,9 +50,9 @@ def adult_email(stage: str, expires: date, today: date, troop_id: str, app_url: 
 
 
 def adult_push(stage: str, troop_id: str) -> Note:
-    path = f"/t/{troop_id}"
+    path = "/account"
     if stage == LAPSED:
-        return note(KIND, "Training lapsed", "Your Youth Protection training has lapsed.", path)
+        return note(KIND, "Training needs renewing", "Your Youth Protection training needs renewing now.", path)
     when = "in a week" if stage == WEEK else "soon"
     return note(KIND, "Training expires soon", f"Your Youth Protection training expires {when}.", path)
 

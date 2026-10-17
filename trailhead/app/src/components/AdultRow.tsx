@@ -39,6 +39,9 @@ export function AdultRow({ adult, scouts, pendingScoutIds, health }: Props) {
           {ypt.expires ? `: ${formatDate(ypt.expires)}` : ''}
         </span>
       ) : null}
+      {ypt.expires && adult.yptUpdatedBy ? (
+        <span className="muted small">{adult.yptUpdatedBy === 'self' ? 'Entered by them' : 'Entered by a leader'}</span>
+      ) : null}
       <HealthPills form={health} />
       <button type="button" className="btn quiet small" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
         {open ? 'Close' : `Change roles for ${adult.displayName}`}

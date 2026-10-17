@@ -64,6 +64,7 @@ from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 from endpoints.stripe_webhook import stripe_webhook
 from endpoints.ypt_reminders import send_ypt_reminders
+from endpoints.ypt_self import set_my_ypt
 
 __all__ = [
     "add_domain",
@@ -141,6 +142,7 @@ __all__ = [
     "send_ypt_reminders",
     "set_item_photo",
     "set_member_roles",
+    "set_my_ypt",
     "set_scout_quartermaster",
     "set_email_announcements",
     "set_email_notifications",
