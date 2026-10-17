@@ -15,7 +15,7 @@ from firebase_admin import firestore
 from firebase_functions import options, scheduler_fn
 
 from endpoints.retention_rules import Budget, announcements, leads, ledger, scouts, threads, usage
-from endpoints.retention_troop import retire_troop
+from endpoints.retention_troop import close_books, retire_troop
 from fb import db, troop
 from handlers.retention import dry_run, today_local, troop_due, troop_last_active
 
@@ -66,6 +66,12 @@ def run_retention(today: date, troop_dry_run: bool, budget: Budget | None = None
         if budget.out_of_time():
             log.warning("retention stopped=out_of_time troops_left_for_tomorrow=yes")
             break
+        if troop_doc.get("retiredAt"):  # only its books are left; nothing else applies
+            try:
+                totals["ledger"] += close_books(troop_id, today, budget.ledger)
+            except Exception:
+                log.exception("retention rule=troop troop=%s close_books failed", troop_id)
+            continue
         try:
             if troop_due(troop_doc, today):
                 totals["troopsDue"] += 1

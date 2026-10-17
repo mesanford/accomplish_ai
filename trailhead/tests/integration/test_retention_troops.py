@@ -85,3 +85,39 @@ def test_a_troop_from_before_tracking_starts_its_clock_now(run):
     totals = run(dry_run=False)
     assert totals["troopsDue"] == 0
     assert read(f"troops/{tid}")["activityTrackedSince"]
+
+
+def entry(sid: str, day: str, cents: int, kind: str, text: str) -> dict:
+    return {"scoutId": sid, "amountCents": cents, "type": kind, "description": text, "date": day, "createdBy": "lead"}
+
+
+def test_a_retired_troop_keeps_its_books_until_each_entry_is_seven_years_old(run):
+    from datetime import date
+
+    from endpoints.retention import Budget, run_retention
+
+    tid, sid = idle_troop("55", years_ago(2))
+    t = f"troops/{tid}"
+    old_day = date(TODAY.year - 8, 1, 15).isoformat()
+    recent_day = date(TODAY.year - 2, 1, 15).isoformat()
+    owner.set(f"{t}/ledger/old", entry(sid, old_day, -1000, "charge", "Sam's campout"))
+    owner.set(f"{t}/ledger/new", entry(sid, recent_day, 3000, "sale", "Popcorn for Sam"))
+    owner.set(f"{t}/accounts/{sid}", {"balanceCents": 3000})
+
+    assert run(dry_run=False)["troops"] == 1
+    troop_doc = read(t)
+    assert troop_doc["retiredAt"] and troop_doc["name"] and "lastActiveAt" not in troop_doc
+    assert list_docs(f"{t}/members") == [] and list_docs(f"{t}/access") == []
+    assert read("slugs/troop-55") is None and tid not in read("users/lead")["troops"]
+    kept = [read(f"{t}/ledger/{i}") for i in ("old", "new")]
+    assert all(e["scoutId"].startswith("former-") and "Sam" not in e["description"] for e in kept)
+    assert read(f"{t}/accounts/{sid}") is None  # the Scout's own account is gone; only the reference account stays
+
+    run(dry_run=False)  # the next night: the 8-year-old entry goes, nothing is brought forward
+    assert read(f"{t}/ledger/old") is None and read(f"{t}/ledger/new") is not None
+    assert not [e for e in list_docs(f"{t}/ledger") if e.get("broughtForward")]
+
+    # Closing Sam's account posted a transfer to the general fund dated today; 8 years on, every entry is past 7.
+    later = date(TODAY.year + 8, TODAY.month, min(TODAY.day, 28))
+    run_retention(later, False, Budget())
+    assert read(t) is None and list_docs(f"{t}/ledger") == [] and list_docs(f"{t}/accounts") == []

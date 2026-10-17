@@ -4,6 +4,11 @@ Until the operator turns dry run off (TRAILHEAD_RETENTION_DRY_RUN, see DEPLOY.md
 delete. Order matters so a failed run can repeat the next day: files, the public site and the members' troop
 lists first, then every subcollection, and the troop document last (it is how the job finds the troop again).
 Auth logins are not touched; a person whose only troop this was can still sign in and create or join another.
+
+The troop's books outlive it: Scout account entries are kept for 7 years after their date, so a retired troop keeps
+its `ledger` and `accounts` (every Scout anonymized, as when a Scout is removed) under a bare troop document marked
+`retiredAt`. Each night `close_books` deletes the entries that have reached 7 years, with nothing brought forward,
+and the troop document goes with the last of them.
 """
 
 from __future__ import annotations
@@ -15,12 +20,17 @@ from datetime import date
 from firebase_admin import firestore
 from google.api_core.exceptions import NotFound
 
-from endpoints.erase import delete_folder
+from endpoints.erase import commit, delete_folder, delete_op
+from endpoints.ledger_retention import close_scout_account
 from endpoints.site_files import bucket
 from fb import db, troop
+from handlers.ledger import GENERAL_FUND
+from handlers.ledger_lifecycle import entry_due, is_former, ledger_cutoff
+from handlers.removal import chunked
 from handlers.retention import troop_due, troop_last_active
 
 log = logging.getLogger(__name__)
+BOOKS = ("ledger", "accounts")  # kept after the troop is retired, until every entry is 7 years old
 
 
 def _prefixes(troop_id: str) -> list[str]:
@@ -83,7 +93,38 @@ def retire_troop(troop_id: str, today: date, dry_run: bool) -> bool:
     for uid in _logins(t):
         with suppress(NotFound):  # never recreate a users document for a deleted account
             db().collection("users").document(uid).update({f"troops.{troop_id}": firestore.DELETE_FIELD})
-    docs = sum(db().recursive_delete(c) for c in t.collections())
-    t.delete()
-    log.warning("retention rule=troop troop=%s deleted docs=%d files=%d", troop_id, docs + 1, files)
+    kept = _anonymize_books(troop_id, t)
+    docs = sum(db().recursive_delete(c) for c in t.collections() if not (kept and c.id in BOOKS))
+    if kept:
+        # Only the troop's name stays, so the operator can tell whose books these are.
+        names = {k: troop_doc[k] for k in ("name", "unitNumber") if k in troop_doc}
+        t.set({**names, "retiredAt": firestore.SERVER_TIMESTAMP})
+    else:
+        t.delete()
+    log.warning(
+        "retention rule=troop troop=%s deleted docs=%d files=%d ledger_kept=%d", troop_id, docs + 1, files, kept
+    )
     return True
+
+
+def _anonymize_books(troop_id: str, t) -> int:
+    """Close every Scout's account the way removing the Scout does. Returns the ledger entries kept."""
+    for account in t.collection("accounts").list_documents():
+        if not is_former(account.id) and account.id != GENERAL_FUND:
+            close_scout_account(troop_id, account.id, t)
+    return t.collection("ledger").count().get()[0][0].value
+
+
+def close_books(troop_id: str, today: date, limit: int) -> int:
+    """A retired troop's nightly step: delete entries 7 years past their date (the books are closed, so nothing is
+    brought forward), and the troop itself once none are left. Returns the entries deleted."""
+    t = troop(troop_id)
+    old = t.collection("ledger").where("date", "<", ledger_cutoff(today)).limit(limit)
+    due = [d.reference for d in old.stream() if entry_due(d.to_dict(), today)]
+    for group in chunked(due):
+        commit([delete_op(ref) for ref in group])
+    if not any(True for _ in t.collection("ledger").limit(1).stream()):
+        db().recursive_delete(t.collection("accounts"))
+        t.delete()
+        log.warning("retention rule=troop troop=%s books_closed=yes", troop_id)
+    return len(due)
