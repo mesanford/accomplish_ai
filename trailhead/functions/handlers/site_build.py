@@ -9,9 +9,11 @@ from __future__ import annotations
 from datetime import date
 from urllib.parse import quote, quote_plus
 
-from .site import InvalidSite
+from .site_common import InvalidSite
+from .site_pages import filter_page_images, page_image_paths, page_urls, public_pages
 
-MAX_EVENTS = 12
+MAX_EVENTS = 12  # on the home page
+MAX_CALENDAR = 60  # on the calendar page
 DEFAULT_STORAGE_HOST = "https://firebasestorage.googleapis.com"
 
 
@@ -92,7 +94,7 @@ def _event_date(value: object) -> date | None:
         return None
 
 
-def public_events(events: list[dict], today: date) -> list[dict]:
+def public_events(events: list[dict], today: date, limit: int = MAX_EVENTS) -> list[dict]:
     """Upcoming events marked public, soonest first. Only the title, date and place are shared."""
     upcoming = []
     for event in events:
@@ -104,7 +106,26 @@ def public_events(events: list[dict], today: date) -> list[dict]:
         place = (place.strip()[:120] or None) if isinstance(place, str) else None
         upcoming.append({"title": title[:120], "start": start.isoformat(), "place": place})
     upcoming.sort(key=lambda e: (e["start"], e["title"]))
-    return upcoming[:MAX_EVENTS]
+    return upcoming[:limit]
+
+
+def live_announcement(announcement: dict | None, today: date) -> dict | None:
+    """The banner, unless its end date has already passed."""
+    if not announcement:
+        return None
+    end = _event_date(announcement.get("endDate"))
+    if end is not None and end < today:
+        return None
+    return {"text": announcement["text"], "endDate": end.isoformat() if end else None}
+
+
+def site_urls(public: dict) -> set[str]:
+    """Every file URL a published site uses: logo, cover, gallery, page images and public documents."""
+    urls = {(public.get("theme") or {}).get("logoUrl"), (public.get("cover") or {}).get("photoUrl")}
+    urls.update(g.get("url") for g in public.get("gallery") or [])
+    urls.update(d.get("url") for d in public.get("documents") or [])
+    urls.update(page_urls(public.get("pages") or []))
+    return {u for u in urls if u}
 
 
 def public_path(troop_id: str, draft_path: str) -> str:
@@ -120,9 +141,21 @@ def map_url(address: str | None) -> str | None:
     return f"https://www.google.com/maps/search/?api=1&query={quote_plus(address)}" if address else None
 
 
+def filter_pages(clean: dict, members: dict[str, dict]) -> tuple[dict, list[dict]]:
+    """The cleaned draft with page images removed when they show a Scout without media consent (same rule as the
+    gallery), and the leader-facing list of what was left out and why."""
+    pages, left_out = filter_page_images(clean["pages"], lambda item: image_problem(item, members, "image"))
+    return {**clean, "pages": pages}, left_out
+
+
 def draft_files(clean: dict, gallery: list[dict]) -> list[str]:
     """Every draft file the public site needs, once each."""
-    paths = [clean["theme"]["logoPath"], clean["cover"]["photoPath"], *(g["path"] for g in gallery)]
+    paths = [
+        clean["theme"]["logoPath"],
+        clean["cover"]["photoPath"],
+        *(g["path"] for g in gallery),
+        *page_image_paths(clean.get("pages") or []),
+    ]
     return list(dict.fromkeys(p for p in paths if p))
 
 
@@ -134,8 +167,10 @@ def build_public_site(
     contacts: list[dict],
     gallery: list[dict],
     events: list[dict],
+    documents: list[dict] | None = None,
 ) -> dict:
-    """The publicSites document, without its publishedAt timestamp. `urls` maps draft paths to public URLs."""
+    """The publicSites document, without its publishedAt timestamp. `urls` maps draft paths to public URLs.
+    `events` is every upcoming public event (the home page shows the first few); `documents` the public library."""
     meeting = clean["meeting"]
     return {
         "slug": clean["slug"],
@@ -148,7 +183,9 @@ def build_public_site(
             "heading": clean["cover"]["heading"],
             "tagline": clean["cover"]["tagline"],
             "photoUrl": urls.get(clean["cover"]["photoPath"] or ""),
+            "layout": clean.get("coverLayout") or "band",
         },
+        "announcement": live_announcement(clean.get("announcement"), date.today()),
         "about": clean["about"],
         "meeting": {
             "schedule": meeting["schedule"],
@@ -159,6 +196,9 @@ def build_public_site(
         "faq": clean["faq"],
         "contacts": contacts,
         "gallery": [{"url": urls[g["path"]], "caption": g["caption"]} for g in gallery if g["path"] in urls],
-        "events": events,
+        "events": events[:MAX_EVENTS],
+        "calendar": events[:MAX_CALENDAR],
+        "pages": public_pages(clean.get("pages") or [], urls),
+        "documents": documents or [],
         "recruiting": clean["recruiting"],
     }

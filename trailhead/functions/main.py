@@ -33,6 +33,8 @@ from endpoints.scouts import add_scout
 from endpoints.site import on_event_written_site, publish_site, unpublish_site
 from endpoints.site_about import draft_site_about
 from endpoints.site_consent import set_media_consent
+from endpoints.site_documents import on_document_written_site
+from endpoints.site_shell import site_shell
 
 __all__ = [
     "accept_invite",
@@ -55,6 +57,7 @@ __all__ = [
     "on_attendance_written",
     "on_blue_card_notify",
     "on_blue_card_written",
+    "on_document_written_site",
     "on_event_written_site",
     "on_path_written",
     "on_signoff_created",
@@ -70,6 +73,7 @@ __all__ = [
     "set_email_notifications",
     "set_media_consent",
     "set_scoutbook_entered",
+    "site_shell",
     "submit_interest",
     "unpublish_site",
     "withdraw_parent_consent",

@@ -9,7 +9,7 @@
       name="description"
       content="Forthright helps Scouts BSA troops plan rank advancement, run blue cards and counselors, and hand advancement to Scoutbook with a report. In a pilot with a few troops."
     />
-    <!-- These describe the home page. The script below removes the two address tags on every other page. -->
+    <!-- These describe the home page. The script below removes the two address tags on every other page, except troop sites (/s/), whose address tags the server writes. -->
     <link rel="canonical" href="https://forthrightapp.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Forthright" />
@@ -26,7 +26,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://forthrightapp.com/og-image.png" />
     <script>
-      if (location.pathname !== '/') {
+      if (location.pathname !== '/' && location.pathname.indexOf('/s/') !== 0) {
         document.querySelectorAll('link[rel="canonical"], meta[property="og:url"]').forEach(function (el) {
           el.remove();
         });

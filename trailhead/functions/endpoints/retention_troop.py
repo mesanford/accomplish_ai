@@ -24,8 +24,8 @@ log = logging.getLogger(__name__)
 
 
 def _prefixes(troop_id: str) -> list[str]:
-    """Storage folders for the troop (see storage.rules): paper blue card photos and the website."""
-    return [f"cards/{troop_id}/", f"sites/{troop_id}/"]
+    """Storage folders for the troop (see storage.rules): blue card photos, the website and the documents."""
+    return [f"cards/{troop_id}/", f"sites/{troop_id}/", f"docs/{troop_id}/"]
 
 
 def _logins(t) -> list[str]:

@@ -24,6 +24,7 @@ function TroopNav() {
     [`${base}/awards`, 'Troop awards', isLeader],
     [`${base}/recruiting`, newLeads > 0 ? `Recruiting (${newLeads})` : 'Recruiting', isLeader],
     [`${base}/messages`, 'Messages', true],
+    [`${base}/documents`, 'Documents', true],
     [`${base}/website`, 'Website', isLeader],
     [`${base}/help`, 'Help', true],
   ];

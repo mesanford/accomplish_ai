@@ -1,4 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { DraftPage } from './sitePages';
 import type { Member, Troop } from './types';
 
 /** troops/{t}/site/draft: what leaders edit. Only the publish_site function makes a public copy. */
@@ -18,8 +19,21 @@ export interface SiteDraft {
   contacts: { memberId: string; role: string; email: string | null }[];
   gallery: GalleryItem[];
   recruiting: { open: boolean; intro: string };
+  coverLayout: CoverLayout;
+  /** A banner on the home page. No text means no banner; it stops showing after the end date. */
+  announcement: { text: string; endDate: string | null };
+  /** Up to 10 extra pages, in menu order. See lib/sitePages.ts. */
+  pages: DraftPage[];
   updatedAt?: Timestamp;
 }
+
+export type CoverLayout = 'band' | 'centered' | 'split';
+export const COVER_LAYOUTS: [CoverLayout, string, string][] = [
+  ['band', 'Band', 'Heading on the left over a color band or photo.'],
+  ['centered', 'Centered', 'Heading in the middle over a color band or photo.'],
+  ['split', 'Split', 'Heading beside the photo. Without a photo, it matches Band.'],
+];
+export const ANNOUNCEMENT_MAX = 200;
 
 export interface GalleryItem {
   path: string;
@@ -89,6 +103,9 @@ export function emptyDraft(troop: Troop | null): SiteDraft {
     contacts: [],
     gallery: [],
     recruiting: { open: true, intro: '' },
+    coverLayout: 'band',
+    announcement: { text: '', endDate: null },
+    pages: [],
   };
 }
 
@@ -108,6 +125,9 @@ export function normalizeDraft(saved: Partial<SiteDraft> | null, troop: Troop | 
     contacts: saved.contacts ?? [],
     gallery: (saved.gallery ?? []).map((g) => ({ ...g, scoutIds: g.scoutIds ?? [], noScoutsShown: Boolean(g.noScoutsShown) })),
     recruiting: { ...base.recruiting, ...saved.recruiting },
+    coverLayout: saved.coverLayout ?? base.coverLayout,
+    announcement: { ...base.announcement, ...saved.announcement },
+    pages: saved.pages ?? [],
   };
 }
 

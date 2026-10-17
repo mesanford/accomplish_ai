@@ -8,34 +8,33 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 
+from endpoints.site_documents import publish_documents
 from endpoints.site_files import MissingFile, delete_public_files, publish_files
 from fb import db, fail, require_leader, troop
 from handlers.images import UnreadableImage
 from handlers.site import InvalidSite, validate_draft
 from handlers.site_build import (
+    MAX_CALENDAR,
+    MAX_EVENTS,
     build_public_site,
     draft_files,
     filter_branding,
     filter_gallery,
+    filter_pages,
     public_events,
     resolve_contacts,
+    site_urls,
 )
+from handlers.site_pages import page_image_records
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
 TAKEN = "That web address is already used by another troop. Choose a different one."
 
 
-def site_urls(public: dict) -> set[str]:
-    """Every file URL a published site uses."""
-    urls = {(public.get("theme") or {}).get("logoUrl"), (public.get("cover") or {}).get("photoUrl")}
-    urls.update(g.get("url") for g in public.get("gallery") or [])
-    return {u for u in urls if u}
-
-
 def _upcoming(t) -> list[dict]:
     events = [d.to_dict() for d in t.collection("events").where("public", "==", True).stream()]
-    return public_events(events, date.today())
+    return public_events(events, date.today(), MAX_CALENDAR)
 
 
 def _record(path: str | None, tags: dict, urls: dict[str, str]) -> dict | None:
@@ -49,7 +48,7 @@ def _owner(slug_snap) -> str | None:
     return (slug_snap.to_dict() or {}).get("troopId") if slug_snap.exists else None
 
 
-@https_fn.on_call(timeout_sec=120, memory=512)
+@https_fn.on_call(timeout_sec=180, memory=1024)
 def publish_site(req: https_fn.CallableRequest) -> dict:
     """Check the draft, copy its images to the public folder and write publicSites/{slug}. Leaders only."""
     troop_id = (req.data or {}).get("troopId")
@@ -68,7 +67,8 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
 
     gallery, left_out = filter_gallery(clean["gallery"], members)
     clean, branding_left_out = filter_branding(clean, members)  # a cover photo or logo follows the gallery's rule
-    left_out = [*branding_left_out, *left_out]
+    clean, pages_left_out = filter_pages(clean, members)  # page images follow the same rule
+    left_out = [*branding_left_out, *pages_left_out, *left_out]
     try:
         urls = publish_files(troop_id, draft_files(clean, gallery))
     except MissingFile:
@@ -77,8 +77,10 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
         raise fail(
             Code.FAILED_PRECONDITION, "One of your images can't be read. Upload it again, then publish."
         ) from None
+    documents, document_records, documents_left_out = publish_documents(troop_id, members)
+    left_out = [*left_out, *documents_left_out]
     troop_doc = t.get().to_dict() or {}
-    public = build_public_site(clean, troop_id, troop_doc, urls, contacts, gallery, _upcoming(t))
+    public = build_public_site(clean, troop_id, troop_doc, urls, contacts, gallery, _upcoming(t), documents)
     site_ref = db().collection("publicSites")
 
     @firestore.transactional
@@ -106,6 +108,8 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
                     {"url": urls[g["path"]], "scoutIds": g["scoutIds"], "noScoutsShown": g["noScoutsShown"]}
                     for g in gallery
                 ],
+                "pageImages": page_image_records(clean["pages"], urls),
+                "documents": document_records,
             },
         )
 
@@ -149,4 +153,5 @@ def on_event_written_site(event: firestore_fn.Event) -> None:
     ref = db().collection("publicSites").document(site["slug"])
     if not ref.get().exists:
         return
-    ref.update({"events": _upcoming(t)})
+    upcoming = _upcoming(t)
+    ref.update({"events": upcoming[:MAX_EVENTS], "calendar": upcoming})

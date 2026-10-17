@@ -3,7 +3,7 @@ import { safeUrl, paragraphs } from '../../lib/siteTheme';
 import type { PublicSite } from '../../lib/types';
 import { formatDate } from '../ui';
 
-function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+export function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
     <section className="site-section" aria-labelledby={`${id}-title`} id={id}>
       <h2 id={`${id}-title`}>{title}</h2>

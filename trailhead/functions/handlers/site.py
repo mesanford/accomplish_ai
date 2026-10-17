@@ -6,6 +6,12 @@ A leader edits `troops/{t}/site/draft`; publishing turns it into the public copy
 from __future__ import annotations
 
 import re
+from datetime import date
+
+from .site_common import InvalidSite
+from .site_common import draft_path as _draft_path
+from .site_common import tags as _tags
+from .site_pages import validate_pages
 
 SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{1,38}[a-z0-9])$")
 RESERVED_SLUGS = frozenset(
@@ -29,11 +35,10 @@ LIMITS = {
     "email": 120,
     "caption": 200,
     "intro": 1000,
+    "announcement": 200,
 }
-
-
-class InvalidSite(ValueError):
-    """The draft can't be published as it is. The message is shown to the leader."""
+COVER_LAYOUTS = ("band", "centered", "split")
+DEFAULT_LAYOUT = "band"
 
 
 def check_slug(slug: object) -> str:
@@ -63,25 +68,6 @@ def _optional(value: object, key: str, label: str) -> str | None:
     return _text(value, key, label) or None
 
 
-def _draft_path(value: object, troop_id: str) -> str | None:
-    """A storage path inside this troop's draft folder, or None. Anything else is refused."""
-    if value in (None, ""):
-        return None
-    prefix = f"sites/{troop_id}/draft/"
-    if not isinstance(value, str) or not value.startswith(prefix) or ".." in value or len(value) > 300:
-        raise InvalidSite("One of the images isn't in this troop's uploads. Upload it again.")
-    if not value[len(prefix) :] or "/" in value[len(prefix) :]:
-        raise InvalidSite("One of the images isn't in this troop's uploads. Upload it again.")
-    return value
-
-
-def _tags(item: dict, ids_key: str, none_key: str) -> dict:
-    """Which Scouts an image shows (ids), or the leader's confirmation that none can be identified."""
-    raw = item.get(ids_key)
-    scout_ids = [s for s in raw if isinstance(s, str)] if isinstance(raw, list) else []
-    return {"scoutIds": list(dict.fromkeys(scout_ids)), "noScoutsShown": item.get(none_key) is True}
-
-
 def _items(value: object, limit: int, label: str) -> list[dict]:
     items = [i for i in value if isinstance(i, dict)] if isinstance(value, list) else []
     if len(items) > limit:
@@ -94,6 +80,21 @@ def _email(value: object) -> str | None:
     if email and not EMAIL_RE.match(email):
         raise InvalidSite(f'"{email}" doesn\'t look like an email address.')
     return email
+
+
+def _announcement(value: object) -> dict | None:
+    """The banner text and the last day to show it (optional). No text means no banner."""
+    raw = value if isinstance(value, dict) else {}
+    text = _text(raw.get("text"), "announcement", "The announcement")
+    if not text:
+        return None
+    end = raw.get("endDate")
+    if end in (None, ""):
+        return {"text": text, "endDate": None}
+    try:
+        return {"text": text, "endDate": date.fromisoformat(str(end)[:10]).isoformat()}
+    except ValueError:
+        raise InvalidSite("Choose a valid end date for the announcement, or leave it empty.") from None
 
 
 def validate_draft(draft: dict | None, troop_id: str) -> dict:
@@ -156,4 +157,7 @@ def validate_draft(draft: dict | None, troop_id: str) -> dict:
             "open": recruiting.get("open") is True,
             "intro": _text(recruiting.get("intro"), "intro", "The recruiting message"),
         },
+        "coverLayout": draft.get("coverLayout") if draft.get("coverLayout") in COVER_LAYOUTS else DEFAULT_LAYOUT,
+        "announcement": _announcement(draft.get("announcement")),
+        "pages": validate_pages(draft.get("pages"), troop_id),
     }

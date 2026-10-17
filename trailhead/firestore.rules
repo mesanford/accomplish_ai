@@ -261,13 +261,51 @@ service cloud.firestore {
         function section(d, k) { return absent(d, k) || (d[k] is map && d[k].size() <= 5); }
         function validSiteDraft(d) {
           return d.keys().hasOnly(['slug', 'theme', 'cover', 'about', 'meeting', 'faq', 'contacts', 'gallery',
-                                   'recruiting', 'updatedAt'])
+                                   'recruiting', 'coverLayout', 'announcement', 'pages', 'updatedAt'])
             && text(d, 'slug', 40)
+            && text(d, 'coverLayout', 20)
+            && section(d, 'announcement')
+            && items(d, 'pages', 10)
             && text(d, 'about', 4000)
             && section(d, 'theme') && section(d, 'cover') && section(d, 'meeting') && section(d, 'recruiting')
             && items(d, 'faq', 20)
             && items(d, 'contacts', 6)
             && items(d, 'gallery', 24);
+        }
+      }
+      // The document library. Leaders add and change documents; their files are in Storage at
+      // docs/{t}/{id}/{file}, and Storage rules read this document's visibility. public = listed on the troop website
+      // and open to every member; members = every member of the troop; leaders = leaders only. Medical forms are
+      // never public. The file's details can't change after upload, so a document can't be pointed at another file.
+      match /documents/{docId} {
+        allow read: if isLeader(t) || (isMember(t) && resource.data.visibility in ['members', 'public']);
+        allow create: if isLeader(t) && validDocument(t, docId, request.resource.data)
+          && request.resource.data.createdBy == request.auth.uid;
+        allow update: if isLeader(t) && validDocument(t, docId, request.resource.data)
+          && request.resource.data.storagePath == resource.data.storagePath
+          && request.resource.data.contentType == resource.data.contentType
+          && request.resource.data.size == resource.data.size
+          && request.resource.data.createdBy == resource.data.createdBy;
+        allow delete: if isLeader(t);
+
+        function validDocument(tid, did, d) {
+          return d.keys().hasOnly(['title', 'category', 'visibility', 'fileName', 'contentType', 'size', 'storagePath',
+                                   'scoutIds', 'noScoutsShown', 'createdBy', 'createdAt'])
+            && d.keys().hasAll(['title', 'category', 'visibility', 'fileName', 'contentType', 'size', 'storagePath',
+                                'createdBy'])
+            && d.title is string && d.title.size() > 0 && d.title.size() <= 120
+            && d.category in ['permission', 'gear', 'handbook', 'medical', 'other']
+            && d.visibility in ['public', 'members', 'leaders']
+            && !(d.category == 'medical' && d.visibility == 'public')
+            && d.fileName is string && d.fileName.size() > 0 && d.fileName.size() <= 120
+            && d.contentType in ['application/pdf', 'application/msword',
+                                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                 'image/png', 'image/jpeg', 'image/gif', 'image/webp']
+            && !(d.visibility == 'public' && d.contentType == 'application/msword')
+            && d.size is int && d.size > 0 && d.size <= 20 * 1024 * 1024
+            && d.storagePath is string && d.storagePath.matches('docs/' + tid + '/' + did + '/[^/]+')
+            && (!('scoutIds' in d) || (d.scoutIds is list && d.scoutIds.size() <= 60))
+            && (!('noScoutsShown' in d) || d.noScoutsShown is bool);
         }
       }
       // What the live site shows (which Scouts each public photo includes). Server-only.

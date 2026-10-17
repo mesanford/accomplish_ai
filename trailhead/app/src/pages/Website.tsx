@@ -4,7 +4,10 @@ import { AboutSection } from '../components/site/AboutSection';
 import { ContactsSection } from '../components/site/ContactsSection';
 import { CoverSection } from '../components/site/CoverSection';
 import { FaqSection } from '../components/site/FaqSection';
+import { DocumentsSection } from '../components/site/DocumentsSection';
 import { GallerySection } from '../components/site/GallerySection';
+import { LayoutSection } from '../components/site/LayoutSection';
+import { PagesSection } from '../components/site/PagesSection';
 import { MeetingSection } from '../components/site/MeetingSection';
 import { GuideBlock } from '../components/GuideBlock';
 import { PublishPanel } from '../components/site/PublishPanel';
@@ -123,11 +126,14 @@ export function Website() {
         onUnpublish={onUnpublish}
       />
       <CoverSection troopId={troopId} draft={draft} onChange={edit} />
+      <LayoutSection draft={draft} onChange={edit} />
       <AboutSection troopId={troopId} draft={draft} onChange={edit} />
       <MeetingSection draft={draft} onChange={edit} />
       <FaqSection draft={draft} onChange={edit} />
       <ContactsSection draft={draft} onChange={edit} />
       <GallerySection troopId={troopId} draft={draft} onChange={edit} />
+      <PagesSection troopId={troopId} draft={draft} onChange={edit} />
+      <DocumentsSection troopId={troopId} />
     </>
   );
 }

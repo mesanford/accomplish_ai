@@ -32,6 +32,7 @@ import { Scoutbook } from './pages/Scoutbook';
 import { SignIn } from './pages/SignIn';
 import { ThreadPage } from './pages/ThreadPage';
 import { TroopHome } from './pages/TroopHome';
+import { Documents } from './pages/Documents';
 import { Website } from './pages/Website';
 
 /** Sends signed-out visitors to sign in, then back to where they were going (such as an invite link). */
@@ -72,6 +73,7 @@ const router = createBrowserRouter([
   // Any failure or unknown address shows a plain page, never the router's developer error screen.
   // The public troop website has its own look and needs no sign-in, so it sits outside the app layout.
   { path: '/s/:slug', element: <PublicSite />, errorElement: <RouteError /> },
+  { path: '/s/:slug/:page', element: <PublicSite />, errorElement: <RouteError /> },
   // The marketing page is full width, so "/" sits outside the app layout too and wraps Home in it when signed in.
   { path: '/', element: <Root />, errorElement: <RouteError /> },
   {
@@ -110,6 +112,7 @@ const router = createBrowserRouter([
       { path: 'recruiting', element: <Recruiting /> },
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
+      { path: 'documents', element: <Documents /> },
       { path: 'website', element: <Website /> },
       { path: 'help', element: <HelpPage /> },
     ],

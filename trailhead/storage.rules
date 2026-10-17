@@ -5,6 +5,9 @@ rules_version = '2';
 //                       advancement chair write (up to 10 MB); the Scout and their parents (their access record lists
 //                       the Scout) read.
 //   sites/{t}/draft/*   the leader's uploads while editing: that troop's leaders only, images up to 8 MB.
+//   docs/{t}/{id}/*     a document in the troop library, up to 20 MB (PDF, Word or an image). Leaders read and
+//                       write. Other members read it when the document's visibility (troops/{t}/documents/{id}) is
+//                       members or public. Leaders-only documents are never readable by anyone else.
 //   sites/{t}/public/*  copies made by the publish_site function: anyone may read, no client writes.
 // Everything else is closed. Leader checks read the troop's access record from Firestore.
 service firebase.storage {
@@ -27,6 +30,24 @@ service firebase.storage {
         && request.resource.contentType.matches('image/(png|jpeg|gif|webp)');
     }
 
+    function isMember(t) {
+      return request.auth != null && firestore.exists(accessPath(t));
+    }
+    function docPath(t, docId) {
+      return /databases/(default)/documents/troops/$(t)/documents/$(docId);
+    }
+    function sharedWithMembers(t, docId) {
+      return isMember(t)
+        && firestore.exists(docPath(t, docId))
+        && firestore.get(docPath(t, docId)).data.visibility in ['members', 'public'];
+    }
+    function isDocumentUpload() {
+      return request.resource.size <= 20 * 1024 * 1024
+        && request.resource.contentType.matches(
+          '(image/(png|jpeg|gif|webp)|application/pdf|application/msword'
+          + '|application/vnd.openxmlformats-officedocument.wordprocessingml.document)');
+    }
+
     function actsFor(t, scoutId) {
       return request.auth != null
         && firestore.exists(accessPath(t))
@@ -41,6 +62,11 @@ service firebase.storage {
       allow read: if isLeader(t) || actsFor(t, scoutId);
       allow create, update: if canManageBadges(t) && isCardFile();
       allow delete: if canManageBadges(t);
+    }
+    match /docs/{t}/{docId}/{file} {
+      allow read: if isLeader(t) || sharedWithMembers(t, docId);
+      allow create, update: if isLeader(t) && isDocumentUpload();
+      allow delete: if isLeader(t);
     }
     match /sites/{t}/draft/{file} {
       allow read, delete: if isLeader(t);
