@@ -1,4 +1,5 @@
-"""A parent gives permission for their Scout to go to an event, and can add a note only leaders see."""
+"""A parent gives permission for their Scout to go to an event, and can add a note only leaders see. A leader can
+record a signed paper slip instead."""
 
 from __future__ import annotations
 
@@ -9,10 +10,10 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.signup_core import Code, args, bad, read_all, refs
-from fb import db, fail, require_access, troop
+from fb import db, fail, require_access, require_leader, troop
 from handlers import signups as rules
 from handlers.roles import acts_for
-from handlers.signups import PENDING, SignupError
+from handlers.signups import PAPER, PENDING, SignupError
 
 log = logging.getLogger(__name__)
 
@@ -62,4 +63,37 @@ def approve_permission(req: https_fn.CallableRequest) -> dict:
 
     status = run(db().transaction())
     log.info("event permission troop=%s event=%s", troop_id, event_id)
+    return {"status": status}
+
+
+@https_fn.on_call()
+def record_paper_permission(req: https_fn.CallableRequest) -> dict:
+    """A leader records that a signed paper permission slip was received for a Scout's sign-up.
+
+    For a Scout whose parents are not on Forthright. It counts like a parent's approval, and records who recorded it
+    and when, with `permission.method` "paper". It is not an in-app approval: `approve_permission` still needs a
+    parent of the Scout, and a leader can't approve through it.
+    """
+    troop_id, event_id, member_id = args(req)
+    access = require_leader(req, troop_id)
+    t = troop(troop_id)
+    r = refs(t, event_id)
+    name = (t.collection("members").document(access["memberId"]).get().to_dict() or {}).get("displayName", "")
+    signer, now = {"memberId": access["memberId"], "name": name}, datetime.now(UTC)
+
+    @firestore.transactional
+    def run(tx) -> str:
+        event, signups = read_all(tx, r)
+        current = signups.get(member_id)
+        problem = rules.paper_blocker(current) if rules.read_config(event) else "That sign-up was not found."
+        if problem:
+            raise fail(Code.NOT_FOUND if current is None else Code.FAILED_PRECONDITION, problem)
+        current = rules.with_permission(current, signer, now, PAPER)
+        signups[member_id] = current
+        tx.update(r["signups"].document(member_id), {"permission": current["permission"], "status": current["status"]})
+        tx.update(r["event"], {"signupCounts": rules.counts(signups)})
+        return current["status"]
+
+    status = run(db().transaction())
+    log.info("event paper permission troop=%s event=%s", troop_id, event_id)
     return {"status": status}

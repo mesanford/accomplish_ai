@@ -139,6 +139,36 @@ def test_a_scout_13_or_older_signs_up_and_waits_for_a_parent():
     assert read(EV)["signupCounts"] == {"held": 1, "going": 1, "waitingPermission": 0, "waitlist": 0}
 
 
+def test_a_leader_records_a_paper_slip_for_a_scout_waiting_for_permission():
+    assert go("scout1", "s1").status_code == 200
+    assert status("s1") == "waiting_permission"
+    args = {"troopId": "tn", "eventId": "e1", "memberId": "s1"}
+    for who in ("mom", "dad", "scout1"):
+        assert call("record_paper_permission", who, args).status_code == 403  # only a leader records a slip
+    assert status("s1") == "waiting_permission"
+
+    assert call("record_paper_permission", "lead", args).status_code == 200
+    doc = read(f"{EV}/signups/s1")
+    assert doc["status"] == "going" and doc["permission"]["state"] == "approved"
+    assert doc["permission"]["method"] == "paper"
+    assert doc["permission"]["byMemberId"] == "m-lead" and doc["permission"]["byName"] and doc["permission"]["at"]
+    assert read(EV)["signupCounts"] == {"held": 1, "going": 1, "waitingPermission": 0, "waitlist": 0}
+
+    again = call("record_paper_permission", "lead", args)
+    assert again.status_code == 400 and "not waiting" in again.text  # nothing left to record
+    gone = call("record_paper_permission", "lead", {**args, "memberId": "s9"})
+    assert gone.status_code == 404
+
+
+def test_a_parent_approval_in_the_app_is_recorded_as_app_and_a_leader_still_cannot_approve_in_the_app():
+    assert go("scout1", "s1").status_code == 200
+    assert call("approve_permission", "lead", {"troopId": "tn", "eventId": "e1", "memberId": "s1"}).status_code == 403
+    assert call("approve_permission", "mom", {"troopId": "tn", "eventId": "e1", "memberId": "s1"}).status_code == 200
+    assert read(f"{EV}/signups/s1")["permission"]["method"] == "app"
+    assert go("mom", "s2", permission=True).status_code == 200
+    assert read(f"{EV}/signups/s2")["permission"]["method"] == "app"
+
+
 def test_a_scout_under_13_cannot_sign_themselves_up_and_a_family_cannot_sign_up_another_scout():
     owner.set(f"{T}/access/scout1", {"memberId": "s2", "roles": ["scout"], "scoutIds": ["s2"]})
     assert go("scout1", "s2").status_code == 400

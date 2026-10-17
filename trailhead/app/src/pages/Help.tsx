@@ -1,23 +1,22 @@
 import { useState } from 'react';
 import { PageHeader } from '../components/ui';
 import { GLOSSARY } from '../lib/help';
-import { ROLE_GUIDES } from '../lib/roleGuides';
+import { guidesToOpen, ROLE_GUIDES } from '../lib/roleGuides';
 import { useTroop } from '../lib/troop';
 
 export function HelpPage() {
   const { has, isLeader } = useTroop();
   const [search, setSearch] = useState('');
   const q = search.trim().toLowerCase();
-  const mine = new Set<string>([
-    ...(isLeader ? ['leader'] : []),
-    ...(has('parent') ? ['parent'] : []),
-    ...(has('scout') ? ['scout'] : []),
-    ...(has('counselor') ? ['counselor'] : []),
-  ]);
-  const guides = ROLE_GUIDES.map((g) => ({
-    ...g,
-    tasks: g.tasks.filter((t) => !q || `${t.task} ${t.steps.join(' ')}`.toLowerCase().includes(q)),
-  })).filter((g) => g.tasks.length > 0);
+  const mine = new Set<string>(guidesToOpen(isLeader, has));
+  const guides = ROLE_GUIDES.map((g) => {
+    const access = `${g.sees.join(' ')} ${g.cannot.join(' ')}`.toLowerCase();
+    return {
+      ...g,
+      showAccess: !q || access.includes(q),
+      tasks: g.tasks.filter((t) => !q || `${t.task} ${t.steps.join(' ')}`.toLowerCase().includes(q)),
+    };
+  }).filter((g) => g.tasks.length > 0 || (q && g.showAccess));
   const terms = GLOSSARY.filter((g) => !q || `${g.term} ${g.meaning}`.toLowerCase().includes(q));
   return (
     <>
@@ -32,6 +31,22 @@ export function HelpPage() {
           <summary>
             <h2>{g.title}</h2>
           </summary>
+          {g.showAccess ? (
+            <div className="stack">
+              <h3>What you can see and do</h3>
+              <ul className="guide-list">
+                {g.sees.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+              <h3>What you cannot see or change</h3>
+              <ul className="guide-list">
+                {g.cannot.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {g.tasks.map((t) => (
             <div key={t.task} className="stack">
               <h3>{t.task}</h3>

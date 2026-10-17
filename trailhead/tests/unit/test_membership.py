@@ -20,6 +20,38 @@ def test_new_troop_needs_name_number_and_training():
         new_troop({**data, "unitNumber": ""}, "u1", TODAY)
 
 
+@pytest.mark.parametrize(
+    ("choice", "roles"),
+    [
+        (None, ["leader", "scoutmaster"]),
+        ("scoutmaster", ["leader", "scoutmaster"]),
+        ("leader", ["leader"]),
+        ("advancement", ["leader", "advancement"]),
+        ("committee_chair", ["leader", "committee"]),
+    ],
+)
+def test_creator_gets_the_role_they_pick_and_always_the_ability_to_assign_roles(choice, roles):
+    data = {"name": "Troop 101", "unitNumber": "101", "displayName": "Pat", "yptExpiresAt": "2027-05-01"}
+    if choice:
+        data["creatorRole"] = choice
+    _, member = new_troop(data, "u1", TODAY)
+    assert member["roles"] == roles
+    assert "leader" in member["roles"]  # only leaders assign roles, so every new troop has someone who can
+
+
+def test_creator_role_must_be_one_of_the_choices():
+    data = {"name": "Troop 101", "unitNumber": "101", "displayName": "Pat", "yptExpiresAt": "2027-05-01"}
+    with pytest.raises(InvalidInput, match="Pick your role"):
+        new_troop({**data, "creatorRole": "treasurer"}, "u1", TODAY)
+
+
+def test_every_creator_choice_needs_training_because_each_includes_leader():
+    data = {"name": "Troop 101", "unitNumber": "101", "displayName": "Pat", "yptExpiresAt": ""}
+    for choice in ("scoutmaster", "leader", "advancement", "committee_chair"):
+        with pytest.raises(InvalidInput, match="Youth Protection"):
+            new_troop({**data, "creatorRole": choice}, "u1", TODAY)
+
+
 def test_expired_training_is_refused_for_leaders_but_optional_for_parents():
     with pytest.raises(InvalidInput, match="expired"):
         parse_ypt("2026-01-01", ["leader"], TODAY)

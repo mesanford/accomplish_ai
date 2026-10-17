@@ -6,6 +6,7 @@ import { errorMessage } from '../lib/api';
 import { PATROL_COLORS } from '../lib/patrols';
 import { usePatrols } from '../lib/patrolHooks';
 import { useTroop } from '../lib/troop';
+import { HelpTip } from '../components/HelpTip';
 
 export function Patrols() {
   const { troopId, members, isLeader } = useTroop();
@@ -36,7 +37,9 @@ export function Patrols() {
   }
   return (
     <>
-      <PageHeader eyebrow="Troop" title="Patrols" />
+      <PageHeader eyebrow="Troop" title="Patrols">
+        <HelpTip topic="patrols" />
+      </PageHeader>
       <p className="muted">
         A patrol is a small group of Scouts. Each Scout is in one patrol. Name a patrol leader and
         an assistant from its Scouts.

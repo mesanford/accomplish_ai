@@ -25,7 +25,7 @@ const ROLE_HINTS: Record<string, string> = {
   leader: 'Can manage the troop and sign ranks, but cannot change merit badge records.',
   scoutmaster: 'Can manage everything in the troop, including blue cards and merit badges.',
   advancement: 'Can manage everything in the troop, including blue cards and merit badges.',
-  committee: 'Can see the troop but not change records.',
+  committee: 'Can post announcements. Sees what other members see, not the Roster, and changes no records. Needs current Youth Protection training.',
   treasurer: "Keeps Scout accounts: fundraiser credits, charges and payments. Doesn't change advancement.",
   quartermaster: "Keeps the troop's gear and library: adds items, checks them out and in. Doesn't change advancement.",
 };

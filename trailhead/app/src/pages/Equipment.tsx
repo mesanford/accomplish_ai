@@ -10,6 +10,7 @@ import { isOverdue } from '../lib/equipment';
 import { checkoutsCsv, inventoryCsv } from '../lib/equipmentCsv';
 import { useAllCheckouts, useCanManageGear, useInventory, useRequests } from '../lib/equipmentHooks';
 import { downloadCsv } from '../lib/scoutbook';
+import { HelpTip } from '../components/HelpTip';
 
 type Tab = 'catalog' | 'out' | 'requests';
 
@@ -39,6 +40,7 @@ export function Equipment() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Equipment">
+        <HelpTip topic="equipment" />
         {manage ? (
           <>
             <button type="button" className="btn small no-print" onClick={() => setAdding(true)}>

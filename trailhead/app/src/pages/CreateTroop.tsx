@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { HelpTip } from '../components/HelpTip';
 import { Field, Notice, PageHeader } from '../components/ui';
 import { createTroop, errorMessage, type TroopForm } from '../lib/api';
+import { CREATOR_CHOICES, creatorHint, DEFAULT_CREATOR_ROLE } from '../lib/creatorRole';
 import { stillNeeded } from '../lib/formCheck';
 
-const EMPTY: TroopForm = { name: '', unitNumber: '', council: '', displayName: '', yptExpiresAt: '' };
+const EMPTY: TroopForm = { name: '', unitNumber: '', council: '', displayName: '', yptExpiresAt: '', creatorRole: DEFAULT_CREATOR_ROLE };
 
 export function CreateTroop() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export function CreateTroop() {
     <>
       <PageHeader eyebrow="New troop" title="Create a troop" />
       <p className="muted">
-        You'll be the troop's first leader. After this, you will add your Scouts and invite parents and counselors.
+        You'll be the troop's first leader, with the role you pick below. After this, you will add your Scouts and invite parents and counselors.
         <HelpTip topic="roles" />
       </p>
       <form className="form" onSubmit={submit} noValidate>
@@ -56,6 +57,15 @@ export function CreateTroop() {
         </Field>
         <Field label="Your name" htmlFor="you">
           <input id="you" required value={form.displayName} onChange={set('displayName')} autoComplete="name" />
+        </Field>
+        <Field label="Your role in the troop" htmlFor="creator-role" hint={creatorHint(form.creatorRole ?? DEFAULT_CREATOR_ROLE)}>
+          <select id="creator-role" value={form.creatorRole} onChange={set('creatorRole')}>
+            {CREATOR_CHOICES.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field
           label="Youth Protection training expires"

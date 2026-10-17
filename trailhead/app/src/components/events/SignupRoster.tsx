@@ -1,8 +1,14 @@
 import { collection } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { errorMessage } from '../../lib/api';
-import { audienceAllows, STATUS_LABELS, type Signup, type SignupStatus } from '../../lib/eventSignups';
-import { cancelSignup, signUpForEvent } from '../../lib/eventsApi';
+import {
+  audienceAllows,
+  permissionText,
+  STATUS_LABELS,
+  type Signup,
+  type SignupStatus,
+} from '../../lib/eventSignups';
+import { cancelSignup, recordPaperPermission, signUpForEvent } from '../../lib/eventsApi';
 import { eventProblems, problemText } from '../../lib/healthForm';
 import { useHealthForms } from '../../lib/healthHooks';
 import { db } from '../../lib/firebase';
@@ -18,7 +24,27 @@ interface Note {
 
 const ORDER: SignupStatus[] = ['waiting_permission', 'going', 'waitlist'];
 
-function Row({ signup, event, note, health, onRemove }: { signup: Signup; event: TroopEvent; note?: string; health?: string; onRemove: () => void }) {
+function when(at: { toDate?: () => Date } | undefined): string {
+  return at?.toDate
+    ? at.toDate().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+    : '';
+}
+
+function Row({
+  signup,
+  event,
+  note,
+  health,
+  onRemove,
+  onPaper,
+}: {
+  signup: Signup;
+  event: TroopEvent;
+  note?: string;
+  health?: string;
+  onRemove: () => void;
+  onPaper: () => void;
+}) {
   const { memberName } = useTroop();
   const name = memberName(signup.memberId);
   const answers = (event.signups?.questions ?? []).filter((q) => signup.answers?.[q.id]);
@@ -33,15 +59,28 @@ function Row({ signup, event, note, health, onRemove }: { signup: Signup; event:
             {q.label}: {signup.answers[q.id]}
           </span>
         ))}
-        {health ? <span className="small"><span className="pill bad">Health form</span> {health}</span> : null}
+        {health ? (
+          <span className="small">
+            <span className="pill bad">Health form</span> {health}
+          </span>
+        ) : null}
         {note ? <span className="small">Health or emergency note: {note}</span> : null}
-        {signup.permission.state === 'approved' && signup.permission.byName ? (
-          <span className="muted small">Permission given by {signup.permission.byName}</span>
+        {permissionText(signup.permission, when(signup.permission.at)) ? (
+          <span className="muted small">
+            {permissionText(signup.permission, when(signup.permission.at))}
+          </span>
         ) : null}
       </div>
-      <button type="button" className="btn secondary small" onClick={onRemove}>
-        Remove {name}
-      </button>
+      <div className="row">
+        {signup.permission.state === 'pending' ? (
+          <button type="button" className="btn secondary small" onClick={onPaper}>
+            Record paper slip for {name}
+          </button>
+        ) : null}
+        <button type="button" className="btn secondary small" onClick={onRemove}>
+          Remove {name}
+        </button>
+      </div>
     </li>
   );
 }
@@ -62,7 +101,9 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
   const noteOf = new Map(notes.data.map((n) => [n.id, n.note]));
   const taken = new Set(signups.data.map((s) => s.memberId));
   const addable = members
-    .filter((m) => !taken.has(m.id) && settings && audienceAllows(settings.audience, m.kind) && !m.leftAt)
+    .filter(
+      (m) => !taken.has(m.id) && settings && audienceAllows(settings.audience, m.kind) && !m.leftAt,
+    )
     .sort((a, b) => a.displayName.localeCompare(b.displayName));
 
   async function run(task: () => Promise<unknown>) {
@@ -77,19 +118,27 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
   const lastDay = event.endDate || event.start;
   /** What is missing or expired for this event's last day, or '' when nothing is needed or all is in order. */
   const healthOf = (id: string) =>
-    event.healthForm && !formsLoading ? problemText(eventProblems(event.healthForm, forms.get(id), lastDay)) : '';
+    event.healthForm && !formsLoading
+      ? problemText(eventProblems(event.healthForm, forms.get(id), lastDay))
+      : '';
   return (
     <div className="stack">
       <Notice kind="error">{error}</Notice>
       {event.healthForm ? (
         <label className="check">
-          <input type="checkbox" checked={onlyMissing} onChange={(e) => setOnlyMissing(e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={onlyMissing}
+            onChange={(e) => setOnlyMissing(e.target.checked)}
+          />
           Show only people missing a health form
         </label>
       ) : null}
       {signups.data.length === 0 ? <Empty>No one has signed up yet.</Empty> : null}
       {ORDER.map((status) => {
-        const rows = signups.data.filter((s) => s.status === status && (!onlyMissing || healthOf(s.memberId))).sort((a, b) => when(a) - when(b));
+        const rows = signups.data
+          .filter((s) => s.status === status && (!onlyMissing || healthOf(s.memberId)))
+          .sort((a, b) => when(a) - when(b));
         return rows.length === 0 ? null : (
           <section key={status} className="stack" aria-label={STATUS_LABELS[status]}>
             <h3>
@@ -103,7 +152,14 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
                   event={event}
                   note={noteOf.get(s.memberId)}
                   health={healthOf(s.memberId)}
-                  onRemove={() => run(() => cancelSignup({ troopId, eventId: event.id, memberId: s.memberId }))}
+                  onRemove={() =>
+                    run(() => cancelSignup({ troopId, eventId: event.id, memberId: s.memberId }))
+                  }
+                  onPaper={() =>
+                    run(() =>
+                      recordPaperPermission({ troopId, eventId: event.id, memberId: s.memberId }),
+                    )
+                  }
                 />
               ))}
             </ul>
@@ -111,7 +167,12 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
         );
       })}
       <div className="row">
-        <select aria-label="Person to add" value={pick} onChange={(e) => setPick(e.target.value)} style={{ width: 'auto' }}>
+        <select
+          aria-label="Person to add"
+          value={pick}
+          onChange={(e) => setPick(e.target.value)}
+          style={{ width: 'auto' }}
+        >
           <option value="">Add a person</option>
           {addable.map((m) => (
             <option key={m.id} value={m.id}>
@@ -123,12 +184,21 @@ export function SignupRoster({ troopId, event }: { troopId: string; event: Troop
           type="button"
           className="btn secondary small"
           disabled={!pick}
-          onClick={() => run(() => signUpForEvent({ troopId, eventId: event.id, memberId: pick }).then(() => setPick('')))}
+          onClick={() =>
+            run(() =>
+              signUpForEvent({ troopId, eventId: event.id, memberId: pick }).then(() =>
+                setPick(''),
+              ),
+            )
+          }
         >
           {pick ? `Add ${memberName(pick)}` : 'Add'}
         </button>
       </div>
-      <p className="small muted">A Scout you add still needs a parent to give permission if the event asks for it.</p>
+      <p className="small muted">
+        A Scout you add still needs permission if the event asks for it. A parent gives it in the
+        app, or you record a signed paper slip.
+      </p>
     </div>
   );
 }

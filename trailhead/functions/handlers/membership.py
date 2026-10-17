@@ -21,6 +21,15 @@ ROLES = (
 # accounts and is not a leader, so does not need it for that role alone.
 YPT_ROLES = {"leader", "scoutmaster", "advancement", "counselor", "committee"}
 INVITE_DAYS = 30
+# What the person creating a troop can be. Every choice includes "leader", the role that can assign roles, so a new
+# troop always has someone who can give out the other roles. A committee chair is a committee member with that ability.
+CREATOR_ROLES = {
+    "scoutmaster": ["leader", "scoutmaster"],
+    "leader": ["leader"],
+    "advancement": ["leader", "advancement"],
+    "committee_chair": ["leader", "committee"],
+}
+DEFAULT_CREATOR_ROLE = "scoutmaster"
 
 
 class InvalidInput(ValueError):
@@ -53,14 +62,17 @@ def parse_ypt(value, roles: list[str], today: date) -> datetime | None:
 
 
 def new_troop(data: dict, uid: str, today: date) -> tuple[dict, dict]:
-    """Return (troop doc, leader member doc) for a new troop."""
+    """Return (troop doc, creator member doc) for a new troop. `creatorRole` picks the creator's roles."""
     troop = {
         "name": _text(data, "name", "Troop name"),
         "unitNumber": _text(data, "unitNumber", "Unit number", 10),
         "council": (data.get("council") or "").strip()[:80],
         "createdBy": uid,
     }
-    member = adult_member(data, uid, ["leader", "scoutmaster"], today)
+    choice = data.get("creatorRole") or DEFAULT_CREATOR_ROLE
+    if choice not in CREATOR_ROLES:
+        raise InvalidInput("Pick your role: Scoutmaster, leader, advancement chair or committee chair.")
+    member = adult_member(data, uid, list(CREATOR_ROLES[choice]), today)
     return troop, member
 
 

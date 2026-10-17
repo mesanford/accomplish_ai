@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from handlers.account import LEADER_ROLES
+from handlers.account import BADGE_MANAGER_ROLES, LEADER_ROLES
 from handlers.email_recipients import parent_uids
 
 NOT_GOING = {"no", "declined", "cancelled", "canceled", "withdrawn", "not_going", "notgoing"}
@@ -100,10 +100,15 @@ def _login_of(access: dict[str, dict]) -> dict[str, str]:
     return {a["memberId"]: uid for uid, a in access.items() if a.get("memberId")}
 
 
+def is_post_manager(access: dict | None) -> bool:
+    """A Scoutmaster or advancement chair, who can edit or delete any post and so reads every post."""
+    return bool(BADGE_MANAGER_ROLES & set((access or {}).get("roles", [])))
+
+
 def readers(audience: Audience, poster_uid: str, access: dict[str, dict]) -> list[str]:
-    """Logins that can read: the audience, the poster and every Scoutmaster (who can edit or delete any post)."""
-    masters = [u for u, a in access.items() if "scoutmaster" in a.get("roles", [])]
-    return sorted({*audience.uids, poster_uid, *masters})
+    """Logins that can read: the audience, the poster and every Scoutmaster and advancement chair."""
+    managers = [u for u, a in access.items() if is_post_manager(a)]
+    return sorted({*audience.uids, poster_uid, *managers})
 
 
 def email_uids(audience: Audience, poster_uid: str, members: dict[str, dict], access: dict[str, dict]) -> list[str]:

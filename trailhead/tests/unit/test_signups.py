@@ -184,7 +184,7 @@ def test_audience_limits_who_can_sign_up():
 
 def test_parent_sign_up_counts_as_permission_and_records_who_and_when():
     doc = make("s1", how="parent")
-    assert doc["permission"] == {"state": "approved", "byMemberId": "m-mom", "byName": "Jo", "at": NOW}
+    assert doc["permission"] == {"state": "approved", "method": "app", "byMemberId": "m-mom", "byName": "Jo", "at": NOW}
     assert s.status_of(doc) == "going"
 
 
@@ -214,6 +214,40 @@ def test_a_parent_approval_records_who_and_when_and_moves_to_going():
     approved = s.with_permission(pending, {"memberId": "m-mom", "name": "Jo"}, later)
     assert approved["permission"]["byMemberId"] == "m-mom" and approved["permission"]["at"] == later
     assert approved["status"] == "going"
+
+
+def test_a_parent_approval_in_the_app_is_marked_app():
+    approved = s.with_permission(make("s1", how="self"), {"memberId": "m-mom", "name": "Jo"}, NOW)
+    assert approved["permission"]["method"] == "app"
+
+
+def test_a_leader_can_record_a_paper_slip_and_it_counts_like_a_parents_approval():
+    pending = make("s1", how="leader")
+    assert s.paper_blocker(pending) is None
+    later = NOW + timedelta(days=1)
+    recorded = s.with_permission(pending, {"memberId": "m-lead", "name": "Pat"}, later, s.PAPER)
+    assert recorded["permission"] == {
+        "state": "approved",
+        "method": "paper",
+        "byMemberId": "m-lead",
+        "byName": "Pat",
+        "at": later,
+    }
+    assert recorded["status"] == "going"
+    assert s.needing_permission({"s1": recorded}) == []
+
+
+def test_a_paper_slip_only_applies_to_a_sign_up_waiting_for_permission():
+    assert "not found" in s.paper_blocker(None)
+    assert "not waiting" in s.paper_blocker(make("s1", how="parent"))  # a parent already gave it
+    assert "not waiting" in s.paper_blocker(make("m-dad", kind="adult", how="self"))  # adults need none
+    assert s.paper_blocker(make("s1", how="self")) is None
+
+
+def test_recording_a_paper_slip_keeps_a_waitlisted_scouts_place_on_the_waitlist():
+    waiting = make("s1", how="self", room=False)
+    recorded = s.with_permission(waiting, {"memberId": "m-lead", "name": "Pat"}, NOW, s.PAPER)
+    assert recorded["status"] == "waitlist" and recorded["spot"] == "waitlist"
 
 
 def test_answers_are_checked_against_the_questions():

@@ -128,7 +128,7 @@ def _own(req, data: dict):
     if post is None:
         raise fail(NOT_FOUND, "That announcement was not found.")
     if not can_manage(access, req.auth.uid, post):
-        raise fail(DENIED, "Only the person who posted this or the Scoutmaster can change it.")
+        raise fail(DENIED, "Only the person who posted this, a Scoutmaster or an advancement chair can change it.")
     return troop(data["troopId"]), ref, post
 
 

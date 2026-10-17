@@ -16,6 +16,27 @@ describe('noScoutsText', () => {
   });
 });
 
+describe('noScoutsText for roles with their own pages', () => {
+  it('points a treasurer to Accounts and does not ask them to add a Scout', () => {
+    expect(noScoutsText(['treasurer'])).toMatch(/Scout accounts are under Accounts/);
+    expect(noScoutsText(['treasurer'])).not.toMatch(/Add your Scout/);
+  });
+
+  it('points a quartermaster to Equipment', () => {
+    expect(noScoutsText(['quartermaster'])).toMatch(/troop gear is under Equipment/);
+  });
+
+  it('names every job for someone with several roles', () => {
+    const text = noScoutsText(['treasurer', 'quartermaster']);
+    expect(text).toMatch(/Accounts/);
+    expect(text).toMatch(/Equipment/);
+  });
+
+  it('points a committee member to Announcements', () => {
+    expect(noScoutsText(['committee'])).toMatch(/under Announcements/);
+  });
+});
+
 describe('blueCardAction', () => {
   it('is quiet when nothing is waiting', () => {
     expect(blueCardAction(0)).toEqual({ text: 'No blue cards need action', waiting: false });

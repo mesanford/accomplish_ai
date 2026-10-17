@@ -16,6 +16,8 @@ export interface TroopForm {
   council: string;
   displayName: string;
   yptExpiresAt: string;
+  /** The creator's role. Leave out for Scoutmaster. */
+  creatorRole?: string;
 }
 
 export const createTroop = (form: TroopForm) => call<TroopForm, { troopId: string }>('create_troop', form);

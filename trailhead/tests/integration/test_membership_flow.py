@@ -41,6 +41,28 @@ def new_scout(tid: str, caller: str, name: str, year: int) -> str:
     return ok(call("add_scout", caller, form))["scoutId"]
 
 
+@pytest.mark.parametrize(
+    ("choice", "roles"),
+    [("leader", ["leader"]), ("advancement", ["leader", "advancement"]), ("committee_chair", ["leader", "committee"])],
+)
+def test_creator_picks_their_role_and_can_still_assign_roles(choice, roles):
+    form = {"name": "Troop 8", "unitNumber": "8", "displayName": "Pat", "yptExpiresAt": "2027-12-31"}
+    tid = ok(call("create_troop", "lead", {**form, "creatorRole": choice}))["troopId"]
+    assert read("users/lead")["troops"][tid]["roles"] == roles
+    assert read(f"troops/{tid}/access/lead")["roles"] == roles
+    invite = ok(call("create_invite", "lead", {"troopId": tid, "role": "treasurer"}))
+    joined = ok(call("accept_invite", "tess", {"troopId": tid, "code": invite["code"], "displayName": "Tess"}))
+    # The creator can give out roles whatever they picked.
+    roles = ["treasurer", "quartermaster"]
+    changed = call("set_member_roles", "lead", {"troopId": tid, "memberId": joined["memberId"], "roles": roles})
+    assert changed.status_code == 200, changed.text
+
+
+def test_creator_role_outside_the_choices_is_refused():
+    form = {"name": "Troop 8", "unitNumber": "8", "displayName": "Pat", "yptExpiresAt": "2027-12-31"}
+    assert call("create_troop", "lead", {**form, "creatorRole": "treasurer"}).status_code == 400
+
+
 def test_troop_invite_and_join():
     tid = new_troop("7")
     assert read("users/lead")["troops"][tid]["roles"] == ["leader", "scoutmaster"]

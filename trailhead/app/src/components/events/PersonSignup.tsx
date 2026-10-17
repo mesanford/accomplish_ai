@@ -1,7 +1,7 @@
 import { doc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { errorMessage } from '../../lib/api';
-import { closedReason, STATUS_LABELS, type Signup } from '../../lib/eventSignups';
+import { closedReason, permissionText, STATUS_LABELS, type Signup } from '../../lib/eventSignups';
 import { approvePermission, cancelSignup } from '../../lib/eventsApi';
 import { db } from '../../lib/firebase';
 import { useDoc } from '../../lib/hooks';
@@ -90,11 +90,8 @@ export function PersonSignup({ troopId, event, memberId, name, full }: Props) {
           <p>
             <span className={`pill ${signup.status === 'going' ? 'good' : 'warn'}`}>{STATUS_LABELS[signup.status]}</span>
           </p>
-          {signup.permission.state === 'approved' && signup.permission.byName ? (
-            <p className="small muted">
-              Permission given by {signup.permission.byName}
-              {when(signup.permission.at) ? ` on ${when(signup.permission.at)}` : ''}.
-            </p>
+          {permissionText(signup.permission, when(signup.permission.at)) ? (
+            <p className="small muted">{permissionText(signup.permission, when(signup.permission.at))}</p>
           ) : null}
           {signup.status === 'waitlist' ? <p className="small">You will get an email if a spot opens up.</p> : null}
           {asParent && signup.permission.state !== 'not_needed' ? (
