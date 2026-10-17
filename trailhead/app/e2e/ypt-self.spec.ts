@@ -14,7 +14,7 @@ test('an adult enters their own Youth Protection date and the roster says they d
   await adult.getByRole('button', { name: 'Create troop' }).click();
   await expect(adult.getByRole('heading', { name: 'Troop 505' })).toBeVisible();
 
-  await adult.getByRole('link', { name: 'Account' }).click();
+  await adult.getByRole('link', { name: 'Account', exact: true }).click();
   const form = adult.getByRole('form', { name: 'Youth Protection date for Troop 505' });
   const newDate = new Date();
   newDate.setFullYear(newDate.getFullYear() + 2);
@@ -29,6 +29,6 @@ test('an adult enters their own Youth Protection date and the roster says they d
   await expect(form.getByText('Enter an expiry date that has not passed.')).toBeVisible();
 
   await adult.goBack();
-  await adult.getByRole('link', { name: 'Roster' }).click();
+  await adult.getByRole('link', { name: 'Roster', exact: true }).click();
   await expect(adult.getByText('Entered by them')).toBeVisible();
 });

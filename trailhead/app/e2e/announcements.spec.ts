@@ -12,7 +12,7 @@ test('a leader posts an announcement to parents, a parent reads it, and the lead
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 404' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');

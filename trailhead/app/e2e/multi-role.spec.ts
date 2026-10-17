@@ -12,11 +12,11 @@ test('a leader adds their own child and is both leader and parent', async ({ bro
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 303' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
 
-  // A Scout who may be under 13 asks the leader to confirm the family's permission. "This is my child" swaps that
-  // for the parent notice and the parent's own agreement.
-  const confirm = leader.getByRole('checkbox', { name: /parent or guardian has given the troop permission/ });
+  // A Scout who may be under 13 asks the leader for a parent's email, since only a parent can give permission.
+  // "This is my child" swaps that for the parent notice and the parent's own agreement.
+  const confirm = leader.getByLabel('Parent or guardian email');
   const agree = leader.getByRole('checkbox', { name: "I am this Scout's parent or guardian, and I agree." });
   await leader.getByLabel("Scout's name").fill('Ava');
   await leader.getByLabel('Birth month').selectOption('1');
@@ -55,7 +55,7 @@ test('a leader gives a committee member the parent role and they agree to the no
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 304' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');

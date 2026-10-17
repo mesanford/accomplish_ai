@@ -24,7 +24,7 @@ test('new leaders get guidance: checklist, help tips, how-this-page-works panels
   await leader.screenshot({ path: `${SHOTS}/leader-home.png`, fullPage: true });
 
   // Adding a Scout ticks the first item off.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await expect(leader.getByRole('region', { name: 'How this page works' })).toBeVisible();
   await leader.getByLabel("Scout's name").fill('Alex');
   await leader.getByLabel('Birth year').fill('2012');
@@ -34,7 +34,7 @@ test('new leaders get guidance: checklist, help tips, how-this-page-works panels
   await expect(leader.getByRole('region', { name: 'Getting started' }).getByText('1 of 6 done')).toBeVisible();
 
   // A help tip opens on click (so it works by touch) and closes on Escape.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   const tip = leader.getByRole('button', { name: 'Help: Who can do what' });
   await expect(tip).toHaveAttribute('aria-expanded', 'false');
   await tip.click();
@@ -84,7 +84,7 @@ test('a treasurer and a quartermaster see their own Getting started lists and He
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 707' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   const treasurerInvite = await createInviteLink(leader, 'treasurer');
   const quartermasterInvite = await createInviteLink(leader, 'quartermaster');
 
@@ -105,7 +105,7 @@ test('a treasurer and a quartermaster see their own Getting started lists and He
   await expect(tCard.getByRole('link', { name: 'Check the account settings' })).toBeVisible();
   await expect(treasurer.getByRole('region', { name: 'Getting started', exact: true })).toBeHidden();
   await expect(treasurer.getByRole('region', { name: 'Getting started as quartermaster' })).toBeHidden();
-  await expect(treasurer.getByRole('link', { name: 'Roster' })).toBeHidden();
+  await expect(treasurer.getByRole('link', { name: 'Roster', exact: true })).toBeHidden();
   await expect(treasurer.getByText(/Scout accounts are under Accounts/)).toBeVisible();
   await treasurer.getByRole('link', { name: 'Help', exact: true }).click();
   await expect(treasurer.getByRole('heading', { name: "I'm the treasurer" })).toBeVisible();

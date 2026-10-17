@@ -13,7 +13,7 @@ test('official requirement text shows up wherever requirements are mentioned', a
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 404' })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Riley');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');
@@ -50,7 +50,7 @@ test('official requirement text shows up wherever requirements are mentioned', a
   await expect(leader.getByRole('note')).toBeHidden();
 
   // Scout page: sign a rank requirement by picking it, then expand the checklist to see it marked signed.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByRole('link', { name: 'Riley', exact: true }).click();
   await leader.getByLabel('Rank or merit badge').first().selectOption('tenderfoot');
   await expect(leader.getByText('Demonstrate how to tie a square knot.')).toBeVisible();

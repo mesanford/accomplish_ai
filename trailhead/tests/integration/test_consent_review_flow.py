@@ -162,8 +162,9 @@ def test_the_daily_job_emails_out_of_date_parents_by_itself_and_not_twice():
 def test_nobody_is_reminded_once_they_have_agreed_and_only_leaders_can_send():
     assert call("send_consent_reminders", "mom", {"troopId": "tn"}).status_code == 403
     ok(call("review_consent_notice", "mom", AGREE))
-    assert ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))["sent"] == 0
-    assert outbox("consent_review_reminder") == []
+    # Mom agreed, so only the parent who turned off notification emails, and still hasn't reviewed, is reminded
+    assert ok(call("send_consent_reminders", "lead", {"troopId": "tn"}))["sent"] == 1
+    assert [m["to"] for m in outbox("consent_review_reminder")] == [email_of("quiet")]
 
 
 def test_no_reminder_goes_to_a_parent_after_they_withdrew():

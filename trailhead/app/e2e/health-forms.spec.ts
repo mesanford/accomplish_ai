@@ -20,7 +20,7 @@ test('a parent records Parts A and B and a leader sees the event roster flag cle
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 404' })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   for (const name of ['Riley', 'Sam']) {
     await leader.getByLabel("Scout's name").fill(name);
     await leader.getByLabel('Birth year').fill(String(new Date().getFullYear() - 14));

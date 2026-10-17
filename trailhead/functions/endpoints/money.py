@@ -93,18 +93,24 @@ def post(
         query = t.collection("ledger").where("scoutId", "==", account_id)
         return {d.id: d.to_dict() for d in query.get(transaction=tx)}
 
+    def blocker_for(tx, account_id: str) -> str | None:
+        member = t.collection("members").document(account_id).get(transaction=tx).to_dict()
+        consent = t.collection("consents").document(account_id).get(transaction=tx).to_dict()
+        return kind_blocker(member, consent, "accounts")
+
     @firestore.transactional
     def run(tx) -> list:
         settings = settings_of(t.get(transaction=tx).to_dict())
         entries = {a: entries_for(tx, a) for a in dict.fromkeys(account_ids)}
+        # A person posting (not Stripe or the nightly job) can't add entries for a Scout awaiting consent. These reads
+        # come before `build`, which may write (posting a campaign closes it): a transaction can't read after writing.
+        blockers = {a: blocker_for(tx, a) for a in dict.fromkeys(account_ids)} if created_by else {}
         new = build(tx, settings, entries)
-        if (
-            created_by
-        ):  # a person is posting (not Stripe or the nightly job): no new entries for a Scout awaiting consent
+        if created_by:
             for account_id in dict.fromkeys(e["scoutId"] for e in new):
-                member = t.collection("members").document(account_id).get(transaction=tx).to_dict()
-                consent = t.collection("consents").document(account_id).get(transaction=tx).to_dict()
-                if reason := kind_blocker(member, consent, "accounts"):
+                if account_id not in blockers:
+                    blockers[account_id] = blocker_for(tx, account_id)
+                if reason := blockers[account_id]:
                     raise InvalidInput(reason)
         for e in new:
             if e["scoutId"] not in entries:

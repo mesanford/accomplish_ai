@@ -13,7 +13,7 @@ test('a leader records ranks and badges a new Scout earned before joining', asyn
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 303' })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Jamie');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');

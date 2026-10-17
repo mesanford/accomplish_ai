@@ -23,7 +23,7 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 101' })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');

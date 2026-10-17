@@ -17,7 +17,7 @@ test('required forms explain what is missing, and Badges works on a deep link an
   await expect(leader.getByRole('heading', { name: 'Troop 202' })).toBeVisible();
   const troopUrl = new URL(leader.url()).pathname;
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByRole('button', { name: 'Add Scout' }).click();
   await expect(leader.getByText(/Still needed: the Scout's name and the birth year/)).toBeVisible();
   await leader.getByLabel("Scout's name").fill('Robin');

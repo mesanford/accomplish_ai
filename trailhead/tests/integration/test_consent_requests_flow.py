@@ -85,7 +85,14 @@ def test_the_email_is_sent_even_to_a_parent_who_turned_notification_emails_off_a
 def test_nothing_else_can_be_collected_for_a_waiting_scout_until_a_parent_agrees():
     tid = new_troop("103")
     sid = add_young(tid)
-    entry = {"troopId": tid, "scoutId": sid, "kind": "service", "note": "Park cleanup", "serviceHours": 2}
+    entry = {
+        "troopId": tid,
+        "scoutId": sid,
+        "kind": "service",
+        "date": "2026-10-01",
+        "note": "Park cleanup",
+        "serviceHours": 2,
+    }
     blocked = [
         call("add_activity_entry", "lead", entry),
         call("set_media_consent", "lead", {"troopId": tid, "scoutId": sid, "granted": True}),
@@ -270,7 +277,14 @@ def test_data_added_by_a_newer_notice_waits_for_a_parent_who_agreed_to_an_older_
     owner.set(f"troops/{tid}/consents/s1", {"parentConsents": [old]})
     owner.set(f"troops/{tid}/access/mom", {"memberId": "m-mom", "roles": ["parent"], "scoutIds": ["s1"]})
     owner.set(f"troops/{tid}/members/m-mom", {"kind": "adult", "displayName": "Mom", "uid": "mom", "roles": ["parent"]})
-    entry = {"troopId": tid, "scoutId": "s1", "kind": "service", "note": "Hike", "serviceHours": 1}
+    entry = {
+        "troopId": tid,
+        "scoutId": "s1",
+        "kind": "service",
+        "date": "2026-10-01",
+        "note": "Hike",
+        "serviceHours": 1,
+    }
     blocked = call("add_activity_entry", "lead", entry)  # activity logs were added in 2026-10-17.1
     assert blocked.status_code == 400 and "Waiting for a parent to agree to the updated notice." in blocked.text
     assert list_docs(f"troops/{tid}/logs") == []

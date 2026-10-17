@@ -13,7 +13,7 @@ test('a leader makes a troop award, changes it, moves a Scout to the new version
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 202' })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');
@@ -36,7 +36,7 @@ test('a leader makes a troop award, changes it, moves a Scout to the new version
   await expect(leader.getByText('Version 1 (current)')).toBeVisible();
 
   // Sign two of the three requirements by picking them from the list on Sam's page.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByRole('link', { name: 'Sam', exact: true }).click();
   await leader.getByRole('button', { name: 'Sign troop award requirement' }).click();
   await expect(leader.getByText('Signed First-Year Trail requirement 1.')).toBeVisible();
@@ -55,7 +55,7 @@ test('a leader makes a troop award, changes it, moves a Scout to the new version
   await leader.getByRole('button', { name: 'Save changes' }).click();
   await expect(leader.getByText('Saved as version 2.')).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByRole('link', { name: 'Sam', exact: true }).click();
   await expect(leader.getByText(/Sam is on version 1/)).toBeVisible();
   await leader.getByRole('button', { name: 'Move to latest version' }).click();

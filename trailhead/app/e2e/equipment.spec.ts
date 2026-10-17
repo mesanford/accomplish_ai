@@ -21,7 +21,7 @@ test('a quartermaster adds a tent, checks it out to a Scout and checks it back i
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 606' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');
@@ -34,7 +34,7 @@ test('a quartermaster adds a tent, checks it out to a Scout and checks it back i
   const qm = await signedIn(browser, 'gear-qm@example.com', quartermasterInvite);
   await join(qm, 'Quinn Quartermaster');
   await expect(qm.getByRole('heading', { name: 'Troop 606' })).toBeVisible();
-  await expect(qm.getByRole('link', { name: 'Roster' })).toBeHidden();
+  await expect(qm.getByRole('link', { name: 'Roster', exact: true })).toBeHidden();
   await qm.getByRole('link', { name: 'Equipment' }).click();
   await expect(qm.getByRole('heading', { name: 'Equipment' })).toBeVisible();
 

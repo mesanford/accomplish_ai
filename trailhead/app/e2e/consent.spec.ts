@@ -13,7 +13,7 @@ test('a young Scout needs a leader confirmation, a parent agrees to the notice, 
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 202' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
 
   // A Scout who may be under 13 needs a parent's email (no leader confirmation); a 14-year-old needs none.
   const parentEmail = leader.locator('#add-parent-email-0');
@@ -45,7 +45,7 @@ test('a young Scout needs a leader confirmation, a parent agrees to the notice, 
   await joinAsParent(parent, 'Jordan Parent');
 
   // Leaders now see the consent; the parent withdraws it and leaders are told to remove the records.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await expect(leader.getByText(/Parent consent: given/)).toBeVisible();
   await parent.getByRole('link', { name: /Riley/ }).click();
   await expect(parent.getByRole('heading', { name: 'Parent consent' })).toBeVisible();

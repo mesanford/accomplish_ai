@@ -14,7 +14,7 @@ async function startTroop(leader: Page): Promise<void> {
 }
 
 async function addScout(leader: Page, name: string): Promise<void> {
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill(name);
   await leader.getByLabel('Birth year').fill(String(new Date().getFullYear() - 14));
   await leader.getByRole('button', { name: 'Add Scout' }).click();
@@ -44,7 +44,7 @@ test('a leader sets a campout with 2 nights, marks attendance and sees the Scout
   await leader.getByLabel('Riley').check();
 
   // The Scout's page shows the totals once the server has added the credit.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByRole('link', { name: 'Riley', exact: true }).click();
   const totals = leader.getByTestId('activity-totals');
   await expect(totals).toContainText('2 nights camped in 1 campout');
@@ -67,7 +67,7 @@ test('a leader sets a campout with 2 nights, marks attendance and sees the Scout
   await leader.getByRole('link', { name: 'Events', exact: true }).click();
   await leader.getByRole('link', { name: 'Attendance' }).click();
   await leader.getByLabel('Riley').uncheck();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByRole('link', { name: 'Riley', exact: true }).click();
   await expect(totals).toContainText('0 nights camped');
 });
@@ -92,7 +92,7 @@ test('a leader makes a patrol, adds a Scout, filters the roster and sees the tro
   await card.getByRole('button', { name: 'Save Eagles' }).click();
   await expect(card.getByText('Saved.')).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel('Show').selectOption({ label: 'Eagles' });
   await expect(leader.getByRole('link', { name: 'Riley', exact: true })).toBeVisible();
   await expect(leader.getByRole('link', { name: 'Jules', exact: true })).toBeHidden();

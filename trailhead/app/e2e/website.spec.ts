@@ -42,7 +42,7 @@ test('a leader builds the troop website, uploads photos and publishes it', async
   await expect(leader.getByRole('heading', { name: 'Troop 303' })).toBeVisible();
 
   // A Scout whose family gave media consent on a paper form, recorded by the leader.
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');

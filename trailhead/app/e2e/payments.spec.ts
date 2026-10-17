@@ -33,14 +33,14 @@ test('the treasurer connects Stripe and a parent sees Pay online', async ({ brow
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 606' })).toBeVisible();
   const troopId = new URL(leader.url()).pathname.split('/')[2];
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Sam');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');
   await leader.getByRole('button', { name: 'Add Scout' }).click();
   await leader.getByRole('link', { name: 'Sam', exact: true }).click();
   const scoutId = new URL(leader.url()).pathname.split('/')[4];
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   const treasurerInvite = await createInviteLink(leader, 'treasurer');
   const parentInvite = await createInviteLink(leader, 'parent', 'Sam');
 

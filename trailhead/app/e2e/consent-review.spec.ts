@@ -31,7 +31,7 @@ test('a parent who agreed to an older notice sees what changed and agrees; leade
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 303' })).toBeVisible();
   const troopId = leader.url().split('/t/')[1].split('/')[0];
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Riley');
   await leader.getByLabel('Birth month').selectOption('1');
   await leader.getByLabel('Birth year').fill('2010');
@@ -50,12 +50,13 @@ test('a parent who agreed to an older notice sees what changed and agrees; leade
   // The leader sees who has not reviewed it, and can send a reminder (once a week per parent).
   await leader.goto(`/t/${troopId}`);
   await expect(leader.getByText("1 Scout has a parent who hasn't reviewed the new notice")).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
-  await expect(leader.getByText("Parent hasn't reviewed the new notice")).toBeVisible();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
+  // That older notice came before kinds of data added since, so the Scout's row says those are paused.
+  await expect(leader.getByText('Waiting for a parent to agree to the updated notice.', { exact: true })).toBeVisible();
   await leader.getByRole('button', { name: 'Send a reminder to these parents' }).click();
   await expect(leader.getByText('Sent 1 reminder.')).toBeVisible();
   await leader.getByRole('button', { name: 'Send a reminder to these parents' }).click();
-  await expect(leader.getByText(/No reminders were sent\. 1 already got one in the last 7 days\./)).toBeVisible();
+  await expect(leader.getByText(/No reminders were sent\. 1 already got one in the last 7 days, or all four\./)).toBeVisible();
 
   // The parent sees a card, not a blocking page: the rest of the app still works.
   await parent.goto(`/t/${troopId}`);
@@ -77,5 +78,5 @@ test('a parent who agreed to an older notice sees what changed and agrees; leade
   // Agreeing records a new consent and clears the card, and the leader's warning.
   await card.getByRole('button', { name: 'I agree' }).click();
   await expect(parent.getByLabel('The parent notice changed')).toBeHidden();
-  await expect(leader.getByText("Parent hasn't reviewed the new notice")).toBeHidden();
+  await expect(leader.getByText('Waiting for a parent to agree to the updated notice.', { exact: true })).toBeHidden();
 });

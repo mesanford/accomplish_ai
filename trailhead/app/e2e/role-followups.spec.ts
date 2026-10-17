@@ -27,8 +27,8 @@ for (const c of CHOICES) {
     await expect(creator.getByRole('heading', { name: `Troop ${c.number}` })).toBeVisible();
 
     // Whatever they picked, they can still run the troop and give out roles.
-    await creator.getByRole('link', { name: 'Roster' }).click();
-    await expect(creator.getByText(c.roles, { exact: true })).toBeVisible();
+    await creator.getByRole('link', { name: 'Roster', exact: true }).click();
+    await expect(creator.getByText(new RegExp(`^· ${c.roles}$`))).toBeVisible(); // the roles after their name
     await expect(creator.getByLabel('Invite as')).toBeVisible();
   });
 }
@@ -42,7 +42,7 @@ test('a leader records a paper permission slip for a Scout whose parents are not
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 814' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Riley');
   await leader.getByLabel('Birth month').selectOption('3');
   await leader.getByLabel('Birth year').fill('2012');
@@ -78,7 +78,7 @@ test('an advancement chair can read, edit and delete any announcement', async ({
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 815' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   const chairInvite = await createInviteLink(leader, 'advancement');
 
   // The Scoutmaster posts to parents only. An advancement chair is not in that audience.

@@ -44,7 +44,7 @@ export async function createTroopAsLeader(leader: Page, name: string, unit: stri
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name })).toBeVisible();
   const troopId = leader.url().split('/t/')[1].split('/')[0];
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   return troopId;
 }
 

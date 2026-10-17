@@ -36,7 +36,7 @@ test('a parent signs up a Scout and approves permission; a leader sees the roste
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 303' })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Roster' }).click();
+  await leader.getByRole('link', { name: 'Roster', exact: true }).click();
   await leader.getByLabel("Scout's name").fill('Riley');
   await leader.getByLabel('Birth year').fill(String(new Date().getFullYear() - 14));
   await leader.getByRole('button', { name: 'Add Scout' }).click();
