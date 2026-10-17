@@ -24,6 +24,8 @@ const FALLBACK = {
   photo: '',
   cover: ' The cover shows your troop color instead.',
   logo: ' Your site has no logo until this is fixed.',
+  page: '',
+  document: ' It is not listed on your site.',
 };
 
 /** The web address, the draft and publish buttons, and what happened on the last publish. */

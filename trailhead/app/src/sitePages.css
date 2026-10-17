@@ -1,0 +1,26 @@
+/* Troop website 2.0: site menu, home page banner, cover layouts, custom pages and documents. Uses the site tokens. */
+.site a.site-id { color: var(--s-ink); text-decoration: none; }
+.site-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+.site-banner { background: var(--s-surface); border-bottom: 1px solid var(--s-line); border-left: 6px solid var(--site-fill); padding-block: 12px; font-weight: 600; }
+.site-banner p { overflow-wrap: anywhere; }
+
+.site-cover.centered .site-cover-inner { justify-items: center; text-align: center; }
+.site-cover.centered .site-tagline { margin-inline: auto; }
+.site-cover.split { display: grid; padding: 0; background: var(--site-fill); background-image: none; }
+.site-split-text { display: grid; gap: 14px; justify-items: start; align-content: center; padding: clamp(32px, 7vw, 72px) 16px; max-width: 520px; margin-inline: auto; width: 100%; }
+.site-split-photo { min-height: 220px; background-size: cover; background-position: center; }
+@media (min-width: 720px) {
+  .site-cover.split { grid-template-columns: 1fr 1fr; }
+  .site-split-text { margin-inline: 0 auto; padding-inline: 24px; }
+  .site-split-photo { min-height: 340px; }
+}
+
+.site-page-title { font-size: clamp(1.8rem, 6vw, 2.6rem); }
+.site-prose { display: grid; gap: 14px; min-width: 0; }
+.site-prose h2 { font-size: 1.5rem; margin-top: 10px; }
+.site-prose p, .site-prose li { overflow-wrap: anywhere; }
+.site-prose ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.site-figure { margin: 0; }
+.site-figure img { max-width: 100%; height: auto; border-radius: 10px; display: block; background: var(--s-line); }
+.site-docs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.site-docs a { overflow-wrap: anywhere; }

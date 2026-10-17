@@ -2,7 +2,8 @@ import { doc } from 'firebase/firestore';
 import { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { JoinForm } from '../components/site/JoinForm';
-import { SiteCover, SiteFrame, SiteHeader } from '../components/site/SiteFrame';
+import { Announcement, SiteCover, SiteFrame, SiteHeader } from '../components/site/SiteFrame';
+import { CalendarPage, CustomPage, PublicDocuments } from '../components/site/SitePages';
 import { About, Contacts, Events, Faq, Gallery, Meeting } from '../components/site/SiteSections';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
@@ -34,6 +35,19 @@ function usePageMeta(title: string, description: string) {
   }, [title, description]);
 }
 
+/** Which page the address asks for: the home page, the calendar, a custom page, or none the site has. */
+function pageTitle(site: Site | null, page: string | undefined): string {
+  if (!site) {
+    return 'Troop page not found';
+  }
+  const troop = `${site.troopName} · Scouts BSA Troop ${site.unitNumber}`;
+  if (page === 'calendar') {
+    return `Calendar · ${troop}`;
+  }
+  const custom = page ? site.pages?.find((p) => p.slug === page) : undefined;
+  return custom ? `${custom.title} · ${troop}` : troop;
+}
+
 function describe(site: Site): string {
   const first = paragraphs(site.about)[0] ?? '';
   const base = site.cover?.tagline || first || `Scouts BSA Troop ${site.unitNumber}.`;
@@ -50,13 +64,10 @@ function Missing() {
 }
 
 export function PublicSite() {
-  const { slug = '' } = useParams();
+  const { slug = '', page } = useParams();
   const ref = useMemo(() => doc(db, 'publicSites', slug.toLowerCase()), [slug]);
   const { data: site, loading } = useDoc<Site>(ref);
-  usePageMeta(
-    site ? `${site.troopName} · Scouts BSA Troop ${site.unitNumber}` : 'Troop page not found',
-    site ? describe(site) : 'This troop page could not be found.',
-  );
+  usePageMeta(pageTitle(site, page), site ? describe(site) : 'This troop page could not be found.');
 
   if (loading) {
     return (
@@ -67,7 +78,8 @@ export function PublicSite() {
       </SiteFrame>
     );
   }
-  if (!site) {
+  const known = !page || page === 'calendar' || Boolean(site?.pages?.some((p) => p.slug === page));
+  if (!site || !known) {
     return (
       <SiteFrame>
         <Missing />
@@ -76,21 +88,33 @@ export function PublicSite() {
   }
   return (
     <SiteFrame site={site}>
-      <SiteHeader site={site} />
+      <SiteHeader site={site} page={page} />
       <main id="site-main">
-        <SiteCover site={site} />
-        <div className="site-wrap site-body">
-          <About text={site.about} />
-          <Meeting meeting={site.meeting} />
-          <Events events={site.events} />
-          <Gallery photos={site.gallery} />
-          <Faq items={site.faq} />
-          <Contacts contacts={site.contacts} />
-          {site.recruiting?.open ? (
-            <JoinForm slug={site.slug || slug} intro={site.recruiting.intro} troopName={site.troopName} />
-          ) : null}
-        </div>
+        {page === 'calendar' ? <CalendarPage site={site} /> : null}
+        {page && page !== 'calendar' ? <CustomPage site={site} slug={page} /> : null}
+        {page ? null : <Home site={site} slug={slug} />}
       </main>
     </SiteFrame>
+  );
+}
+
+function Home({ site, slug }: { site: Site; slug: string }) {
+  return (
+    <>
+      <Announcement site={site} />
+      <SiteCover site={site} />
+      <div className="site-wrap site-body">
+        <About text={site.about} />
+        <Meeting meeting={site.meeting} />
+        <Events events={site.events} />
+        <PublicDocuments documents={site.documents} />
+        <Gallery photos={site.gallery} />
+        <Faq items={site.faq} />
+        <Contacts contacts={site.contacts} />
+        {site.recruiting?.open ? (
+          <JoinForm slug={site.slug || slug} intro={site.recruiting.intro} troopName={site.troopName} />
+        ) : null}
+      </div>
+    </>
   );
 }

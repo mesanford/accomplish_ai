@@ -59,6 +59,25 @@ def test_draft_holds_the_scout_tags_for_the_cover_photo_and_logo():
     assert leader.set(DRAFT, {**GOOD, "cover": too_many}) == DENIED
 
 
+def test_draft_holds_pages_an_announcement_and_a_cover_layout():
+    leader = Client("leader")
+    page = {
+        "id": "p1",
+        "title": "High adventure",
+        "slug": "high-adventure",
+        "blocks": [{"type": "heading", "text": "Hi"}],
+    }
+    banner = {"text": "Camp fees due", "endDate": "2026-11-01"}
+    assert leader.set(DRAFT, {**GOOD, "pages": [page], "announcement": banner, "coverLayout": "split"}) == OK
+    assert leader.set(DRAFT, {**GOOD, "pages": [page] * 10}) == OK
+    assert leader.set(DRAFT, {**GOOD, "pages": [page] * 11}) == DENIED
+    assert leader.set(DRAFT, {**GOOD, "pages": "not a list"}) == DENIED
+    assert leader.set(DRAFT, {**GOOD, "announcement": "not a map"}) == DENIED
+    assert leader.set(DRAFT, {**GOOD, "coverLayout": "x" * 21}) == DENIED
+    for uid in ("parent", "scout1", "counselor", "stranger", None):
+        assert Client(uid).set(DRAFT, {**GOOD, "pages": [page]}) == DENIED
+
+
 def test_published_record_is_server_only():
     path = f"{T}/site/published"
     assert Client("owner").set(path, {"slug": "troop-123", "gallery": []}) == OK

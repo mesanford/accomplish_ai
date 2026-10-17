@@ -129,6 +129,21 @@ migration once, after deploying. It gives the role to each troop's creator and i
 .venv/bin/python scripts/migrate_scoutmaster.py --project <project-id> --apply   # make the changes
 ```
 
+## Troop website pages, documents and link previews
+
+- **Pages.** A leader adds up to 10 extra pages in the Website editor (`/s/{slug}/{page}`). A page is a list of
+  blocks (heading, paragraph, bullet list, image), stored as data, never HTML; links may be http, https or mailto.
+  `publish_site` checks them (`functions/handlers/site_pages.py`) and applies the photo consent rule to page images.
+- **Documents.** `troops/{t}/documents/{id}` with the file at `docs/{t}/{id}/{file}` (PDF, Word or image, 20 MB).
+  Visibility is `public` (listed on the site, copied to `sites/{t}/public/` on publish), `members` or `leaders`.
+  Firestore and Storage rules enforce it. Medical forms and old `.doc` files are never public. Making a document
+  private or deleting it takes the public copy down at once (`on_document_written_site`).
+- **Calendar.** `/s/{slug}/calendar` lists upcoming public events by month. The iCal link is switched on by
+  `CALENDAR_FEED_READY` in `app/src/lib/siteCalendar.ts` once `/s/{slug}/calendar.ics` exists.
+- **Link previews.** Hosting rewrites `/s/**` to the `site_shell` function, which adds the troop's title, description
+  and cover image to the app's `index.html`. Any rewrite for `/s/*/calendar.ics` must come before `/s/**` in
+  `firebase.json`. Set `TRAILHEAD_SITE_ORIGIN` if the app is not at `https://<project-id>.web.app`.
+
 ## Not built yet
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.

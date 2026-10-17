@@ -27,6 +27,13 @@
     ],
     "rewrites": [
       {
+        "source": "/s/**",
+        "function": {
+          "functionId": "site_shell",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

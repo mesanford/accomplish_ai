@@ -1,4 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { PublicPage } from './sitePages';
 
 export type Role = 'leader' | 'scoutmaster' | 'advancement' | 'counselor' | 'committee' | 'parent' | 'scout';
 
@@ -227,14 +228,30 @@ export interface PublicSite {
   unitNumber: string;
   council?: string;
   theme?: { color?: string; logoUrl?: string | null };
-  cover?: { heading?: string; tagline?: string; photoUrl?: string | null };
+  cover?: { heading?: string; tagline?: string; photoUrl?: string | null; layout?: 'band' | 'centered' | 'split' };
+  /** A home page banner; the page hides it after endDate. */
+  announcement?: { text: string; endDate?: string | null } | null;
   about?: string;
   meeting?: { schedule?: string; place?: string; address?: string | null; mapUrl?: string | null };
   faq?: { q: string; a: string }[];
   contacts?: { name: string; role: string; email?: string | null }[];
   gallery?: { url: string; caption?: string }[];
   events?: { title: string; start: string; place?: string | null }[];
+  /** Every upcoming public event (the home page shows the first few). */
+  calendar?: { title: string; start: string; place?: string | null }[];
+  pages?: PublicPage[];
+  documents?: PublicDocument[];
   recruiting?: { open: boolean; intro?: string };
+}
+
+export interface PublicDocument {
+  id: string;
+  title: string;
+  category: string;
+  fileName: string;
+  contentType: string;
+  size?: number | null;
+  url: string;
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'invited' | 'joined' | 'not_interested';
