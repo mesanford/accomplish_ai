@@ -36,6 +36,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       'Families who use a troop website\'s "Join us" form: the parent or guardian\'s name, email, optional phone number, the Scout\'s age or grade, and any note they add.',
       'Scouts 13 and older who sign in: their email address, and what they type, such as plan requests and messages.',
       'Merit badge counselors from outside the troop: the name and email address a leader enters.',
+      'People who ask to join the pilot from the Forthright home page: name, email address, troop or unit number, council, role, and any note they add. We use it only to reply about the pilot, and delete it when you ask or when the pilot ends.',
       'Troop websites: what leaders choose to publish, such as meeting details, events, contacts and photos.',
       'Usage counts: how many AI drafts each person makes per day, so we can keep a daily limit.',
     ],
