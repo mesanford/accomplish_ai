@@ -60,6 +60,13 @@ service cloud.firestore {
     match /slugs/{slug} {
       allow read, write: if false;
     }
+    // Requests to join the pilot, and their daily counters. Written only by request_pilot; no client reads or writes them.
+    match /pilotRequests/{id} {
+      allow read, write: if false;
+    }
+    match /pilotUsage/{day} {
+      allow read, write: if false;
+    }
     match /users/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow write: if false;

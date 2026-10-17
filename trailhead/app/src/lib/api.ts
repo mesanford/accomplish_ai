@@ -1,5 +1,6 @@
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
+import type { PilotForm } from './pilotForm';
 import type { CustomRequirement, Feasibility, PathItemDoc } from './types';
 
 async function call<In, Out>(name: string, data: In): Promise<Out> {
@@ -216,6 +217,8 @@ export interface InterestForm {
 
 export const submitInterest = (slug: string, form: InterestForm) =>
   call<{ slug: string; form: InterestForm }, { ok: boolean }>('submit_interest', { slug, form });
+
+export const requestPilot = (form: PilotForm) => call<{ form: PilotForm }, { ok: boolean }>('request_pilot', { form });
 
 export interface RemoveScoutForm {
   troopId: string;

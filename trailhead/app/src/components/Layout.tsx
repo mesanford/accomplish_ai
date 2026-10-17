@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import lockupDark from '../assets/forthright-lockup-dark.svg';
 import lockup from '../assets/forthright-lockup.svg';
@@ -49,7 +50,7 @@ function TroopOutlet() {
   return waiting.length > 0 ? <ConsentGate scoutIds={waiting} /> : <Outlet />;
 }
 
-function Shell({ troopNav }: { troopNav: boolean }) {
+function Shell({ troopNav, children }: { troopNav: boolean; children?: ReactNode }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   return (
@@ -80,14 +81,15 @@ function Shell({ troopNav }: { troopNav: boolean }) {
         </div>
       </header>
       <main className="main">
-        {troopNav ? <TroopOutlet /> : <Outlet />}
+        {troopNav ? <TroopOutlet /> : (children ?? <Outlet />)}
       </main>
     </>
   );
 }
 
-export function AppLayout() {
-  return <Shell troopNav={false} />;
+/** The app shell. Routes outside the layout route can pass their page as `children`. */
+export function AppLayout({ children }: { children?: ReactNode }) {
+  return <Shell troopNav={false}>{children}</Shell>;
 }
 
 export function TroopLayout() {

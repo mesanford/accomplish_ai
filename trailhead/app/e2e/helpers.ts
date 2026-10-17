@@ -35,7 +35,8 @@ export async function signedIn(browser: Browser, email: string, startAt = '/'): 
   const context = await browser.newContext();
   await mockRequirements(context);
   const page = await context.newPage();
-  await page.goto(startAt);
+  // "/" shows the marketing page to signed-out visitors, so sign in from the sign-in page and land on "/".
+  await page.goto(startAt === '/' ? '/signin' : startAt);
   await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
   await page.getByLabel('Email').fill(email);
   await page.getByRole('button', { name: 'Email me a sign-in link' }).click();
