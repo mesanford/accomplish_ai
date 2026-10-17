@@ -8,6 +8,7 @@ from contextlib import suppress
 from firebase_admin import auth, firestore
 from firebase_functions import https_fn
 
+from endpoints.equipment_erase import holder_ops
 from endpoints.erase import commit, delete_op, update_op
 from endpoints.feeds import cleanup_ops as feed_cleanup_ops
 from endpoints.ledger_retention import forget_author_ops
@@ -44,6 +45,7 @@ def _adult_ops(t, uid: str, member_id: str) -> list:
     threads = _docs(t.collection("threads").where("memberIds", "array_contains", member_id))
     for thread_id, fields in plan_threads(member_id, uid, threads).items():
         ops.append(update_op(t.collection("threads").document(thread_id), fields))
+    ops += holder_ops(t, member_id, "adult")  # gear loans and requests keep only "Former member"
 
     name = (t.collection("members").document(member_id).get().to_dict() or {}).get("displayName", "")
     draft_ref = t.collection("site").document("draft")

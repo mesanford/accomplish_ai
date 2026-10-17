@@ -35,8 +35,8 @@ BOOKS = ("ledger", "accounts")  # kept after the troop is retired, until every e
 
 
 def _prefixes(troop_id: str) -> list[str]:
-    """Storage folders for the troop (see storage.rules): blue card photos, the website and the documents."""
-    return [f"cards/{troop_id}/", f"sites/{troop_id}/", f"docs/{troop_id}/"]
+    """Storage folders for the troop (see storage.rules): blue card photos, the website, documents and gear photos."""
+    return [f"cards/{troop_id}/", f"sites/{troop_id}/", f"docs/{troop_id}/", f"gear/{troop_id}/"]
 
 
 def _logins(t) -> list[str]:

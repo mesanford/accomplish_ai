@@ -29,6 +29,8 @@ from endpoints.custom_awards import archive_custom_award, move_to_custom_version
 from endpoints.domains import add_domain, check_domain, remove_domain
 from endpoints.domains_sync import sync_domains
 from endpoints.entries import record_payment, reverse_entry, settle_account
+from endpoints.equipment import check_in_item, check_out_item, decide_request, request_item
+from endpoints.equipment_photo import on_inventory_deleted, set_item_photo
 from endpoints.event_fees import charge_event_fees
 from endpoints.event_reminders import send_event_reminders
 from endpoints.feeds import calendar_feed, get_calendar_feed, reset_calendar_feed
@@ -43,6 +45,7 @@ from endpoints.permission import approve_permission
 from endpoints.pilot import request_pilot
 from endpoints.prior import record_prior_advancement
 from endpoints.push import register_push_device, remove_push_device
+from endpoints.quartermaster import set_scout_quartermaster
 from endpoints.recruiting import submit_interest
 from endpoints.removal import remove_scout
 from endpoints.retention import apply_retention
@@ -86,12 +89,15 @@ __all__ = [
     "calendar_feed",
     "cancel_signup",
     "charge_event_fees",
+    "check_in_item",
+    "check_out_item",
     "check_path_preview",
     "create_invite",
     "create_scoutbook_report",
     "create_troop",
     "delete_account",
     "delete_announcement",
+    "decide_request",
     "delete_lead",
     "draft_path",
     "draft_site_about",
@@ -107,6 +113,7 @@ __all__ = [
     "on_blue_card_notify",
     "on_blue_card_written",
     "on_document_written_site",
+    "on_inventory_deleted",
     "on_event_written_signups",
     "on_event_written_site",
     "on_path_written",
@@ -119,12 +126,15 @@ __all__ = [
     "register_push_device",
     "remove_push_device",
     "remove_scout",
+    "request_item",
     "request_pilot",
     "reset_calendar_feed",
     "save_custom_award",
     "send_event_reminders",
     "send_message",
+    "set_item_photo",
     "set_member_roles",
+    "set_scout_quartermaster",
     "set_email_announcements",
     "set_email_notifications",
     "set_media_consent",

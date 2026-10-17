@@ -8,6 +8,8 @@ rules_version = '2';
 //   docs/{t}/{id}/*     a document in the troop library, up to 20 MB (PDF, Word or an image). Leaders read and
 //                       write. Other members read it when the document's visibility (troops/{t}/documents/{id}) is
 //                       members or public. Leaders-only documents are never readable by anyone else.
+//   gear/{t}/{id}/*     the photo of a troop gear item. Every member reads it. No client writes: the
+//                       set_item_photo function re-encodes the picture (no hidden metadata) and stores it.
 //   sites/{t}/public/*  copies made by the publish_site function: anyone may read, no client writes.
 // Everything else is closed. Leader checks read the troop's access record from Firestore.
 service firebase.storage {
@@ -67,6 +69,10 @@ service firebase.storage {
       allow read: if isLeader(t) || sharedWithMembers(t, docId);
       allow create, update: if isLeader(t) && isDocumentUpload();
       allow delete: if isLeader(t);
+    }
+    match /gear/{t}/{itemId}/{file} {
+      allow read: if isMember(t);
+      allow write: if false;
     }
     match /sites/{t}/draft/{file} {
       allow read, delete: if isLeader(t);

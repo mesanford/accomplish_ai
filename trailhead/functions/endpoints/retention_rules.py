@@ -41,6 +41,7 @@ class Budget:
     usage: int = 2000
     troops: int = 2
     ledger: int = 2000
+    equipment: int = 2000
     seconds: float = 420
     started: float = field(default_factory=time.monotonic)
 

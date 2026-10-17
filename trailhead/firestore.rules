@@ -2,7 +2,7 @@ rules_version = '2';
 
 // Access model: troops/{t}/access/{uid} is written only by the server. It holds
 // { memberId, roles: [...], scoutIds: [...], yptExpiresAt, consentPendingScoutIds? }. Roles: leader, scoutmaster,
-// advancement, counselor, parent, scout, committee, treasurer; one person can hold several. A Scoutmaster has every permission a
+// advancement, counselor, parent, scout, committee, treasurer, quartermaster; one person can hold several. A Scoutmaster has every permission a
 // leader has. Only the Scoutmaster, the advancement chair and a badge's assigned counselor change merit badge records. scoutIds = the Scouts this login acts for
 // (a Scout's own id, or a parent's children). consentPendingScoutIds = Scouts a leader linked this parent to, which
 // the parent has not yet agreed to the consent notice for.
@@ -34,6 +34,9 @@ service cloud.firestore {
     // own Scouts' (a Scout 13 or older acts for themselves). Counselors and other leaders see none.
     function canSeeMoney(t) { return hasRole(t, 'treasurer') || hasRole(t, 'scoutmaster') || hasRole(t, 'advancement'); }
     function canSeeAccount(t, scoutId) { return canSeeMoney(t) || actsFor(t, scoutId); }
+    // Troop gear: the quartermaster (an adult, or a Scout 13 or older) and the leaders manage the inventory. The
+    // quartermaster role grants nothing else.
+    function canManageGear(t) { return isLeader(t) || hasRole(t, 'quartermaster'); }
     function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
     function card(t, cardId) { return get(/databases/$(database)/documents/troops/$(t)/blueCards/$(cardId)).data; }
     function isCounselorFor(t, cardId) {
@@ -439,6 +442,70 @@ service cloud.firestore {
       match /campaigns/{c} {
         allow read: if canSeeMoney(t);
         allow write: if false;
+      }
+
+      // Troop gear and library. Everyone in the troop reads the catalog; the quartermaster and leaders add and change
+      // items. `out` (how many are checked out) and `photoPath` are written only by the server (check_out_item,
+      // check_in_item, decide_request, set_item_photo), which also writes every loan and request. An item that is
+      // out can't be deleted, and its quantity can't drop below what is out.
+      match /inventory/{i} {
+        allow read: if isMember(t);
+        allow create: if canManageGear(t) && validItem(request.resource.data)
+          && !request.resource.data.keys().hasAny(['out', 'photoPath'])
+          && request.resource.data.createdAt is timestamp
+          && request.resource.data.updatedAt is timestamp;
+        allow update: if canManageGear(t) && validItem(request.resource.data)
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['out', 'photoPath', 'createdAt'])
+          && request.resource.data.quantity >= resource.data.get('out', 0)
+          && request.resource.data.updatedAt is timestamp;
+        allow delete: if canManageGear(t) && resource.data.get('out', 0) == 0;
+
+        function optionalText(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+        function validItem(d) {
+          return d.keys().hasOnly(['name', 'category', 'quantity', 'tag', 'location', 'condition', 'purchaseDate',
+                                   'costCents', 'notes', 'out', 'photoPath', 'createdAt', 'updatedAt'])
+            && d.keys().hasAll(['name', 'category', 'quantity', 'condition', 'createdAt', 'updatedAt'])
+            && d.name is string && d.name.size() > 0 && d.name.size() <= 120
+            && d.category in ['tents', 'cooking', 'tools', 'first_aid', 'library', 'other']
+            && d.quantity is int && d.quantity >= 1 && d.quantity <= 1000
+            && d.condition in ['good', 'needs_repair', 'retired']
+            && optionalText(d, 'tag', 40) && optionalText(d, 'location', 120) && optionalText(d, 'notes', 1000)
+            && (!('purchaseDate' in d) || (d.purchaseDate is string && d.purchaseDate.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')))
+            && (!('costCents' in d) || (d.costCents is int && d.costCents >= 0 && d.costCents <= 100000000));
+        }
+      }
+      // Loans. A manager reads all; the borrower reads their own; a parent reads loans to their Scout. Server-written.
+      match /checkouts/{c} {
+        allow read: if canManageGear(t)
+          || (isMember(t) && resource.data.get('toMemberId', '') == access(t).memberId)
+          || actsFor(t, resource.data.scoutId);
+        allow write: if false;
+      }
+      // A member's request for an item for an event. The quartermaster and leaders read all; the requester reads
+      // their own. Server-written.
+      match /equipmentRequests/{r} {
+        allow read: if canManageGear(t) || resource.data.get('requestedByUid', '') == request.auth.uid;
+        allow write: if false;
+      }
+      // Repair notes and history for an item. Managers only. Notes can be added and removed, not rewritten.
+      match /maintenance/{m} {
+        allow read: if canManageGear(t);
+        allow create: if canManageGear(t)
+          && request.resource.data.keys().hasOnly(['itemId', 'kind', 'note', 'date', 'costCents', 'byMemberId', 'createdAt'])
+          && request.resource.data.keys().hasAll(['itemId', 'kind', 'note', 'date', 'byMemberId', 'createdAt'])
+          && request.resource.data.itemId is string
+          && exists(/databases/$(database)/documents/troops/$(t)/inventory/$(request.resource.data.itemId))
+          && request.resource.data.kind in ['repair', 'note']
+          && request.resource.data.note is string && request.resource.data.note.size() > 0
+          && request.resource.data.note.size() <= 500
+          && request.resource.data.date is string && request.resource.data.date.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+          && (!('costCents' in request.resource.data)
+              || (request.resource.data.costCents is int && request.resource.data.costCents >= 0
+                  && request.resource.data.costCents <= 100000000))
+          && request.resource.data.byMemberId == access(t).memberId
+          && request.resource.data.createdAt is timestamp;
+        allow update: if false;
+        allow delete: if canManageGear(t);
       }
     }
   }
