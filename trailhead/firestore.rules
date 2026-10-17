@@ -256,7 +256,9 @@ service cloud.firestore {
       // Health form dates: {partsAB, partC}, each {date, byMemberId, at}. Doc id = member id. Server-written; erased
       // with the person.
       match /healthForms/{m} {
-        allow read: if canRecordHealth(t, m);
+        // A list query can't check each record's person, so listing is for leaders; one record uses the full rule.
+        allow list: if isLeader(t);
+        allow get: if canRecordHealth(t, m);
         allow write: if false;
       }
       // Which Youth Protection reminders were sent. Server-only, so no one can reset or read them.

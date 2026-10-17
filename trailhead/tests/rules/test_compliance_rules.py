@@ -108,3 +108,12 @@ def test_no_client_writes_training_dates_directly():
             assistant.set(f"{T}/access/assistant", {"memberId": "m-asst", "roles": ["leader"], field: value}) == DENIED
         )
     assert leader.set(f"{T}/members/m-asst", {"kind": "adult", "displayName": "Asst B.", "roles": ["leader"]}) == OK
+
+
+def test_only_leaders_can_list_every_health_form():
+    # The Roster lists them all; a refused list query breaks the browser's Firestore client, so this must be allowed.
+    seed()
+    for who in (leader, assistant, Client("chair")):
+        assert who.get(f"{T}/healthForms") == OK
+    for who in (parent, scout1, counselor, stranger):
+        assert who.get(f"{T}/healthForms") == DENIED
