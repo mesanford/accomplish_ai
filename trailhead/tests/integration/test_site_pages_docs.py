@@ -72,9 +72,9 @@ def test_pages_publish_in_order_with_safe_links():
     blocks = [
         {"type": "heading", "text": "Welcome"},
         {"type": "paragraph", "inline": [{"text": "Read the "}, {"text": "guide", "href": "https://example.com/g"}]},
-        {"type": "list", "items": [[{"text": "Tent"}], [{"text": "Pack"}]]},
+        {"type": "list", "items": [{"inline": [{"text": "Tent"}]}, {"inline": [{"text": "Pack"}]}]},
     ]
-    owner.set(f"{T}/site/draft", draft(pages=[page(blocks), page([], "eagles", "Eagle Scouts")]))
+    assert owner.set(f"{T}/site/draft", draft(pages=[page(blocks), page([], "eagles", "Eagle Scouts")])) == 200
     assert publish().status_code == 200
     pages = read(SLUG)["pages"]
     assert [p["slug"] for p in pages] == ["new-families", "eagles"]

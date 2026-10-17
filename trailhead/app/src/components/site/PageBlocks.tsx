@@ -42,7 +42,7 @@ export function PageBlocks({ blocks }: { blocks: PublicBlock[] }) {
             <ul key={i}>
               {block.items.map((item, n) => (
                 <li key={n}>
-                  <Spans spans={item} />
+                  <Spans spans={item.inline} />
                 </li>
               ))}
             </ul>

@@ -87,7 +87,7 @@ def test_a_page_keeps_its_blocks_in_order_and_drops_empty_ones():
         {"type": "heading", "text": "  Philmont  "},
         {"type": "paragraph", "inline": [{"text": "See "}, {"text": "the plan", "href": "https://example.com/p"}]},
         {"type": "paragraph", "inline": [{"text": ""}]},
-        {"type": "list", "items": [[{"text": "Boots"}], [], [{"text": "Pack"}]]},
+        {"type": "list", "items": [{"inline": [{"text": "Boots"}]}, {"inline": []}, {"inline": [{"text": "Pack"}]}]},
         {"type": "heading", "text": "   "},
         image(),
     ]
@@ -95,7 +95,7 @@ def test_a_page_keeps_its_blocks_in_order_and_drops_empty_ones():
     assert [b["type"] for b in clean["blocks"]] == ["heading", "paragraph", "list", "image"]
     assert clean["blocks"][0]["text"] == "Philmont"
     assert clean["blocks"][1]["inline"][1] == {"text": "the plan", "href": "https://example.com/p"}
-    assert clean["blocks"][2]["items"] == [[{"text": "Boots"}], [{"text": "Pack"}]]
+    assert clean["blocks"][2]["items"] == [{"inline": [{"text": "Boots"}]}, {"inline": [{"text": "Pack"}]}]
 
 
 def test_no_raw_html_survives_as_markup_and_unknown_keys_are_dropped():
@@ -115,7 +115,7 @@ def test_a_page_with_an_unsafe_link_is_refused(href):
     with pytest.raises(InvalidSite, match="must start with https://"):
         validate_pages([page(blocks=[block])], T)
     with pytest.raises(InvalidSite, match="must start with https://"):
-        validate_pages([page(blocks=[{"type": "list", "items": [[{"text": "x", "href": href}]]}])], T)
+        validate_pages([page(blocks=[{"type": "list", "items": [{"inline": [{"text": "x", "href": href}]}]}])], T)
 
 
 def test_page_images_must_be_troop_uploads():

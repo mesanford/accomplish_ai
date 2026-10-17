@@ -15,7 +15,8 @@ export interface ParagraphBlock {
 }
 export interface ListBlock {
   type: 'list';
-  items: Span[][];
+  /** Each item wraps its spans in an object, because Firestore cannot store a list directly inside a list. */
+  items: { inline: Span[] }[];
 }
 export interface ImageBlock {
   type: 'image';
@@ -33,7 +34,8 @@ export interface DraftPage {
 }
 
 /** What the public site holds: images have a public url and no Scout tags. */
-export type PublicBlock = HeadingBlock | ParagraphBlock | ListBlock | { type: 'image'; url: string; alt: string };
+export type PublicBlock =
+  HeadingBlock | ParagraphBlock | ListBlock | { type: 'image'; url: string; alt: string };
 export interface PublicPage {
   id: string;
   title: string;
@@ -41,7 +43,16 @@ export interface PublicPage {
   blocks: PublicBlock[];
 }
 
-export const PAGE_LIMITS = { pages: 10, blocks: 40, images: 12, title: 60, heading: 120, paragraph: 1500, item: 300, items: 20 };
+export const PAGE_LIMITS = {
+  pages: 10,
+  blocks: 40,
+  images: 12,
+  title: 60,
+  heading: 120,
+  paragraph: 1500,
+  item: 300,
+  items: 20,
+};
 const PAGE_SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/;
 export const RESERVED_PAGE_SLUGS = new Set(['calendar', 'documents', 'home', 'index']);
 const LINK_RE = /\[([^\]\n]+)\]\(([^)\s]+)\)/g;
@@ -56,7 +67,9 @@ export function safeHref(url: string | undefined | null): string | null {
     if (parsed.protocol === 'mailto:') {
       return parsed.pathname.includes('@') ? url : null;
     }
-    return (parsed.protocol === 'https:' || parsed.protocol === 'http:') && parsed.host ? url : null;
+    return (parsed.protocol === 'https:' || parsed.protocol === 'http:') && parsed.host
+      ? url
+      : null;
   } catch {
     return null;
   }
@@ -87,9 +100,11 @@ export function formatInline(spans: Span[]): string {
   return spans.map((s) => (s.href ? `[${s.text}](${s.href})` : s.text)).join('');
 }
 
-export const listToText = (items: Span[][]): string => items.map(formatInline).join('\n');
+export const listToText = (items: ListBlock['items']): string =>
+  items.map((i) => formatInline(i.inline)).join('\n');
 /** One item per line. Blank lines stay while typing; the server drops them when it publishes. */
-export const textToList = (text: string): Span[][] => text.split('\n').map((line) => parseInline(line));
+export const textToList = (text: string): ListBlock['items'] =>
+  text.split('\n').map((line) => ({ inline: parseInline(line) }));
 
 export function newPage(existing: DraftPage[], now = Date.now()): DraftPage {
   const id = `p${now.toString(36)}${Math.random().toString(36).slice(2, 5)}`;

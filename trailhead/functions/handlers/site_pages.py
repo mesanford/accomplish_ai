@@ -5,7 +5,7 @@ A page is stored as structured data, never as HTML, so nothing a leader types ca
     page   = {id, title, slug, blocks: [block]}            (the order of the list is the order in the menu)
     block  = {type: "heading", text}
            | {type: "paragraph", inline: [span]}
-           | {type: "list", items: [[span]]}
+           | {type: "list", items: [{inline: [span]}]}   (Firestore cannot store a list directly inside a list)
            | {type: "image", path, alt, scoutIds, noScoutsShown}   (path is a draft upload; published as url)
     span   = {text} | {text, href}                          (href is http, https or mailto, nothing else)
 """
@@ -109,8 +109,11 @@ def _block(block: dict, troop_id: str, title: str) -> dict | None:
         raw = block.get("items")
         if isinstance(raw, list) and len(raw) > MAX_LIST_ITEMS:
             raise InvalidSite(f"A list can have up to {MAX_LIST_ITEMS} items.")
-        items = [clean_inline(i, LIMITS["item"], "A list item") for i in (raw if isinstance(raw, list) else [])]
-        items = [i for i in items if i]
+        items = [
+            clean_inline(i.get("inline") if isinstance(i, dict) else None, LIMITS["item"], "A list item")
+            for i in (raw if isinstance(raw, list) else [])
+        ]
+        items = [{"inline": i} for i in items if i]
         return {"type": "list", "items": items} if items else None
     path = draft_path(block.get("path"), troop_id)
     if path is None:

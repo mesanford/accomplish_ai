@@ -19,12 +19,21 @@ import {
 } from '../sitePages';
 import { normalizeDraft } from '../site';
 
-const page = (over: Partial<DraftPage> = {}): DraftPage => ({ id: 'p1', title: 'High adventure', slug: 'high-adventure', blocks: [], ...over });
+const page = (over: Partial<DraftPage> = {}): DraftPage => ({
+  id: 'p1',
+  title: 'High adventure',
+  slug: 'high-adventure',
+  blocks: [],
+  ...over,
+});
 
 describe('safe links', () => {
-  it.each(['https://example.com', 'http://example.com/a?b=1#c', 'mailto:sm@example.com'])('keeps %s', (url) => {
-    expect(safeHref(url)).toBe(url);
-  });
+  it.each(['https://example.com', 'http://example.com/a?b=1#c', 'mailto:sm@example.com'])(
+    'keeps %s',
+    (url) => {
+      expect(safeHref(url)).toBe(url);
+    },
+  );
 
   it.each([
     'javascript:alert(1)',
@@ -59,19 +68,33 @@ describe('text with links', () => {
   });
 
   it('leaves an unsafe link as plain text instead of making a link', () => {
-    expect(parseInline('[click](javascript:alert(1))')).toEqual([{ text: '[click](javascript:alert(1))' }]);
-    expect(parseInline('[mail](mailto:a@b.org)')).toEqual([{ text: 'mail', href: 'mailto:a@b.org' }]);
+    expect(parseInline('[click](javascript:alert(1))')).toEqual([
+      { text: '[click](javascript:alert(1))' },
+    ]);
+    expect(parseInline('[mail](mailto:a@b.org)')).toEqual([
+      { text: 'mail', href: 'mailto:a@b.org' },
+    ]);
   });
 
   it('round-trips, so typing never loses text', () => {
-    for (const text of ['', 'plain', 'a [b](https://c.org) d', '[x](https://x.org)[y](https://y.org)', 'line one\nline two', 'unclosed [x](https://']) {
+    for (const text of [
+      '',
+      'plain',
+      'a [b](https://c.org) d',
+      '[x](https://x.org)[y](https://y.org)',
+      'line one\nline two',
+      'unclosed [x](https://',
+    ]) {
       expect(formatInline(parseInline(text))).toBe(text);
     }
   });
 
   it('keeps blank lines in lists while typing so a new line can start', () => {
     expect(listToText(textToList('Tent\n'))).toBe('Tent\n');
-    expect(textToList('Tent\nPack')).toEqual([[{ text: 'Tent' }], [{ text: 'Pack' }]]);
+    expect(textToList('Tent\nPack')).toEqual([
+      { inline: [{ text: 'Tent' }] },
+      { inline: [{ text: 'Pack' }] },
+    ]);
   });
 });
 
@@ -80,7 +103,7 @@ describe('rendering', () => {
     const blocks: PublicBlock[] = [
       { type: 'heading', text: '<img src=x onerror=alert(1)>' },
       { type: 'paragraph', inline: [{ text: '<script>alert(1)</script>' }] },
-      { type: 'list', items: [[{ text: '<b>bold</b>' }]] },
+      { type: 'list', items: [{ inline: [{ text: '<b>bold</b>' }] }] },
     ];
     const html = renderToStaticMarkup(createElement(PageBlocks, { blocks }));
     expect(html).not.toContain('<script');
@@ -150,9 +173,13 @@ describe('page rules', () => {
 
   it('limits blocks and images', () => {
     const heading = { type: 'heading' as const, text: 'x' };
-    expect(pageProblem(page({ blocks: Array(PAGE_LIMITS.blocks + 1).fill(heading) }), [])).toMatch(/blocks/);
+    expect(pageProblem(page({ blocks: Array(PAGE_LIMITS.blocks + 1).fill(heading) }), [])).toMatch(
+      /blocks/,
+    );
     const image = { type: 'image' as const, path: 'p', alt: '', scoutIds: [], noScoutsShown: true };
-    expect(pageProblem(page({ blocks: Array(PAGE_LIMITS.images + 1).fill(image) }), [])).toMatch(/images/);
+    expect(pageProblem(page({ blocks: Array(PAGE_LIMITS.images + 1).fill(image) }), [])).toMatch(
+      /images/,
+    );
   });
 });
 
@@ -160,7 +187,9 @@ describe('page helpers', () => {
   it('makes addresses from titles', () => {
     expect(pageSlug('High Adventure!')).toBe('high-adventure');
     expect(pageSlug('New families & friends')).toBe('new-families-friends');
-    expect(pageAddress('https://x.org', 'troop-1', 'eagles')).toBe('https://x.org/s/troop-1/eagles');
+    expect(pageAddress('https://x.org', 'troop-1', 'eagles')).toBe(
+      'https://x.org/s/troop-1/eagles',
+    );
   });
 
   it('adds new pages with unused names and ids', () => {
@@ -180,7 +209,10 @@ describe('page helpers', () => {
   });
 
   it('opens older drafts with no pages, announcement or layout', () => {
-    const draft = normalizeDraft({ slug: 'troop-1', about: 'Hi' }, { name: 'Troop 1', unitNumber: '1' } as never);
+    const draft = normalizeDraft({ slug: 'troop-1', about: 'Hi' }, {
+      name: 'Troop 1',
+      unitNumber: '1',
+    } as never);
     expect(draft.pages).toEqual([]);
     expect(draft.announcement).toEqual({ text: '', endDate: null });
     expect(draft.coverLayout).toBe('band');

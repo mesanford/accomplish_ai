@@ -19,7 +19,7 @@ interface Props {
 const NEW_BLOCKS: [string, () => Block][] = [
   ['Heading', () => ({ type: 'heading', text: '' })],
   ['Paragraph', () => ({ type: 'paragraph', inline: [] })],
-  ['Bullet list', () => ({ type: 'list', items: [[]] })],
+  ['Bullet list', () => ({ type: 'list', items: [{ inline: [] }] })],
 ];
 
 /** One extra page: title, web address, menu position and its content blocks. */
