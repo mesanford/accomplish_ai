@@ -38,17 +38,21 @@ export function Patrols() {
     <>
       <PageHeader eyebrow="Troop" title="Patrols" />
       <p className="muted">
-        A patrol is a small group of Scouts. Each Scout is in one patrol. Name a patrol leader and an assistant from its
-        Scouts.
+        A patrol is a small group of Scouts. Each Scout is in one patrol. Name a patrol leader and
+        an assistant from its Scouts.
       </p>
       {patrols.data.length === 0 ? <Empty>No patrols yet. Add the first one below.</Empty> : null}
       {patrols.data.map((p) => (
-        <PatrolCard key={`${p.id}:${p.name}:${p.leaderId}:${p.assistantId}`} patrol={p} />
+        <PatrolCard key={p.id} patrol={p} />
       ))}
       {patrols.data.length > 0 ? (
         <section className="card stack">
           <h2>Scouts with no patrol ({loose.length})</h2>
-          <p className="small">{loose.length === 0 ? 'Every Scout is in a patrol.' : loose.map((s) => s.displayName).join(', ')}</p>
+          <p className="small">
+            {loose.length === 0
+              ? 'Every Scout is in a patrol.'
+              : loose.map((s) => s.displayName).join(', ')}
+          </p>
         </section>
       ) : null}
       <section className="card">
@@ -56,7 +60,13 @@ export function Patrols() {
         <form className="form" onSubmit={create} noValidate>
           <div className="row">
             <Field label="Patrol name" htmlFor="patrol-name">
-              <input id="patrol-name" maxLength={40} value={name} onChange={(e) => setName(e.target.value)} placeholder="Eagles" />
+              <input
+                id="patrol-name"
+                maxLength={40}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Eagles"
+              />
             </Field>
             <Field label="Emblem color (optional)" htmlFor="patrol-color">
               <select id="patrol-color" value={color} onChange={(e) => setColor(e.target.value)}>

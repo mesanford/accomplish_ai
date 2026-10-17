@@ -1,9 +1,18 @@
 import { expect, test } from '@playwright/test';
-import { createInviteLink, inOneYear, join, joinAsParent, resetEmulators, signedIn } from './helpers';
+import {
+  createInviteLink,
+  inOneYear,
+  join,
+  joinAsParent,
+  resetEmulators,
+  signedIn,
+} from './helpers';
 
 test.beforeAll(resetEmulators);
 
-test('a quartermaster adds a tent, checks it out to a Scout and checks it back in', async ({ browser }) => {
+test('a quartermaster adds a tent, checks it out to a Scout and checks it back in', async ({
+  browser,
+}) => {
   const leader = await signedIn(browser, 'gear-leader@example.com');
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 606');
@@ -30,14 +39,17 @@ test('a quartermaster adds a tent, checks it out to a Scout and checks it back i
   await expect(qm.getByRole('heading', { name: 'Equipment' })).toBeVisible();
 
   await qm.getByRole('button', { name: 'Add an item' }).click();
-  await qm.getByLabel('Name', { exact: true }).fill('Tent 4');
-  await qm.getByLabel('Category').selectOption('tents');
-  await qm.getByLabel('Asset tag (optional)').fill('T-4');
-  await qm.getByLabel('Location').fill('Trailer');
-  await expect(qm.getByText('Photos of gear only. Do not include Scouts or other people.')).toBeVisible();
+  const addForm = qm.getByRole('form', { name: 'Add an item' });
+  await addForm.getByLabel('Name', { exact: true }).fill('Tent 4');
+  await addForm.getByLabel('Category').selectOption('tents');
+  await addForm.getByLabel('Asset tag (optional)').fill('T-4');
+  await addForm.getByLabel('Location').fill('Trailer');
+  await expect(
+    qm.getByText('Photos of gear only. Do not include Scouts or other people.'),
+  ).toBeVisible();
   await qm.getByRole('button', { name: 'Add item' }).click();
   await expect(qm.getByRole('link', { name: 'Tent 4' })).toBeVisible();
-  await expect(qm.getByText('On the shelf')).toBeVisible();
+  await expect(qm.getByText('On the shelf', { exact: true })).toBeVisible();
 
   // Check it out to Sam.
   await qm.getByRole('link', { name: 'Tent 4' }).click();
@@ -52,7 +64,9 @@ test('a quartermaster adds a tent, checks it out to a Scout and checks it back i
   await joinAsParent(parent, 'Jordan Parent');
   await parent.getByRole('link', { name: 'Equipment' }).click();
   await parent.getByRole('button', { name: 'Checked out to you' }).click();
-  await expect(parent.getByRole('region', { name: 'Checked out to you' }).getByText('Tent 4')).toBeVisible();
+  await expect(
+    parent.getByRole('region', { name: 'Checked out to you' }).getByText('Tent 4'),
+  ).toBeVisible();
   await expect(parent.getByRole('button', { name: 'Add an item' })).toBeHidden();
 
   // Check it back in, needing repair, and see it in the repair log.

@@ -57,12 +57,12 @@ def test_names_are_escaped_in_html_but_not_in_text():
 
 
 def test_consent_confirmation_content():
-    mail = tpl.consent_confirmation(["Ava", "Max"], "Troop 1", "October 15, 2026", "2026-10-16.1", URL)
+    mail = tpl.consent_confirmation(["Ava", "Max"], "Troop 1", "October 15, 2026", "2026-10-17.1", URL)
     assert mail.subject == "You agreed to Forthright's notice for Ava and Max"
     for part in (
         "Ava and Max",
         "October 15, 2026",
-        "2026-10-16.1",
+        "2026-10-17.1",
         "withdraw",
         f"{URL}/privacy",
         "privacy@msanford.com",

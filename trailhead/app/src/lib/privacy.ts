@@ -1,6 +1,6 @@
 /** The privacy policy's wording, kept apart from the page so it can be reviewed and edited in one place. */
 
-export const PRIVACY_EFFECTIVE = 'October 16, 2026';
+export const PRIVACY_EFFECTIVE = 'October 17, 2026';
 export const PRIVACY_OPERATOR = 'MM Sanford';
 /** Where privacy questions and deletion requests go. */
 export const PRIVACY_EMAIL: string | null = 'privacy@msanford.com';
@@ -31,9 +31,13 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: 'collect',
     heading: 'What we collect',
     items: [
-      'Adults who sign in: name, email address and the troop roles you hold (Scoutmaster, leader, advancement chair, committee, treasurer, counselor, parent). If you sign in with Google, we receive your name and email from Google. Leaders also give their Youth Protection training expiry date.',
+      'Adults who sign in: name, email address and the troop roles you hold (Scoutmaster, leader, advancement chair, committee, treasurer, quartermaster, counselor, parent). If you sign in with Google, we receive your name and email from Google. Leaders also give their Youth Protection training expiry date.',
       "Scouts: name, birth month and year (never the full date), current rank, the ranks, merit badges and requirements they've completed and when, who signed each one off, blue cards, photos of signed paper blue cards, advancement plans, event sign-ups (answers to sign-up questions, and which parent gave permission and when), event attendance and troop messages.",
       'Health or emergency notes a parent chooses to add when signing their Scout up for an event.',
+      "A Scout's patrol and patrol office, and their camping nights, service hours and hiking miles. These come from the troop's event attendance, or are entered by a leader; a parent, or a Scout 13 or older, can submit one for a leader to approve.",
+      "Troop equipment and library books, and who has borrowed them: the person or event, the due date and the condition it came back in. Photos of gear are re-saved without hidden details such as location; please don't include people in them.",
+      "If you turn on notifications on a device, a device token from your browser's push service, so we can send notifications to that device.",
+      'If a troop connects its own domain to its website, the domain name and its setup status.',
       'Scout account entries the treasurer records: fundraiser credits, charges for activities and dues, and payments, with their date, amount, a short description and who recorded them. We never collect bank or card numbers, and descriptions should not include them.',
       "Families who use a troop website's \"Join us\" form: the parent or guardian's name, email, optional phone number, the Scout's age or grade, and any note they add.",
       'Scouts 13 and older who sign in: their email address, and what they type, such as plan requests and messages.',
@@ -57,6 +61,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       'To run Forthright for your troop: planning paths to rank, recording sign-offs, managing blue cards and counselors, events, messages and the troop website.',
       "To follow Youth Protection rules. Messages are only between people in the same troop, and every conversation that includes a Scout also includes an adult. Scouts can message adults but not other Scouts, and only an adult can start a conversation with several Scouts. An adult in a conversation with a Scout must have current Youth Protection training, except a parent talking with their own children. The Scout's parent, or a second trained adult if the parent is not on Forthright, is added automatically and can read every message.",
       'To keep Scout accounts for the troop: fundraiser credit, activity charges and payments. Forthright records payments made to the troop. It does not take, hold or pay out money.',
+      "To send notifications to devices where you turned them on. They follow your email choices and are a short line with a link. They never include a Scout's last name, birth date, health information, message text or money amounts. Scouts 13 or older who turn them on get notifications only about announcements sent to them and their own event sign-ups.",
       'To run event sign-ups: spots and waitlists, permission from a parent, and private calendar feeds of troop events.',
       'To build the report leaders use to enter advancement in Scoutbook. Leaders download it; we never send records to Scouting America ourselves.',
       "To send email: sign-in links; a copy of the notice a parent agreed to; and blue card updates (a new request to the Scoutmaster and advancement chair; approval, counselor and completion to the Scout's parents; an assignment to the counselor); event emails to parents (when their Scout comes off a waitlist, when permission is needed, and a reminder two days before an event they signed up for); and announcements a leader chooses to email. Scouts are not emailed. Anyone can turn notification emails and announcement emails off on the Account page; consent confirmations are always sent.",
@@ -76,6 +81,8 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       "Scout accounts: the treasurer, the Scoutmaster and the advancement chair see every Scout's account. Parents see only their own Scouts' accounts, and a Scout 13 or older sees their own. Counselors and other leaders see no financial information.",
       'Announcements are seen only by the audience the leader chose, the person who posted them and the Scoutmaster. Someone who joins later, or takes on a new role, can also see the past 12 months of announcements sent to that audience. Leaders and committee members can post them; one that reaches Scouts can only be posted by an adult with current Youth Protection training.',
       'Documents are seen by the people a leader chooses: leaders only, all troop members, or the public. Medical forms can never be made public.',
+      "A Scout's patrol and patrol office are visible to everyone in the troop. Camping nights, service hours and hiking miles are visible to leaders, the Scout's parents and the Scout if 13 or older. The troop can export its totals as a spreadsheet and report troop service hours to its council.",
+      'The equipment list is visible to everyone in the troop. The quartermaster and leaders see who has borrowed what; parents see what their own Scout has borrowed, and anyone can see what is checked out to them.',
       'Calendar feeds use a private web address for each member. They list event names, dates, places and links, and never include names or other information about Scouts. You can replace your address at any time, and it stops working when you leave the troop.',
       'These limits are enforced on our servers, not only in the app.',
       "We, the operator, can access stored data. We look at a troop's information only to run and secure Forthright, to answer a request from the troop or a family, to look into a safety concern, or when the law requires it.",
@@ -99,7 +106,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     id: 'providers',
     heading: 'Companies that help us run Forthright',
     items: [
-      'Google (Firebase and Google Cloud) hosts the app and stores its data in the United States, handles sign-in, stores photos and runs our server code.',
+      "Google (Firebase and Google Cloud) hosts the app and stores its data in the United States, handles sign-in, stores photos and runs our server code. If you turn on notifications, Google Firebase Cloud Messaging delivers them and processes the device token and the notification text. If a troop connects its own domain, we send the domain name to Firebase Hosting so it can serve the site and issue a secure certificate; a troop's own domain shows only the public site and adds no tracking.",
       "Resend delivers our emails. It receives the recipient's email address and the email itself: a Scout's first name, the merit badge, the troop name and links back to Forthright. It never receives birth dates, messages, photos or last names. For an emailed announcement, it receives the announcement, the sender's name and the troop name, and it is sent only to parents and other adults.",
       "Anthropic provides Claude, the AI behind \"Draft with AI\" and the website About us helper. To draft a plan we send a Scout's birth month and year, current rank, rank dates, merit badges already earned, the goal rank and target date, and the words typed into the request box. For the About us helper we send the troop's name, unit number and council and the leader's notes. In both, we try to remove the names of people on your troop roster from what you type, but nicknames or misspellings may get through, so please don't include names, health, family or school details. Health notes and Scout account information are never sent to Claude. Under Anthropic's commercial terms, this data is not used to train its models; Anthropic deletes it within 30 days unless it must keep it longer to enforce its usage policy or the law. AI drafts can be wrong: Forthright checks each plan against the advancement rules, and a person decides whether to use it.",
     ],
@@ -135,11 +142,14 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       "We keep information only while the troop needs it to run Forthright, and delete it on this schedule. Deletion runs automatically each night. We keep a Scout's records while they are in the troop so leaders can track advancement toward Eagle, which ends at 18.",
     ],
     items: [
-      "A Scout's records (name, birth month and year, advancement, blue cards and photos of them, sign-offs, attendance, plans and consent records): deleted 12 months after a leader marks the Scout as having left the troop, or 12 months after the Scout turns 18, whichever comes first. Because we store only the birth month and year, we treat a Scout as 18 from the first day of the month after their 18th birthday month. A leader can also delete a Scout's records at any time.",
+      "A Scout's records (name, birth month and year, advancement, blue cards and photos of them, sign-offs, attendance, camping, service and hiking logs, plans and consent records): deleted 12 months after a leader marks the Scout as having left the troop, or 12 months after the Scout turns 18, whichever comes first. Because we store only the birth month and year, we treat a Scout as 18 from the first day of the month after their 18th birthday month. A leader can also delete a Scout's records at any time.",
       'Troop messages: a conversation and all of its messages are deleted 24 months after its last message.',
       'Announcements and newsletters: deleted 24 months after they are posted. The record of when you last opened Announcements is deleted when you delete your account.',
       "Scout account entries: kept for 7 years after their date, so the troop's books stay complete, even after a Scout's other records are deleted. When a Scout is removed, their name is replaced with a reference number.",
       'Documents: deleted when a leader deletes them, or with the rest of the troop.',
+      'Equipment: check-out history, requests and repair notes are deleted 7 years after they close. When a Scout\'s records are deleted or an adult deletes their account, gear they borrowed stays in the history with their name replaced by "Former Scout" or "Former member". The inventory is deleted with the troop.',
+      'Device tokens for notifications: deleted when you turn notifications off, sign out on that device or delete your account, or when the push service says the token no longer works.',
+      "A troop's own domain: its record is deleted when a leader removes the domain or unpublishes the site, when the troop is deleted, or after 7 days if the domain never connects.",
       '"Join us" requests from a troop website: deleted 12 months after they were sent. Troop leaders can delete one sooner.',
       'Daily counts of AI drafts: deleted after 30 days. Forthright does not save the text of plan requests sent to Claude.',
       "Inactive troops: if no one in a troop has used Forthright for 18 months, we plan to delete the troop and everything in it, including its records, files, website and web address. Its Scout account entries are kept, with every Scout's name replaced by a reference number, until each entry is 7 years old. Until that is switched on, we review inactive troops and delete them on request; email us to have a troop deleted sooner. People's sign-in accounts are not deleted this way; anyone can delete their own account from the Account page.",

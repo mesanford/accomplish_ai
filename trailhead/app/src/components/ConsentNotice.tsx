@@ -14,10 +14,11 @@ export function ConsentNotice({ troopName }: { troopName: string }) {
       </p>
       <p>
         What we keep: your Scout's name, birth month and year, rank and advancement, sign-offs, blue
-        cards and photos of paper blue cards, plans, event sign-ups and attendance, any health or
-        emergency note you add to a sign-up, Scout account entries the treasurer records (fundraiser
-        credit, charges and payments), and troop messages. If your Scout is 13 or older and signs
-        in, also their email address and what they type.
+        cards and photos of paper blue cards, plans, patrol, camping nights, service hours and
+        hiking miles, gear they borrow, event sign-ups and attendance, any health or emergency note
+        you add to a sign-up, Scout account entries the treasurer records (fundraiser credit,
+        charges and payments), and troop messages. If your Scout is 13 or older and signs in, also
+        their email address and what they type.
       </p>
       <p>
         Who sees it: everyone in the troop sees the roster (names, roles and family links) and

@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { errorMessage } from '../../lib/api';
 import { assignPatrol, deletePatrol, savePatrol } from '../../lib/activityApi';
 import { colorLabel, officeOf, PATROL_COLORS, type Patrol, patrolMembers } from '../../lib/patrols';
@@ -10,7 +10,13 @@ export function ColorSwatch({ color }: { color?: string | null }) {
   return (
     <span
       aria-hidden="true"
-      style={{ display: 'inline-block', width: 14, height: 14, borderRadius: 7, background: color ?? 'var(--line, #bbb)' }}
+      style={{
+        display: 'inline-block',
+        width: 14,
+        height: 14,
+        borderRadius: 7,
+        background: color ?? 'var(--line, #bbb)',
+      }}
     />
   );
 }
@@ -18,7 +24,9 @@ export function ColorSwatch({ color }: { color?: string | null }) {
 /** One patrol: its name and color, who leads it, and who is in it. Leaders only. */
 export function PatrolCard({ patrol }: { patrol: Patrol }) {
   const { troopId, members, memberName } = useTroop();
-  const scouts = members.filter((m) => m.kind === 'scout').sort((a, b) => a.displayName.localeCompare(b.displayName));
+  const scouts = members
+    .filter((m) => m.kind === 'scout')
+    .sort((a, b) => a.displayName.localeCompare(b.displayName));
   const inside = patrolMembers(patrol.id, members);
   const others = scouts.filter((s) => s.patrolId !== patrol.id);
   const [name, setName] = useState(patrol.name);
@@ -28,6 +36,13 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
   const [adding, setAdding] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  // Follow saved changes (such as an office cleared when a Scout moves) without remounting, so "Saved." stays.
+  useEffect(() => {
+    setName(patrol.name);
+    setColor(patrol.color ?? '');
+    setLeaderId(patrol.leaderId ?? '');
+    setAssistantId(patrol.assistantId ?? '');
+  }, [patrol.name, patrol.color, patrol.leaderId, patrol.assistantId]);
 
   async function run(task: () => Promise<unknown>, done = '') {
     setError('');
@@ -64,7 +79,9 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
       </h2>
       <p className="muted small">
         {plural(inside.length, 'Scout')}
-        {inside.length > 0 ? `: ${inside.map((s) => `${s.displayName}${officeOf(s.id, patrol) ? ` (${officeOf(s.id, patrol)})` : ''}`).join(', ')}` : ''}
+        {inside.length > 0
+          ? `: ${inside.map((s) => `${s.displayName}${officeOf(s.id, patrol) ? ` (${officeOf(s.id, patrol)})` : ''}`).join(', ')}`
+          : ''}
       </p>
       <ul className="list">
         {inside.map((s) => (
@@ -82,8 +99,16 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
         ))}
       </ul>
       <div className="row">
-        <Field label="Add a Scout" htmlFor={`add-${patrol.id}`} hint="A Scout is in one patrol. Adding moves them here.">
-          <select id={`add-${patrol.id}`} value={adding} onChange={(e) => setAdding(e.target.value)}>
+        <Field
+          label="Add a Scout"
+          htmlFor={`add-${patrol.id}`}
+          hint="A Scout is in one patrol. Adding moves them here."
+        >
+          <select
+            id={`add-${patrol.id}`}
+            value={adding}
+            onChange={(e) => setAdding(e.target.value)}
+          >
             <option value="">Choose a Scout</option>
             {others.map((s) => (
               <option key={s.id} value={s.id}>
@@ -96,7 +121,12 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
           type="button"
           className="btn secondary small"
           disabled={!adding}
-          onClick={() => run(() => assignPatrol(troopId, [adding], patrol.id), `${memberName(adding)} added.`).then(() => setAdding(''))}
+          onClick={() =>
+            run(
+              () => assignPatrol(troopId, [adding], patrol.id),
+              `${memberName(adding)} added.`,
+            ).then(() => setAdding(''))
+          }
         >
           Add to {patrol.name}
         </button>
@@ -104,23 +134,38 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
       <form className="form" onSubmit={save} noValidate>
         <div className="row">
           <Field label="Patrol name" htmlFor={`name-${patrol.id}`}>
-            <input id={`name-${patrol.id}`} maxLength={40} value={name} onChange={(e) => setName(e.target.value)} />
+            <input
+              id={`name-${patrol.id}`}
+              maxLength={40}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Field>
           <Field label="Emblem color" htmlFor={`color-${patrol.id}`}>
-            <select id={`color-${patrol.id}`} value={color} onChange={(e) => setColor(e.target.value)}>
+            <select
+              id={`color-${patrol.id}`}
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            >
               <option value="">No color</option>
               {PATROL_COLORS.map((c) => (
                 <option key={c.value} value={c.value}>
                   {c.label}
                 </option>
               ))}
-              {color && !PATROL_COLORS.some((c) => c.value === color) ? <option value={color}>{colorLabel(color)}</option> : null}
+              {color && !PATROL_COLORS.some((c) => c.value === color) ? (
+                <option value={color}>{colorLabel(color)}</option>
+              ) : null}
             </select>
           </Field>
         </div>
         <div className="row">
           <Field label="Patrol leader" htmlFor={`pl-${patrol.id}`}>
-            <select id={`pl-${patrol.id}`} value={leaderId} onChange={(e) => setLeaderId(e.target.value)}>
+            <select
+              id={`pl-${patrol.id}`}
+              value={leaderId}
+              onChange={(e) => setLeaderId(e.target.value)}
+            >
               <option value="">Not chosen</option>
               {inside.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -130,7 +175,11 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
             </select>
           </Field>
           <Field label="Assistant patrol leader" htmlFor={`apl-${patrol.id}`}>
-            <select id={`apl-${patrol.id}`} value={assistantId} onChange={(e) => setAssistantId(e.target.value)}>
+            <select
+              id={`apl-${patrol.id}`}
+              value={assistantId}
+              onChange={(e) => setAssistantId(e.target.value)}
+            >
               <option value="">Not chosen</option>
               {inside.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -150,7 +199,11 @@ export function PatrolCard({ patrol }: { patrol: Patrol }) {
             type="button"
             className="btn quiet small"
             onClick={() => {
-              if (window.confirm(`Delete the ${patrol.name} patrol? Its Scouts stay on the roster with no patrol.`)) {
+              if (
+                window.confirm(
+                  `Delete the ${patrol.name} patrol? Its Scouts stay on the roster with no patrol.`,
+                )
+              ) {
                 run(() => deletePatrol(troopId, patrol.id));
               }
             }}

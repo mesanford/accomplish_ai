@@ -2,7 +2,7 @@ import { formatDate } from '../components/ui';
 import type { ConsentDoc } from './types';
 
 /** The notice parents read before they agree. Keep it equal to CONSENT_NOTICE_VERSION in the functions. */
-export const CONSENT_NOTICE_VERSION = '2026-10-16.1';
+export const CONSENT_NOTICE_VERSION = '2026-10-17.1';
 
 /** True if the Scout may still be under 13: the birth day is unknown, so assume the latest day of the month. */
 export function mayBeUnder13(year: number, month: number, today: Date): boolean {

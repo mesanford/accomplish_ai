@@ -21,7 +21,9 @@ async function addScout(leader: Page, name: string): Promise<void> {
   await expect(leader.getByRole('link', { name, exact: true })).toBeVisible();
 }
 
-test('a leader sets a campout with 2 nights, marks attendance and sees the Scout totals', async ({ browser }) => {
+test('a leader sets a campout with 2 nights, marks attendance and sees the Scout totals', async ({
+  browser,
+}) => {
   const leader = await signedIn(browser, 'activity-leader@example.com');
   await startTroop(leader);
   await addScout(leader, 'Riley');
@@ -70,7 +72,9 @@ test('a leader sets a campout with 2 nights, marks attendance and sees the Scout
   await expect(totals).toContainText('0 nights camped');
 });
 
-test('a leader makes a patrol, adds a Scout, filters the roster and sees the troop report', async ({ browser }) => {
+test('a leader makes a patrol, adds a Scout, filters the roster and sees the troop report', async ({
+  browser,
+}) => {
   const leader = await signedIn(browser, 'patrol-leader@example.com');
   await startTroop(leader);
   await addScout(leader, 'Riley');
@@ -84,7 +88,7 @@ test('a leader makes a patrol, adds a Scout, filters the roster and sees the tro
   await card.getByLabel('Add a Scout').selectOption({ label: 'Riley' });
   await card.getByRole('button', { name: 'Add to Eagles' }).click();
   await expect(card.getByText('1 Scout: Riley')).toBeVisible();
-  await card.getByLabel('Patrol leader').selectOption({ label: 'Riley' });
+  await card.getByLabel('Patrol leader', { exact: true }).selectOption({ label: 'Riley' });
   await card.getByRole('button', { name: 'Save Eagles' }).click();
   await expect(card.getByText('Saved.')).toBeVisible();
 
@@ -95,6 +99,10 @@ test('a leader makes a patrol, adds a Scout, filters the roster and sees the tro
 
   await leader.getByRole('link', { name: 'Activity report' }).click();
   await expect(leader.getByRole('heading', { name: /Service hours in/ })).toBeVisible();
-  await expect(leader.getByRole('table', { name: 'Totals by patrol' }).getByText('Eagles')).toBeVisible();
-  await expect(leader.getByRole('table', { name: 'Totals by Scout' }).getByText('Troop total')).toBeVisible();
+  await expect(
+    leader.getByRole('table', { name: 'Totals by patrol' }).getByText('Eagles'),
+  ).toBeVisible();
+  await expect(
+    leader.getByRole('table', { name: 'Totals by Scout' }).getByText('Troop total'),
+  ).toBeVisible();
 });
