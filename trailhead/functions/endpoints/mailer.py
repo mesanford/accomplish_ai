@@ -100,6 +100,8 @@ def send_all(
                 "text": email.text,
                 "html": email.html,
             }
+            if env.get("EMAIL_REPLY_TO"):
+                body["reply_to"] = env["EMAIL_REPLY_TO"]  # replies reach a real inbox, not the sending address
             status = post(RESEND_URL, headers, body)
             if 200 <= status < 300:
                 sent += 1

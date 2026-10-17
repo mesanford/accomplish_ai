@@ -81,3 +81,9 @@ def test_recipients_are_capped_and_deduplicated():
 def test_nobody_to_email_does_nothing():
     post = FakePost()
     assert send_all("t", [], MAIL, post=post, env=SEND) == 0 and post.calls == []
+
+
+def test_a_reply_to_address_is_added_when_set():
+    post = FakePost()
+    send_all("card_requested", ["a@x.org"], MAIL, post=post, env={**SEND, "EMAIL_REPLY_TO": "help@x.org"})
+    assert post.calls[0][2]["reply_to"] == "help@x.org"
