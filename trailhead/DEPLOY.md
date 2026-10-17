@@ -19,6 +19,9 @@ Do the one-time setup for each, then deploy with `scripts/deploy.sh`.
    `firebase login` if you aren't signed in.
 7. **Claude writing help:** see the Claude section below. Every project needs the `ANTHROPIC_API_KEY` secret set
    before functions deploy.
+8. **Card payment secrets:** every project needs `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` set before
+   functions deploy, even while payments are off. Store a stand-in such as `unset` until Stripe is set up (see
+   Card payments below).
 
 ## Deploy
 
@@ -155,3 +158,34 @@ after 7 days is detached and the Website page tells the leader. Removing the dom
   `site_shell` invocation per page view. Nothing is charged per domain.
 - If the limits ever bind, put a CDN or proxy in front instead (Cloudflare for SaaS custom hostnames, or a Cloud Load
   Balancer with Certificate Manager). `endpoints/hosting_client.py` is the only file that talks to the provider.
+
+## Card payments (Stripe Connect)
+
+Off by default (`PAYMENTS_MODE=off` in `functions/.env.<project-id>`): every payment screen is hidden and every
+payment call refuses. Each troop, or its chartered organization, owns its own Stripe account and money; Forthright
+is the Connect platform, never holds funds and takes no fee.
+
+1. **Platform account.** Create a Stripe account for Forthright, then turn on Connect (Dashboard, Connect, Get
+   started). Choose **Standard** accounts. Fill in the platform profile and branding Stripe shows troops during
+   onboarding. Do all of this in test mode first.
+2. **Webhook endpoint.** Dashboard, Developers, Webhooks, Add endpoint, choose **Events on connected accounts**:
+   - URL: `https://us-central1-<project-id>.cloudfunctions.net/stripe_webhook`
+   - Events: `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
+     `checkout.session.async_payment_failed`, `checkout.session.expired`, `charge.refunded`,
+     `charge.dispute.created`, `charge.dispute.updated`, `charge.dispute.closed`, `account.updated`,
+     `account.application.deauthorized`.
+   Copy its signing secret (`whsec_...`).
+3. **Secrets** (copy each value, then run; nothing is echoed or saved in the shell history):
+   ```bash
+   pbpaste | firebase functions:secrets:set STRIPE_SECRET_KEY --data-file - --project <project-id>
+   pbpaste | firebase functions:secrets:set STRIPE_WEBHOOK_SECRET --data-file - --project <project-id>
+   ```
+   Use the test key (`sk_test_...`, or a restricted `rk_test_...` key) with `PAYMENTS_MODE=test` and the live key
+   with `PAYMENTS_MODE=live`. A key for the other mode is refused, so test setup can never take real money. Test and
+   live have separate webhook endpoints and secrets.
+4. **Turn it on:** set `PAYMENTS_MODE=test` (staging) or `live` (production) in `functions/.env.<project-id>`, and
+   deploy the functions. The treasurer then uses **Connect Stripe** on Account settings.
+
+Webhook answers: 400 means a bad signature, 500 asks Stripe to retry (an error, or a refund that arrived before its
+payment), 200 everything else. A session whose account, amount or mode doesn't match its record is never credited;
+it is marked "Needs the treasurer". Card payment records follow the ledger's 7-year retention.

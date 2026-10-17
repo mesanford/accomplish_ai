@@ -6,6 +6,7 @@ import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { accountName, type AccountDoc, GENERAL_FUND, isFormer } from '../lib/ledger';
 import { balancesCsv, ledgerCsv } from '../lib/moneyCsv';
 import { useAccounts, useLedger, useMoneyAccess, useRosterScouts } from '../lib/moneyHooks';
+import { usePayments } from '../lib/paymentsHooks';
 import { downloadCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
 
@@ -17,6 +18,7 @@ export function Accounts() {
   const ledger = useLedger(null);
   const scouts = useRosterScouts();
   const [search, setSearch] = useState('');
+  const payments = usePayments();
 
   if (!canSeeMoney) {
     return <Empty>Only the treasurer, the Scoutmaster and the advancement chair see the troop's accounts.</Empty>;
@@ -37,6 +39,11 @@ export function Accounts() {
   return (
     <>
       <PageHeader eyebrow="Scout accounts" title="Accounts">
+        {payments.on && payments.connected ? (
+          <Link className="btn quiet small" to={`${base}/payments`}>
+            Card payments
+          </Link>
+        ) : null}
         {isTreasurer ? (
           <>
             <Link className="btn small" to={`${base}/charge`}>

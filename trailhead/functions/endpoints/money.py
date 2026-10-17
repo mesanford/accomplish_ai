@@ -71,11 +71,19 @@ def clean_ids(value) -> list[str]:
     return list(dict.fromkeys(v for v in (value or []) if isinstance(v, str) and v))
 
 
-def post(troop_id: str, account_ids: list[str], build: Build, created_by: str | None, day: date | None = None) -> list:
+def post(
+    troop_id: str,
+    account_ids: list[str],
+    build: Build,
+    created_by: str | None,
+    day: date | None = None,
+    after: Callable[[object, list], None] | None = None,
+) -> list:
     """Run `build(tx, settings, entries by account)` in a transaction and append what it returns.
 
     `build` may read (it runs before any write) and returns entries without dates or authors. Returns
     [(entry id, entry)] in order. Accounts not in `account_ids` that a built entry names are read too.
+    `after(tx, written)` may add its own writes to the same transaction (card payments mark their record paid).
     """
     t = troop(troop_id)
     author = name_of(t, created_by)
@@ -104,6 +112,8 @@ def post(troop_id: str, account_ids: list[str], build: Build, created_by: str | 
             state = compute_account(entries[account_id])
             doc = account_doc(account_id, state, len(entries[account_id]))
             tx.set(t.collection("accounts").document(account_id), {**doc, "updatedAt": firestore.SERVER_TIMESTAMP})
+        if after:
+            after(tx, written)
         return written
 
     return run(db().transaction())
