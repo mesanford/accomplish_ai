@@ -19,7 +19,9 @@ from .paths import feasibility_doc
 
 log = logging.getLogger(__name__)
 
-DAILY_DRAFT_LIMIT = 20
+DAILY_DRAFT_LIMIT = 5
+# A troop-wide ceiling keeps the AI bill bounded: about $0.04 a draft, so at most about $4 a troop a month.
+TROOP_MONTHLY_DRAFT_LIMIT = 100
 ModelFn = Callable[[str], dict]
 
 
@@ -34,6 +36,11 @@ def validate_request(text: object) -> str:
 
 def usage_doc_id(uid: str, day: date) -> str:
     return f"{uid}_{day.isoformat()}"
+
+
+def troop_month_doc_id(day: date) -> str:
+    """The troop's monthly draft counter. The id has no full date, so the 30-day usage cleanup leaves it alone."""
+    return f"troop_month_{day.strftime('%Y-%m')}"
 
 
 def within_daily_limit(count_today: int, limit: int = DAILY_DRAFT_LIMIT) -> bool:

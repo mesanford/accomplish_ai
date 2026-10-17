@@ -50,7 +50,7 @@ development needs no API key (`scripts/test.sh` gives the emulator a stand-in ke
 4. To keep a project on the practice drafts, set `TRAILHEAD_FAKE_LLM=1` in its `functions/.env.<project-id>`. The
    secret must still exist, so store any stand-in value. Staging does this.
 
-Each person can make 20 drafts a day, so cost stays small. Usage counts are kept in `troops/{t}/usage`.
+Each person can make 5 drafts a day and each troop 100 a month, which caps Claude at about $4 a troop a month. Usage counts are kept in `troops/{t}/usage`.
 
 ## Data retention
 

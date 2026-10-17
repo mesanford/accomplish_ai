@@ -32,7 +32,7 @@ export function Hero() {
                 Sign in
               </Link>
             </div>
-            <p className="l-small">Forthright is in a pilot with a few troops. There is no charge during the pilot.</p>
+            <p className="l-small">Forthright is in a pilot with a few troops. It is free during the pilot, then $20 a month or $199 a year per troop.</p>
           </div>
           <TrailMap />
         </div>

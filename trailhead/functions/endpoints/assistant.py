@@ -11,7 +11,16 @@ from firebase_functions import https_fn
 
 from endpoints.advancement import _scout_record
 from fb import db, fail, require_access, troop
-from handlers.assistant import ModelFn, draft_plan, usage_doc_id, validate_request, within_daily_limit
+from handlers.assistant import (
+    DAILY_DRAFT_LIMIT,
+    TROOP_MONTHLY_DRAFT_LIMIT,
+    ModelFn,
+    draft_plan,
+    troop_month_doc_id,
+    usage_doc_id,
+    validate_request,
+    within_daily_limit,
+)
 from handlers.claude_model import DEFAULT_MODEL, claude_model, real_client
 from handlers.fake_planner import fake_plan
 from handlers.site_about import scrub_names
@@ -32,22 +41,36 @@ def _claude() -> ModelFn:
 
 
 def _count_draft(uid: str, troop_id: str, today: date) -> None:
-    """Count one draft against today's limit. Server-only document: troops/{t}/usage/{uid}_{date}."""
-    ref = troop(troop_id).collection("usage").document(usage_doc_id(uid, today))
+    """Count one draft against the person's daily limit and the troop's monthly limit, in one transaction.
+
+    Server-only documents: troops/{t}/usage/{uid}_{date} and troops/{t}/usage/troop_month_{YYYY-MM}.
+    """
+    usage = troop(troop_id).collection("usage")
+    mine, month = usage.document(usage_doc_id(uid, today)), usage.document(troop_month_doc_id(today))
 
     @firestore.transactional
-    def bump(tx) -> bool:
-        snap = ref.get(transaction=tx)
-        count = (snap.to_dict() or {}).get("count", 0) if snap.exists else 0
+    def bump(tx) -> str | None:
+        mine_snap, month_snap = mine.get(transaction=tx), month.get(transaction=tx)
+        count = (mine_snap.to_dict() or {}).get("count", 0) if mine_snap.exists else 0
+        troop_count = (month_snap.to_dict() or {}).get("count", 0) if month_snap.exists else 0
         if not within_daily_limit(count):
-            return False
+            return f"You've used all {DAILY_DRAFT_LIMIT} of today's plan drafts. Try again tomorrow."
+        if not within_daily_limit(troop_count, TROOP_MONTHLY_DRAFT_LIMIT):
+            return (
+                f"Your troop has used all {TROOP_MONTHLY_DRAFT_LIMIT} plan drafts for this month. "
+                "Drafts are available again on the 1st."
+            )
         tx.set(
-            ref, {"uid": uid, "date": today.isoformat(), "count": count + 1, "updatedAt": firestore.SERVER_TIMESTAMP}
+            mine, {"uid": uid, "date": today.isoformat(), "count": count + 1, "updatedAt": firestore.SERVER_TIMESTAMP}
         )
-        return True
+        tx.set(
+            month, {"month": today.strftime("%Y-%m"), "count": troop_count + 1, "updatedAt": firestore.SERVER_TIMESTAMP}
+        )
+        return None
 
-    if not bump(db().transaction()):
-        raise fail(Code.RESOURCE_EXHAUSTED, "You've used all of today's plan drafts. Try again tomorrow.")
+    refused = bump(db().transaction())
+    if refused:
+        raise fail(Code.RESOURCE_EXHAUSTED, refused)
 
 
 def _parse_date(value) -> date | None:

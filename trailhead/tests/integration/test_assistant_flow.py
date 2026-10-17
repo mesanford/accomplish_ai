@@ -6,7 +6,7 @@ from datetime import UTC, datetime, timedelta
 import pytest
 import requests
 
-from handlers.assistant import DAILY_DRAFT_LIMIT
+from handlers.assistant import DAILY_DRAFT_LIMIT, TROOP_MONTHLY_DRAFT_LIMIT, troop_month_doc_id
 from tests.rules.emulator import PROJECT, Client, list_docs, reset, token
 
 FUNCTIONS = os.environ.get("FUNCTIONS_EMULATOR_URL", "http://127.0.0.1:5001")
@@ -71,5 +71,13 @@ def test_daily_limit_is_enforced_per_user():
         assert ask("leader").status_code == 200
     assert ask("leader").status_code == 429
     assert ask("parent").status_code == 200
-    usage = list_docs(f"{T}/usage")
+    usage = [u for u in list_docs(f"{T}/usage") if "uid" in u]
     assert sorted(u["count"] for u in usage) == [1, DAILY_DRAFT_LIMIT]
+
+
+def test_monthly_limit_is_enforced_per_troop():
+    month = troop_month_doc_id(datetime.now(UTC).date())
+    owner.set(f"{T}/usage/{month}", {"month": month[-7:], "count": TROOP_MONTHLY_DRAFT_LIMIT})
+    refused = ask("parent")
+    assert refused.status_code == 429
+    assert "troop has used all" in refused.text

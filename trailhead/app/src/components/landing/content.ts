@@ -62,7 +62,10 @@ export const FAQ: { q: string; a: string }[] = [
     q: "Who can see my Scout's information?",
     a: "Leaders see their troop's Scouts. You see your own Scout. A Scout 13 or older sees their own records. Counselors see only the badges assigned to them. The privacy policy lists exactly who sees what.",
   },
-  { q: 'What does it cost?', a: 'There is no charge during the pilot.' },
+  {
+    q: 'What does it cost?',
+    a: 'Nothing during the pilot. After that, Forthright costs $20 a month or $199 a year for the whole troop.',
+  },
   {
     q: 'Is it made by Scouting America?',
     a: 'No. Forthright is an independent product and is not affiliated with, sponsored or endorsed by Scouting America.',
