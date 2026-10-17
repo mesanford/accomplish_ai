@@ -8,15 +8,17 @@ import '../landing.css';
 
 const TITLE = 'Forthright: advancement planning for Scouts BSA troops';
 
-/** The public page at `/` for signed-out visitors. */
-export function Landing() {
-  const { hash } = useLocation();
-  // Arriving from another page at "/#pilot" lands on the form, since the router doesn't scroll to anchors itself.
+/** The public page: at `/` for signed-out visitors, and at `/pilot` for everyone, opened at the pilot form. */
+export function Landing({ section }: { section?: string }) {
+  const { hash, key } = useLocation();
+  const target = section ?? hash.slice(1);
+  // The router doesn't scroll to anchors itself. `key` changes on every click, so pressing "Join the pilot" again
+  // after scrolling away still goes back to the form.
   useEffect(() => {
-    if (hash) {
-      document.getElementById(hash.slice(1))?.scrollIntoView();
+    if (target) {
+      document.getElementById(target)?.scrollIntoView();
     }
-  }, [hash]);
+  }, [target, key]);
   useEffect(() => {
     const before = document.title;
     document.title = TITLE;

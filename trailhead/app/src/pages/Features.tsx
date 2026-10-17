@@ -86,7 +86,7 @@ export function Features() {
               troop.
             </p>
             <div className="l-actions">
-              <Link className="l-btn" to="/#pilot">
+              <Link className="l-btn" to="/pilot">
                 Ask to join the pilot
               </Link>
               <Link className="l-btn l-btn-outline" to="/signin">

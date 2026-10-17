@@ -94,7 +94,7 @@ test('the features page lists every category, jumps to one, and leads to the pil
   );
 
   await page.getByRole('link', { name: 'Ask to join the pilot' }).click();
-  await expect(page).toHaveURL(/\/#pilot$/);
+  await expect(page).toHaveURL(/\/pilot$/);
   await expect(page.getByRole('heading', { name: 'How the pilot works' })).toBeInViewport();
 });
 
@@ -120,12 +120,23 @@ test('"Join the pilot" in the top bar goes to the pilot form from any public pag
   await expect(bar.getByRole('link', { name: 'Join the pilot' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= 375)).toBe(true);
   await bar.getByRole('link', { name: 'Join the pilot' }).click();
-  await expect(page).toHaveURL(/\/#pilot$/);
+  await expect(page).toHaveURL(/\/pilot$/);
   await expect(page.getByRole('heading', { name: 'How the pilot works' })).toBeInViewport();
 
-  // Already on the home page, it scrolls down to the form.
+  // Pressing it again after scrolling back up returns to the form.
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'How the pilot works' })).not.toBeInViewport();
   await bar.getByRole('link', { name: 'Join the pilot' }).click();
+  await expect(page.getByRole('heading', { name: 'How the pilot works' })).toBeInViewport();
+});
+
+test('a signed-in visitor can reach the pilot form from the features page', async ({ browser }) => {
+  const page = await signedIn(browser, 'pilot-curious@example.com');
+  await page.goto('/features');
+  await page
+    .getByRole('navigation', { name: 'Forthright' })
+    .getByRole('link', { name: 'Join the pilot' })
+    .click();
+  await expect(page).toHaveURL(/\/pilot$/);
   await expect(page.getByRole('heading', { name: 'How the pilot works' })).toBeInViewport();
 });

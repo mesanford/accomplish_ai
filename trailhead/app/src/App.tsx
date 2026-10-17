@@ -92,6 +92,8 @@ const router = createBrowserRouter([
   // The marketing page is full width, so "/" sits outside the app layout too and wraps Home in it when signed in.
   { path: '/', element: <Root />, errorElement: <RouteError /> },
   { path: '/features', element: <Features />, errorElement: <RouteError /> },
+  // The pilot form, for signed-in visitors too ("/" shows them their troops instead of the marketing page).
+  { path: '/pilot', element: <Landing section="pilot" />, errorElement: <RouteError /> },
   {
     element: <AppLayout />,
     errorElement: <RouteError />,
