@@ -13,6 +13,7 @@ from endpoints.advancement import (
     on_path_written,
     on_signoff_created,
 )
+from endpoints.announcement_catchup import on_access_written_announcements
 from endpoints.announcements import delete_announcement, edit_announcement, post_announcement
 from endpoints.assistant import draft_path
 from endpoints.campaigns import post_sales, save_account_settings, save_campaign
@@ -80,6 +81,7 @@ __all__ = [
     "link_self_as_parent",
     "mark_scout_left",
     "move_to_custom_version",
+    "on_access_written_announcements",
     "on_attendance_written",
     "on_blue_card_notify",
     "on_blue_card_written",

@@ -18,6 +18,7 @@ KINDS = ("announcement", "newsletter")
 MAX_EMAILED_PER_DAY = 5  # emailed announcements per troop per day
 MAX_EMAIL_RECIPIENTS = 200  # people emailed by one announcement
 RETENTION_MONTHS = 24
+CATCH_UP_MONTHS = 12  # someone who joins later can read what their audience got in this many months before
 MAX_TITLE, MAX_BODY, MAX_SECTIONS, MAX_HEADING, MAX_SECTION_TEXT = 120, 5000, 6, 80, 2000
 MAX_EVENTS, MAX_SCOUTS = 10, 60
 YPT_REQUIRED = (

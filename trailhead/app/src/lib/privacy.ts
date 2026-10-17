@@ -74,7 +74,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       'Messages are seen only by the people in the conversation. "Join us" requests are seen only by that troop\'s leaders.',
       "Event sign-ups are seen by leaders, the person who signed up, and a Scout's linked parents. A health or emergency note is seen only by leaders; not even the family can read it back.",
       "Scout accounts: the treasurer, the Scoutmaster and the advancement chair see every Scout's account. Parents see only their own Scouts' accounts, and a Scout 13 or older sees their own. Counselors and other leaders see no financial information.",
-      'Announcements are seen only by the audience the leader chose, the person who posted them and the Scoutmaster. Leaders and committee members can post them; one that reaches Scouts can only be posted by an adult with current Youth Protection training.',
+      'Announcements are seen only by the audience the leader chose, the person who posted them and the Scoutmaster. Someone who joins later, or takes on a new role, can also see the past 12 months of announcements sent to that audience. Leaders and committee members can post them; one that reaches Scouts can only be posted by an adult with current Youth Protection training.',
       'Documents are seen by the people a leader chooses: leaders only, all troop members, or the public. Medical forms can never be made public.',
       'Calendar feeds use a private web address for each member. They list event names, dates, places and links, and never include names or other information about Scouts. You can replace your address at any time, and it stops working when you leave the troop.',
       'These limits are enforced on our servers, not only in the app.',

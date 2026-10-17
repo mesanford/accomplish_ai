@@ -224,3 +224,27 @@ def test_the_nightly_job_deletes_announcements_24_months_after_posting():
     assert run_retention(date(2026, 10, 14), True, Budget())["announcements"] == 2
     assert read(f"{T}/announcements/old") is None and read(f"{T}/announcements/edited") is None
     assert read(f"{T}/announcements/new") is not None
+
+
+def test_people_who_join_later_can_read_the_last_twelve_months_for_their_audience():
+    from tests.integration.test_functions import wait_for
+
+    recent = posted(post(audience={"type": "parents"}))["announcementId"]
+    leaders_only = posted(post(audience={"type": "leaders"}))["announcementId"]
+    old = posted(post(audience={"type": "parents"}))["announcementId"]
+    owner.set(
+        f"{T}/announcements/{old}",
+        {**read(f"{T}/announcements/{old}"), "createdAt": datetime.now(UTC) - timedelta(days=400)},
+    )
+
+    owner.set(
+        f"{T}/members/m-newbie", {"kind": "adult", "displayName": "Newbie Person", "uid": "newbie", "roles": ["parent"]}
+    )
+    owner.set(f"{T}/access/newbie", {"memberId": "m-newbie", "roles": ["parent"], "scoutIds": ["s2"]})
+    wait_for(lambda: "newbie" in read(f"{T}/announcements/{recent}")["readerUids"])
+    assert "newbie" not in read(f"{T}/announcements/{leaders_only}")["readerUids"]  # not their audience
+    assert "newbie" not in read(f"{T}/announcements/{old}")["readerUids"]  # older than 12 months
+
+    # Gaining a role later opens that role's recent posts too.
+    owner.set(f"{T}/access/newbie", {"memberId": "m-newbie", "roles": ["parent", "leader"], "scoutIds": ["s2"]})
+    wait_for(lambda: "newbie" in read(f"{T}/announcements/{leaders_only}")["readerUids"])
