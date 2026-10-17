@@ -17,6 +17,7 @@ import { HelpPage } from './pages/Help';
 import { Home } from './pages/Home';
 import { Join } from './pages/Join';
 import { Landing } from './pages/Landing';
+import { Announcements } from './pages/Announcements';
 import { Messages } from './pages/Messages';
 import { NotFound, RouteError } from './pages/NotFound';
 import { PathEditor } from './pages/PathEditor';
@@ -108,6 +109,7 @@ const router = createBrowserRouter([
       { path: 'events', element: <Events /> },
       { path: 'events/:eventId', element: <AttendancePage /> },
       { path: 'recruiting', element: <Recruiting /> },
+      { path: 'announcements', element: <Announcements /> },
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
       { path: 'website', element: <Website /> },

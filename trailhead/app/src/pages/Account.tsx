@@ -2,7 +2,8 @@ import { doc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Notice, PageHeader } from '../components/ui';
-import { deleteAccount, errorMessage, setEmailNotifications } from '../lib/api';
+import { announcementEmailsOn, ANNOUNCEMENT_EMAIL_LABEL } from '../lib/announcements';
+import { deleteAccount, errorMessage, setEmailAnnouncements, setEmailNotifications } from '../lib/api';
 import { signOutUser, useAuth } from '../lib/auth';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
@@ -19,13 +20,19 @@ export function Account() {
   const [saving, setSaving] = useState(false);
   const [mailError, setMailError] = useState('');
   const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user]);
-  const emailOn = emailNotificationsOn(useDoc<{ emailNotifications?: boolean }>(userRef).data);
+  const prefs = useDoc<{ emailNotifications?: boolean; emailAnnouncements?: boolean }>(userRef).data;
+  const emailOn = emailNotificationsOn(prefs);
+  const announcementsOn = announcementEmailsOn(prefs);
 
-  async function changeEmail(enabled: boolean) {
+  async function changeAnnouncements(enabled: boolean) {
+    await changeEmail(enabled, setEmailAnnouncements);
+  }
+
+  async function changeEmail(enabled: boolean, save: (on: boolean) => Promise<unknown> = setEmailNotifications) {
     setSaving(true);
     setMailError('');
     try {
-      await setEmailNotifications(enabled);
+      await save(enabled);
     } catch (err) {
       setMailError(errorMessage(err));
     } finally {
@@ -57,6 +64,16 @@ export function Account() {
           {EMAIL_NOTIFICATIONS_LABEL}
         </label>
         <p className="small muted">Emails that confirm a consent you gave are always sent, because they are your record.</p>
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={announcementsOn}
+            disabled={saving}
+            onChange={(e) => changeAnnouncements(e.target.checked)}
+          />
+          {ANNOUNCEMENT_EMAIL_LABEL}
+        </label>
+        <p className="small muted">Leaders choose when to email an announcement. Scouts are never emailed.</p>
         <Notice kind="error">{mailError}</Notice>
       </section>
       <section className="card stack">

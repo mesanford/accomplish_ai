@@ -252,3 +252,35 @@ export const markScoutLeft = (form: MarkLeftForm) =>
 
 export const deleteLead = (troopId: string, leadId: string) =>
   call<{ troopId: string; leadId: string }, { deleted: boolean }>('delete_lead', { troopId, leadId });
+
+export const setEmailAnnouncements = (enabled: boolean) =>
+  call<{ enabled: boolean }, { enabled: boolean }>('set_email_announcements', { enabled });
+
+export interface AnnouncementContent {
+  kind: 'announcement' | 'newsletter';
+  title: string;
+  body: string;
+  sections?: { heading: string; text: string }[];
+  eventIds?: string[];
+  pinned: boolean;
+}
+
+export interface PostAnnouncementForm extends AnnouncementContent {
+  troopId: string;
+  audience: { type: string; scoutIds?: string[]; eventId?: string };
+  /** Also email the adults in the audience. Never sent again when the post is edited. */
+  email: boolean;
+}
+
+export const postAnnouncement = (form: PostAnnouncementForm) =>
+  call<PostAnnouncementForm, { announcementId: string; emailed: number; emailSkipped: number }>('post_announcement', form);
+
+export const editAnnouncement = (troopId: string, announcementId: string, content: AnnouncementContent) =>
+  call<AnnouncementContent & { troopId: string; announcementId: string }, { announcementId: string }>('edit_announcement', {
+    troopId,
+    announcementId,
+    ...content,
+  });
+
+export const deleteAnnouncement = (troopId: string, announcementId: string) =>
+  call<{ troopId: string; announcementId: string }, { deleted: boolean }>('delete_announcement', { troopId, announcementId });

@@ -250,6 +250,22 @@ service cloud.firestore {
           allow write: if false;
         }
       }
+      // Announcements and newsletters are one-way broadcasts, written only by the post_announcement, edit_announcement
+      // and delete_announcement functions. readerUids is the audience, the poster and the Scoutmasters, fixed when
+      // it was posted; clients list with where('readerUids', 'array-contains', uid).
+      match /announcements/{a} {
+        allow read: if signedIn() && request.auth.uid in resource.data.readerUids;
+        allow write: if false;
+      }
+      // When each person last opened Announcements, for the unread marker. Only they read or write it, and only
+      // with the server's time.
+      match /announcementReads/{uid} {
+        allow read: if isMember(t) && request.auth.uid == uid;
+        allow create, update: if isMember(t) && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['lastSeenAt'])
+          && request.resource.data.lastSeenAt == request.time;
+        allow delete: if false;
+      }
       // The troop website draft. Leaders edit it here; only the publish_site function makes a public copy.
       match /site/draft {
         allow read, delete: if isLeader(t);

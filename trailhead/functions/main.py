@@ -4,7 +4,7 @@ Firebase deploys the functions found in this module, so each one is re-exported 
 Logic lives in `handlers` and `trailhead_core`; Firestore wiring lives in `endpoints`.
 """
 
-from endpoints.account import delete_account, set_email_notifications
+from endpoints.account import delete_account, set_email_announcements, set_email_notifications
 from endpoints.activity import mark_scout_left, record_activity
 from endpoints.advancement import (
     check_path_preview,
@@ -13,6 +13,7 @@ from endpoints.advancement import (
     on_path_written,
     on_signoff_created,
 )
+from endpoints.announcements import delete_announcement, edit_announcement, post_announcement
 from endpoints.assistant import draft_path
 from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
@@ -45,9 +46,11 @@ __all__ = [
     "create_scoutbook_report",
     "create_troop",
     "delete_account",
+    "delete_announcement",
     "delete_lead",
     "draft_path",
     "draft_site_about",
+    "edit_announcement",
     "invite_notice",
     "link_self_as_parent",
     "mark_scout_left",
@@ -58,6 +61,7 @@ __all__ = [
     "on_event_written_site",
     "on_path_written",
     "on_signoff_created",
+    "post_announcement",
     "publish_site",
     "record_activity",
     "record_paper_blue_card",
@@ -67,6 +71,7 @@ __all__ = [
     "save_custom_award",
     "send_message",
     "set_member_roles",
+    "set_email_announcements",
     "set_email_notifications",
     "set_media_consent",
     "set_scoutbook_entered",

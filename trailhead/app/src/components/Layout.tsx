@@ -23,6 +23,7 @@ function TroopNav() {
     [`${base}/templates`, 'Path templates', isLeader],
     [`${base}/awards`, 'Troop awards', isLeader],
     [`${base}/recruiting`, newLeads > 0 ? `Recruiting (${newLeads})` : 'Recruiting', isLeader],
+    [`${base}/announcements`, 'Announcements', true],
     [`${base}/messages`, 'Messages', true],
     [`${base}/website`, 'Website', isLeader],
     [`${base}/help`, 'Help', true],
