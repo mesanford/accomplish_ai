@@ -32,6 +32,7 @@ from endpoints.parent_consent import answer_pending_consent, link_self_as_parent
 from endpoints.permission import approve_permission
 from endpoints.pilot import request_pilot
 from endpoints.prior import record_prior_advancement
+from endpoints.push import register_push_device, remove_push_device
 from endpoints.recruiting import submit_interest
 from endpoints.removal import remove_scout
 from endpoints.retention import apply_retention
@@ -93,6 +94,8 @@ __all__ = [
     "record_activity",
     "record_paper_blue_card",
     "record_prior_advancement",
+    "register_push_device",
+    "remove_push_device",
     "remove_scout",
     "request_pilot",
     "reset_calendar_feed",

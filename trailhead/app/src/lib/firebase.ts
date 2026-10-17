@@ -21,6 +21,8 @@ const config = usingEmulators
       projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
       appId: import.meta.env.VITE_FIREBASE_APP_ID,
       storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+      // Push notifications need the sender id (Project settings > Cloud Messaging); see lib/push.ts.
+      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
     };
 
 export const app = initializeApp(config);

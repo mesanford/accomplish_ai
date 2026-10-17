@@ -15,9 +15,10 @@ from firebase_functions import options, scheduler_fn
 from endpoints.mailer import app_url
 from endpoints.notify import deliver
 from endpoints.signup_core import refs
-from endpoints.signup_mail import by_login
+from endpoints.signup_mail import by_login, push_to_scouts
 from fb import db, troop
 from handlers import event_emails as mail
+from handlers import push as push_text
 from handlers import signups as rules
 from handlers.signups import GOING, WAITING, status_of
 
@@ -51,8 +52,10 @@ def _remind(troop_id: str, event_id: str, event: dict) -> int:
         names = families.get(uid, {}).get("names", [])
         pending = owed.get(uid, {}).get("names", [])
         email = mail.event_reminder(names, pending, event["title"], start, place, troop_id, event_id, url)
-        deliver("event_reminder", [uid], email)
+        note = push_text.event_reminder(event["title"], troop_id, event_id)
+        deliver("event_reminder", [uid], email, note)
         sent += 1
+    push_to_scouts(t, "event_reminder", going, lambda _: push_text.event_reminder(event["title"], troop_id, event_id))
     return sent
 
 

@@ -54,7 +54,11 @@ export const getInviteNotice = (troopId: string, code: string) =>
 export const setEmailNotifications = (enabled: boolean) =>
   call<{ enabled: boolean }, { enabled: boolean }>('set_email_notifications', { enabled });
 
-export const withdrawParentConsent = (troopId: string, scoutId: string) =>
+/** Save or remove this device's push token. Only these functions write device records. */
+export const registerPushDevice = (token: string) => call<{ token: string }, { deviceId: string }>('register_push_device', { token });
+export const removePushDevice = (token: string) => call<{ token: string }, { removed: boolean }>('remove_push_device', { token });
+
+export const withdrawParentConsent =(troopId: string, scoutId: string) =>
   call<{ troopId: string; scoutId: string }, { ok: boolean }>('withdraw_parent_consent', { troopId, scoutId });
 
 export interface ConsentAnswer {

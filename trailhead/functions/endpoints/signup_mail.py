@@ -6,8 +6,10 @@ import logging
 
 from endpoints.mailer import app_url
 from endpoints.notify import deliver
+from endpoints.push import push_all
 from fb import troop
 from handlers import event_emails as mail
+from handlers import push as push_text
 from handlers.email_recipients import parent_uids
 from handlers.email_templates import first_name
 from handlers.signups import WAITING, as_date, status_of
@@ -37,6 +39,15 @@ def by_login(t, member_ids: list[str], signups: dict[str, dict]) -> dict[str, di
     return out
 
 
+def push_to_scouts(t, template: str, member_ids: list[str], make) -> None:
+    """Push to the own logins of Scouts among these members (Scouts 13 and older have one). `make(first name)` builds
+    the text. This is only ever about the Scout's own sign-up, and Scouts are never emailed."""
+    for member_id in dict.fromkeys(member_ids):
+        member = t.collection("members").document(member_id).get().to_dict() or {}
+        if member.get("kind") == "scout" and member.get("uid"):
+            push_all(template, [member["uid"]], make(first_name(member.get("displayName"))))
+
+
 def send_promoted(troop_id: str, event_id: str, event: dict, promoted: list[str], signups: dict[str, dict]) -> None:
     if not promoted:
         return
@@ -46,7 +57,11 @@ def send_promoted(troop_id: str, event_id: str, event: dict, promoted: list[str]
             email = mail.waitlist_promoted(
                 who["names"], who["pending"], event.get("title", "the event"), troop_id, event_id, url
             )
-            deliver("event_waitlist_promoted", [uid], email)
+            note = push_text.waitlist_promoted(who["names"], event.get("title", "the event"), troop_id, event_id)
+            deliver("event_waitlist_promoted", [uid], email, note)
+        title = event.get("title", "the event")
+        own = push_text.waitlist_promoted(["you"], title, troop_id, event_id)
+        push_to_scouts(t, "event_waitlist_promoted", promoted, lambda _: own)
     except Exception:
         log.error("waitlist email failed")
 
@@ -61,6 +76,7 @@ def send_permission_needed(troop_id: str, event_id: str, event: dict, scout_ids:
             email = mail.permission_needed(
                 who["names"], event.get("title", "the event"), start, troop_id, event_id, url
             )
-            deliver("event_permission_needed", [uid], email)
+            note = push_text.permission_needed(who["names"], event.get("title", "the event"), troop_id, event_id)
+            deliver("event_permission_needed", [uid], email, note)
     except Exception:
         log.error("permission email failed")

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom';
 import { AppLayout, TroopLayout } from './components/Layout';
 import { Loading } from './components/ui';
+import { UpdateBanner } from './components/UpdateBanner';
 import { AuthProvider, useAuth } from './lib/auth';
 import { Account } from './pages/Account';
 import { AccountSettings } from './pages/AccountSettings';
@@ -139,6 +140,7 @@ export function App() {
   return (
     <AuthProvider>
       <RouterProvider router={router} />
+      <UpdateBanner />
     </AuthProvider>
   );
 }
