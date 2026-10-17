@@ -12,6 +12,7 @@ from firebase_admin import firestore
 
 from endpoints.erase import commit, delete_op
 from endpoints.leads import erase_lead
+from endpoints.ledger_retention import purge
 from endpoints.removal import erase_scout
 from handlers.retention import (
     LEAD_MONTHS,
@@ -36,6 +37,7 @@ class Budget:
     leads: int = 500
     usage: int = 2000
     troops: int = 2
+    ledger: int = 2000
     seconds: float = 420
     started: float = field(default_factory=time.monotonic)
 
@@ -137,3 +139,13 @@ def usage(t, troop_id: str, today: date, budget: Budget) -> tuple[int, int]:
     budget.usage -= len(due)
     log.info("retention rule=usage troop=%s due=%d deleted=%d", troop_id, len(due), len(due))
     return len(due), len(due)
+
+
+def ledger(t, troop_id: str, today: date, budget: Budget) -> tuple[int, int]:
+    """Scout account entries: deleted 7 years after their date, with any total still held brought forward."""
+    if budget.ledger <= 0:
+        log.info("retention rule=ledger troop=%s skipped=budget", troop_id)
+        return 0, 0
+    due, deleted = purge(t, troop_id, today, budget.ledger)
+    budget.ledger -= deleted
+    return due, deleted

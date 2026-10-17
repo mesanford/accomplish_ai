@@ -8,6 +8,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.erase import commit, delete_files, delete_folder, delete_op, update_op
+from endpoints.ledger_retention import close_scout_account
 from endpoints.site_consent import _take_down_photos as take_down_photos
 from fb import db, fail, require_leader, troop
 from handlers.removal import (
@@ -79,7 +80,8 @@ def _plan_ops(t, scout_id: str, scout_uid: str | None) -> tuple[list, list[str],
 
 
 def erase_scout(troop_id: str, scout_id: str, scout_uid: str | None) -> dict:
-    """Delete a Scout's member record and everything keyed to them in this troop. The caller has checked that
+    """Delete a Scout's member record and everything keyed to them in this troop, except account entries, which
+    stay anonymized for 7 years (`close_scout_account`). The caller has checked that
     `scout_id` is a Scout on the roster. Used by `remove_scout` and by the retention job (`endpoints/retention.py`).
 
     Order matters so a failed run can simply be repeated: files first, then dependent documents, and the
@@ -94,6 +96,8 @@ def erase_scout(troop_id: str, scout_id: str, scout_uid: str | None) -> dict:
         user_ref = db().collection("users").document(uid)
         user_ref.set({"troops": {troop_id: firestore.DELETE_FIELD}}, merge=True)
     commit(ops)
+    # Account entries are kept for 7 years under a reference number, with any balance moved to the general fund.
+    kept = close_scout_account(troop_id, scout_id, t)
     commit(
         [
             delete_op(t.collection("paths").document(scout_id)),
@@ -102,7 +106,7 @@ def erase_scout(troop_id: str, scout_id: str, scout_uid: str | None) -> dict:
             delete_op(t.collection("members").document(scout_id)),
         ]
     )
-    return {"removed": True, "documents": len(ops) + 4, "files": files, "photosTakenDown": photos}
+    return {"removed": True, "documents": len(ops) + 4, "files": files, "photosTakenDown": photos, "ledgerKept": kept}
 
 
 @https_fn.on_call(timeout_sec=300, memory=512)

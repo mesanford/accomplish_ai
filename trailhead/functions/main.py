@@ -14,8 +14,11 @@ from endpoints.advancement import (
     on_signoff_created,
 )
 from endpoints.assistant import draft_path
+from endpoints.campaigns import post_sales, save_account_settings, save_campaign
+from endpoints.charges import charge_attendees, post_charge
 from endpoints.consent import invite_notice, withdraw_parent_consent
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
+from endpoints.entries import record_payment, reverse_entry, settle_account
 from endpoints.leads import delete_lead
 from endpoints.membership import accept_invite, create_invite, create_troop
 from endpoints.messaging import send_message
@@ -35,6 +38,14 @@ from endpoints.site_about import draft_site_about
 from endpoints.site_consent import set_media_consent
 
 __all__ = [
+    "settle_account",
+    "save_campaign",
+    "save_account_settings",
+    "reverse_entry",
+    "record_payment",
+    "post_sales",
+    "post_charge",
+    "charge_attendees",
     "accept_invite",
     "add_scout",
     "answer_pending_consent",

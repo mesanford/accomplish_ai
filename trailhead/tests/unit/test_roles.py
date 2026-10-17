@@ -102,3 +102,13 @@ def test_a_parent_who_has_not_agreed_is_not_copied_or_counted_as_family():
     people = people_from_members(MEMBERS, pending)
     assert people["own"].guardian_ids == ()
     assert people_from_members(MEMBERS)["own"].guardian_ids == ("lead",)
+
+
+def test_treasurer_is_an_adult_role_that_is_not_a_leader_and_needs_no_training_date():
+    from handlers.account import LEADER_ROLES
+
+    assert parse_roles(["parent", "treasurer"]) == ["treasurer", "parent"]
+    assert "treasurer" not in LEADER_ROLES
+    assert ypt_blocker({"treasurer"}, None, "Pat", TODAY) is None
+    access = {"t": {"roles": ["treasurer"]}, "l": {"roles": ["leader"]}}
+    assert loses_all_leaders("l", ["treasurer"], access)

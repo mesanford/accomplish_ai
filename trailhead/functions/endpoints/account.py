@@ -9,6 +9,7 @@ from firebase_admin import auth, firestore
 from firebase_functions import https_fn
 
 from endpoints.erase import commit, delete_op, update_op
+from endpoints.ledger_retention import forget_author_ops
 from fb import db, fail, require_uid, troop
 from handlers.account import is_last_leader, last_leader_message, plan_contacts
 from handlers.removal import plan_threads, usage_ids
@@ -72,6 +73,7 @@ def _leave_troop(troop_id: str, uid: str, access: dict) -> int:
         last = [update_op(member_ref, {"uid": firestore.DELETE_FIELD})]
     else:
         ops += _adult_ops(t, uid, member_id)
+        ops += forget_author_ops(t, uid)  # the entries stay in the troop's books, without this person's name
         last = [delete_op(member_ref)]
     commit(ops)
     # The access record goes last: it is how a repeat run finds this troop again after a failure.

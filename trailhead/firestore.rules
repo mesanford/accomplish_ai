@@ -2,7 +2,7 @@ rules_version = '2';
 
 // Access model: troops/{t}/access/{uid} is written only by the server. It holds
 // { memberId, roles: [...], scoutIds: [...], yptExpiresAt, consentPendingScoutIds? }. Roles: leader, scoutmaster,
-// advancement, counselor, parent, scout, committee; one person can hold several. A Scoutmaster has every permission a
+// advancement, counselor, parent, scout, committee, treasurer; one person can hold several. A Scoutmaster has every permission a
 // leader has. Only the Scoutmaster, the advancement chair and a badge's assigned counselor change merit badge records. scoutIds = the Scouts this login acts for
 // (a Scout's own id, or a parent's children). consentPendingScoutIds = Scouts a leader linked this parent to, which
 // the parent has not yet agreed to the consent notice for.
@@ -30,6 +30,10 @@ service cloud.firestore {
         && !(scoutId in access(t).get('consentPendingScoutIds', []));
     }
     function canSeeScout(t, scoutId) { return isLeader(t) || actsFor(t, scoutId); }
+    // Scout accounts. The treasurer, Scoutmaster and advancement chair see every account; a family sees only its
+    // own Scouts' (a Scout 13 or older acts for themselves). Counselors and other leaders see none.
+    function canSeeMoney(t) { return hasRole(t, 'treasurer') || hasRole(t, 'scoutmaster') || hasRole(t, 'advancement'); }
+    function canSeeAccount(t, scoutId) { return canSeeMoney(t) || actsFor(t, scoutId); }
     function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
     function card(t, cardId) { return get(/databases/$(database)/documents/troops/$(t)/blueCards/$(cardId)).data; }
     function isCounselorFor(t, cardId) {
@@ -292,6 +296,21 @@ service cloud.firestore {
       }
       match /exports/{x} {
         allow read: if isLeader(t);
+        allow write: if false;
+      }
+      // Scout accounts: an append-only ledger in cents, each Scout's cached totals, and fundraiser campaigns.
+      // Only server functions write them, after checking the treasurer role. The troop's account rules live on the
+      // troop document under `accounts`, which clients can't write either.
+      match /ledger/{e} {
+        allow read: if canSeeAccount(t, resource.data.scoutId);
+        allow write: if false;
+      }
+      match /accounts/{s} {
+        allow read: if canSeeAccount(t, s);
+        allow write: if false;
+      }
+      match /campaigns/{c} {
+        allow read: if canSeeMoney(t);
         allow write: if false;
       }
     }
