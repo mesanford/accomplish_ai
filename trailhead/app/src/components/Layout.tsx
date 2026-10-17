@@ -17,8 +17,10 @@ function TroopNav() {
   const links: [string, string, boolean][] = [
     [base, 'Home', true],
     [`${base}/roster`, 'Roster', isLeader],
+    [`${base}/patrols`, 'Patrols', isLeader],
     [`${base}/blue-cards`, 'Blue cards', isLeader],
     [`${base}/scoutbook`, 'Scoutbook', isLeader],
+    [`${base}/activity-report`, 'Activity report', isLeader],
     [`${base}/counseling`, 'Counseling', has('counselor') || canManageBadges],
     [`${base}/events`, 'Events', true],
     [`${base}/badges`, 'Badges', true],

@@ -1,5 +1,6 @@
 import { Field } from './ui';
 import { AUDIENCE_CHOICES, type AudienceSpec, type AudienceType } from '../lib/announcements';
+import { usePatrols } from '../lib/patrolHooks';
 import type { Member, TroopEvent } from '../lib/types';
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 /** Who an announcement is for. Parents of chosen Scouts shows a Scout list; an event audience shows an event list. */
 export function AudiencePicker({ value, onChange, scouts, events }: Props) {
   const chosen = value.scoutIds ?? [];
+  const patrols = usePatrols().data;
   return (
     <>
       <Field label="Who is this for?" htmlFor="ann-audience">
@@ -46,6 +48,22 @@ export function AudiencePicker({ value, onChange, scouts, events }: Props) {
           </div>
         </fieldset>
       ) : null}
+      {value.type === 'patrolParents' ? (
+        <Field
+          label="Patrol"
+          htmlFor="ann-patrol"
+          hint={patrols.length === 0 ? 'No patrols yet. A leader can add them on the Patrols page.' : 'Reaches the parents of the Scouts in this patrol.'}
+        >
+          <select id="ann-patrol" value={value.patrolId ?? ''} onChange={(e) => onChange({ ...value, patrolId: e.target.value })}>
+            <option value="">Choose a patrol</option>
+            {patrols.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+      ) : null}
       {value.type === 'event' ? (
         <Field
           label="Event"
@@ -70,6 +88,9 @@ export function AudiencePicker({ value, onChange, scouts, events }: Props) {
 export function audienceReady(a: AudienceSpec): boolean {
   if (a.type === 'parentsOf') {
     return (a.scoutIds ?? []).length > 0;
+  }
+  if (a.type === 'patrolParents') {
+    return Boolean(a.patrolId);
   }
   return a.type === 'event' ? Boolean(a.eventId) : true;
 }

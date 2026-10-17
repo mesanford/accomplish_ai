@@ -8,6 +8,7 @@ from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 
 from fb import db, fail, require_access, troop
+from handlers.activity_log import event_log_id
 from handlers.attendance import attendance_effects, mark_ready
 from handlers.paths import feasibility_doc, needs_recheck, path_from_doc, scout_from_docs
 from handlers.signoffs import apply_signoff
@@ -78,15 +79,22 @@ def on_blue_card_written(event: Written) -> None:
 @firestore_fn.on_document_written(document="troops/{troopId}/events/{eventId}/attendance/{memberId}")
 def on_attendance_written(event: Written) -> None:
     _, after = _before_after(event)
-    if after is None:
-        return
     t = troop(event.params["troopId"])
     member_id, event_id = event.params["memberId"], event.params["eventId"]
+    log_ref = t.collection("logs").document(event_log_id(event_id, member_id))
+    if after is None:
+        log_ref.delete()  # the attendance entry was removed, so the credit goes too
+        return
     event_doc = t.collection("events").document(event_id).get().to_dict() or {}
     member_doc = t.collection("members").document(member_id).get().to_dict() or {}
     effects = attendance_effects(event_id, event_doc, {**member_doc, "id": member_id}, bool(after.get("present")))
-    if effects.log:
-        t.collection("logs").document(f"{event_id}_{member_id}").set(effects.log)
+    # Idempotent: the credit has a fixed id, is rewritten only when it differs, and goes when the Scout is not present.
+    existing = log_ref.get().to_dict()
+    if effects.log is None:
+        if existing is not None:
+            log_ref.delete()
+    elif existing != effects.log:
+        log_ref.set(effects.log)
     for award_id, req_id in effects.ready:
         ref = t.collection("progress").document(f"{member_id}_{award_id}")
         snap = ref.get()

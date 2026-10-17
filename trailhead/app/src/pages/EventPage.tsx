@@ -1,6 +1,7 @@
 import { collection, doc, updateDoc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { EventLogFields } from '../components/activity/EventLogFields';
 import { EventSettings } from '../components/events/EventSettings';
 import { FeesPanel } from '../components/events/FeesPanel';
 import { PersonSignup } from '../components/events/PersonSignup';
@@ -183,6 +184,10 @@ export function EventPage() {
           >
             <summary>Event settings and sign-ups</summary>
             <EventSettings troopId={troopId} event={event} />
+          </details>
+          <details className="card">
+            <summary>Activity log: nights, service hours and miles</summary>
+            <EventLogFields troopId={troopId} event={event} />
           </details>
         </>
       ) : null}

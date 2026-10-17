@@ -1,10 +1,11 @@
 import type { Timestamp } from 'firebase/firestore';
 
-export type AudienceType = 'troop' | 'parents' | 'adults' | 'leaders' | 'parentsOf' | 'event';
+export type AudienceType = 'troop' | 'parents' | 'adults' | 'leaders' | 'parentsOf' | 'patrolParents' | 'event';
 
 export interface AudienceSpec {
   type: AudienceType;
   scoutIds?: string[];
+  patrolId?: string;
   eventId?: string;
 }
 
@@ -44,6 +45,7 @@ export const AUDIENCE_CHOICES: { type: AudienceType; label: string }[] = [
   { type: 'adults', label: 'All adults' },
   { type: 'leaders', label: 'Leaders only' },
   { type: 'parentsOf', label: 'Parents of chosen Scouts' },
+  { type: 'patrolParents', label: 'Parents of a patrol' },
   { type: 'event', label: 'Everyone signed up for an event' },
 ];
 

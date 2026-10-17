@@ -7,18 +7,23 @@ import { InviteForm } from '../components/InviteForm';
 import { GuideBlock } from '../components/GuideBlock';
 import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
+import { ColorSwatch } from '../components/patrols/PatrolCard';
 import { Empty, Notice, PageHeader } from '../components/ui';
 import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
 import { consentSummary } from '../lib/consent';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { usePatrols } from '../lib/patrolHooks';
+import { filterByPatrol, NO_PATROL, officeOf } from '../lib/patrols';
 import { useTroop } from '../lib/troop';
 import type { Access, ConsentDoc, Member, ScoutRecord } from '../lib/types';
 
 export function Roster() {
   const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
   const [added, setAdded] = useState('');
+  const [patrolFilter, setPatrolFilter] = useState('');
+  const patrols = usePatrols().data;
   const consentsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/consents`) : null), [isLeader, troopId]);
   const consents = useQuery<ConsentDoc>(consentsQuery, `${troopId}/consents/${isLeader}`);
   const recordsQuery = useMemo(() => (isLeader ? collection(db, `troops/${troopId}/scoutRecords`) : null), [isLeader, troopId]);
@@ -31,6 +36,8 @@ export function Roster() {
   const waitingFor = (scoutId: string) => [...pending].filter(([, ids]) => ids.includes(scoutId)).map(([memberId]) => memberId);
   const rankOf = (id: string) => rank(records.data.find((r) => r.id === id)?.currentRankId ?? '')?.name;
   const scouts = members.filter((m) => m.kind === 'scout').sort((a, b) => a.displayName.localeCompare(b.displayName));
+  const shownScouts = filterByPatrol(scouts, patrolFilter);
+  const patrolOf = (id: string) => patrols.find((p) => p.id === id);
   const adults = members.filter((m) => m.kind === 'adult').sort((a, b) => a.displayName.localeCompare(b.displayName));
   if (!isLeader) {
     return <Empty>Only leaders can manage the roster.</Empty>;
@@ -55,7 +62,32 @@ export function Roster() {
         ]}
       />
       <section className="stack">
-        <h2>Scouts ({scouts.length})</h2>
+        <h2>
+          Scouts ({patrolFilter ? `${shownScouts.length} of ${scouts.length}` : scouts.length})
+        </h2>
+        {patrols.length > 0 ? (
+          <div className="row">
+            <label htmlFor="roster-patrol" className="small">
+              Show
+            </label>
+            <select id="roster-patrol" value={patrolFilter} onChange={(e) => setPatrolFilter(e.target.value)} style={{ width: 'auto' }}>
+              <option value="">All patrols</option>
+              {patrols.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+              <option value={NO_PATROL}>No patrol</option>
+            </select>
+            <Link className="small" to={`/t/${troopId}/patrols`}>
+              Manage patrols
+            </Link>
+          </div>
+        ) : (
+          <Link className="small" to={`/t/${troopId}/patrols`}>
+            Set up patrols
+          </Link>
+        )}
         {withdrawn.length > 0 ? (
           <Notice kind="warn">
             A parent withdrew consent. Remove these Scouts' records:{' '}
@@ -70,15 +102,24 @@ export function Roster() {
         ) : null}
         {scouts.length === 0 ? (
           <NextStep action="Go to the form" onClick={() => document.getElementById('scout-name')?.focus()}>No Scouts yet. Add your first Scout with the form below.</NextStep>
+        ) : shownScouts.length === 0 ? (
+          <Empty>No Scouts in this patrol yet.</Empty>
         ) : (
           <ul className="list">
-            {scouts.map((s) => {
+            {shownScouts.map((s) => {
               const consent = consentOf(s);
               return (
                 <li key={s.id}>
                   <span>
                     <Link to={`/t/${troopId}/scouts/${s.id}`}>{s.displayName}</Link>
                     {rankOf(s.id) ? <span className="muted small"> · {rankOf(s.id)}</span> : null}
+                    {patrolOf(s.patrolId ?? '') ? (
+                      <span className="muted small">
+                        {' · '}
+                        <ColorSwatch color={patrolOf(s.patrolId ?? '')?.color} /> {patrolOf(s.patrolId ?? '')?.name}
+                        {officeOf(s.id, patrolOf(s.patrolId ?? '')) ? ` (${officeOf(s.id, patrolOf(s.patrolId ?? ''))})` : ''}
+                      </span>
+                    ) : null}
                   </span>
                   <span className="muted small">{parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}</span>
                   <span className={`pill ${consent.tone}`}>{consent.text}</span>

@@ -58,6 +58,7 @@ def resolve(
     access: dict[str, dict],
     signups: set[str] | None = None,
     event_title: str = "",
+    patrol_name: str = "",
 ) -> Audience:
     """The members and logins an audience reaches. Parents of chosen or signed-up Scouts count only once they have
     agreed to the consent notice for that Scout. A Scout under 13 has no login, so their parents are the readers."""
@@ -75,6 +76,12 @@ def resolve(
         ids = _parent_members(chosen, members, access)
         names = ", ".join(_first(members[s].get("displayName")) for s in chosen)
         label = f"Parents of {names}" if names else "Parents of chosen Scouts"
+    elif kind == "patrolParents":
+        in_patrol = [
+            m for m, d in members.items() if d.get("kind") == "scout" and d.get("patrolId") == spec["patrolId"]
+        ]
+        ids = _parent_members(in_patrol, members, access)
+        label = f"Parents of {patrol_name}" if patrol_name else "Parents of a patrol"
     else:
         scouts = [m for m in signups if (members.get(m) or {}).get("kind") == "scout"]
         ids = {m for m in signups if m in members} | _parent_members(scouts, members, access)

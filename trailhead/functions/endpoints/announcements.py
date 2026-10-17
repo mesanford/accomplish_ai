@@ -70,7 +70,12 @@ def _checked(req, data: dict, today: date):
     t = troop(troop_id)
     members, logins = _docs(t.collection("members")), _docs(t.collection("access"))
     signups, title = _signups(t, spec["eventId"]) if spec["type"] == "event" else (set(), "")
-    audience = aud.resolve(spec, members, logins, signups, title)
+    patrol = {}
+    if spec["type"] == "patrolParents":
+        patrol = t.collection("patrols").document(spec["patrolId"]).get().to_dict()
+        if patrol is None:
+            raise fail(BAD, "That patrol was not found.")
+    audience = aud.resolve(spec, members, logins, signups, title, patrol.get("name", ""))
     sender = members.get(access["memberId"]) or {}
     if audience.includes_scouts and not has_current_ypt(sender, today):
         raise fail(DENIED, YPT_REQUIRED)
