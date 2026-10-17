@@ -4,9 +4,12 @@ import { AppLayout, TroopLayout } from './components/Layout';
 import { Loading } from './components/ui';
 import { AuthProvider, useAuth } from './lib/auth';
 import { Account } from './pages/Account';
+import { AccountSettings } from './pages/AccountSettings';
+import { Accounts } from './pages/Accounts';
 import { AttendancePage } from './pages/Attendance';
 import { Badges } from './pages/Badges';
 import { BlueCards } from './pages/BlueCards';
+import { CampaignPage } from './pages/CampaignPage';
 import { Counseling } from './pages/Counseling';
 import { CustomAwardPage } from './pages/CustomAwardPage';
 import { CustomAwards } from './pages/CustomAwards';
@@ -21,14 +24,17 @@ import { Messages } from './pages/Messages';
 import { NotFound, RouteError } from './pages/NotFound';
 import { PathEditor } from './pages/PathEditor';
 import { PathTemplates } from './pages/PathTemplates';
+import { PostCharge } from './pages/PostCharge';
 import { PublicSite } from './pages/PublicSite';
 import { PaperCard } from './pages/PaperCard';
 import { PriorAdvancement } from './pages/PriorAdvancement';
 import { PrivacyPage } from './pages/Privacy';
 import { Recruiting } from './pages/Recruiting';
+import { RecordPayment } from './pages/RecordPayment';
 import { Roster } from './pages/Roster';
 import { ScoutPage } from './pages/ScoutPage';
 import { Scoutbook } from './pages/Scoutbook';
+import { ScoutStatement } from './pages/ScoutStatement';
 import { SignIn } from './pages/SignIn';
 import { ThreadPage } from './pages/ThreadPage';
 import { TroopHome } from './pages/TroopHome';
@@ -111,6 +117,12 @@ const router = createBrowserRouter([
       { path: 'messages', element: <Messages /> },
       { path: 'messages/:threadId', element: <ThreadPage /> },
       { path: 'website', element: <Website /> },
+      { path: 'accounts', element: <Accounts /> },
+      { path: 'accounts/charge', element: <PostCharge /> },
+      { path: 'accounts/payment', element: <RecordPayment /> },
+      { path: 'accounts/settings', element: <AccountSettings /> },
+      { path: 'accounts/campaigns/:campaignId', element: <CampaignPage /> },
+      { path: 'accounts/scouts/:scoutId', element: <ScoutStatement /> },
       { path: 'help', element: <HelpPage /> },
     ],
   },

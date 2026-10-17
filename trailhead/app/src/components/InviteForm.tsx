@@ -14,6 +14,7 @@ const ROLE_OPTIONS: [string, string][] = [
   ['scoutmaster', 'Scoutmaster'],
   ['advancement', 'Advancement chair'],
   ['committee', 'Committee member'],
+  ['treasurer', 'Treasurer'],
 ];
 
 const ROLE_HINTS: Record<string, string> = {
@@ -24,6 +25,7 @@ const ROLE_HINTS: Record<string, string> = {
   scoutmaster: 'Can manage everything in the troop, including blue cards and merit badges.',
   advancement: 'Can manage everything in the troop, including blue cards and merit badges.',
   committee: 'Can see the troop but not change records.',
+  treasurer: "Keeps Scout accounts: fundraiser credits, charges and payments. Doesn't change advancement.",
 };
 
 interface Props {

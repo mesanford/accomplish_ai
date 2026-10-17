@@ -1,6 +1,15 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { AccountSettings } from './campaigns';
 
-export type Role = 'leader' | 'scoutmaster' | 'advancement' | 'counselor' | 'committee' | 'parent' | 'scout';
+export type Role =
+  | 'leader'
+  | 'scoutmaster'
+  | 'advancement'
+  | 'counselor'
+  | 'committee'
+  | 'treasurer'
+  | 'parent'
+  | 'scout';
 
 export interface Membership {
   name: string;
@@ -19,6 +28,8 @@ export interface Troop {
   council?: string;
   /** The public website's state. Written only by the server. */
   site?: { slug?: string; published?: boolean; publishedAt?: Timestamp | null };
+  /** The troop's Scout account rules. Written only by save_account_settings. */
+  accounts?: Partial<AccountSettings>;
 }
 
 export interface Access {

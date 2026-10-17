@@ -64,6 +64,7 @@ ask to enable the Cloud Scheduler API). It enforces the privacy policy's retenti
 | A "Join us" request     | 12 months after it was sent                                                             |
 | Daily AI draft counters | after 30 days                                                                           |
 | A whole troop           | 18 months after anyone in it last opened the app (see the switch below)                 |
+| A Scout account entry   | 7 years after its date, even after the Scout was removed (then kept anonymized)         |
 
 Each run is capped (20 Scouts, 200 conversations, 2 troops, and about 7 minutes); anything left over is picked up
 the next night. The logs have one line per rule per troop (`retention rule=...`), with ids and counts, never names.

@@ -185,3 +185,12 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: v
 .policy-toc { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; }
 .policy-list { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
 .policy section[id] { scroll-margin-top: 120px; }
+
+/* Scout accounts: money lines up in columns. */
+.money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+th.num, td.num { text-align: right; }
+.money.below { color: var(--bad); }
+.totals { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); }
+.total { display: grid; gap: 2px; }
+.total .money { font: 700 1.5rem var(--display); font-variant-numeric: tabular-nums; }
+td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabular-nums; }

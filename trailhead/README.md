@@ -66,6 +66,15 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     clock, after which the Scout's records are deleted (or 12 months after they turn 18, if sooner). Leaders can
     delete a "Join us" request at any time (`delete_lead`). Opening a troop calls `record_activity`, which keeps
     `troops/{t}.lastActiveAt`; a troop nobody opens for 18 months is deleted (dry run until the operator turns it on).
+14. **Scout accounts.** A leader gives an adult the **treasurer** role. The treasurer's **Accounts** page runs
+    fundraisers with a credit rule (`save_campaign`, `post_sales`), charges many Scouts at once or everyone marked
+    present at an event (`post_charge`, `charge_attendees`), records payments (`record_payment`), reverses a wrong
+    entry with a reason (`reverse_entry`), settles a leaving Scout's balance (`settle_account`), sets the troop's
+    account rules (`save_account_settings`) and exports CSV. The ledger (`troops/{t}/ledger`) is append-only, in
+    cents; `accounts/{scoutId}` holds totals recomputed from every entry. The Scoutmaster and advancement chair see
+    the summary read-only, and families see their own Scouts' statements. Only these functions write money
+    documents. Removing a Scout keeps their entries for 7 years under a reference number; the nightly job then
+    deletes entries 7 years past their date. Forthright records payments; it never takes or holds money.
 
 ## Setup
 
@@ -133,6 +142,7 @@ migration once, after deploying. It gives the role to each troop's creator and i
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.
 - Automatic Scoutbook Plus import (needs Scouting America certification) and the blue card PDF.
-- Offline sign-off at camp (data already caches locally for reading) and payments.
+- Offline sign-off at camp (data already caches locally for reading) and card payments (Scout accounts record
+  payments made outside Forthright).
 - Deleting a whole troop yourself. Leaders can remove a Scout (`remove_scout`) and anyone can delete their account (`delete_account`), but removing a troop and its website is still by email request, as the privacy policy explains.
 - Removing a Scout takes every live website photo that shows them down, but keeps draft photos that also show other Scouts. Their tag points at nobody, so the next publish leaves those photos out until a leader fixes the tags.

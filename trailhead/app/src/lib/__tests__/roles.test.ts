@@ -13,6 +13,11 @@ describe('roleList', () => {
     expect(roleList(['advancement', 'scoutmaster', 'leader'])).toBe('Leader, Scoutmaster and advancement chair');
     expect(roleList(undefined)).toBe('No role');
   });
+
+  it('lists the treasurer, who needs no training date for that role alone', () => {
+    expect(roleList(['parent', 'treasurer'])).toBe('Treasurer and parent');
+    expect(needsTrainingDate(['treasurer'], null, now)).toBe(false);
+  });
 });
 
 describe('roleChange', () => {
