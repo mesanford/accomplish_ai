@@ -12,10 +12,19 @@ export default defineConfig({
   use: { baseURL: 'http://localhost:5180', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   // Uses your installed Google Chrome. Set PW_CHANNEL=chromium to use Playwright's own browser instead.
   projects: [{ name: 'chrome', use: { ...devices['Desktop Chrome'], channel: process.env.PW_CHANNEL ?? 'chrome' } }],
-  webServer: {
-    command: 'npm run dev -- --port 5180 --strictPort',
-    url: 'http://localhost:5180',
-    reuseExistingServer: false,
-    timeout: 60_000,
-  },
+  webServer: [
+    {
+      command: 'npm run dev -- --port 5180 --strictPort',
+      url: 'http://localhost:5180',
+      reuseExistingServer: false,
+      timeout: 60_000,
+    },
+    {
+      // A production build, because the service worker only registers in one (see e2e/pwa.spec.ts).
+      command: 'npm run build && npm run preview -- --port 5182 --strictPort',
+      url: 'http://localhost:5182',
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+  ],
 });

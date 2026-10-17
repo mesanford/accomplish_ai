@@ -9,8 +9,10 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints import announcement_mail as mail
+from endpoints.push import push_all
 from fb import fail, require_access, troop
 from handlers import announcement_audience as aud
+from handlers import push as push_text
 from handlers.announcements import (
     RATE_LIMITED,
     YPT_REQUIRED,
@@ -106,6 +108,10 @@ def post_announcement(req: https_fn.CallableRequest) -> dict:
         name = (t.get().to_dict() or {}).get("name", "Your troop")
         emailed = mail.send(post, uids, sender.get("displayName", "A leader"), name, req.data["troopId"], ref.id)
         ref.update({"emailed": emailed})
+    # A push goes to every login in the audience (Scouts with their own login too), whether or not it is emailed.
+    name = (t.get().to_dict() or {}).get("name", "Your troop")
+    others = [u for u in audience.uids if u != req.auth.uid]
+    push_all("announcement", others, push_text.announcement(name, req.data["troopId"]))
     return {"announcementId": ref.id, "emailed": emailed, "emailSkipped": skipped}
 
 

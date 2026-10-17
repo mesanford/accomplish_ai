@@ -78,6 +78,12 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow write: if false;
+
+      // Push tokens (one document per device). Only register_push_device and remove_push_device touch them: a token
+      // can send notifications to a person's phone, so no client may read or write one, not even its own.
+      match /devices/{id} {
+        allow read, write: if false;
+      }
     }
 
     match /troops/{t} {

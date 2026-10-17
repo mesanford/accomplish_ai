@@ -10,8 +10,10 @@ import {
   type User,
 } from 'firebase/auth';
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { clearBadge } from './badge';
 import { auth, db } from './firebase';
 import { useDoc } from './hooks';
+import { dropDeviceOnSignOut } from './push';
 import { safeNext } from './redirect';
 import { storage } from './storage';
 import type { UserDoc } from './types';
@@ -85,6 +87,8 @@ export async function signInWithGoogle(): Promise<void> {
 /** Signs out and removes the offline copy of troop data from this browser, so the next person on a shared
  * computer can't read it. The page reloads because the database can't be used after its cache is cleared. */
 export async function signOutUser(): Promise<void> {
+  await dropDeviceOnSignOut(); // while still signed in: this device stops getting this person's notifications
+  clearBadge();
   await signOut(auth);
   try {
     await terminate(db);

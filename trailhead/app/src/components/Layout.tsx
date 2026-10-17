@@ -6,11 +6,13 @@ import { signOutUser, useAuth } from '../lib/auth';
 import { CustomAwardsProvider } from '../lib/customAwardsContext';
 import { useNewLeadCount } from '../lib/leads';
 import { TroopProvider, useTroop } from '../lib/troop';
+import { useUnreadBadge } from '../lib/useUnreadBadge';
 import { ConsentGate } from './ConsentGate';
 
 function TroopNav() {
   const { troopId, troop, has, isLeader, canManageBadges } = useTroop();
   const newLeads = useNewLeadCount();
+  useUnreadBadge(); // the installed app's icon shows the unread announcements
   const base = `/t/${troopId}`;
   const links: [string, string, boolean][] = [
     [base, 'Home', true],

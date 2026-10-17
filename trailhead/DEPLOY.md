@@ -35,6 +35,22 @@ security rules, indexes, functions and hosting. The app is then live at `https:/
 - Sign in at the app's address and create the pilot troop. You become its first leader.
 - Add Scouts on the Roster page and send invite links to parents, counselors and other leaders.
 
+## Installing the app and push notifications
+
+The app is installable (web app manifest and a service worker). Nothing to configure for that. Push notifications need
+three things per project; without them the "Notify me on this device" option is hidden and nothing is sent.
+
+1. Firebase console > Project settings > Cloud Messaging. Under **Web Push certificates**, choose **Generate key pair**
+   and copy the key pair value into `VITE_FCM_VAPID_KEY` in `app/.env.<alias>`. Copy the **Sender ID** into
+   `VITE_FIREBASE_MESSAGING_SENDER_ID` in the same file. Leave both empty to keep push off.
+2. Make sure the **Firebase Cloud Messaging API** is enabled for the Google Cloud project (it is by default).
+3. To send for real, add `PUSH_MODE=send` to `functions/.env.<project-id>` and deploy. Any other value, or none, only
+   logs how many devices would have been notified (like `EMAIL_MODE`). `APP_URL` must be set, as for email, because
+   notification links use it.
+
+Deploy the indexes too: sign-in on a shared device looks up a device token across logins, which needs the single-field
+`devices` index in `firestore.indexes.json`.
+
 ## Claude writing help
 
 "Draft with AI" in the path planner, and the About us helper on the troop website, call Claude through the
