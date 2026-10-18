@@ -34,6 +34,7 @@ from handlers.consent_requests import (
 )
 from handlers.email_recipients import wants_email
 from handlers.membership import INVITE_DAYS, InvalidInput
+from handlers.retention import local_date
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -144,7 +145,7 @@ def set_consent_parents(req: https_fn.CallableRequest) -> dict:
     if not held and not data.get("invite"):
         record = t.collection("scoutRecords").document(scout_id).get().to_dict()
         consented = bool((t.collection("consents").document(scout_id).get().to_dict() or {}).get("parentConsents"))
-        if not consented and needs_parent_consent(record, now.date()):
+        if not consented and needs_parent_consent(record, local_date(now)):
             t.collection("members").document(scout_id).update({"consentHold": True})
             held = True
     kind = "consent" if held else "invite"
@@ -239,7 +240,7 @@ def sync_holds(t, now: datetime) -> int:
         if member.get("leftAt"):
             continue
         has_parent = bool(consents.get(scout_id, {}).get("parentConsents"))
-        should = not has_parent and needs_parent_consent(records.get(scout_id), now.date())
+        should = not has_parent and needs_parent_consent(records.get(scout_id), local_date(now))
         held += int(should)
         if should != bool(member.get("consentHold")):
             ref = t.collection("members").document(scout_id)

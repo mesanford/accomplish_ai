@@ -9,6 +9,8 @@ from __future__ import annotations
 from datetime import date
 from urllib.parse import quote, quote_plus
 
+from handlers.retention import today_local
+
 from .site_common import InvalidSite
 from .site_pages import filter_page_images, page_image_paths, page_urls, public_pages
 
@@ -185,7 +187,7 @@ def build_public_site(
             "photoUrl": urls.get(clean["cover"]["photoPath"] or ""),
             "layout": clean.get("coverLayout") or "band",
         },
-        "announcement": live_announcement(clean.get("announcement"), date.today()),
+        "announcement": live_announcement(clean.get("announcement"), today_local()),
         "about": clean["about"],
         "meeting": {
             "schedule": meeting["schedule"],

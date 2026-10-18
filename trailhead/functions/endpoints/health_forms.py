@@ -7,7 +7,6 @@ Leaders can record for anyone; a person for themselves; a Scout's linked parent 
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime
 
 from firebase_admin import firestore
 from firebase_functions import https_fn
@@ -15,6 +14,7 @@ from firebase_functions import https_fn
 from fb import fail, refuse_if_blocked, require_access, troop
 from handlers.health_forms import can_record, entry, parse_record
 from handlers.membership import InvalidInput
+from handlers.retention import today_local
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -31,7 +31,7 @@ def record_health_form(req: https_fn.CallableRequest) -> dict:
     if not can_record(access, member_id):
         raise fail(Code.PERMISSION_DENIED, "You can only record health form dates for yourself or your own Scouts.")
     try:
-        part, day = parse_record(data, datetime.now(UTC).date())
+        part, day = parse_record(data, today_local())
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     t = troop(troop_id)

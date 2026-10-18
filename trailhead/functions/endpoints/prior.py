@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import date
-
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from fb import can_manage_badges, db, fail, require_leader, require_not_held, troop
 from handlers.membership import InvalidInput
 from handlers.prior import check_prior, completed_doc, keep_existing, partial_doc
+from handlers.retention import today_local
 from trailhead_core.catalog import badge_version, load_catalog
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -38,7 +37,7 @@ def record_prior_advancement(req: https_fn.CallableRequest) -> dict:
         raise fail(https_fn.FunctionsErrorCode.NOT_FOUND, "That Scout isn't on the roster.")
     catalog = load_catalog()
     try:
-        plan = check_prior(data, record, catalog, date.today())
+        plan = check_prior(data, record, catalog, today_local())
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
 

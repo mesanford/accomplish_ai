@@ -7,13 +7,13 @@ The date goes on both the member and the access record, with who entered it and 
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime
 
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from fb import db, fail, require_access, troop
 from handlers.membership import InvalidInput
+from handlers.retention import today_local
 from handlers.ypt_dates import SELF, parse_own_date
 
 log = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ def set_my_ypt(req: https_fn.CallableRequest) -> dict:
     if "scout" in access.get("roles", []):
         raise fail(Code.PERMISSION_DENIED, "Only adults have Youth Protection training.")
     try:
-        expires = parse_own_date(data.get("yptExpiresAt"), datetime.now(UTC).date())
+        expires = parse_own_date(data.get("yptExpiresAt"), today_local())
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     t = troop(troop_id)

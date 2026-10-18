@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from datetime import date
 
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
@@ -13,6 +12,7 @@ from endpoints.site_documents import publish_documents
 from endpoints.site_files import MissingFile, delete_public_files, publish_files
 from fb import db, fail, require_leader, troop
 from handlers.images import UnreadableImage
+from handlers.retention import today_local
 from handlers.site import InvalidSite, validate_draft
 from handlers.site_build import (
     MAX_CALENDAR,
@@ -35,7 +35,7 @@ TAKEN = "That web address is already used by another troop. Choose a different o
 
 def _upcoming(t) -> list[dict]:
     events = [d.to_dict() for d in t.collection("events").where("public", "==", True).stream()]
-    return public_events(events, date.today(), MAX_CALENDAR)
+    return public_events(events, today_local(), MAX_CALENDAR)
 
 
 def _record(path: str | None, tags: dict, urls: dict[str, str]) -> dict | None:

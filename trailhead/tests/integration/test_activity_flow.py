@@ -3,6 +3,7 @@ Runs against the Functions emulator."""
 
 import os
 from datetime import UTC, date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import pytest
 import requests
@@ -146,6 +147,9 @@ def test_manual_entries_and_approval():
 
     # Bad input is refused.
     assert call("add_activity_entry", "lead", entry(date=TOMORROW)).status_code == 400
+    # The server's "today" is US Central, not UTC, so tomorrow is refused even in the evening, when UTC is a day ahead.
+    local_tomorrow = (datetime.now(ZoneInfo("America/Chicago")).date() + timedelta(days=1)).isoformat()
+    assert call("add_activity_entry", "lead", entry(date=local_tomorrow)).status_code == 400
     assert call("add_activity_entry", "lead", entry(note="  ")).status_code == 400
     assert call("add_activity_entry", "lead", entry(serviceHours=0)).status_code == 400
     assert call("add_activity_entry", "lead", entry(kind="party")).status_code == 400

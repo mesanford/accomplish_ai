@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import UTC, date, datetime
+from datetime import date
 
 from firebase_admin import firestore
 from firebase_functions import https_fn
@@ -23,6 +23,7 @@ from handlers.assistant import (
 )
 from handlers.claude_model import DEFAULT_MODEL, claude_model, real_client
 from handlers.fake_planner import fake_plan
+from handlers.retention import today_local
 from handlers.site_about import scrub_names
 from trailhead_core import load_catalog
 
@@ -104,7 +105,7 @@ def draft_path(req: https_fn.CallableRequest) -> dict:
     if scout is None:
         raise fail(Code.FAILED_PRECONDITION, "Add the Scout's birth month and rank first.")
 
-    today = datetime.now(UTC).date()
+    today = today_local()
     _count_draft(req.auth.uid, troop_id, today)
     if use_fake_llm():
         model: ModelFn = lambda _prompt: fake_plan(scout, goal_id, catalog, today)  # noqa: E731

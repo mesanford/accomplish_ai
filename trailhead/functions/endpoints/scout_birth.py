@@ -10,7 +10,6 @@ never get around that:
 from __future__ import annotations
 
 import logging
-from datetime import date
 
 from firebase_admin import firestore
 from firebase_functions import https_fn
@@ -19,6 +18,7 @@ from fb import db, fail, require_leader, troop
 from handlers.consent_kinds import HOLD_MESSAGE, is_held
 from handlers.consent_requests import needs_parent_consent
 from handlers.membership import InvalidInput, parse_birth, under_13
+from handlers.retention import today_local
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -33,7 +33,7 @@ def set_scout_birth(req: https_fn.CallableRequest) -> dict:
     require_leader(req, troop_id)
     if not isinstance(scout_id, str) or not scout_id:
         raise fail(Code.INVALID_ARGUMENT, "Choose a Scout.")
-    today = date.today()
+    today = today_local()
     try:
         year, month = parse_birth(data, today)
     except InvalidInput as err:

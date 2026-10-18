@@ -8,7 +8,6 @@ a login, so can't hold it.
 from __future__ import annotations
 
 import logging
-from datetime import date
 
 from firebase_admin import firestore
 from firebase_functions import https_fn
@@ -16,6 +15,7 @@ from firebase_functions import https_fn
 from endpoints.parent_links import stage_roles
 from fb import db, fail, require_leader, troop
 from handlers.membership import InvalidInput, scout_login_blocker
+from handlers.retention import today_local
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -38,7 +38,7 @@ def set_scout_quartermaster(req: https_fn.CallableRequest) -> dict:
             raise InvalidInput("Only a Scout who has joined with their own login can be the quartermaster.")
         if on:
             record = t.collection("scoutRecords").document(member_id).get(transaction=tx).to_dict()
-            blocker = scout_login_blocker(record, date.today())
+            blocker = scout_login_blocker(record, today_local())
             if blocker:
                 raise InvalidInput("Only a Scout who is 13 or older can be the quartermaster.")
         roles = ["scout", "quartermaster"] if on else ["scout"]

@@ -8,7 +8,6 @@ only through the callable functions below, so clients never write the `logs` col
 from __future__ import annotations
 
 import logging
-from datetime import date
 
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
@@ -26,6 +25,7 @@ from handlers.activity_log import (
     review_blocker,
 )
 from handlers.membership import InvalidInput
+from handlers.retention import today_local
 from handlers.roles import acts_for
 
 log = logging.getLogger(__name__)
@@ -88,7 +88,7 @@ def add_activity_entry(req: https_fn.CallableRequest) -> dict:
     if not isinstance(scout_id, str) or not may_add_for(access, scout_id, leader):
         raise fail(Code.PERMISSION_DENIED, "You can only add entries for your own Scout.")
     try:
-        entry = parse_manual_entry(data, date.today())
+        entry = parse_manual_entry(data, today_local())
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     t = troop(troop_id)

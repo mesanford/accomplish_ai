@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import UTC, date, datetime
-
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 
@@ -11,6 +9,7 @@ from fb import db, fail, kind_blocker, require_access, troop
 from handlers.activity_log import event_log_id
 from handlers.attendance import attendance_effects, mark_ready
 from handlers.paths import feasibility_doc, needs_recheck, path_from_doc, scout_from_docs
+from handlers.retention import today_local
 from handlers.signoffs import apply_signoff
 from trailhead_core import check_path
 from trailhead_core.catalog import is_custom_award
@@ -44,7 +43,7 @@ def on_signoff_created(event: firestore_fn.Event[firestore_fn.DocumentSnapshot |
     def apply(tx):
         snap = progress_ref.get(transaction=tx)
         current = snap.to_dict() if snap.exists else None
-        outcome = apply_signoff(event.params["signoffId"], signoff, current, custom_ids, date.today())
+        outcome = apply_signoff(event.params["signoffId"], signoff, current, custom_ids, today_local())
         if outcome.accepted:
             tx.set(progress_ref, outcome.progress)
             tx.update(event.data.reference, {"status": "accepted"})
@@ -69,7 +68,7 @@ def on_blue_card_written(event: Written) -> None:
             "awardId": after["awardId"],
             "versionId": after["versionId"],
             "status": "complete",
-            "completedAt": str(datetime.now(UTC).date()),
+            "completedAt": str(today_local()),
             "completedByUid": after.get("counselorUid"),
         },
         merge=True,
@@ -135,7 +134,7 @@ def on_path_written(event: Written) -> None:
     if not needs_recheck(before, after):
         return
     scout = _scout_record(troop(event.params["troopId"]), after["scoutId"])
-    result = NO_RECORD if scout is None else feasibility_doc(check_path(path_from_doc(after), scout, date.today()))
+    result = NO_RECORD if scout is None else feasibility_doc(check_path(path_from_doc(after), scout, today_local()))
     event.data.after.reference.update({"feasibility": result})
 
 
@@ -147,4 +146,4 @@ def check_path_preview(req: https_fn.CallableRequest) -> dict:
     scout = _scout_record(troop(troop_id), path_data["scoutId"])
     if scout is None:
         raise fail(https_fn.FunctionsErrorCode.FAILED_PRECONDITION, "No Scout record yet.")
-    return feasibility_doc(check_path(path_from_doc(path_data), scout, date.today()))
+    return feasibility_doc(check_path(path_from_doc(path_data), scout, today_local()))

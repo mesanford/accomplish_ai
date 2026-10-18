@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 
+from handlers.retention import today_local
+
 
 @dataclass
 class SignoffOutcome:
@@ -63,5 +65,5 @@ def apply_signoff(
         requirements.get(r, {}).get("status") == "signed" for r in custom_requirement_ids
     ):
         updated["status"] = "complete"
-        updated["completedAt"] = str(today or date.today())
+        updated["completedAt"] = str(today or today_local())
     return SignoffOutcome(accepted=True, reason=None, progress=updated)

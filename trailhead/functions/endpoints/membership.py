@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import secrets
-from datetime import UTC, date, datetime
+from datetime import UTC, datetime
 
 from firebase_admin import firestore
 from firebase_functions import https_fn
@@ -23,6 +23,7 @@ from handlers.membership import (
     new_troop,
     scout_login_blocker,
 )
+from handlers.retention import local_date, today_local
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 
@@ -41,7 +42,7 @@ def create_troop(req: https_fn.CallableRequest) -> dict:
     """The caller becomes the troop's first leader, with the role they pick (Scoutmaster unless they say otherwise)."""
     uid = require_uid(req)
     try:
-        troop_doc, member = new_troop(req.data or {}, uid, date.today())
+        troop_doc, member = new_troop(req.data or {}, uid, today_local())
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
     ref = db().collection("troops").document()
@@ -71,7 +72,7 @@ def create_invite(req: https_fn.CallableRequest) -> dict:
         invite = new_invite(data, set(scouts), unlinked, now)
         if invite["role"] == "scout":
             record = t.collection("scoutRecords").document(invite["scoutMemberId"]).get().to_dict()
-            blocker = scout_login_blocker(record, now.date())
+            blocker = scout_login_blocker(record, local_date(now))
             if blocker:
                 raise InvalidInput(blocker)
     except InvalidInput as err:
@@ -135,7 +136,7 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
                 scout_ids, ypt = [member_id], None
             else:
                 member_ref = t.collection("members").document()
-                member = adult_member(data, uid, [role], date.today())
+                member = adult_member(data, uid, [role], today_local())
                 tx.set(member_ref, member)
                 member_id, ypt = member_ref.id, member["yptExpiresAt"]
                 scout_ids = invite.get("scoutIds", [])

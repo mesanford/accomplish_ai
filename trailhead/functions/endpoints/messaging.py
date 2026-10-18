@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date
-
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from fb import HOLD_MESSAGE, fail, is_held, require_access, troop
 from handlers.messaging import participant_uids, pending_links, people_from_members
+from handlers.retention import today_local
 from trailhead_core import YPTViolation, plan_delivery
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -52,7 +51,7 @@ def send_message(req: https_fn.CallableRequest) -> dict:
             [people[r] for r in recipient_ids],
             people,
             second_adults,
-            date.today(),
+            today_local(),
             new_thread=thread_ref is None,
         )
     except YPTViolation as err:

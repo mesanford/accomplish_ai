@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, date, datetime
+from datetime import UTC, datetime
 
 from firebase_admin import firestore
 
@@ -10,6 +10,7 @@ from endpoints.consent import stage_parent_consent
 from endpoints.parent_links import stage_link, stage_roles
 from handlers.consent import check_parent_consent, parent_consent_entry
 from handlers.membership import YPT_ROLES, InvalidInput, parse_ypt
+from handlers.retention import today_local
 from handlers.roles import acts_for, as_date, in_order, new_links
 
 
@@ -29,7 +30,7 @@ def add_invite_role(
         raise InvalidInput("You already have this role in the troop.")
     member_id = access["memberId"]
     member = t.collection("members").document(member_id).get(transaction=tx).to_dict() or {}
-    today = date.today()
+    today = today_local()
     expires, extra = member.get("yptExpiresAt"), {}
     if data.get("yptExpiresAt"):
         expires = parse_ypt(data["yptExpiresAt"], [role], today)

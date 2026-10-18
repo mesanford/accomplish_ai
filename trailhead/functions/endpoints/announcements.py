@@ -86,7 +86,7 @@ def _checked(req, data: dict, today: date):
 def post_announcement(req: https_fn.CallableRequest) -> dict:
     """Post to an audience, and optionally email the adults in it (once; editing never emails again)."""
     data = req.data or {}
-    t, access, content, spec, audience, members, logins, sender = _checked(req, data, date.today())
+    t, access, content, spec, audience, members, logins, sender = _checked(req, data, today_local())
     uids, skipped, wants_email = [], 0, data.get("email") is True
     if wants_email:
         uids, skipped = mail.recipients(aud.email_uids(audience, req.auth.uid, members, logins))

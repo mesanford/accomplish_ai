@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, date, datetime
+from datetime import UTC, datetime
 
 from firebase_functions import https_fn
 
@@ -13,6 +13,7 @@ from fb import db, fail, is_leader, require_access, troop
 from handlers.consent import check_parent_consent, parent_consent_entry
 from handlers.consent_requests import clean_parents, needs_parent_consent
 from handlers.membership import InvalidInput, new_scout
+from handlers.retention import local_date, today_local
 from handlers.roles import in_order
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -36,7 +37,7 @@ def add_scout(req: https_fn.CallableRequest) -> dict:
     if not roles & {"leader", "scoutmaster", "advancement", "parent"}:
         raise fail(https_fn.FunctionsErrorCode.PERMISSION_DENIED, "Only leaders and parents can add Scouts.")
     try:
-        member, record = new_scout(data, date.today())
+        member, record = new_scout(data, today_local())
     except (InvalidInput, ValueError) as err:
         raise fail(BAD, str(err)) from err
     t = troop(troop_id)
@@ -47,7 +48,9 @@ def add_scout(req: https_fn.CallableRequest) -> dict:
         if is_parent:
             check_parent_consent(data)  # a parent adding their child agrees to the same notice
         parents = (
-            clean_parents(data.get("parents")) if not is_parent and needs_parent_consent(record, now.date()) else []
+            clean_parents(data.get("parents"))
+            if not is_parent and needs_parent_consent(record, local_date(now))
+            else []
         )
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
