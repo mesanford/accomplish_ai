@@ -10,7 +10,7 @@ export function TipPill({ tone, tip, children }: { tone?: string; tip: string; c
   return (
     <span className="tip-wrap">
       <span
-        className={`pill${tone ? ` ${tone}` : ''}`}
+        className={`pill ${tone || 'neutral'}`} // no tone: an outlined neutral pill
         tabIndex={0}
         aria-describedby={id}
         onKeyDown={(e) => {

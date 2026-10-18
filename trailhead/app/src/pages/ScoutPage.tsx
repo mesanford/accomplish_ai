@@ -107,12 +107,12 @@ export function ScoutPage() {
       ) : null}
       <PathSummary path={path.data} editTo={`/t/${troopId}/scouts/${scoutId}/path`} />
       <section className="stack">
-        <h2>Ranks and badges in progress</h2>
+        <h2 className="blazed">Ranks and badges in progress</h2>
         <ProgressList progress={official} />
       </section>
       {custom.length > 0 || isLeader ? (
         <section className="stack">
-          <h2>
+          <h2 className="blazed">
             Troop awards
             <HelpTip topic="troopAward" />
           </h2>
@@ -121,7 +121,7 @@ export function ScoutPage() {
       ) : null}
       {scout.kind === 'scout' ? <ScoutActivity scoutId={scoutId} rankDates={record.data?.rankDates} /> : null}
       <section className="stack">
-        <h2>Blue cards</h2>
+        <h2 className="blazed">Blue cards</h2>
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={canManageBadges} />
       </section>
       <HealthFormCard memberId={scoutId} name={scout.displayName} />

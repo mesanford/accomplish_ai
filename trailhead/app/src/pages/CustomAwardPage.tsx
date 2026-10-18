@@ -110,7 +110,7 @@ export function CustomAwardPage() {
         </section>
       ) : null}
       <section className="stack">
-        <h2>
+        <h2 className="blazed">
           Versions
           <HelpTip topic="awardVersion" />
         </h2>

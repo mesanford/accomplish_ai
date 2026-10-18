@@ -60,7 +60,7 @@ export function HelpPage() {
         </details>
       ))}
       <section className="stack" aria-labelledby="glossary-h">
-        <h2 id="glossary-h">Scouting words, explained</h2>
+        <h2 className="blazed" id="glossary-h">Scouting words, explained</h2>
         {terms.length === 0 && guides.length === 0 ? <p className="muted">Nothing matches that search. Try a shorter word.</p> : null}
         <dl className="glossary">
           {terms.map((t) => (

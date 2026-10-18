@@ -17,7 +17,7 @@ export function Pips({ level }: { level: number }) {
   );
 }
 
-export function Notice({ kind, children }: { kind: 'error' | 'ok' | 'warn'; children: ReactNode }) {
+export function Notice({ kind, children }: { kind: 'error' | 'ok' | 'warn' | 'info'; children: ReactNode }) {
   if (!children) {
     return null;
   }

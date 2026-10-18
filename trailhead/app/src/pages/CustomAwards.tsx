@@ -89,7 +89,7 @@ export function CustomAwards() {
       {active.length > 0 ? <AwardList awards={active} troopId={troopId} /> : null}
       {archived.length > 0 ? (
         <section className="stack">
-          <h2>Archived</h2>
+          <h2 className="blazed">Archived</h2>
           <AwardList awards={archived} troopId={troopId} />
         </section>
       ) : null}

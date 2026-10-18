@@ -157,6 +157,11 @@
   color: #fff;
   border-top: 6px solid var(--l-gold);
 }
+/* Headings on the green band stay white, not the app's dark-green heading color. */
+.l-safety h2,
+.l-safety h3 {
+  color: inherit;
+}
 .l-safety .l-wrap {
   display: grid;
   gap: 20px;

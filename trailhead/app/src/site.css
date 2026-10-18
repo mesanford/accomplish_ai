@@ -1,6 +1,6 @@
 /* The public troop website. Its own look: no app chrome, the troop's color as the accent. */
 .site {
-  --s-bg: #fbfaf5; --s-surface: #ffffff; --s-ink: #1f241b; --s-muted: #565d4e; --s-line: #ddd9ca;
+  --s-bg: #fbfaf5; --s-surface: #ffffff; --s-ink: #1f241b; --s-muted: #4c5345; --s-line: #bcb6a0;
   --s-accent-text: var(--site-text-light);
   --s-ok-bg: #e3efdf; --s-ok: #2f6a2a; --s-err-bg: #f8e3df; --s-err: #9a2f22;
   min-height: 100vh; background: var(--s-bg); color: var(--s-ink); font: 17px/1.6 var(--body);
@@ -8,14 +8,15 @@
 }
 @media (prefers-color-scheme: dark) {
   .site {
-    --s-bg: #14170f; --s-surface: #1d2118; --s-ink: #ecebe0; --s-muted: #aeb3a2; --s-line: #373c2e;
+    --s-bg: #14170f; --s-surface: #1d2118; --s-ink: #ecebe0; --s-muted: #b6bbaa; --s-line: #4a5240;
     --s-accent-text: var(--site-text-dark);
     --s-ok-bg: #223320; --s-ok: #8fd07f; --s-err-bg: #3a211d; --s-err: #f0907f;
   }
 }
 .site a { color: var(--s-accent-text); }
 .site :focus-visible { outline: 3px solid var(--s-accent-text); outline-offset: 2px; }
-.site h1, .site h2 { font-family: var(--display); line-height: 1.15; margin: 0; }
+/* A troop site never uses Forthright's accent: headings take the site's own text color (white on the cover band). */
+.site h1, .site h2 { font-family: var(--display); line-height: 1.15; margin: 0; color: inherit; }
 .site p { margin: 0; }
 .site-wrap { width: 100%; max-width: 860px; margin: 0 auto; padding-inline: 16px; }
 .site-muted { color: var(--s-muted); }

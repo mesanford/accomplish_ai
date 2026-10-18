@@ -152,7 +152,7 @@ export function EventPage() {
       <Details event={event} />
       {s?.enabled ? (
         <section className="stack" aria-label="Your sign-ups">
-          <h2>Sign up</h2>
+          <h2 className="blazed">Sign up</h2>
           {mine.length === 0 ? (
             <p className="muted">There is no one in your family who can sign up for this event.</p>
           ) : null}

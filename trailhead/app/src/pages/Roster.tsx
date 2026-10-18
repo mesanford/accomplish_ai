@@ -108,7 +108,7 @@ export function Roster() {
         ]}
       />
       <section className="stack">
-        <h2>
+        <h2 className="blazed">
           Scouts ({patrolFilter ? `${shownScouts.length} of ${scouts.length}` : scouts.length})
         </h2>
         {patrols.length > 0 ? (
@@ -216,7 +216,7 @@ export function Roster() {
         )}
       </section>
       <section className="stack">
-        <h2>
+        <h2 className="blazed">
           Adults ({adults.length})
           <HelpTip topic="ypt" />
         </h2>

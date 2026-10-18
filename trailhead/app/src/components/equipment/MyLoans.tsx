@@ -20,7 +20,7 @@ export function MyLoans() {
   const children = actingScoutIds.filter((id) => id !== access?.memberId);
   return (
     <section className="stack" aria-label="Checked out to you">
-      <h2>Checked out to you</h2>
+      <h2 className="blazed">Checked out to you</h2>
       <LoanList loans={mine.data} manage={false} empty="Nothing is checked out to you." />
       {children.length > 0 ? <h2>Checked out to your Scouts</h2> : null}
       {children.map((id) => (

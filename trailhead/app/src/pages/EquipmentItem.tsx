@@ -91,7 +91,7 @@ export function EquipmentItem() {
       </dl>
       {manage ? (
         <section className="stack" aria-label="Checked out">
-          <h2>Checked out</h2>
+          <h2 className="blazed">Checked out</h2>
           <LoanList loans={mine} manage showItem={false} empty="None of this item is checked out." />
         </section>
       ) : item.condition !== 'retired' ? (

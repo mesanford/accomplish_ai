@@ -93,7 +93,7 @@ export function Counseling() {
       {active.length === 0 ? <Empty>No Scouts are assigned to you right now.</Empty> : active.map((c) => <CounselCard key={c.id} card={c} />)}
       {done.length > 0 ? (
         <section className="stack">
-          <h2>Completed</h2>
+          <h2 className="blazed">Completed</h2>
           <ul className="list">
             {done.map((c) => (
               <li key={c.id}>

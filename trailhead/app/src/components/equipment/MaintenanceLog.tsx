@@ -48,7 +48,7 @@ export function MaintenanceLog({ itemId }: { itemId: string }) {
 
   return (
     <section className="stack" aria-label="Repair log">
-      <h2>Repair log</h2>
+      <h2 className="blazed">Repair log</h2>
       <form className="form" onSubmit={add}>
         <Field label="Repair note" htmlFor="log-note">
           <input id="log-note" maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} />

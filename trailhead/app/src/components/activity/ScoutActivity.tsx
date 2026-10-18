@@ -32,7 +32,7 @@ export function ScoutActivity({ scoutId, rankDates }: { scoutId: string; rankDat
 
   return (
     <section className="stack" aria-label="Activity">
-      <h2>Camping, service and hiking</h2>
+      <h2 className="blazed">Camping, service and hiking</h2>
       <p className="small" data-testid="activity-totals">
         <strong>{plural(totals.nights, 'night')}</strong> camped in {plural(totals.campouts, 'campout')} ·{' '}
         <strong>{plural(totals.serviceHours, 'service hour')}</strong> · <strong>{plural(totals.miles, 'mile')}</strong> hiked

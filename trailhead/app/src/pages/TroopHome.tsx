@@ -135,7 +135,7 @@ export function TroopHome() {
         </div>
       ) : null}
       <section className="stack">
-        <h2>{isLeader ? 'Scouts' : 'Your Scouts'}</h2>
+        <h2 className="blazed">{isLeader ? 'Scouts' : 'Your Scouts'}</h2>
         <ScoutCards />
       </section>
       {has('parent') && !isLeader ? (
