@@ -14,6 +14,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+import urllib.error
 import urllib.request
 
 from firebase_functions import https_fn
@@ -23,8 +24,11 @@ from handlers import domain_serving as serving
 from handlers.site_meta import clean_host, has_page, inject_meta, meta_tags, parse_path
 
 log = logging.getLogger(__name__)
-CACHE_SECONDS = 300
-_shell: dict = {"html": None, "at": 0.0}
+# How long a copy of index.html is used before asking Hosting whether it changed. After a deploy the old copy names
+# the old build's script, which is gone, so a troop site would load without the app until the copy is replaced. A
+# check is a conditional request (ETag): unchanged, Hosting answers 304 with no body.
+CHECK_SECONDS = 10
+_shell: dict = {"html": None, "etag": None, "checked": 0.0}
 
 
 def app_origin() -> str:
@@ -39,18 +43,28 @@ def app_origin() -> str:
     return f"https://{project}.web.app"
 
 
-def load_shell() -> str | None:
-    """The app's index.html, kept for a few minutes."""
-    if _shell["html"] and time.time() - _shell["at"] < CACHE_SECONDS:
+def load_shell(now: float | None = None, opener=urllib.request.urlopen) -> str | None:
+    """The app's index.html. A copy is reused for CHECK_SECONDS, then checked against Hosting and replaced if a deploy
+    changed it. If Hosting can't be reached, the last good copy is used."""
+    now = time.time() if now is None else now
+    if _shell["html"] and now - _shell["checked"] < CHECK_SECONDS:
         return _shell["html"]
+    headers = {"If-None-Match": _shell["etag"]} if _shell["html"] and _shell["etag"] else {}
+    request = urllib.request.Request(f"{app_origin()}/index.html", headers=headers)
     try:
-        with urllib.request.urlopen(f"{app_origin()}/index.html", timeout=5) as res:  # noqa: S310 (fixed https origin)
-            html = res.read().decode("utf-8")
+        with opener(request, timeout=5) as res:  # noqa: S310 (fixed https origin)
+            html, etag = res.read().decode("utf-8"), res.headers.get("ETag")
+    except urllib.error.HTTPError as err:
+        _shell["checked"] = now  # 304: still current. Anything else: try again after the next interval.
+        if err.code != 304:
+            log.warning("site shell: index.html answered %s", err.code)
+        return _shell["html"]
     except (OSError, ValueError):
+        _shell["checked"] = now
         return _shell["html"]
     if '<div id="root">' not in html:
         return _shell["html"]
-    _shell.update(html=html, at=time.time())
+    _shell.update(html=html, etag=etag, checked=now)
     return html
 
 
