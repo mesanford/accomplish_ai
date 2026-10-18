@@ -18,7 +18,8 @@ TID = "ta"
 T = f"troops/{TID}"
 FUTURE = datetime.now(UTC) + timedelta(days=365)
 TODAY = date.today().isoformat()
-TOMORROW = (date.today() + timedelta(days=1)).isoformat()
+# Two days ahead, so it is in the future both here and on the server, whose date is UTC (a day ahead in US evenings).
+TOMORROW = (date.today() + timedelta(days=2)).isoformat()
 CAMPOUT = {"title": "October campout", "start": "2026-10-10", "logKind": "campout", "logValues": {"nights": 2}}
 
 
