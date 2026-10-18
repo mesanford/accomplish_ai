@@ -13,6 +13,7 @@ import { TipPill } from '../components/TipPill';
 import { yptTip } from '../lib/statusTips';
 import { NoAccess } from '../components/NoAccess';
 import { HelpTip } from '../components/HelpTip';
+import { SPREADSHEET_TIP } from '../lib/moreStatusTips';
 
 function Line({ row }: { row: RechartRow }) {
   const { troopId } = useTroop();
@@ -62,8 +63,8 @@ export function Recharter() {
     <>
       <PageHeader eyebrow="Troop" title="Recharter">
         <HelpTip topic="recharter" />
-        <button type="button" className="btn" disabled={rows.length === 0} onClick={() => downloadCsv(rechartFileName(today), rechartCsv(rows))}>
-          Download CSV
+        <button type="button" className="btn" disabled={rows.length === 0} title={SPREADSHEET_TIP} onClick={() => downloadCsv(rechartFileName(today), rechartCsv(rows))}>
+          Download spreadsheet
         </button>
       </PageHeader>
       <p className="muted">

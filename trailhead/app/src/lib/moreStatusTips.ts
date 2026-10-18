@@ -96,3 +96,6 @@ export const DOCUMENT_TIP: Record<Visibility, string> = {
   members: 'Anyone in the troop who uses the app can open this file. People outside the troop can’t.',
   leaders: 'Only troop leaders can open this file. Other people in the troop can’t see it.',
 };
+
+/** On every download button: what the file is and what opens it. */
+export const SPREADSHEET_TIP = 'Saves a spreadsheet file (CSV) that opens in Excel, Google Sheets or Numbers.';

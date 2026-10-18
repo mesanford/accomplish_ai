@@ -127,9 +127,23 @@ const STATUS_WORDS: Record<PaymentStatus, string> = {
   review: 'Needs the treasurer',
 };
 
+/** Stripe's dispute statuses, in plain words. A dispute is a family asking their bank to take a payment back. */
+const DISPUTE_WORDS: Record<string, string> = {
+  needs_response: 'the troop needs to answer in Stripe',
+  warning_needs_response: 'the troop needs to answer in Stripe',
+  under_review: 'the bank is deciding',
+  warning_under_review: 'the bank is deciding',
+  warning_closed: 'closed',
+  won: 'the troop kept the money',
+  lost: 'the money went back to the family',
+};
+
 export function statusLabel(p: Pick<PaymentRecord, 'status' | 'dispute'>): string {
   const words = STATUS_WORDS[p.status] ?? p.status;
-  return p.dispute?.status ? `${words}, disputed (${p.dispute.status.replace(/_/g, ' ')})` : words;
+  if (!p.dispute?.status) {
+    return words;
+  }
+  return `${words}, disputed (${DISPUTE_WORDS[p.dispute.status] ?? p.dispute.status.replace(/_/g, ' ')})`;
 }
 
 /** The treasurer's link to the payment in the troop's own Stripe dashboard. */

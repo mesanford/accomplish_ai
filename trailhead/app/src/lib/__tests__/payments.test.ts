@@ -38,7 +38,13 @@ describe('statusLabel and dashboardUrl', () => {
   it('says what happened in plain words', () => {
     expect(statusLabel({ status: 'paid' })).toBe('Paid');
     expect(statusLabel({ status: 'expired' })).toBe('Not finished');
-    expect(statusLabel({ status: 'paid', dispute: { status: 'needs_response' } })).toBe('Paid, disputed (needs response)');
+    expect(statusLabel({ status: 'paid', dispute: { status: 'needs_response' } })).toBe(
+      'Paid, disputed (the troop needs to answer in Stripe)',
+    );
+    expect(statusLabel({ status: 'refunded', dispute: { status: 'lost' } })).toBe(
+      'Refunded, disputed (the money went back to the family)',
+    );
+    expect(statusLabel({ status: 'paid', dispute: { status: 'something_new' } })).toBe('Paid, disputed (something new)');
   });
 
   it("links to the payment in the troop's own dashboard", () => {

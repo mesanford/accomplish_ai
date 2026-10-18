@@ -5,6 +5,7 @@ import { useTroop } from '../lib/troop';
 import type { ScoutbookReport } from '../lib/types';
 import { RequirementRef } from './RequirementRef';
 import { formatDate, Notice } from './ui';
+import { SPREADSHEET_TIP } from '../lib/moreStatusTips';
 
 export function reportRange(report: ScoutbookReport): string {
   const iso = (t: { toDate: () => Date }) => t.toDate().toISOString();
@@ -33,8 +34,8 @@ export function ScoutbookReportView({ report }: { report: ScoutbookReport }) {
       <div className="row spread">
         <h2>Report: {reportRange(report)}</h2>
         <div className="row no-print">
-          <button type="button" className="btn small" onClick={() => downloadCsv(`scoutbook-${stamp}.csv`, reportToCsv(report.rows))}>
-            Download CSV
+          <button type="button" className="btn small" title={SPREADSHEET_TIP} onClick={() => downloadCsv(`scoutbook-${stamp}.csv`, reportToCsv(report.rows))}>
+            Download spreadsheet
           </button>
           <button type="button" className="btn quiet small" onClick={() => window.print()}>
             Print

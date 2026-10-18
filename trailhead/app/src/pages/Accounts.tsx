@@ -11,6 +11,7 @@ import { downloadCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
 import { HelpTip } from '../components/HelpTip';
 import { NoAccess } from '../components/NoAccess';
+import { SPREADSHEET_TIP } from '../lib/moreStatusTips';
 
 /** The troop summary: money held in Scout accounts, open charges, every Scout's balance, and the export. */
 export function Accounts() {
@@ -76,6 +77,7 @@ export function Accounts() {
             <button
               type="button"
               className="btn quiet small"
+              title={SPREADSHEET_TIP}
               onClick={() => downloadCsv(`accounts-${day}.csv`, balancesCsv(accounts.data, nameOf))}
             >
               Download balances
@@ -83,6 +85,7 @@ export function Accounts() {
             <button
               type="button"
               className="btn quiet small"
+              title={SPREADSHEET_TIP}
               onClick={() => downloadCsv(`ledger-${day}.csv`, ledgerCsv(ledger.data, nameOf))}
             >
               Download every entry

@@ -50,8 +50,10 @@ export function FeedLink() {
         <HelpTip topic="calendarFeed" />
       </h2>
       <p className="small">
-        Add this address to Google Calendar, Apple Calendar or Outlook as a subscription. New events show up on their own. It lists
-        event names, dates, places and links. It has no names of Scouts. Keep it private: anyone with it can see the troop's events.
+        Copy this address and add it to your calendar once: in Google Calendar choose Other calendars, then From URL; in
+        Apple Calendar choose File, then New Calendar Subscription; in Outlook choose Add calendar, then Subscribe from
+        web. New events then show up on their own. It lists event names, dates, places and links. It has no names of
+        Scouts. Keep it private: anyone with it can see the troop's events.
       </p>
       <input readOnly aria-label="Calendar address" value={mine.https} onFocus={(e) => e.currentTarget.select()} />
       <div className="row">
@@ -69,6 +71,10 @@ export function FeedLink() {
           Make a new link
         </button>
       </div>
+      <p className="small muted">
+        Make a new link only if this one was shared by mistake. The old link stops working for everyone using it,
+        including you, so add the new one to your calendar again.
+      </p>
       {isLeader && open ? (
         <p className="small">
           Public calendar for your website (public events only): <a href={open.webcal}>{open.https}</a>

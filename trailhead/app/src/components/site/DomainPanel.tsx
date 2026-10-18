@@ -91,7 +91,11 @@ export function DomainPanel({ troopId, site }: { troopId: string; site: Troop['s
           {domain.status !== 'failed' ? <Progress domain={domain} /> : null}
           {domain.records.length > 0 ? (
             <>
-              <h3>Add these records at your registrar</h3>
+              <h3>Add these settings where you bought the domain</h3>
+              <p className="small muted">
+                The company you bought the domain from is called the registrar. Look for its DNS settings. If someone
+                else bought the domain, such as a parent or your chartered organization, send them these steps.
+              </p>
               <ol>
                 {domain.steps.map((s) => (
                   <li key={s}>{s}</li>
@@ -127,6 +131,10 @@ export function DomainPanel({ troopId, site }: { troopId: string; site: Troop['s
             Show your troop website at an address you own, like troop101springfield.org. You buy the domain from a
             registrar such as GoDaddy or Namecheap (about $15 a year). We'll give you the exact settings to add there.
             Only one domain per troop.
+          </p>
+          <p className="muted small">
+            This is optional. Your troop website already works at its free Forthright address, and most troops don’t need
+            their own domain.
           </p>
           {published ? null : <Notice kind="warn">Publish your website first. Your domain shows the published site.</Notice>}
           <Field label="Your domain" htmlFor="own-domain-input" hint="Just the domain, with no https:// or page.">

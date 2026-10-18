@@ -68,11 +68,11 @@ export function PaymentsConnect() {
         <HelpTip topic="cardPayments" />
       </h2>
       <p className="small muted">
-        Families can pay open charges by card. The money goes straight to the troop's own Stripe account (the troop or
-        its chartered organization owns it), then to its bank. Forthright never holds the money and takes no fee.
+        Families can pay open charges by card. Stripe is the company that handles the card payments. The money goes
+        straight to the troop's own Stripe account (the troop or its chartered organization owns it), then to its bank. Forthright never holds the money and takes no fee.
         Stripe charges its own fee on each payment (2.9% + 30¢ for US cards).
       </p>
-      {payments.mode === 'test' ? <Notice kind="warn">Stripe test mode: no real money moves.</Notice> : null}
+      {payments.mode === 'test' ? <Notice kind="warn">Stripe test mode: no real money moves. It’s for trying out payments before families use them.</Notice> : null}
       {!payments.connected ? (
         <div className="row">
           <button className="btn" type="button" onClick={connect} disabled={busy || payments.loading}>

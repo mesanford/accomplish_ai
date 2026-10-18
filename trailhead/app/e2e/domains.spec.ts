@@ -51,7 +51,7 @@ test('a leader connects their own domain, sees the DNS records to add, then remo
   await expect(leader.getByText('Waiting for your DNS records.')).toBeVisible();
   await expect(leader.getByText('troop505springfield.org', { exact: true }).first()).toBeVisible();
   await expect(
-    leader.getByRole('heading', { name: 'Add these records at your registrar' }),
+    leader.getByRole('heading', { name: 'Add these settings where you bought the domain' }),
   ).toBeVisible();
   await expect(
     leader.getByText(/Sign in to the company where you bought troop505springfield.org/),

@@ -11,6 +11,7 @@ import { checkoutsCsv, inventoryCsv } from '../lib/equipmentCsv';
 import { useAllCheckouts, useCanManageGear, useInventory, useRequests } from '../lib/equipmentHooks';
 import { downloadCsv } from '../lib/scoutbook';
 import { HelpTip } from '../components/HelpTip';
+import { SPREADSHEET_TIP } from '../lib/moreStatusTips';
 
 type Tab = 'catalog' | 'out' | 'requests';
 
@@ -46,10 +47,10 @@ export function Equipment() {
             <button type="button" className="btn small no-print" onClick={() => setAdding(true)}>
               Add an item
             </button>
-            <button type="button" className="btn quiet small no-print" onClick={() => downloadCsv(`inventory-${today}.csv`, inventoryCsv(inventory.data))}>
+            <button type="button" className="btn quiet small no-print" title={SPREADSHEET_TIP} onClick={() => downloadCsv(`inventory-${today}.csv`, inventoryCsv(inventory.data))}>
               Download inventory
             </button>
-            <button type="button" className="btn quiet small no-print" onClick={() => downloadCsv(`checkouts-${today}.csv`, checkoutsCsv(loans.data, today))}>
+            <button type="button" className="btn quiet small no-print" title={SPREADSHEET_TIP} onClick={() => downloadCsv(`checkouts-${today}.csv`, checkoutsCsv(loans.data, today))}>
               Download check-outs
             </button>
             <button type="button" className="btn quiet small no-print" onClick={() => window.print()}>

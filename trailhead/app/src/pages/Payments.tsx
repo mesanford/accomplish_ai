@@ -9,6 +9,7 @@ import { downloadCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
 import { NoAccess } from '../components/NoAccess';
 import { HelpTip } from '../components/HelpTip';
+import { SPREADSHEET_TIP } from '../lib/moreStatusTips';
 
 /** Every card payment: status, links to the troop's Stripe dashboard, and the reconciliation spreadsheet. */
 export function Payments() {
@@ -36,22 +37,24 @@ export function Payments() {
         <button
           type="button"
           className="btn quiet small"
+          title={SPREADSHEET_TIP}
           onClick={() => downloadCsv(`card-payments-${day}.csv`, paymentsCsv(shown, nameOf))}
         >
           Download for reconciling
         </button>
       </PageHeader>
-      {payments.mode === 'test' ? <Notice kind="warn">Stripe test mode: no real money moved.</Notice> : null}
+      {payments.mode === 'test' ? <Notice kind="warn">Stripe test mode: no real money moved. These were practice payments.</Notice> : null}
       <Notice kind="error">{records.error}</Notice>
       {attention.length > 0 ? (
         <Notice kind="warn">
-          {attention.length === 1 ? '1 payment needs' : `${attention.length} payments need`} a look: a dispute, or a
-          payment Forthright could not match. Check it in the Stripe dashboard, then post a correction if needed.
+          {attention.length === 1 ? '1 payment needs' : `${attention.length} payments need`} a look: a dispute (a family asked
+          their bank to take a card payment back), or a payment Forthright could not match. Check it in the Stripe dashboard, then post a correction if needed.
         </Notice>
       ) : null}
       <p className="small muted">
         A paid card payment is posted to the Scout's account automatically. Refunds made in Stripe post a reversal. The
-        Stripe payment id matches the troop's Stripe payout report.
+        Stripe payment id matches the troop's Stripe payout report, Stripe's list of the money it sent to the troop's
+        bank.
       </p>
       {records.loading ? <Loading /> : null}
       {!records.loading && shown.length === 0 ? <Empty>No card payments yet.</Empty> : null}

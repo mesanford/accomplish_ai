@@ -10,6 +10,7 @@ import { usePatrols } from '../lib/patrolHooks';
 import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 import { NoAccess } from '../components/NoAccess';
+import { SPREADSHEET_TIP } from '../lib/moreStatusTips';
 
 type Choice = RangePreset | 'custom';
 const CHOICES: [Choice, string][] = [
@@ -71,8 +72,8 @@ export function TroopReportPage() {
               </Field>
             </>
           ) : null}
-          <button type="button" className="btn secondary small" onClick={() => downloadCsv(reportFileName(range), reportCsv(report, names))}>
-            Download CSV
+          <button type="button" className="btn secondary small" title={SPREADSHEET_TIP} onClick={() => downloadCsv(reportFileName(range), reportCsv(report, names))}>
+            Download spreadsheet
           </button>
         </div>
         <h2>By patrol</h2>
