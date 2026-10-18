@@ -1,7 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { PaperCardRequirements } from '../components/PaperCardRequirements';
-import { Empty, Field, Notice, PageHeader, todayIso } from '../components/ui';
+import { Field, Notice, PageHeader, todayIso } from '../components/ui';
 import { errorMessage, recordPaperBlueCard } from '../lib/api';
 import { attachCardFiles } from '../lib/cardPhotos';
 import { cardFileProblem, paperDateProblem, paperRequirements } from '../lib/cards';
@@ -10,6 +10,7 @@ import { stillNeeded } from '../lib/formCheck';
 import { plural } from '../lib/plural';
 import { BADGE_MANAGER_NOTE } from '../lib/badgeAuthority';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
 
 /** The Scoutmaster or advancement chair records a blue card a Scout brought signed on paper by a counselor outside Forthright. */
 export function PaperCard() {
@@ -30,7 +31,7 @@ export function PaperCard() {
   const max = todayIso();
 
   if (!canManageBadges) {
-    return <Empty>{BADGE_MANAGER_NOTE}</Empty>;
+    return <NoAccess message={BADGE_MANAGER_NOTE} ask="badges" />;
   }
 
   async function save(e: FormEvent) {

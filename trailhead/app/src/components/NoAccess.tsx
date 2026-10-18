@@ -7,6 +7,8 @@ const NEXT_STEP = {
     'If you help run the troop and should see this, ask your Scoutmaster or another leader to give you a leader role. They do it on the Roster page.',
   treasurer:
     'If you look after the troop’s money, ask your Scoutmaster or another leader to give you the treasurer role. They do it on the Roster page.',
+  badges:
+    'If you look after advancement for the troop, ask your Scoutmaster to give you the advancement chair role. They do it on the Roster page.',
 } as const;
 
 /**

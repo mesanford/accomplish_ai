@@ -14,6 +14,7 @@ import { saveTemplate, setArchived } from '../lib/templateStore';
 import { daysToWeeks } from '../lib/templates';
 import { useTroop } from '../lib/troop';
 import type { PathTemplate } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 const BLANK: TemplateDraft = { name: '', description: '', goalAwardId: 'eagle', items: [] };
 
@@ -58,7 +59,7 @@ export function PathTemplates() {
   }
 
   if (!isLeader) {
-    return <Notice kind="warn">Only leaders can manage path templates.</Notice>;
+    return <NoAccess message="Only leaders can manage path templates." ask="leader" />;
   }
   if (templates.loading) {
     return <Loading />;
