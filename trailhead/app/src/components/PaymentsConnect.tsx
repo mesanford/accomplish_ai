@@ -6,6 +6,7 @@ import { connectStripe, disconnectStripe, isStripeUrl } from '../lib/payments';
 import { usePayments } from '../lib/paymentsHooks';
 import { useTroop } from '../lib/troop';
 import { Notice } from './ui';
+import { HelpTip } from './HelpTip';
 
 /** The treasurer connects the troop's own Stripe account (Stripe-hosted onboarding), checks it, or disconnects it.
  * Hidden while card payments are off. */
@@ -62,7 +63,10 @@ export function PaymentsConnect() {
 
   return (
     <section className="card stack" aria-label="Card payments">
-      <h2>Card payments</h2>
+      <h2>
+        Card payments
+        <HelpTip topic="cardPayments" />
+      </h2>
       <p className="small muted">
         Families can pay open charges by card. The money goes straight to the troop's own Stripe account (the troop or
         its chartered organization owns it), then to its bank. Forthright never holds the money and takes no fee.

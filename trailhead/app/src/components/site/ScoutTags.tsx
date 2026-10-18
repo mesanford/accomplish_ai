@@ -1,5 +1,7 @@
+import { PHOTO_TIP } from '../../lib/moreStatusTips';
 import { CONSENT_LABELS, consentState, tagsWillShow } from '../../lib/site';
 import type { Member } from '../../lib/types';
+import { TipPill } from '../TipPill';
 
 export interface Tags {
   scoutIds: string[];
@@ -38,7 +40,8 @@ export function ScoutTags({ subject, tags, scouts, onChange, noun }: Props) {
             Scouts in {subject}
           </legend>
           {scouts.map((s) => {
-            const [label, tone] = CONSENT_LABELS[consentState(s)];
+            const state = consentState(s);
+            const [label, tone] = CONSENT_LABELS[state];
             return (
               <div key={s.id} className="row">
                 <label className="check">
@@ -49,7 +52,9 @@ export function ScoutTags({ subject, tags, scouts, onChange, noun }: Props) {
                   />
                   {s.displayName}
                 </label>
-                <span className={`pill ${tone}`}>{label}</span>
+                <TipPill tone={tone} tip={PHOTO_TIP[state]}>
+                  {label}
+                </TipPill>
               </div>
             );
           })}

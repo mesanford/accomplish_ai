@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CustomAwardForm } from '../components/CustomAwardForm';
 import { GuideBlock } from '../components/GuideBlock';
 import { NextStep } from '../components/NextStep';
-import { Empty, Loading, PageHeader } from '../components/ui';
+import { Loading, PageHeader } from '../components/ui';
 import { useCustomAwards } from '../lib/customAwardsContext';
 import { useTroop } from '../lib/troop';
 import type { CustomAward } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
+import { HelpTip } from '../components/HelpTip';
 
 function AwardList({ awards, troopId }: { awards: CustomAward[]; troopId: string }) {
   return (
@@ -33,7 +35,7 @@ export function CustomAwards() {
   const navigate = useNavigate();
   const [creating, setCreating] = useState(false);
   if (!isLeader) {
-    return <Empty>Only leaders can manage troop awards.</Empty>;
+    return <NoAccess message="Only leaders can manage troop awards." ask="leader" />;
   }
   const active = awards.filter((a) => !a.archived);
   const archived = awards.filter((a) => a.archived);
@@ -41,6 +43,7 @@ export function CustomAwards() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Troop awards">
+        <HelpTip topic="troopAward" />
         {creating ? null : (
           <button type="button" className="btn" onClick={() => setCreating(true)}>
             New award

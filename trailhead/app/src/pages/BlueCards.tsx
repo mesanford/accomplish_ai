@@ -8,6 +8,8 @@ import { useQuery } from '../lib/hooks';
 import { BADGE_MANAGER_NOTE } from '../lib/badgeAuthority';
 import { useTroop } from '../lib/troop';
 import type { BlueCard } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
+import { HelpTip } from '../components/HelpTip';
 
 const OPEN = ['requested', 'approved', 'counselor_assigned', 'in_progress'];
 
@@ -49,13 +51,15 @@ export function BlueCards() {
   );
   const cards = useQuery<BlueCard>(openQuery, `${troopId}/open-cards/${isLeader}`);
   if (!isLeader) {
-    return <Empty>Only leaders manage blue cards.</Empty>;
+    return <NoAccess message="Only leaders manage blue cards." ask="leader" />;
   }
   const order = (c: BlueCard) => OPEN.indexOf(c.status);
   const sorted = [...cards.data].sort((a, b) => order(a) - order(b));
   return (
     <>
-      <PageHeader eyebrow="Advancement" title="Blue cards" />
+      <PageHeader eyebrow="Advancement" title="Blue cards">
+        <HelpTip topic="blueCard" />
+      </PageHeader>
       {canManageBadges ? (
         <p className="muted">
           Approve requests, then assign a merit badge counselor: a troop member, or someone outside the troop whom you sign

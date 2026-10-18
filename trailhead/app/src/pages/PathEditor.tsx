@@ -88,7 +88,9 @@ export function PathEditor() {
   }
   return (
     <>
-      <PageHeader eyebrow={memberName(scoutId)} title="Plan a path" />
+      <PageHeader eyebrow={memberName(scoutId)} title="Plan a path">
+        <HelpTip topic="pathPlan" />
+      </PageHeader>
       <GuideBlock
         id="path-editor"
         purpose="A plan is the rank and merit badges a Scout wants to finish, with rough dates. It is only a guide, and you can change it any time."

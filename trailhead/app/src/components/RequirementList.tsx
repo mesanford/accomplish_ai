@@ -1,12 +1,14 @@
 import { type ReactNode, useState } from 'react';
+import { REQUIREMENT_TIP } from '../lib/moreStatusTips';
 import { type FlatRequirement, flatten, normalizeReqId, REQUIREMENTS_ATTRIBUTION, type RequirementsDoc, wholeSentences } from '../lib/requirements';
+import { TipPill } from './TipPill';
 
 export type ReqStatus = 'signed' | 'ready' | 'review';
 
 const STATUS_PILL: Record<ReqStatus, { cls: string; text: string }> = {
   signed: { cls: 'good', text: 'Signed' },
   ready: { cls: 'warn', text: 'Ready for sign-off' },
-  review: { cls: 'bad', text: 'Needs review' },
+  review: { cls: 'warn', text: 'Needs review' },
 };
 
 interface Props {
@@ -73,7 +75,11 @@ export function RequirementList({ doc, statuses, action, selected, collapsedCoun
                 <RequirementResources req={r} />
               </div>
               <div className="req-side">
-                {status ? <span className={`pill ${STATUS_PILL[status].cls}`}>{STATUS_PILL[status].text}</span> : null}
+                {status ? (
+                  <TipPill tone={STATUS_PILL[status].cls} tip={REQUIREMENT_TIP[status]}>
+                    {STATUS_PILL[status].text}
+                  </TipPill>
+                ) : null}
                 {action ? action(r) : null}
               </div>
             </li>

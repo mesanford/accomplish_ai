@@ -4,6 +4,7 @@ import { IOS_INSTALL_STEPS, type PushState } from '../lib/installHint';
 import { dismissInstall, promptInstall, useInstallHint, usePwa } from '../lib/pwa';
 import { deviceHasToken, disablePush, enablePush, pushConfigured, readPushState } from '../lib/push';
 import { Notice } from './ui';
+import { HelpTip } from './HelpTip';
 
 const PUSH_NOTES: Partial<Record<PushState, string>> = {
   'needs-install': `On an iPhone or iPad, install Forthright first. ${IOS_INSTALL_STEPS} Then open it from your home screen and turn this on.`,
@@ -46,7 +47,10 @@ export function DeviceSettings() {
   }
   return (
     <section className="card stack" aria-labelledby="device-heading">
-      <h2 id="device-heading">This device</h2>
+      <h2 id="device-heading">
+        This device
+        <HelpTip topic="installApp" />
+      </h2>
       {hint === 'prompt' ? (
         <div className="row">
           <button type="button" className="btn" onClick={promptInstall}>

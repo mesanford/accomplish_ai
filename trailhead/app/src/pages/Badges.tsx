@@ -3,8 +3,10 @@ import { RequirementsToggle } from '../components/AwardRequirements';
 import { GuideBlock } from '../components/GuideBlock';
 import { HelpTip } from '../components/HelpTip';
 import { StartCard } from '../components/StartCard';
+import { TipPill } from '../components/TipPill';
 import { PageHeader, Pips } from '../components/ui';
 import { CATEGORY_LABELS, discontinuedLabel, eagleLabel, searchBadges } from '../lib/catalog';
+import { DISCONTINUED_TIP, EAGLE_GROUP_TIP, EAGLE_REQUIRED_TIP } from '../lib/moreStatusTips';
 import { firstPage, PAGE_SIZE } from '../lib/paging';
 import { plural } from '../lib/plural';
 
@@ -67,8 +69,20 @@ export function Badges() {
               <span className="row small muted" style={{ gap: 6 }}>
                 <Pips level={b.difficulty} /> {b.typicalTime} · {CATEGORY_LABELS[b.category]}
               </span>
-              {eagleLabel(b) ? <span><span className="pill eagle">{eagleLabel(b)}</span></span> : null}
-              {discontinuedLabel(b) ? <span><span className="pill warn">{discontinuedLabel(b)}</span></span> : null}
+              {eagleLabel(b) ? (
+                <span>
+                  <TipPill tone="eagle" tip={b.eagleRequired ? EAGLE_REQUIRED_TIP : EAGLE_GROUP_TIP}>
+                    {eagleLabel(b)}
+                  </TipPill>
+                </span>
+              ) : null}
+              {discontinuedLabel(b) ? (
+                <span>
+                  <TipPill tone="warn" tip={DISCONTINUED_TIP}>
+                    {discontinuedLabel(b)}
+                  </TipPill>
+                </span>
+              ) : null}
             </div>
             <p className="small">{b.summary}</p>
             <p className="small muted">

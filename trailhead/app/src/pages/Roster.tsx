@@ -12,7 +12,7 @@ import { HealthPills } from '../components/HealthPills';
 import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { ColorSwatch } from '../components/patrols/PatrolCard';
-import { Empty, Loading, Notice, PageHeader } from '../components/ui';
+import { Empty, Notice, PageHeader } from '../components/ui';
 import { syncConsentHolds } from '../lib/api';
 import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
@@ -28,9 +28,10 @@ import { useTroop } from '../lib/troop';
 import type { Access, ConsentDoc, ConsentRequest, Member, ScoutRecord } from '../lib/types';
 import { TipPill } from '../components/TipPill';
 import { PAUSED_TIP, REVIEW_TIP } from '../lib/statusTips';
+import { NoAccess } from '../components/NoAccess';
 
 export function Roster() {
-  const { troopId, members, memberName, isLeader, canManageBadges, loading } = useTroop();
+  const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
   const [added, setAdded] = useState('');
   const [patrolFilter, setPatrolFilter] = useState('');
   const { forms: healthForms } = useHealthForms();
@@ -83,8 +84,7 @@ export function Roster() {
     .filter((m) => m.kind === 'adult')
     .sort((a, b) => a.displayName.localeCompare(b.displayName));
   if (!isLeader) {
-    // Until this person's access loads, they aren't a leader yet; don't tell a leader they can't manage the roster.
-    return loading ? <Loading /> : <Empty>Only leaders can manage the roster.</Empty>;
+    return <NoAccess message="Only leaders can manage the roster." ask="leader" />;
   }
   const consentOf = (s: Member) =>
     consentSummary(

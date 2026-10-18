@@ -23,7 +23,14 @@ function LeaderStart() {
   if (events.loading || paths.loading) {
     return null;
   }
-  return <Checklist title="Getting started" items={leaderChecklist(`/t/${troopId}`, data)} dismissKey={`start.leader.${troopId}`} />;
+  return (
+    <Checklist
+      title="Getting started"
+      items={leaderChecklist(`/t/${troopId}`, data)}
+      dismissKey={`start.leader.${troopId}`}
+      help="gettingStarted"
+    />
+  );
 }
 
 function FamilyStart() {

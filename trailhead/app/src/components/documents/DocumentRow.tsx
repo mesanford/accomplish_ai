@@ -3,6 +3,7 @@ import { getDownloadURL, ref } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import { errorMessage } from '../../lib/api';
 import { db, storage } from '../../lib/firebase';
+import { DOCUMENT_TIP } from '../../lib/moreStatusTips';
 import {
   CATEGORIES,
   categoryLabel,
@@ -17,6 +18,7 @@ import {
 } from '../../lib/siteDocs';
 import { useTroop } from '../../lib/troop';
 import { ScoutTags } from '../site/ScoutTags';
+import { TipPill } from '../TipPill';
 import { Field, Notice } from '../ui';
 
 /** Opens a stored file in a new tab. The address is fetched when the row shows, so the link is a real link. */
@@ -133,7 +135,11 @@ export function DocumentRow({ d, troopId, manage }: { d: TroopDocument; troopId:
         <>
           <OpenLink doc={d} />
           <span className="muted small">{details}</span>
-          {manage ? <span className={`pill ${d.visibility === 'leaders' ? 'warn' : 'neutral'}`}>{VISIBILITY_LABELS[d.visibility]}</span> : null}
+          {manage ? (
+            <TipPill tone={d.visibility === 'leaders' ? 'warn' : 'neutral'} tip={DOCUMENT_TIP[d.visibility]}>
+              {VISIBILITY_LABELS[d.visibility]}
+            </TipPill>
+          ) : null}
         </>
       )}
       <Notice kind="error">{error}</Notice>

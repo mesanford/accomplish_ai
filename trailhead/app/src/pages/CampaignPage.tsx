@@ -23,6 +23,7 @@ import { centsToInput, formatCents } from '../lib/money';
 import { postSales, saveCampaign } from '../lib/moneyApi';
 import { useMoneyAccess, useRosterScouts } from '../lib/moneyHooks';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
 
 /** A fundraiser: its credit rule, each Scout's sales, the totals, and the button that credits the accounts. */
 export function CampaignPage() {
@@ -61,7 +62,7 @@ export function CampaignPage() {
   }, [loaded?.id, loaded?.updatedAt?.toMillis?.()]);
 
   if (!canSeeMoney) {
-    return <Empty>Only the treasurer, the Scoutmaster and the advancement chair see fundraisers.</Empty>;
+    return <NoAccess message="Only the treasurer, the Scoutmaster and the advancement chair see fundraisers." ask="treasurer" />;
   }
   if (!isNew && campaign.loading) {
     return <Loading />;

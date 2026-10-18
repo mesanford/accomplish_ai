@@ -5,8 +5,10 @@ import { closedReason, permissionText, STATUS_LABELS, type Signup } from '../../
 import { approvePermission, cancelSignup } from '../../lib/eventsApi';
 import { db } from '../../lib/firebase';
 import { useDoc } from '../../lib/hooks';
+import { SIGNUP_TIP } from '../../lib/moreStatusTips';
 import { useTroop } from '../../lib/troop';
 import type { TroopEvent } from '../../lib/types';
+import { TipPill } from '../TipPill';
 import { Field, Notice, todayIso } from '../ui';
 import { EventHealth } from './EventHealth';
 import { SignupForm } from './SignupForm';
@@ -88,7 +90,9 @@ export function PersonSignup({ troopId, event, memberId, name, full }: Props) {
       {signup ? (
         <>
           <p>
-            <span className={`pill ${signup.status === 'going' ? 'good' : 'warn'}`}>{STATUS_LABELS[signup.status]}</span>
+            <TipPill tone={signup.status === 'going' ? 'good' : 'warn'} tip={SIGNUP_TIP[signup.status]}>
+              {STATUS_LABELS[signup.status]}
+            </TipPill>
           </p>
           {permissionText(signup.permission, when(signup.permission.at)) ? (
             <p className="small muted">{permissionText(signup.permission, when(signup.permission.at))}</p>

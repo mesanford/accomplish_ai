@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CampaignList } from '../components/CampaignList';
 import { Money, Total } from '../components/Money';
-import { Empty, Loading, Notice, PageHeader } from '../components/ui';
+import { Loading, Notice, PageHeader } from '../components/ui';
 import { accountName, type AccountDoc, GENERAL_FUND, isFormer } from '../lib/ledger';
 import { balancesCsv, ledgerCsv } from '../lib/moneyCsv';
 import { useAccounts, useLedger, useMoneyAccess, useRosterScouts } from '../lib/moneyHooks';
@@ -10,6 +10,7 @@ import { usePayments } from '../lib/paymentsHooks';
 import { downloadCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
 import { HelpTip } from '../components/HelpTip';
+import { NoAccess } from '../components/NoAccess';
 
 /** The troop summary: money held in Scout accounts, open charges, every Scout's balance, and the export. */
 export function Accounts() {
@@ -22,7 +23,7 @@ export function Accounts() {
   const payments = usePayments();
 
   if (!canSeeMoney) {
-    return <Empty>Only the treasurer, the Scoutmaster and the advancement chair see the troop's accounts.</Empty>;
+    return <NoAccess message="Only the treasurer, the Scoutmaster and the advancement chair see the troop's accounts." ask="treasurer" />;
   }
   const byId = new Map(accounts.data.map((a) => [a.id, a]));
   const nameOf = (id: string) => scouts.find((s) => s.id === id)?.displayName;

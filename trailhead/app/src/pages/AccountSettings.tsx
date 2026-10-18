@@ -1,13 +1,14 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { PaymentsConnect } from '../components/PaymentsConnect';
 import { RuleFields } from '../components/RuleFields';
-import { Empty, Field, Notice, PageHeader } from '../components/ui';
+import { Field, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { type AccountSettings as Settings, ruleFromInput, type RuleKind, ruleText, ruleToInput } from '../lib/campaigns';
 import { saveAccountSettings } from '../lib/moneyApi';
 import { useMoneyAccess } from '../lib/moneyHooks';
 import { usePayments } from '../lib/paymentsHooks';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
 
 /** The troop's account rules, chosen by the treasurer and shown to families. */
 export function AccountSettings() {
@@ -37,7 +38,7 @@ export function AccountSettings() {
   }, [savedKey]);
 
   if (!isTreasurer) {
-    return <Empty>Only the treasurer changes the troop's account settings.</Empty>;
+    return <NoAccess message="Only the treasurer changes the troop's account settings." ask="treasurer" />;
   }
   const rule = ruleFromInput(kind, amount);
 
@@ -99,6 +100,7 @@ export function AccountSettings() {
         </p>
         <Field
           label="What account credit can pay for"
+          help="accountCredit"
           htmlFor="credit-policy"
           hint="Families see this. For example: campouts, summer camp, dues, uniforms and books."
         >

@@ -11,6 +11,7 @@ import type { ScoutRecord } from '../lib/types';
 import { YPT_TONE } from '../lib/ypt';
 import { TipPill } from '../components/TipPill';
 import { yptTip } from '../lib/statusTips';
+import { NoAccess } from '../components/NoAccess';
 
 function Line({ row }: { row: RechartRow }) {
   const { troopId } = useTroop();
@@ -50,7 +51,7 @@ export function Recharter() {
     [members, records.data, today],
   );
   if (!isLeader) {
-    return <Empty>Only leaders can open the recharter roster.</Empty>;
+    return <NoAccess message="Only leaders can open the recharter roster." ask="leader" />;
   }
   if (loading || records.loading) {
     return <Loading />;

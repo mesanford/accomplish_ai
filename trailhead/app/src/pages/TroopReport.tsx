@@ -1,7 +1,7 @@
 import { collection } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Empty, Field, PageHeader } from '../components/ui';
+import { Field, PageHeader } from '../components/ui';
 import { type ActivityEntry, type DateRange, presetRange, type RangePreset, troopReport } from '../lib/activity';
 import { downloadCsv, reportCsv, reportFileName } from '../lib/activityCsv';
 import { db } from '../lib/firebase';
@@ -9,6 +9,7 @@ import { useQuery } from '../lib/hooks';
 import { usePatrols } from '../lib/patrolHooks';
 import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
 
 type Choice = RangePreset | 'custom';
 const CHOICES: [Choice, string][] = [
@@ -36,7 +37,7 @@ export function TroopReportPage() {
   const average = scouts.length ? Math.round((thisYear.total.serviceHours / scouts.length) * 10) / 10 : 0;
 
   if (!isLeader) {
-    return <Empty>Only leaders can see the troop report.</Empty>;
+    return <NoAccess message="Only leaders can see the troop report." ask="leader" />;
   }
   return (
     <>

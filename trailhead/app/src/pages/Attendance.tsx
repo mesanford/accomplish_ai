@@ -13,6 +13,7 @@ import { useDoc, useQuery } from '../lib/hooks';
 import { plural } from '../lib/plural';
 import { useTroop } from '../lib/troop';
 import type { TroopEvent } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 interface Attendance {
   id: string;
@@ -46,11 +47,13 @@ export function AttendancePage() {
   }
 
   if (!isLeader) {
-    return <Empty>Only leaders take attendance.</Empty>;
+    return <NoAccess message="Only leaders take attendance." ask="leader" />;
   }
   return (
     <>
-      <PageHeader eyebrow={event.data ? formatDate(event.data.start) : 'Event'} title={event.data?.title ?? 'Attendance'} />
+      <PageHeader eyebrow={event.data ? formatDate(event.data.start) : 'Event'} title={event.data?.title ?? 'Attendance'}>
+        <HelpTip topic="attendance" />
+      </PageHeader>
       <GuideBlock
         id="attendance"
         purpose="Tick each Scout who came. That is all you need to do."

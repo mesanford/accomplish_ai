@@ -1,8 +1,10 @@
 import { Fragment, useState } from 'react';
 import { BADGES, badge, discontinuedLabel, eagleLabel } from '../lib/catalog';
+import { DISCONTINUED_TIP, EAGLE_GROUP_TIP, EAGLE_REQUIRED_TIP } from '../lib/moreStatusTips';
 import type { PathItemDoc } from '../lib/types';
 import { AwardRequirements } from './AwardRequirements';
 import { HelpTip } from './HelpTip';
+import { TipPill } from './TipPill';
 import { Empty, Pips } from './ui';
 
 interface Props {
@@ -63,8 +65,16 @@ export function PathItems({ items, onChange }: Props) {
                         <strong>{b?.name ?? item.awardId}</strong>
                         <span className="row small muted" style={{ gap: 6 }}>
                           <Pips level={b?.difficulty ?? 1} /> {b?.typicalTime}
-                          {b && eagleLabel(b) ? <span className="pill eagle">{eagleLabel(b)}</span> : null}
-                          {b && discontinuedLabel(b) ? <span className="pill warn">{discontinuedLabel(b)}</span> : null}
+                          {b && eagleLabel(b) ? (
+                            <TipPill tone="eagle" tip={b.eagleRequired ? EAGLE_REQUIRED_TIP : EAGLE_GROUP_TIP}>
+                              {eagleLabel(b)}
+                            </TipPill>
+                          ) : null}
+                          {b && discontinuedLabel(b) ? (
+                            <TipPill tone="warn" tip={DISCONTINUED_TIP}>
+                              {discontinuedLabel(b)}
+                            </TipPill>
+                          ) : null}
                         </span>
                         <span>
                           <button

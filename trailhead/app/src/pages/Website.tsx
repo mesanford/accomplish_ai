@@ -12,19 +12,20 @@ import { MeetingSection } from '../components/site/MeetingSection';
 import { GuideBlock } from '../components/GuideBlock';
 import { DomainPanel } from '../components/site/DomainPanel';
 import { PublishPanel } from '../components/site/PublishPanel';
-import { Empty, Loading, PageHeader } from '../components/ui';
+import { Loading, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
 import { type EditDraft, normalizeDraft, type SiteDraft } from '../lib/site';
 import { publishSite, type PublishResult, unpublishSite } from '../lib/siteApi';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
 
 type Message = { kind: 'ok' | 'error'; text: string } | null;
 
 /** The no-code website builder. Leaders edit a draft; Publish makes a safe public copy on the server. */
 export function Website() {
-  const { troopId, troop, isLeader, loading } = useTroop();
+  const { troopId, troop, isLeader } = useTroop();
   const draftRef = useMemo(() => (isLeader ? doc(db, 'troops', troopId, 'site', 'draft') : null), [troopId, isLeader]);
   const saved = useDoc<Partial<SiteDraft>>(draftRef);
   const [draft, setDraft] = useState<SiteDraft | null>(null);
@@ -41,8 +42,8 @@ export function Website() {
     }
   }, [draft, saved.loading, saved.data, troop]);
 
-  if (!loading && !isLeader) {
-    return <Empty>Only troop leaders can edit the troop website.</Empty>;
+  if (!isLeader) {
+    return <NoAccess message="Only troop leaders can edit the troop website." ask="leader" />;
   }
   if (!draft) {
     return <Loading />;

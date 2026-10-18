@@ -7,6 +7,8 @@ import { paymentsCsv } from '../lib/paymentsCsv';
 import { usePaymentRecords, usePayments } from '../lib/paymentsHooks';
 import { downloadCsv } from '../lib/scoutbook';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
+import { HelpTip } from '../components/HelpTip';
 
 /** Every card payment: status, links to the troop's Stripe dashboard, and the reconciliation spreadsheet. */
 export function Payments() {
@@ -17,7 +19,7 @@ export function Payments() {
   const scouts = useRosterScouts();
 
   if (!canSeeMoney) {
-    return <Empty>Only the treasurer, the Scoutmaster and the advancement chair see the troop's payments.</Empty>;
+    return <NoAccess message="Only the treasurer, the Scoutmaster and the advancement chair see the troop's payments." ask="treasurer" />;
   }
   const nameOf = (id: string) => scouts.find((s) => s.id === id)?.displayName;
   const shown = records.data.filter((p) => p.status !== 'starting');
@@ -27,6 +29,7 @@ export function Payments() {
   return (
     <>
       <PageHeader eyebrow="Scout accounts" title="Card payments">
+        <HelpTip topic="cardPayments" />
         <Link className="btn quiet small" to={`/t/${troopId}/accounts`}>
           All accounts
         </Link>

@@ -2,6 +2,7 @@ import { type EditDraft, type SiteDraft } from '../../lib/site';
 import { move, newPage, PAGE_LIMITS } from '../../lib/sitePages';
 import { Empty } from '../ui';
 import { PageCard } from './PageCard';
+import { HelpTip } from '../HelpTip';
 
 interface Props {
   troopId: string;
@@ -15,7 +16,10 @@ export function PagesSection({ troopId, draft, onChange }: Props) {
   const set = (next: SiteDraft['pages']) => onChange({ pages: next });
   return (
     <section className="card">
-      <h2>Pages</h2>
+      <h2>
+        Pages
+        <HelpTip topic="sitePages" />
+      </h2>
       <p className="muted small">
         Add pages such as "High adventure" or "New families". Each one gets its own address and a place in the site
         menu, in the order shown here. Use headings, text, bullet lists, links and images.

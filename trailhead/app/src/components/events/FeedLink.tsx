@@ -4,6 +4,7 @@ import { calendarUrls } from '../../lib/eventSignups';
 import { type FeedPaths, getCalendarFeed, resetCalendarFeed } from '../../lib/eventsApi';
 import { useTroop } from '../../lib/troop';
 import { Notice } from '../ui';
+import { HelpTip } from '../HelpTip';
 
 /** A private calendar address for Google, Apple and Outlook calendars, with a copy button and a reset. */
 export function FeedLink() {
@@ -44,7 +45,10 @@ export function FeedLink() {
   const open = paths.publicPath ? calendarUrls(window.location.origin, paths.publicPath) : null;
   return (
     <section className="card stack" aria-label="Calendar link">
-      <h2>Your troop calendar</h2>
+      <h2>
+        Your troop calendar
+        <HelpTip topic="calendarFeed" />
+      </h2>
       <p className="small">
         Add this address to Google Calendar, Apple Calendar or Outlook as a subscription. New events show up on their own. It lists
         event names, dates, places and links. It has no names of Scouts. Keep it private: anyone with it can see the troop's events.

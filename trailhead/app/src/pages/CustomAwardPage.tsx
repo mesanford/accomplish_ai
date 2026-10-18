@@ -7,6 +7,7 @@ import { archiveCustomAward, errorMessage } from '../lib/api';
 import { useCustomAwards, useCustomVersions } from '../lib/customAwardsContext';
 import { useTroop } from '../lib/troop';
 import type { CustomAwardVersion } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 function VersionHistory({ versions, currentId }: { versions: CustomAwardVersion[]; currentId: string }) {
   const { memberName } = useTroop();
@@ -50,7 +51,7 @@ export function CustomAwardPage() {
   const award = byId.get(awardId);
 
   if (!isLeader) {
-    return <Empty>Only leaders can manage troop awards.</Empty>;
+    return <NoAccess message="Only leaders can manage troop awards." ask="leader" />;
   }
   if (loading || versions.loading) {
     return <Loading />;

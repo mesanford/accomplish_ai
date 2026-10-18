@@ -1,7 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Money } from '../components/Money';
-import { Empty, Field, formatDate, Notice, PageHeader, todayIso } from '../components/ui';
+import { Field, formatDate, Notice, PageHeader, todayIso } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { computeAccount, newestFirst, type PayMethod } from '../lib/ledger';
 import { formatCents, parseDollars } from '../lib/money';
@@ -9,6 +9,7 @@ import { recordPayment } from '../lib/moneyApi';
 import { owedTotal, paymentProblem } from '../lib/moneyForms';
 import { useLedger, useMoneyAccess, useRosterScouts } from '../lib/moneyHooks';
 import { useTroop } from '../lib/troop';
+import { NoAccess } from '../components/NoAccess';
 
 /** The treasurer records money the family paid the troop (cash, check, other), or pays charges from credit. */
 export function RecordPayment() {
@@ -28,7 +29,7 @@ export function RecordPayment() {
   const [done, setDone] = useState('');
 
   if (!isTreasurer) {
-    return <Empty>Only the treasurer records payments.</Empty>;
+    return <NoAccess message="Only the treasurer records payments." ask="treasurer" />;
   }
   const state = computeAccount(scoutId ? ledger.data : []);
   const open = newestFirst(ledger.data).filter((e) => e.id in state.owed).reverse(); // oldest first

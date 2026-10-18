@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { type ActivityEntry, KIND_LABELS } from '../../lib/activity';
 import { deleteActivityEntry, reviewActivityEntry } from '../../lib/activityApi';
 import { errorMessage } from '../../lib/api';
+import { ACTIVITY_TIP } from '../../lib/moreStatusTips';
 import { plural } from '../../lib/plural';
+import { TipPill } from '../TipPill';
 import { formatDate, Notice } from '../ui';
 
 const STATUS: Record<string, [string, string]> = {
@@ -61,7 +63,11 @@ export function EntryRow({
         <Notice kind="error">{error}</Notice>
       </div>
       <div className="row">
-        {STATUS[status] ? <span className={`pill ${STATUS[status][1]}`}>{STATUS[status][0]}</span> : null}
+        {STATUS[status] ? (
+          <TipPill tone={STATUS[status][1]} tip={ACTIVITY_TIP[status as 'pending' | 'rejected']}>
+            {STATUS[status][0]}
+          </TipPill>
+        ) : null}
         {leader && status === 'pending' ? (
           <>
             <button type="button" className="btn small" onClick={() => run(() => reviewActivityEntry(troopId, entry.id, 'approve'))}>

@@ -84,6 +84,7 @@ export function SignupForm({ troopId, eventId, memberId, name, settings, asParen
       {asParent ? (
         <Field
           label="Health or emergency note (optional)"
+          help="healthNote"
           htmlFor={`${memberId}-note`}
           hint="Only troop leaders can read this. Allergies, medicines, anything a leader should know."
         >

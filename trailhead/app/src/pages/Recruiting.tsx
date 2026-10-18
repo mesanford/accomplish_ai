@@ -5,6 +5,7 @@ import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { LEAD_STATUSES, useLeads } from '../lib/leads';
 import { useTroop } from '../lib/troop';
 import type { LeadStatus } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 export function Recruiting() {
   const { troopId, isLeader } = useTroop();
@@ -12,7 +13,7 @@ export function Recruiting() {
   const [filter, setFilter] = useState<LeadStatus | 'all'>('all');
 
   if (!isLeader) {
-    return <Empty>Only troop leaders can see families who asked about the troop.</Empty>;
+    return <NoAccess message="Only troop leaders can see families who asked about the troop." ask="leader" />;
   }
   const shown = filter === 'all' ? leads.data : leads.data.filter((l) => l.status === filter);
   const count = (status: LeadStatus) => leads.data.filter((l) => l.status === status).length;

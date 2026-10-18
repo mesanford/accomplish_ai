@@ -2,22 +2,36 @@ import { useState } from 'react';
 import { errorMessage, moveToCustomVersion } from '../lib/api';
 import { describeMove } from '../lib/customAwards';
 import { useCustomAwards, useCustomVersion } from '../lib/customAwardsContext';
+import { AWARD_FINISHED_TIP, REQUIREMENT_TIP } from '../lib/moreStatusTips';
 import { useTroop } from '../lib/troop';
 import type { CustomRequirement, Progress } from '../lib/types';
+import { TipPill } from './TipPill';
 import { Empty, formatDate, Notice } from './ui';
 
 const versionNumber = (id: string) => id.replace(/^v/, '');
 
 function RequirementStatus({ req, progress }: { req: CustomRequirement; progress: Progress }) {
   if ((progress.needsReview ?? []).includes(req.id)) {
-    return <span className="pill warn">Needs review</span>;
+    return (
+      <TipPill tone="warn" tip={REQUIREMENT_TIP.review}>
+        Needs review
+      </TipPill>
+    );
   }
   const state = progress.requirements?.[req.id]?.status;
   if (state === 'signed') {
-    return <span className="pill good">Signed</span>;
+    return (
+      <TipPill tone="good" tip={REQUIREMENT_TIP.signed}>
+        Signed
+      </TipPill>
+    );
   }
   if (state === 'ready') {
-    return <span className="pill neutral">Ready for sign-off</span>;
+    return (
+      <TipPill tone="warn" tip={REQUIREMENT_TIP.ready}>
+        Ready for sign-off
+      </TipPill>
+    );
   }
   return null;
 }
@@ -86,7 +100,9 @@ function CustomAwardCard({ progress, scoutName }: { progress: Progress; scoutNam
       <div className="row spread">
         <h3>{award?.name ?? 'Troop award'}</h3>
         {progress.status === 'complete' ? (
-          <span className="pill good">Complete {formatDate(progress.completedAt)}</span>
+          <TipPill tone="good" tip={AWARD_FINISHED_TIP}>
+            Complete {formatDate(progress.completedAt)}
+          </TipPill>
         ) : (
           <span className="pill neutral">
             {signed} of {reqs.length} signed · Version {versionNumber(progress.versionId)}

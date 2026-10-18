@@ -23,6 +23,7 @@ import { db } from '../lib/firebase';
 import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
 import type { BlueCard, ConsentRequest, PathDoc, Progress, ScoutRecord } from '../lib/types';
+import { HelpTip } from '../components/HelpTip';
 
 export function ScoutPage() {
   const { scoutId = '' } = useParams();
@@ -110,7 +111,10 @@ export function ScoutPage() {
       </section>
       {custom.length > 0 || isLeader ? (
         <section className="stack">
-          <h2>Troop awards</h2>
+          <h2>
+            Troop awards
+            <HelpTip topic="troopAward" />
+          </h2>
           <CustomProgress progress={custom} scoutName={scout.displayName} />
         </section>
       ) : null}
@@ -130,7 +134,10 @@ export function ScoutPage() {
         <>
           {/* Full width: the requirement checklist needs room to read. */}
           <section className="card">
-            <h2>Sign off a requirement</h2>
+            <h2>
+              Sign off a requirement
+              <HelpTip topic="signOff" />
+            </h2>
             <SignOffForm troopId={troopId} scoutId={scoutId} />
           </section>
           <div
@@ -141,7 +148,10 @@ export function ScoutPage() {
             }}
           >
             <section className="card">
-              <h2>Sign off a troop award</h2>
+              <h2>
+                Sign off a troop award
+                <HelpTip topic="signOff" />
+              </h2>
               <CustomSignOff troopId={troopId} scoutId={scoutId} progress={custom} />
             </section>
             <section className="card">

@@ -9,6 +9,7 @@ import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
 import type { ScoutbookReport } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 export function Scoutbook() {
   const { troopId, isLeader } = useTroop();
@@ -23,7 +24,7 @@ export function Scoutbook() {
   const [error, setError] = useState('');
 
   if (!isLeader) {
-    return <Empty>Only leaders can see Scoutbook reports.</Empty>;
+    return <NoAccess message="Only leaders can see Scoutbook reports." ask="leader" />;
   }
 
   async function create() {

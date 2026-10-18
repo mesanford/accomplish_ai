@@ -5,6 +5,7 @@ import { ADULT_ROLES, needsTrainingDate, ROLE_LABELS, roleChange, rolesProblem, 
 import { useTroop } from '../lib/troop';
 import type { Member, Role } from '../lib/types';
 import { Field, Notice } from './ui';
+import { HelpTip } from './HelpTip';
 
 interface Props {
   adult: Member;
@@ -64,7 +65,10 @@ export function MemberRoles({ adult, scouts, pendingScoutIds, onClose }: Props) 
   return (
     <form className="form card" onSubmit={save} aria-label={`Roles for ${adult.displayName}`}>
       <fieldset className="field" style={{ border: 0, padding: 0, margin: 0 }}>
-        <legend style={{ fontWeight: 600, fontSize: 14 }}>Roles for {adult.displayName}</legend>
+        <legend style={{ fontWeight: 600, fontSize: 14 }}>
+          Roles for {adult.displayName}
+          <HelpTip topic="roles" />
+        </legend>
         {ADULT_ROLES.map((role) => (
           <label key={role} className="check">
             <input type="checkbox" checked={roles.includes(role)} onChange={() => toggleRole(role)} />
@@ -103,6 +107,7 @@ export function MemberRoles({ adult, scouts, pendingScoutIds, onClose }: Props) 
       {needsDate ? (
         <Field
           label="Youth Protection training expires"
+          help="ypt"
           htmlFor={`ypt-${adult.id}`}
           hint="These roles need current training. Add the date from their certificate."
         >

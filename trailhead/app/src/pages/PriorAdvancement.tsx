@@ -6,7 +6,7 @@ import { HelpTip } from '../components/HelpTip';
 import { type BadgeEntry, PriorBadges } from '../components/PriorBadges';
 import { type PartialEntry, PriorPartials } from '../components/PriorPartials';
 import { PriorRanks } from '../components/PriorRanks';
-import { Empty, formatDate, Loading, Notice, PageHeader } from '../components/ui';
+import { formatDate, Loading, Notice, PageHeader } from '../components/ui';
 import { errorMessage, recordPriorAdvancement } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
@@ -14,6 +14,7 @@ import { useDoc, useQuery } from '../lib/hooks';
 import { PRIOR_BADGES_NOTE } from '../lib/badgeAuthority';
 import { useTroop } from '../lib/troop';
 import type { Progress, ScoutRecord } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 /** Leaders record ranks, and the Scoutmaster and advancement chair record merit badges, a Scout earned before joining Forthright. */
 export function PriorAdvancement() {
@@ -40,7 +41,7 @@ export function PriorAdvancement() {
   }, [record.data]);
 
   if (!isLeader) {
-    return <Empty>Only leaders can record earlier advancement.</Empty>;
+    return <NoAccess message="Only leaders can record earlier advancement." ask="leader" />;
   }
   if (record.loading) {
     return <Loading />;

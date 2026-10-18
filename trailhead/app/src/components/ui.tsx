@@ -1,5 +1,9 @@
 import type { ReactNode } from 'react';
+import { CARD_TIP, PATH_TIP } from '../lib/moreStatusTips';
 import type { CardStatus, Feasibility } from '../lib/types';
+import type { HelpKey } from '../lib/help';
+import { HelpTip } from './HelpTip';
+import { TipPill } from './TipPill';
 
 export function Pips({ level }: { level: number }) {
   return (
@@ -24,10 +28,30 @@ export function Notice({ kind, children }: { kind: 'error' | 'ok' | 'warn'; chil
   );
 }
 
-export function Field({ label, hint, htmlFor, children }: { label: string; hint?: string; htmlFor: string; children: ReactNode }) {
+export function Field({
+  label,
+  hint,
+  help,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  /** An explanation offered beside the label (kept outside it, so the field's name is just the label). */
+  help?: HelpKey;
+  htmlFor: string;
+  children: ReactNode;
+}) {
   return (
     <div className="field">
-      <label htmlFor={htmlFor}>{label}</label>
+      {help ? (
+        <span className="field-label">
+          <label htmlFor={htmlFor}>{label}</label>
+          <HelpTip topic={help} />
+        </span>
+      ) : (
+        <label htmlFor={htmlFor}>{label}</label>
+      )}
       {children}
       {hint ? <span className="hint">{hint}</span> : null}
     </div>
@@ -53,7 +77,11 @@ const CARD_LABELS: Record<CardStatus, [string, string]> = {
 
 export function CardStatusPill({ status }: { status: CardStatus }) {
   const [label, tone] = CARD_LABELS[status];
-  return <span className={`pill ${tone}`}>{label}</span>;
+  return (
+    <TipPill tone={tone} tip={CARD_TIP[status]}>
+      {label}
+    </TipPill>
+  );
 }
 
 const PATH_LABELS: Record<Feasibility['status'], [string, string]> = {
@@ -64,7 +92,11 @@ const PATH_LABELS: Record<Feasibility['status'], [string, string]> = {
 
 export function PathStatusPill({ status }: { status: Feasibility['status'] }) {
   const [label, tone] = PATH_LABELS[status];
-  return <span className={`pill ${tone}`}>{label}</span>;
+  return (
+    <TipPill tone={tone} tip={PATH_TIP[status]}>
+      {label}
+    </TipPill>
+  );
 }
 
 export function PageHeader({ eyebrow, title, children }: { eyebrow?: string; title: string; children?: ReactNode }) {

@@ -7,6 +7,7 @@ import { PATROL_COLORS } from '../lib/patrols';
 import { usePatrols } from '../lib/patrolHooks';
 import { useTroop } from '../lib/troop';
 import { HelpTip } from '../components/HelpTip';
+import { NoAccess } from '../components/NoAccess';
 
 export function Patrols() {
   const { troopId, members, isLeader } = useTroop();
@@ -33,7 +34,7 @@ export function Patrols() {
   }
 
   if (!isLeader) {
-    return <Empty>Only leaders can manage patrols.</Empty>;
+    return <NoAccess message="Only leaders can manage patrols." ask="leader" />;
   }
   return (
     <>

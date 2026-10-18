@@ -2,7 +2,7 @@ import { collection } from 'firebase/firestore';
 import { type FormEvent, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ScoutChecklist } from '../components/ScoutChecklist';
-import { Empty, Field, formatDate, Notice, PageHeader } from '../components/ui';
+import { Field, formatDate, Notice, PageHeader } from '../components/ui';
 import { errorMessage } from '../lib/api';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
@@ -12,6 +12,7 @@ import { chargeProblem, chargeSummary, type Who } from '../lib/moneyForms';
 import { useMoneyAccess, useRosterScouts } from '../lib/moneyHooks';
 import { useTroop } from '../lib/troop';
 import type { TroopEvent } from '../lib/types';
+import { NoAccess } from '../components/NoAccess';
 
 /** The treasurer charges many Scouts at once: everyone at an event, a list, or the whole roster. */
 export function PostCharge() {
@@ -39,7 +40,7 @@ export function PostCharge() {
   const present = scouts.filter((s) => attendance.data.some((a) => a.id === s.id && a.present));
 
   if (!isTreasurer) {
-    return <Empty>Only the treasurer posts charges.</Empty>;
+    return <NoAccess message="Only the treasurer posts charges." ask="treasurer" />;
   }
   const sortedEvents = [...events.data].sort((a, b) => b.start.localeCompare(a.start));
 

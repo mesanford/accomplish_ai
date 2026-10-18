@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { errorMessage } from '../lib/api';
+import { PHOTO_TIP } from '../lib/moreStatusTips';
 import { CONSENT_LABELS, consentState } from '../lib/site';
 import { setMediaConsent } from '../lib/siteApi';
 import { useTroop } from '../lib/troop';
 import type { Member } from '../lib/types';
 import { HelpTip } from './HelpTip';
+import { TipPill } from './TipPill';
 import { formatDate, Notice } from './ui';
 
 /** A parent (or a leader recording a paper form) allows or withdraws photos of a Scout on the public website. */
@@ -45,7 +47,9 @@ export function MediaConsent({ scout }: { scout: Member }) {
           Photos on the troop website
           <HelpTip topic="mediaConsent" />
         </h2>
-        <span className={`pill ${tone}`}>{label}</span>
+        <TipPill tone={tone} tip={PHOTO_TIP[state]}>
+          {label}
+        </TipPill>
       </div>
       <p className="small">
         Allowing this lets troop leaders put photos that show {first} on the troop's public website. {first}'s name is

@@ -1,8 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { type ChecklistItem, progress, readHidden, writeHidden } from '../lib/guidance';
+import type { HelpKey } from '../lib/help';
+import { HelpTip } from './HelpTip';
 
-export function Checklist({ title, items, dismissKey }: { title: string; items: ChecklistItem[]; dismissKey: string }) {
+export function Checklist({
+  title,
+  items,
+  dismissKey,
+  help,
+}: {
+  title: string;
+  items: ChecklistItem[];
+  dismissKey: string;
+  /** An explanation to offer beside the title. */
+  help?: HelpKey;
+}) {
   const [hidden, setHidden] = useState(() => readHidden(dismissKey));
   const { done, total, complete } = progress(items);
   if (hidden || complete) {
@@ -11,7 +24,10 @@ export function Checklist({ title, items, dismissKey }: { title: string; items: 
   return (
     <section className="card getting-started" aria-label={title}>
       <div className="row spread">
-        <h2>{title}</h2>
+        <h2>
+          {title}
+          {help ? <HelpTip topic={help} /> : null}
+        </h2>
         <span className="muted small">
           {done} of {total} done
         </span>

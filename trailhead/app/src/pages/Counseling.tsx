@@ -12,6 +12,7 @@ import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
 import { statusLookup } from '../lib/requirements';
 import type { BlueCard, Progress } from '../lib/types';
+import { HelpTip } from '../components/HelpTip';
 
 function CounselCard({ card }: { card: BlueCard }) {
   const { troopId, memberName } = useTroop();
@@ -85,7 +86,10 @@ export function Counseling() {
   const done = cards.data.filter((c) => c.status === 'complete');
   return (
     <>
-      <PageHeader eyebrow="Merit badge counselor" title="Your Scouts" />
+      <PageHeader eyebrow="Merit badge counselor" title="Your Scouts">
+        <HelpTip topic="counselor" />
+        <HelpTip topic="blueCard" />
+      </PageHeader>
       {active.length === 0 ? <Empty>No Scouts are assigned to you right now.</Empty> : active.map((c) => <CounselCard key={c.id} card={c} />)}
       {done.length > 0 ? (
         <section className="stack">

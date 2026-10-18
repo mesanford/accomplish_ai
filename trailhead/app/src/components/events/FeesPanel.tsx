@@ -6,6 +6,7 @@ import { useMoneyAccess } from '../../lib/moneyHooks';
 import { plural } from '../../lib/plural';
 import type { TroopEvent } from '../../lib/types';
 import { Notice } from '../ui';
+import { HelpTip } from '../HelpTip';
 
 /** The treasurer charges the event fee to the Scouts who are going or who came. Each Scout is charged once. */
 export function FeesPanel({ troopId, event }: { troopId: string; event: TroopEvent }) {
@@ -40,7 +41,10 @@ export function FeesPanel({ troopId, event }: { troopId: string; event: TroopEve
   const waiting = event.feesPending?.count ?? 0;
   return (
     <section className="card stack" aria-label="Event fee">
-      <h2>Fee: {formatFee(event.feeCents)} per Scout</h2>
+      <h2>
+        Fee: {formatFee(event.feeCents)} per Scout
+        <HelpTip topic="eventFee" />
+      </h2>
       {isTreasurer ? null : (
         <p className="small">The treasurer charges this fee to Scout accounts.</p>
       )}
