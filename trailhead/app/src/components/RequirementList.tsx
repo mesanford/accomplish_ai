@@ -1,6 +1,8 @@
 import { type ReactNode, useState } from 'react';
 import { REQUIREMENT_TIP } from '../lib/moreStatusTips';
 import { type FlatRequirement, flatten, normalizeReqId, REQUIREMENTS_ATTRIBUTION, type RequirementsDoc, wholeSentences } from '../lib/requirements';
+import { requirementTerms } from '../lib/requirementTerms';
+import { HelpTip } from './HelpTip';
 import { TipPill } from './TipPill';
 
 export type ReqStatus = 'signed' | 'ready' | 'review';
@@ -71,7 +73,13 @@ export function RequirementList({ doc, statuses, action, selected, collapsedCoun
             <li key={r.id} className={`req${picked ? ' chosen' : ''}`} style={{ paddingLeft: 10 + Math.min(r.depth, 3) * 18 }}>
               <span className="req-label">{r.label}</span>
               <div className="req-body">
-                <span>{r.text}</span>
+                {/* The text keeps its own span, so a search for the exact requirement text still finds it. */}
+                <span>
+                  <span>{r.text}</span>
+                  {requirementTerms(r.text).map((topic) => (
+                    <HelpTip key={topic} topic={topic} />
+                  ))}
+                </span>
                 <RequirementResources req={r} />
               </div>
               <div className="req-side">

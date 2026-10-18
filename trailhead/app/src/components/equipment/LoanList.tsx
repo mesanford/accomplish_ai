@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { errorMessage } from '../../lib/api';
 import { type Checkout, CONDITIONS, daysOverdue, isOverdue, type ItemCondition } from '../../lib/equipment';
 import { checkInItem } from '../../lib/equipmentApi';
+import { LATE_TIP } from '../../lib/equipmentTips';
 import { useTroop } from '../../lib/troop';
+import { TipPill } from '../TipPill';
 import { Field, formatDate, Notice, todayIso } from '../ui';
 
 function CheckIn({ loan, onDone }: { loan: Checkout; onDone: () => void }) {
@@ -88,7 +90,11 @@ export function LoanList({ loans, manage, showItem = true, empty }: Props) {
               </span>
             </span>
             <span className="row">
-              {isOverdue(c, today) ? <span className="pill bad">{late === 1 ? '1 day overdue' : `${late} days overdue`}</span> : null}
+              {isOverdue(c, today) ? (
+                <TipPill tone="bad" tip={LATE_TIP}>
+                  {late === 1 ? '1 day overdue' : `${late} days overdue`}
+                </TipPill>
+              ) : null}
               {manage && open !== c.id ? (
                 <button type="button" className="btn quiet small" onClick={() => setOpen(c.id)}>
                   Check in {c.itemName}

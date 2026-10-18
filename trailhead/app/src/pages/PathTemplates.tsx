@@ -3,7 +3,9 @@ import { useMemo, useState } from 'react';
 import { GuideBlock } from '../components/GuideBlock';
 import { NextStep } from '../components/NextStep';
 import { TemplateEditor, type TemplateDraft } from '../components/TemplateEditor';
+import { TipPill } from '../components/TipPill';
 import { Loading, Notice, PageHeader } from '../components/ui';
+import { ARCHIVED_TEMPLATE_TIP } from '../lib/archiveTips';
 import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
 import { db } from '../lib/firebase';
@@ -107,7 +109,11 @@ export function PathTemplates() {
           <section className="card" key={t.id}>
             <div className="row spread">
               <h2>{t.name}</h2>
-              {t.archived ? <span className="pill neutral">Archived</span> : null}
+              {t.archived ? (
+                <TipPill tone="neutral" tip={ARCHIVED_TEMPLATE_TIP}>
+                  Archived
+                </TipPill>
+              ) : null}
             </div>
             {t.description ? <p>{t.description}</p> : null}
             <p className="small muted">

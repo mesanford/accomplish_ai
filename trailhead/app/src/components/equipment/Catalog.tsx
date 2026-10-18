@@ -14,13 +14,20 @@ import {
   NO_FILTER,
   stockText,
 } from '../../lib/equipment';
+import { CONDITION_TIP, STOCK_TIP } from '../../lib/equipmentTips';
 import { useTroop } from '../../lib/troop';
+import { TipPill } from '../TipPill';
 import { Empty } from '../ui';
 
 function StockPill({ item }: { item: InventoryItem }) {
   const left = available(item);
-  const tone = left === 0 ? 'bad' : left < item.quantity ? 'warn' : 'good';
-  return <span className={`pill ${tone}`}>{stockText(item)}</span>;
+  let tone: 'good' | 'warn' | 'bad' = 'good';
+  if (left === 0) {
+    tone = 'bad';
+  } else if (left < item.quantity) {
+    tone = 'warn';
+  }
+  return <TipPill tone={tone} tip={STOCK_TIP[tone]}>{stockText(item)}</TipPill>;
 }
 
 /** The catalog: search by name, tag or place, and narrow by category, condition and what is on the shelf. */
@@ -82,7 +89,11 @@ export function Catalog({ items }: { items: InventoryItem[] }) {
                 </span>
               </span>
               <span className="row">
-                {i.condition === 'good' ? null : <span className={`pill ${i.condition === 'retired' ? 'neutral' : 'warn'}`}>{conditionLabel(i.condition)}</span>}
+                {i.condition === 'good' ? null : (
+                  <TipPill tone={i.condition === 'retired' ? 'neutral' : 'warn'} tip={CONDITION_TIP[i.condition]}>
+                    {conditionLabel(i.condition)}
+                  </TipPill>
+                )}
                 <StockPill item={i} />
               </span>
             </li>

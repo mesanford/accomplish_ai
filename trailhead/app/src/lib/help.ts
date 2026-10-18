@@ -20,12 +20,12 @@ const BASE_HELP = {
   },
   boardOfReview: {
     title: 'Board of review',
-    body: 'A short meeting where a few adults talk with a Scout about their experience. It is the last step for every rank. It is not a test.',
+    body: 'A short meeting where a few adults talk with a Scout about their experience. It is the last step for every rank after Scout. It is not a test.',
     learnMore: 'https://www.scouting.org/resources/guide-to-advancement/',
   },
   scoutmasterConference: {
     title: 'Scoutmaster conference',
-    body: 'A one-on-one talk between a Scout and the Scoutmaster. It happens before the board of review for each rank.',
+    body: 'A one-on-one talk between a Scout and the Scoutmaster, part of every rank. From Tenderfoot on, it comes before the board of review.',
   },
   positionOfResponsibility: {
     title: 'Position of responsibility',

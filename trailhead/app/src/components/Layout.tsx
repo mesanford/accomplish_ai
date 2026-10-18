@@ -5,6 +5,7 @@ import lockup from '../assets/forthright-lockup.svg';
 import { signOutUser, useAuth } from '../lib/auth';
 import { CustomAwardsProvider } from '../lib/customAwardsContext';
 import { useNewLeadCount } from '../lib/leads';
+import { NAV_TIPS } from '../lib/navTips';
 import { TroopProvider, useTroop } from '../lib/troop';
 import { useUnreadBadge } from '../lib/useUnreadBadge';
 import { ConsentGate } from './ConsentGate';
@@ -44,7 +45,7 @@ function TroopNav() {
         {links
           .filter(([, , show]) => show)
           .map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === base}>
+            <NavLink key={to} to={to} end={to === base} title={NAV_TIPS[label]}>
               {label}
             </NavLink>
           ))}

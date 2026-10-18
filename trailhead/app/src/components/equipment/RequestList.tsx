@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { errorMessage } from '../../lib/api';
 import type { EquipmentRequest } from '../../lib/equipment';
 import { decideRequest } from '../../lib/equipmentApi';
+import { REQUEST_TIP } from '../../lib/equipmentTips';
 import { useTroop } from '../../lib/troop';
+import { TipPill } from '../TipPill';
 import { formatDate, Notice } from '../ui';
 
 const TONES = { pending: 'warn', approved: 'good', declined: 'neutral' } as const;
@@ -63,7 +65,11 @@ export function RequestList({ requests, manage }: { requests: EquipmentRequest[]
               {r.note ? ` · "${r.note}"` : ''}
             </span>
           </span>
-          {manage && r.status === 'pending' ? <Answer request={r} /> : <span className={`pill ${TONES[r.status]}`}>{WORDS[r.status]}</span>}
+          {manage && r.status === 'pending' ? <Answer request={r} /> : (
+            <TipPill tone={TONES[r.status]} tip={REQUEST_TIP[r.status]}>
+              {WORDS[r.status]}
+            </TipPill>
+          )}
         </li>
       ))}
     </ul>

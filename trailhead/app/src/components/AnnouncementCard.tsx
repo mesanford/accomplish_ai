@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { AnnouncementComposer } from './AnnouncementComposer';
+import { TipPill } from './TipPill';
 import { Notice, formatDate } from './ui';
 import { deleteAnnouncement, errorMessage } from '../lib/api';
 import { type Announcement, paragraphs, toMillis } from '../lib/announcements';
+import { NEW_TIP, NEWSLETTER_TIP, PINNED_TIP } from '../lib/announcementTips';
 import { useTroop } from '../lib/troop';
 
 function Paragraphs({ text }: { text: string }) {
@@ -50,9 +52,21 @@ export function AnnouncementCard({ post, unread, canManage }: Props) {
   return (
     <li id={post.id} className="stack" style={{ gap: 8, display: 'block' }}>
       <div className="row" style={{ gap: 6 }}>
-        {post.pinned ? <span className="pill neutral">Pinned</span> : null}
-        {unread ? <span className="pill good">New</span> : null}
-        {post.kind === 'newsletter' ? <span className="pill neutral">Newsletter</span> : null}
+        {post.pinned ? (
+          <TipPill tone="neutral" tip={PINNED_TIP}>
+            Pinned
+          </TipPill>
+        ) : null}
+        {unread ? (
+          <TipPill tone="good" tip={NEW_TIP}>
+            New
+          </TipPill>
+        ) : null}
+        {post.kind === 'newsletter' ? (
+          <TipPill tone="neutral" tip={NEWSLETTER_TIP}>
+            Newsletter
+          </TipPill>
+        ) : null}
       </div>
       <h3 style={{ margin: '6px 0 2px' }}>{post.title}</h3>
       <p className="muted small" style={{ margin: '0 0 8px' }}>

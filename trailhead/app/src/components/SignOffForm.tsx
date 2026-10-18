@@ -7,7 +7,9 @@ import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
 import { statusLookup } from '../lib/requirements';
 import { SIGNOFF_NOTE } from '../lib/badgeAuthority';
+import { selectedRequirementLabel } from '../lib/selectedRequirement';
 import { recordSignOff } from '../lib/signoff';
+import { useRequirements } from '../lib/useRequirements';
 import { useTroop } from '../lib/troop';
 import type { Progress } from '../lib/types';
 import { OfficialLink } from './AwardRequirements';
@@ -39,6 +41,7 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId, onBehal
   const [round, setRound] = useState(0);
   const progressRef = useMemo(() => doc(db, `troops/${troopId}/progress/${scoutId}_${awardId}`), [troopId, scoutId, awardId]);
   const progress = useDoc<Progress>(progressRef);
+  const { doc: reqDoc } = useRequirements(awardId);
   const statuses = useMemo(() => statusLookup(progress.data?.requirements), [progress.data]);
 
   async function submit(e: FormEvent) {
@@ -100,7 +103,7 @@ export function SignOffForm({ troopId, scoutId, fixedAwardId, versionId, onBehal
           inputId="so-req"
         />
       </Field>
-      {reqId ? <p className="small">Selected: {reqId}</p> : null}
+      {reqId ? <p className="small">Selected: {selectedRequirementLabel(reqDoc, reqId)}</p> : null}
       <OfficialLink awardId={awardId} />
       <Notice kind="error">{error}</Notice>
       <Notice kind="ok">{done}</Notice>

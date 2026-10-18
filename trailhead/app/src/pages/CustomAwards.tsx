@@ -10,6 +10,7 @@ import type { CustomAward } from '../lib/types';
 import { NoAccess } from '../components/NoAccess';
 import { HelpTip } from '../components/HelpTip';
 import { TipPill } from '../components/TipPill';
+import { ARCHIVED_AWARD_TIP } from '../lib/archiveTips';
 import { HELP } from '../lib/help';
 
 function AwardList({ awards, troopId }: { awards: CustomAward[]; troopId: string }) {
@@ -23,9 +24,16 @@ function AwardList({ awards, troopId }: { awards: CustomAward[]; troopId: string
             </Link>
             {a.description ? <span className="muted small">{a.description}</span> : null}
           </div>
-          <TipPill tone="neutral" tip={HELP.awardVersion.body}>
-            Version {a.currentVersionId.replace(/^v/, '')}
-          </TipPill>
+          <span className="row">
+            {a.archived ? (
+              <TipPill tone="neutral" tip={ARCHIVED_AWARD_TIP}>
+                Archived
+              </TipPill>
+            ) : null}
+            <TipPill tone="neutral" tip={HELP.awardVersion.body}>
+              Version {a.currentVersionId.replace(/^v/, '')}
+            </TipPill>
+          </span>
         </li>
       ))}
     </ul>

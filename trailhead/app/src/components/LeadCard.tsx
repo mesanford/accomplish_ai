@@ -2,8 +2,10 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { createInvite, deleteLead, errorMessage } from '../lib/api';
 import { db } from '../lib/firebase';
+import { LEAD_STATUS_HINT, LEAD_TIP } from '../lib/leadTips';
 import { LEAD_STATUSES, leadStatusLabel } from '../lib/leads';
 import type { Lead, LeadStatus } from '../lib/types';
+import { TipPill } from './TipPill';
 import { formatDate, Notice } from './ui';
 
 const TONES: Record<LeadStatus, string> = {
@@ -85,7 +87,9 @@ export function LeadCard({ lead, troopId }: { lead: Lead; troopId: string }) {
     <li className="card">
       <div className="row spread">
         <h3>{lead.name}</h3>
-        <span className={`pill ${TONES[lead.status]}`}>{leadStatusLabel(lead.status)}</span>
+        <TipPill tone={TONES[lead.status]} tip={LEAD_TIP[lead.status]}>
+          {leadStatusLabel(lead.status)}
+        </TipPill>
       </div>
       <div className="small">
         <a href={`mailto:${lead.email}`}>{lead.email}</a>
@@ -109,6 +113,7 @@ export function LeadCard({ lead, troopId }: { lead: Lead; troopId: string }) {
             </option>
           ))}
         </select>
+        <span className="hint">{LEAD_STATUS_HINT}</span>
       </div>
       <div className="field">
         <label htmlFor={`notes-${lead.id}`}>Notes for leaders</label>

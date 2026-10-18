@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CustomAwardForm } from '../components/CustomAwardForm';
 import { HelpTip } from '../components/HelpTip';
+import { TipPill } from '../components/TipPill';
 import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { archiveCustomAward, errorMessage } from '../lib/api';
+import { ARCHIVED_AWARD_PAGE_TIP } from '../lib/archiveTips';
 import { useCustomAwards, useCustomVersions } from '../lib/customAwardsContext';
 import { useTroop } from '../lib/troop';
 import type { CustomAwardVersion } from '../lib/types';
@@ -82,6 +84,11 @@ export function CustomAwardPage() {
       <Notice kind="error">{error}</Notice>
       {award.archived ? (
         <section className="card">
+          <div>
+            <TipPill tone="neutral" tip={ARCHIVED_AWARD_PAGE_TIP}>
+              Archived
+            </TipPill>
+          </div>
           <p>This award is archived. Restore it to edit it or sign its requirements.</p>
           <div>
             <button type="button" className="btn secondary small" onClick={() => setArchived(false)}>
