@@ -12,6 +12,7 @@ import { YPT_TONE } from '../lib/ypt';
 import { TipPill } from '../components/TipPill';
 import { yptTip } from '../lib/statusTips';
 import { NoAccess } from '../components/NoAccess';
+import { HelpTip } from '../components/HelpTip';
 
 function Line({ row }: { row: RechartRow }) {
   const { troopId } = useTroop();
@@ -60,6 +61,7 @@ export function Recharter() {
   return (
     <>
       <PageHeader eyebrow="Troop" title="Recharter">
+        <HelpTip topic="recharter" />
         <button type="button" className="btn" disabled={rows.length === 0} onClick={() => downloadCsv(rechartFileName(today), rechartCsv(rows))}>
           Download CSV
         </button>
@@ -73,6 +75,12 @@ export function Recharter() {
           ? `${flagged.length} of ${rows.length} people need a fix before you recharter.`
           : 'No problems found.'}
       </Notice>
+      {flagged.length > 0 ? (
+        <p className="small muted">
+          To fix Youth Protection dates and roles, use Change roles on the Roster. To fix a Scout’s rank, use Record earlier
+          ranks on the Scout’s page.
+        </p>
+      ) : null}
       {rows.length === 0 ? (
         <Empty>No one is on the roster yet.</Empty>
       ) : (

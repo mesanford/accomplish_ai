@@ -22,7 +22,7 @@ function TroopNav() {
     [`${base}/scoutbook`, 'Scoutbook', isLeader],
     [`${base}/recharter`, 'Recharter', isLeader],
     [`${base}/activity-report`, 'Activity report', isLeader],
-    [`${base}/counseling`, 'Counseling', has('counselor') || canManageBadges],
+    [`${base}/counseling`, 'Merit badge counseling', has('counselor') || canManageBadges],
     [`${base}/events`, 'Events', true],
     [`${base}/badges`, 'Badges', true],
     [`${base}/templates`, 'Path templates', isLeader],

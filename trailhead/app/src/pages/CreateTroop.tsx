@@ -49,7 +49,11 @@ export function CreateTroop() {
         <Field label="Troop name" htmlFor="name">
           <input id="name" required value={form.name} onChange={set('name')} placeholder="Troop 101" />
         </Field>
-        <Field label="Unit number" htmlFor="unit">
+        <Field
+          label="Unit number"
+          htmlFor="unit"
+          hint="The number your council gave your troop, like 101 in Troop 101. It shows on your troop website."
+        >
           <input id="unit" required value={form.unitNumber} onChange={set('unitNumber')} inputMode="numeric" />
         </Field>
         <Field label="Council" htmlFor="council" hint="Optional. For example, the name of your local Scouting council.">

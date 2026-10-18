@@ -116,15 +116,21 @@ def check_invite(invite: dict | None, now: datetime) -> dict:
     return invite
 
 
-def new_scout(data: dict, today: date) -> tuple[dict, dict]:
-    """Return (member doc, private scout record) for a Scout added by a leader or parent."""
-    name = _text(data, "displayName", "Scout's name")
+def parse_birth(data: dict, today: date) -> tuple[int, int]:
+    """The Scout's (birth year, birth month) from `birthYear` and `birthMonth`, for someone 10 to 17."""
     try:
         year, month = int(data.get("birthYear")), int(data.get("birthMonth"))
     except (TypeError, ValueError) as err:
         raise InvalidInput("Enter the Scout's birth month and year.") from err
     if not 1 <= month <= 12 or not today.year - 18 <= year <= today.year - 10:
         raise InvalidInput("Scouts BSA members are 10 to 17. Check the birth month and year.")
+    return year, month
+
+
+def new_scout(data: dict, today: date) -> tuple[dict, dict]:
+    """Return (member doc, private scout record) for a Scout added by a leader or parent."""
+    name = _text(data, "displayName", "Scout's name")
+    year, month = parse_birth(data, today)
     ranks = load_catalog().ranks
     rank = data.get("currentRankId") or "scout"
     if rank not in ranks:

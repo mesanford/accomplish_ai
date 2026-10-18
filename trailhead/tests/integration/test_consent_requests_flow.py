@@ -25,6 +25,10 @@ WAITING = "waiting for a parent"
 
 @pytest.fixture(autouse=True)
 def clean():
+    # The daily job runs in this test process (see run_notices below). Like the Functions emulator, it then records
+    # each email in emailOutbox instead of sending it. Set here so it doesn't depend on which test ran first.
+    os.environ.setdefault("FUNCTIONS_EMULATOR", "true")
+    os.environ.setdefault("GCLOUD_PROJECT", "demo-trailhead")
     reset()
     reset_storage()
     requests.delete(f"{AUTH}/emulator/v1/projects/{PROJECT}/accounts", timeout=10)

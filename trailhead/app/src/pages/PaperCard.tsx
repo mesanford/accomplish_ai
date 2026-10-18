@@ -97,7 +97,7 @@ export function PaperCard() {
       <PageHeader eyebrow={memberName(scoutId)} title="Record a paper blue card" />
       <p className="muted">
         Enter a blue card {memberName(scoutId)} brought already signed. It counts in Forthright and goes in the next Scoutbook
-        report, with the dates written on the card.
+        report, with the dates written on the card. Scoutbook is Scouting America’s official advancement website.
       </p>
       <form className="stack" onSubmit={save} noValidate>
         <section className="card form">

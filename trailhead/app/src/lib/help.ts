@@ -42,7 +42,7 @@ const BASE_HELP = {
   },
   ypt: {
     title: 'Youth Protection training (YPT)',
-    body: 'Every adult working with Scouts takes this short online course. It expires after two years. We only record the date it runs out, so we can remind you in time.',
+    body: 'Every adult working with Scouts takes this short online course. It expires after two years. The date is on your training certificate and in your my.scouting.org account. We only record the date it runs out, so we can remind you in time.',
     learnMore: 'https://www.scouting.org/training/youth-protection/',
   },
   yptMessages: {
@@ -102,6 +102,10 @@ const BASE_HELP = {
     title: 'Difficulty and time',
     body: 'The squares show how hard a badge usually is, from 1 (easy) to 5 (hard). The time is a typical estimate. Some badges, like Personal Management, take months.',
   },
+  recharter: {
+    title: 'Recharter',
+    body: 'Once a year your troop renews its registration with your local council. This is called recharter. The council asks for everyone in the troop, and adults who work with Scouts need current Youth Protection training. This page lists everyone and points out anything missing.',
+  },
   scoutbookReport: {
     title: 'Scoutbook report',
     body: 'Scoutbook is the official place for advancement records. This list shows what to type in since you last did. Tick each Scout off once it is entered so you do not repeat work.',
@@ -160,6 +164,7 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
   { term: 'Partials', meaning: HELP.partial.body },
   { term: 'Patrol', meaning: 'A small group of Scouts in a troop who camp and plan together.' },
   { term: 'Position of responsibility', meaning: HELP.positionOfResponsibility.body },
+  { term: 'Recharter', meaning: HELP.recharter.body },
   { term: 'Rank', meaning: 'The steps of Scouts BSA: Scout, Tenderfoot, Second Class, First Class, Star, Life, Eagle.' },
   { term: 'Scoutbook', meaning: 'The official Scouting America site where advancement is recorded.' },
   { term: 'Scoutmaster conference', meaning: HELP.scoutmasterConference.body },

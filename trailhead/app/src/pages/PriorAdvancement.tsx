@@ -79,7 +79,7 @@ export function PriorAdvancement() {
         id="prior"
         purpose={`Use this for what ${memberName(scoutId)} earned before joining Forthright. Forthright then knows what is done and plans only what is left.`}
         steps={[
-          'Enter the date for each rank earned. Look in the Scout handbook or Scoutbook.',
+          'Enter the date for each rank earned. Look in the Scout handbook or Scoutbook (Scouting America’s official advancement website).',
           'Add each finished merit badge with its date.',
           'For a badge started but not finished, add it as a partial with the requirements already signed.',
           'Press Save. These do not appear in the Scoutbook report, since Scoutbook already has them.',

@@ -9,7 +9,7 @@ import { HelpTip } from './HelpTip';
 import { emptyParent, filledParents, ParentEmailFields, parentsProblem } from './ParentEmailFields';
 import { Field, Notice } from './ui';
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export function AddScoutForm({ troopId, onAdded }: { troopId: string; onAdded?: (id: string) => void }) {
   const { troop, isLeader, has } = useTroop();

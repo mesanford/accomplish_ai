@@ -9,6 +9,8 @@ import { useTroop } from '../lib/troop';
 import type { CustomAward } from '../lib/types';
 import { NoAccess } from '../components/NoAccess';
 import { HelpTip } from '../components/HelpTip';
+import { TipPill } from '../components/TipPill';
+import { HELP } from '../lib/help';
 
 function AwardList({ awards, troopId }: { awards: CustomAward[]; troopId: string }) {
   return (
@@ -21,7 +23,9 @@ function AwardList({ awards, troopId }: { awards: CustomAward[]; troopId: string
             </Link>
             {a.description ? <span className="muted small">{a.description}</span> : null}
           </div>
-          <span className="pill neutral">Version {a.currentVersionId.replace(/^v/, '')}</span>
+          <TipPill tone="neutral" tip={HELP.awardVersion.body}>
+            Version {a.currentVersionId.replace(/^v/, '')}
+          </TipPill>
         </li>
       ))}
     </ul>

@@ -24,6 +24,7 @@ import { useDoc, useQuery } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
 import type { BlueCard, ConsentRequest, PathDoc, Progress, ScoutRecord } from '../lib/types';
 import { HelpTip } from '../components/HelpTip';
+import { BirthDateForm } from '../components/BirthDateForm';
 
 export function ScoutPage() {
   const { scoutId = '' } = useParams();
@@ -157,6 +158,10 @@ export function ScoutPage() {
             <section className="card">
               <h2>Record a rank</h2>
               <RankForm troopId={troopId} scoutId={scoutId} record={record.data} />
+            </section>
+            <section className="card">
+              <h2>Birth month and year</h2>
+              <BirthDateForm troopId={troopId} scoutId={scoutId} record={record.data} />
             </section>
           </div>
         </>

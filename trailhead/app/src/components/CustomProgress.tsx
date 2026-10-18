@@ -7,6 +7,7 @@ import { useTroop } from '../lib/troop';
 import type { CustomRequirement, Progress } from '../lib/types';
 import { TipPill } from './TipPill';
 import { Empty, formatDate, Notice } from './ui';
+import { HelpTip } from './HelpTip';
 
 const versionNumber = (id: string) => id.replace(/^v/, '');
 
@@ -72,6 +73,7 @@ function MoveNotice({ progress, latestId, scoutName, onMoved }: MoveProps) {
         {scoutName} is on version {versionNumber(progress.versionId)}. The requirements have changed since: version{' '}
         {versionNumber(latestId)} is the latest.
         {isLeader ? ' Moving keeps every signed requirement whose wording is unchanged.' : ' A leader can move them.'}
+        <HelpTip topic="awardVersion" />
       </span>
       {isLeader ? (
         <div>

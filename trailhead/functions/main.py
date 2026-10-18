@@ -62,6 +62,7 @@ from endpoints.recruiting import submit_interest
 from endpoints.removal import remove_scout
 from endpoints.retention import apply_retention
 from endpoints.roles import set_member_roles
+from endpoints.scout_birth import set_scout_birth
 from endpoints.scoutbook import create_scoutbook_report, set_scoutbook_entered
 from endpoints.scouts import add_scout
 from endpoints.signup_trigger import import_rsvps, on_event_written_signups
@@ -153,6 +154,7 @@ __all__ = [
     "set_item_photo",
     "set_member_roles",
     "set_my_ypt",
+    "set_scout_birth",
     "set_scout_quartermaster",
     "set_email_announcements",
     "set_email_notifications",
