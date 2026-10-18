@@ -85,7 +85,6 @@ export const TROOP_CATEGORIES: FeatureCategory[] = [
       {
         title: 'Your own web address',
         text: "Put your troop's site on your own domain. Forthright shows the records to add and sets up the secure certificate.",
-        soon: true,
       },
     ],
   },

@@ -148,7 +148,6 @@ export const ADVANCEMENT_CATEGORIES: FeatureCategory[] = [
       {
         title: 'Phone notifications',
         text: 'Opt-in notifications on your phone for announcements, blue cards, waitlists, permission requests and event reminders.',
-        soon: true,
       },
     ],
   },
