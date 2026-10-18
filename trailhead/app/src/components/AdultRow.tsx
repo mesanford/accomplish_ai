@@ -7,6 +7,8 @@ import { HealthFormCard } from './HealthFormCard';
 import { HealthPills } from './HealthPills';
 import { MemberRoles } from './MemberRoles';
 import { formatDate, todayIso } from './ui';
+import { ADULT_PENDING_TIP, yptTip } from '../lib/statusTips';
+import { TipPill } from './TipPill';
 
 interface Props {
   adult: Member;
@@ -32,12 +34,16 @@ export function AdultRow({ adult, scouts, pendingScoutIds, health }: Props) {
         {adult.displayName} <span className="muted small">· {roleList(adult.roles)}</span>
         {children.length > 0 ? <span className="muted small"> · Parent of {children.join(', ')}</span> : null}
       </span>
-      {waiting ? <span className="pill warn">Has not agreed to the parent notice</span> : null}
+      {waiting ? (
+        <TipPill tone="warn" tip={ADULT_PENDING_TIP}>
+          Has not agreed to the parent notice
+        </TipPill>
+      ) : null}
       {ypt.status !== 'notRequired' ? (
-        <span className={`pill ${YPT_TONE[ypt.status]}`}>
+        <TipPill tone={YPT_TONE[ypt.status]} tip={yptTip(ypt.status)}>
           {YPT_TEXT[ypt.status]}
           {ypt.expires ? `: ${formatDate(ypt.expires)}` : ''}
-        </span>
+        </TipPill>
       ) : null}
       {ypt.expires && adult.yptUpdatedBy ? (
         <span className="muted small">{adult.yptUpdatedBy === 'self' ? 'Entered by them' : 'Entered by a leader'}</span>

@@ -16,6 +16,8 @@ import { useQuery } from '../../lib/hooks';
 import { useTroop } from '../../lib/troop';
 import type { TroopEvent } from '../../lib/types';
 import { Empty, Notice } from '../ui';
+import { EVENT_HEALTH_TIP } from '../../lib/statusTips';
+import { TipPill } from '../TipPill';
 
 interface Note {
   id: string;
@@ -61,7 +63,7 @@ function Row({
         ))}
         {health ? (
           <span className="small">
-            <span className="pill bad">Health form</span> {health}
+            <TipPill tone="bad" tip={EVENT_HEALTH_TIP}>Health form</TipPill> {health}
           </span>
         ) : null}
         {note ? <span className="small">Health or emergency note: {note}</span> : null}

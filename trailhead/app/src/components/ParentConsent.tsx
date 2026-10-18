@@ -7,8 +7,10 @@ import { useDoc } from '../lib/hooks';
 import { PRIVACY_EMAIL } from '../lib/privacy';
 import { useTroop } from '../lib/troop';
 import type { ConsentDoc, ConsentRequest, Member } from '../lib/types';
-import { statusWords } from './ConsentRequestPanel';
+import { statusOf, statusWords } from './ConsentRequestPanel';
 import { formatDate, Notice } from './ui';
+import { PARENT_REQUEST_TIP } from '../lib/statusTips';
+import { TipPill } from './TipPill';
 
 /** Parent consent for a Scout: leaders see its status, and a parent can withdraw it. */
 export function ParentConsent({ scout }: { scout: Member }) {
@@ -50,7 +52,9 @@ export function ParentConsent({ scout }: { scout: Member }) {
     <section className="card">
       <div className="row spread">
         <h2>Parent consent</h2>
-        <span className={`pill ${summary.tone}`}>{summary.text}</span>
+        <TipPill tone={summary.tone} tip={summary.tip}>
+          {summary.text}
+        </TipPill>
       </div>
       {summary.withdrawn ? (
         <p className="small">
@@ -86,7 +90,7 @@ export function ParentConsent({ scout }: { scout: Member }) {
           {request.parents.map((p) => (
             <li key={p.pid}>
               <span>{p.name}</span>
-              <span className="pill">{statusWords(request, p.pid)}</span>
+              <TipPill tip={PARENT_REQUEST_TIP[statusOf(request, p.pid)]}>{statusWords(request, p.pid)}</TipPill>
             </li>
           ))}
         </ul>

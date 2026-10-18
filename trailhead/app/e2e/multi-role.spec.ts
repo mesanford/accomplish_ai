@@ -36,6 +36,9 @@ test('a leader adds their own child and is both leader and parent', async ({ bro
   await expect(leader.getByText('Leader, Scoutmaster and parent')).toBeVisible();
   await expect(leader.getByText('Parent of Ava')).toBeVisible();
   await expect(leader.getByText(/Parent consent: given/)).toBeVisible();
+  // Hovering a status explains what it is and why it's needed.
+  await leader.getByText(/Parent consent: given/).hover();
+  await expect(leader.getByRole('tooltip')).toContainText('requires a parent’s consent');
 
   // Home and the Scout's page show Ava as their child.
   await leader.getByRole('link', { name: 'Home' }).click();

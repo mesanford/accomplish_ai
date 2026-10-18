@@ -9,6 +9,8 @@ import { rechartCsv, rechartFileName, type RechartRow, rechartRows } from '../li
 import { useTroop } from '../lib/troop';
 import type { ScoutRecord } from '../lib/types';
 import { YPT_TONE } from '../lib/ypt';
+import { TipPill } from '../components/TipPill';
+import { yptTip } from '../lib/statusTips';
 
 function Line({ row }: { row: RechartRow }) {
   const { troopId } = useTroop();
@@ -23,10 +25,10 @@ function Line({ row }: { row: RechartRow }) {
         <span className="muted small"> · {facts || 'No details'}</span>
       </span>
       {row.yptTone && row.yptTone !== 'notRequired' ? (
-        <span className={`pill ${YPT_TONE[row.yptTone]}`}>
+        <TipPill tone={YPT_TONE[row.yptTone]} tip={yptTip(row.yptTone)}>
           YPT {row.yptStatus}
           {row.yptExpires ? `: ${formatDate(row.yptExpires)}` : ''}
-        </span>
+        </TipPill>
       ) : null}
       {row.problems.map((p) => (
         <span key={p} className="small">

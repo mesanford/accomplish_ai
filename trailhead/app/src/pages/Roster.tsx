@@ -12,7 +12,7 @@ import { HealthPills } from '../components/HealthPills';
 import { HelpTip } from '../components/HelpTip';
 import { NextStep } from '../components/NextStep';
 import { ColorSwatch } from '../components/patrols/PatrolCard';
-import { Empty, Notice, PageHeader } from '../components/ui';
+import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { syncConsentHolds } from '../lib/api';
 import { rank } from '../lib/catalog';
 import { parentLine, pendingLinks } from '../lib/roles';
@@ -26,9 +26,11 @@ import { usePatrols } from '../lib/patrolHooks';
 import { filterByPatrol, NO_PATROL, officeOf } from '../lib/patrols';
 import { useTroop } from '../lib/troop';
 import type { Access, ConsentDoc, ConsentRequest, Member, ScoutRecord } from '../lib/types';
+import { TipPill } from '../components/TipPill';
+import { PAUSED_TIP, REVIEW_TIP } from '../lib/statusTips';
 
 export function Roster() {
-  const { troopId, members, memberName, isLeader, canManageBadges } = useTroop();
+  const { troopId, members, memberName, isLeader, canManageBadges, loading } = useTroop();
   const [added, setAdded] = useState('');
   const [patrolFilter, setPatrolFilter] = useState('');
   const { forms: healthForms } = useHealthForms();
@@ -81,7 +83,8 @@ export function Roster() {
     .filter((m) => m.kind === 'adult')
     .sort((a, b) => a.displayName.localeCompare(b.displayName));
   if (!isLeader) {
-    return <Empty>Only leaders can manage the roster.</Empty>;
+    // Until this person's access loads, they aren't a leader yet; don't tell a leader they can't manage the roster.
+    return loading ? <Loading /> : <Empty>Only leaders can manage the roster.</Empty>;
   }
   const consentOf = (s: Member) =>
     consentSummary(
@@ -196,12 +199,14 @@ export function Roster() {
                   <span className="muted small">
                     {parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}
                   </span>
-                  <span className={`pill ${consent.tone}`}>{consent.text}</span>
+                  <TipPill tone={consent.tone} tip={consent.tip}>
+                    {consent.text}
+                  </TipPill>
                   <HealthPills form={healthForms.get(s.id)} />
                   {stale.has(s.id) ? (
-                    <span className="pill warn">
+                    <TipPill tone="warn" tip={paused ? PAUSED_TIP : REVIEW_TIP}>
                       {paused ? UPDATED_REASON : "Parent hasn't reviewed the new notice"}
-                    </span>
+                    </TipPill>
                   ) : null}
                   <ScoutQuartermaster scout={s} />
                 </li>
@@ -234,7 +239,8 @@ export function Roster() {
         <section className="card">
           <h2>Add a Scout</h2>
           <AddScoutForm troopId={troopId} onAdded={setAdded} />
-          {added ? (
+          {/* A Scout waiting for a parent's consent can't have earlier advancement recorded yet. */}
+          {added && !members.find((m) => m.id === added)?.consentHold ? (
             <Link className="small" to={`/t/${troopId}/scouts/${added}/earlier`}>
               Record {memberName(added)}'s earlier ranks{canManageBadges ? ' and badges' : ''}
             </Link>

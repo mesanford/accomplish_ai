@@ -3,6 +3,8 @@ import { eventProblems, NEED_LABELS, problemText } from '../../lib/healthForm';
 import { useHealthForm } from '../../lib/healthHooks';
 import { useTroop } from '../../lib/troop';
 import type { TroopEvent } from '../../lib/types';
+import { EVENT_HEALTH_TIP } from '../../lib/statusTips';
+import { TipPill } from '../TipPill';
 
 /** On a person's sign-up: whether the health forms this event asks for will be valid on the event's last day. */
 export function EventHealth({ event, memberId }: { event: TroopEvent; memberId: string }) {
@@ -14,11 +16,11 @@ export function EventHealth({ event, memberId }: { event: TroopEvent; memberId: 
   }
   const problems = eventProblems(event.healthForm, live.data ?? undefined, event.endDate || event.start);
   if (problems.length === 0) {
-    return <p className="small"><span className="pill good">Health form ready</span></p>;
+    return <p className="small"><TipPill tone="good" tip={EVENT_HEALTH_TIP}>Health form ready</TipPill></p>;
   }
   return (
     <p className="small">
-      <span className="pill bad">Health form needed</span> This event needs {NEED_LABELS[event.healthForm]}. {problemText(problems)}.{' '}
+      <TipPill tone="bad" tip={EVENT_HEALTH_TIP}>Health form needed</TipPill> This event needs {NEED_LABELS[event.healthForm]}. {problemText(problems)}.{' '}
       <Link to={`/t/${troopId}/health`}>Record the date</Link>
     </p>
   );

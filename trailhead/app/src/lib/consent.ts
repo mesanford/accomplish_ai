@@ -1,4 +1,5 @@
 import { formatDate } from '../components/ui';
+import { consentTip } from './statusTips';
 import type { ConsentDoc } from './types';
 
 /** The notice parents read before they agree. Keep it equal to CONSENT_NOTICE_VERSION in the functions. */
@@ -15,6 +16,8 @@ export function mayBeUnder13(year: number, month: number, today: Date): boolean 
 
 export interface ConsentSummary {
   text: string;
+  /** What the status means and why it's needed (shown on hover or tap). */
+  tip: string;
   tone: 'good' | 'warn' | 'bad';
   /** True when a parent has asked the troop to delete this Scout's records. */
   withdrawn: boolean;
@@ -28,18 +31,25 @@ const when = (at?: { toDate(): Date }) => (at ? ` ${formatDate(at.toDate().toISO
  */
 export function consentSummary(doc: ConsentDoc | null | undefined, hasParent: boolean, waitingOnParent = false): ConsentSummary {
   if (doc?.withdrawal) {
-    return { text: 'Parent withdrew consent', tone: 'bad', withdrawn: true };
+    return { text: 'Parent withdrew consent', tip: consentTip('withdrawn'), tone: 'bad', withdrawn: true };
   }
   const given = doc?.parentConsents?.[0];
   if (given) {
-    return { text: `Parent consent: given${when(given.at)}`, tone: 'good', withdrawn: false };
+    return { text: `Parent consent: given${when(given.at)}`, tip: consentTip('given'), tone: 'good', withdrawn: false };
   }
   if (doc?.leaderConfirmation) {
-    return { text: `Leader confirmed permission${when(doc.leaderConfirmation.at)}`, tone: 'warn', withdrawn: false };
+    return {
+      text: `Leader confirmed permission${when(doc.leaderConfirmation.at)}`,
+      tip: consentTip('leaderConfirmed'),
+      tone: 'warn',
+      withdrawn: false,
+    };
   }
   if (waitingOnParent) {
-    return { text: 'Waiting for a parent to agree', tone: 'warn', withdrawn: false };
+    return { text: 'Waiting for a parent to agree', tip: consentTip('waitingOnParent'), tone: 'warn', withdrawn: false };
   }
-  const text = hasParent ? 'No parent consent recorded' : 'Waiting for a parent to join';
-  return { text, tone: 'warn', withdrawn: false };
+  if (hasParent) {
+    return { text: 'No parent consent recorded', tip: consentTip('noConsent'), tone: 'warn', withdrawn: false };
+  }
+  return { text: 'Waiting for a parent to join', tip: consentTip('noParent'), tone: 'warn', withdrawn: false };
 }

@@ -10,6 +10,8 @@ import { useTroop } from '../lib/troop';
 import type { ConsentRequest, Member, ParentRequestStatus } from '../lib/types';
 import { emptyParent, filledParents, ParentEmailFields, parentsProblem } from './ParentEmailFields';
 import { formatDate, Notice } from './ui';
+import { HELD_EXISTING_TIP, HELD_NEW_TIP, PARENT_REQUEST_TIP } from '../lib/statusTips';
+import { TipPill } from './TipPill';
 
 const STATUS_WORDS: Record<ParentRequestStatus, string> = {
   emailed: 'Emailed',
@@ -79,7 +81,9 @@ export function ConsentRequestPanel({ scout, request }: { scout: Member; request
 
   return (
     <div className="stack">
-      <span className="pill warn">{isNew ? 'Waiting for parent consent' : 'Needs parent consent'}</span>
+      <TipPill tone="warn" tip={isNew ? HELD_NEW_TIP : HELD_EXISTING_TIP}>
+        {isNew ? 'Waiting for parent consent' : 'Needs parent consent'}
+      </TipPill>
       {request && request.parents.length > 0 ? (
         <ul className="list" aria-label={`Parents of ${scout.displayName}`}>
           {request.parents.map((p) => (
@@ -87,7 +91,7 @@ export function ConsentRequestPanel({ scout, request }: { scout: Member; request
               <span>
                 {p.name} <span className="muted small">{p.email}</span>
               </span>
-              <span className="pill">{STATUS_WORDS[statusOf(request, p.pid)]}</span>
+              <TipPill tip={PARENT_REQUEST_TIP[statusOf(request, p.pid)]}>{STATUS_WORDS[statusOf(request, p.pid)]}</TipPill>
             </li>
           ))}
         </ul>

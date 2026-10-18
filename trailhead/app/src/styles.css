@@ -158,8 +158,13 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: v
 .help-btn::after { content: ""; position: absolute; inset: -10px; }
 .help-pop { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; width: min(320px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 6px 20px rgb(0 0 0 / .18); font: 400 15px/1.45 var(--body); text-transform: none; letter-spacing: 0; text-align: left; white-space: normal; }
 .help-pop:focus { outline: none; }
+/* A status pill's explanation (TipPill): on hover, or when the pill is tapped or focused. */
+.tip-wrap { position: relative; display: inline-block; }
+.tip-wrap > .pill { cursor: help; }
+.tip-pop { display: none; position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; width: min(300px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; box-shadow: 0 6px 20px rgb(0 0 0 / .18); font: 400 14px/1.45 var(--body); text-transform: none; letter-spacing: 0; text-align: left; white-space: normal; }
+.tip-wrap:hover > .tip-pop, .tip-wrap:focus-within > .tip-pop { display: block; }
 /* On phones the explanation is a sheet at the bottom of the screen, so it never runs off the edge. */
-@media (max-width: 640px) { .help-tip { position: static; } .help-pop { position: fixed; top: auto; bottom: 16px; left: 16px; right: 16px; width: auto; max-height: 60vh; overflow-y: auto; font-size: 16px; } }
+@media (max-width: 640px) { .tip-wrap { position: static; } .tip-pop { position: fixed; top: auto; bottom: 16px; left: 16px; right: 16px; width: auto; font-size: 16px; } .help-tip { position: static; } .help-pop { position: fixed; top: auto; bottom: 16px; left: 16px; right: 16px; width: auto; max-height: 60vh; overflow-y: auto; font-size: 16px; } }
 .guide { background: var(--accent-soft); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
 .guide ol, .guide-steps, .guide-list { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
 .guide-collapsed { display: flex; justify-content: flex-end; }

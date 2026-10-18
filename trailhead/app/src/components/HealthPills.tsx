@@ -1,5 +1,7 @@
 import { type HealthForm, partStatus, STATUS_TEXT, STATUS_TONE } from '../lib/healthForm';
 import { todayIso } from './ui';
+import { healthTip } from '../lib/statusTips';
+import { TipPill } from './TipPill';
 
 /** Two small badges for the roster: Parts A and B, and Part C. */
 export function HealthPills({ form }: { form: HealthForm | undefined }) {
@@ -8,8 +10,12 @@ export function HealthPills({ form }: { form: HealthForm | undefined }) {
   const c = partStatus(form?.partC, today);
   return (
     <>
-      <span className={`pill ${STATUS_TONE[ab]}`}>Health A and B: {STATUS_TEXT[ab]}</span>
-      <span className={`pill ${STATUS_TONE[c]}`}>Part C: {STATUS_TEXT[c]}</span>
+      <TipPill tone={STATUS_TONE[ab]} tip={healthTip('partsAB', ab)}>
+        Health A and B: {STATUS_TEXT[ab]}
+      </TipPill>
+      <TipPill tone={STATUS_TONE[c]} tip={healthTip('partC', c)}>
+        Part C: {STATUS_TEXT[c]}
+      </TipPill>
     </>
   );
 }

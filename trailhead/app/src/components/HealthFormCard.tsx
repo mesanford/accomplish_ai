@@ -14,6 +14,8 @@ import { recordHealthForm } from '../lib/healthApi';
 import { useHealthForm } from '../lib/healthHooks';
 import { useTroop } from '../lib/troop';
 import { Field, formatDate, Notice, todayIso } from './ui';
+import { healthTip } from '../lib/statusTips';
+import { TipPill } from './TipPill';
 
 const HINTS: Record<PartKey, string> = {
   partsAB: 'The date you signed Parts A and B. Good for 12 months.',
@@ -58,7 +60,10 @@ function PartRow({ troopId, memberId, name, form, part }: { troopId: string; mem
   return (
     <form className="stack" onSubmit={save} noValidate aria-label={`${PART_LABELS[part]} for ${name}`}>
       <h3>
-        {PART_LABELS[part]} <span className={`pill ${STATUS_TONE[status]}`}>{STATUS_TEXT[status]}</span>
+        {PART_LABELS[part]}{' '}
+        <TipPill tone={STATUS_TONE[status]} tip={healthTip(part, status)}>
+          {STATUS_TEXT[status]}
+        </TipPill>
       </h3>
       <p className="small muted">{recordedLine(form, part, memberName)}</p>
       <Field label={`New date for ${PART_LABELS[part]}`} htmlFor={id} hint={HINTS[part]}>
