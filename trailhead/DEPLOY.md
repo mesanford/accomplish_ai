@@ -31,7 +31,29 @@ scripts/deploy.sh production
 ```
 
 The script runs every test, builds the app for that project, loads the badge and rank content, and deploys the
-security rules, indexes, functions and hosting. The app is then live at `https://<project-id>.web.app`.
+security rules, indexes, functions and hosting. The app is then live at `https://<project-id>.web.app`, and
+production is also at `https://forthrightapp.com` (see below).
+
+## Where each project is served
+
+| Project    | Firebase project id    | Address                             |
+| ---------- | ---------------------- | ----------------------------------- |
+| Staging    | `scout-app-d2282`      | `https://scout-app-d2282.web.app`   |
+| Production | `scout-app-prod-d6a66` | `https://forthrightapp.com`         |
+
+`forthrightapp.com` is a custom domain on production's default Hosting site, so one address serves both the
+marketing pages (`/`, `/features`, `/pilot`, `/privacy`) and the signed-in app: `/` shows the marketing page to
+visitors who aren't signed in and their troops to those who are. Things that depend on the domain:
+
+- `APP_URL=https://forthrightapp.com` in `functions/.env.scout-app-prod-d6a66`. Email, push and calendar links use it.
+- The canonical and share tags in `app/index.html` and `app/src/pages/Features.tsx` name `forthrightapp.com`.
+- `forthrightapp.com` must be listed under Authentication → Settings → Authorized domains, or email-link sign-in fails
+  there. `VITE_FIREBASE_AUTH_DOMAIN` stays `scout-app-prod-d6a66.firebaseapp.com`.
+- Troops can't claim `forthrightapp.com`, `www.forthrightapp.com` or any subdomain of it for their own website
+  (`app/src/lib/domains.ts` and the backend domain check). Troop domains use a separate Hosting site (see Troop
+  domains below).
+
+If the domain ever changes, update all of these together.
 
 ## After the first production deploy
 
