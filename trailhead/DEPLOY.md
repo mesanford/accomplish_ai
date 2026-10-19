@@ -34,6 +34,15 @@ The script runs every test, builds the app for that project, loads the badge and
 security rules, indexes, functions and hosting. The app is then live at `https://<project-id>.web.app`, and
 production is also at `https://forthrightapp.com` (see below).
 
+Production deploys only what's on GitHub: the script stops unless you're on `main`, nothing is uncommitted and `main`
+matches `origin/main`. After a production deploy it tags the commit `deploy/production-<UTC date and time>` and pushes
+the tag, so `git tag -l 'deploy/production-*'` lists every production deploy and the newest is what's live. Staging
+deploys whatever is in the folder.
+
+Pushes and pull requests that touch `trailhead/` also run the quick checks on GitHub (`.github/workflows/forthright.yml`):
+lint, Python unit tests, and the app's typecheck, unit tests and build. Nothing deploys from GitHub, and the emulator
+tests only run locally, in `scripts/test.sh`.
+
 ## Where each project is served
 
 | Project    | Firebase project id    | Address                             |

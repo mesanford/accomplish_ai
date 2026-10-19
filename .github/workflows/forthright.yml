@@ -1,0 +1,59 @@
+name: Forthright
+
+# The quick checks from trailhead/scripts/test.sh: lint, Python unit tests, and the web app's typecheck, unit tests and
+# build. The emulator tests (security rules, integration and browser) stay in test.sh, which deploy.sh runs first.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'trailhead/**'
+      - '.github/workflows/forthright.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'trailhead/**'
+      - '.github/workflows/forthright.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend lint and unit tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: trailhead
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            trailhead/requirements-dev.txt
+            trailhead/functions/requirements.txt
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest -q tests/unit
+
+  app:
+    name: Web app typecheck, unit tests and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: trailhead/app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: trailhead/app/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      # Builds with no .env file, like test.sh does: the Firebase config is only needed when the app runs.
+      - run: npm run build

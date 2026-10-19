@@ -20,6 +20,24 @@ if [[ ! -f "app/.env.$target" ]]; then
   exit 1
 fi
 
+# Production gets only what's on GitHub: the deploy uses this folder as it is, so uncommitted edits, another branch or
+# unpushed commits would otherwise go live with no record of what was deployed. Staging can deploy anything.
+if [[ "$target" == "production" ]]; then
+  git fetch --quiet origin main
+  problem=""
+  if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+    problem="you're on $(git rev-parse --abbrev-ref HEAD), not main"
+  elif [[ -n "$(git status --porcelain)" ]]; then
+    problem="there are uncommitted changes (git status)"
+  elif [[ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]]; then
+    problem="main doesn't match origin/main (push or pull first)"
+  fi
+  if [[ -n "$problem" ]]; then
+    echo "Not deploying to production: $problem." >&2
+    exit 1
+  fi
+fi
+
 echo "Checking everything before deploying to ${project}…"
 scripts/test.sh
 
@@ -34,3 +52,11 @@ firebase deploy --project "$project" --only firestore,storage,functions,hosting
 
 echo "Deploying the troop sites Hosting site (skipped unless TRAILHEAD_TROOPS_SITE is set)…"
 scripts/deploy_troops_site.sh "$project"
+
+# Tag what went live, so `git tag -l 'deploy/production-*'` shows every production deploy and the last one is live.
+if [[ "$target" == "production" ]]; then
+  tag="deploy/production-$(date -u +%Y-%m-%d-%H%M)"
+  git tag -a "$tag" -m "Deployed to $project"
+  git push --quiet origin "$tag" || echo "Deployed, but couldn't push the tag $tag; run: git push origin $tag" >&2
+  echo "Tagged ${tag}."
+fi
