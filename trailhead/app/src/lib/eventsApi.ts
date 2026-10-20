@@ -49,3 +49,35 @@ export interface FeedPaths {
 export const getCalendarFeed = (troopId: string) => call<{ troopId: string }, FeedPaths>('get_calendar_feed', { troopId });
 
 export const resetCalendarFeed = (troopId: string) => call<{ troopId: string }, FeedPaths>('reset_calendar_feed', { troopId });
+
+export type RepeatPattern = 'weekly' | 'biweekly' | 'monthly';
+
+export interface SeriesForm {
+  troopId: string;
+  title: string;
+  start: string;
+  until: string;
+  pattern: RepeatPattern;
+  place?: string;
+  startTime?: string;
+  endTime?: string;
+  public?: boolean;
+}
+
+/** Make one event per date of a repeating event (up to a year, 52 dates). */
+export const createEventSeries = (form: SeriesForm) =>
+  call<SeriesForm, { seriesId: string; count: number; firstEventId: string }>('create_event_series', form);
+
+export interface SeriesChange {
+  troopId: string;
+  seriesId: string;
+  /** This date and every later one change. */
+  fromEventId: string;
+  /** Only the keys sent change; an empty place or time clears it. */
+  changes?: { title?: string; place?: string; startTime?: string; endTime?: string };
+  cancel?: boolean;
+}
+
+/** Change or cancel this date and every later one. Families get one email for the whole change. */
+export const updateEventSeries = (change: SeriesChange) =>
+  call<SeriesChange, { updated: number; notified: number }>('update_event_series', change);

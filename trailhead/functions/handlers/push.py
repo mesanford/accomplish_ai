@@ -83,6 +83,15 @@ def event_reminder(title: str, troop_id: str, event_id: str) -> Note:
     return note(EVENT, "Event reminder", f"{title} is coming up in two days.", f"/t/{troop_id}/events/{event_id}")
 
 
+def event_changed(kind: str, title: str, troop_id: str, event_id: str) -> Note:
+    """Only the event's name and what kind of change: the details are in the app."""
+    heading, body = {
+        "cancelled": ("Event cancelled", f"{title} is cancelled."),
+        "restored": ("Event back on", f"{title} is back on."),
+    }.get(kind, ("Event changed", f"{title} has changed. Check the new details."))
+    return note(EVENT, heading, body, f"/t/{troop_id}/events/{event_id}")
+
+
 def wants_push(user_doc: dict | None, kind: str) -> bool:
     """The same opt-outs as email: announcements follow `emailAnnouncements`, everything else `emailNotifications`."""
     field = "emailAnnouncements" if kind == ANNOUNCEMENT else "emailNotifications"

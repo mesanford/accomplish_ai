@@ -68,7 +68,9 @@ def run_reminders(now: datetime) -> dict:
         for ev in snap.reference.collection("events").where("start", "==", target).stream():
             event = ev.to_dict() or {}
             config = rules.read_config(event)
-            if config is None or not event.get("title") or not _claim(ev.reference, target):
+            if config is None or not event.get("title") or event.get("cancelled") is True:
+                continue
+            if not _claim(ev.reference, target):
                 continue
             try:
                 totals["emails"] += _remind(snap.id, ev.id, event)

@@ -85,6 +85,12 @@ three things per project; without them the "Notify me on this device" option is 
 Deploy the indexes too: sign-in on a shared device looks up a device token across logins, which needs the single-field
 `devices` index in `firestore.indexes.json`.
 
+## Weekly digest and event alerts
+
+Nothing to configure. `send_weekly_digest` (Sundays at 17:00 Central) and the `on_event_written_alerts` trigger deploy
+with the other functions and send through the same email and push settings (`EMAIL_MODE`, `PUSH_MODE`, `APP_URL`,
+the `RESEND_API_KEY` secret). On staging, where `EMAIL_MODE` is `log`, they only log what they would send.
+
 ## Claude writing help
 
 "Draft with AI" in the path planner, and the About us helper on the troop website, call Claude through the

@@ -204,10 +204,28 @@ export interface TroopEvent {
   signups?: SignupSettings;
   /** Health form needed: Parts A and B, or A, B and C (see healthForm.ts). */
   healthForm?: 'ab' | 'abc';
+  /** A leader cancelled it. Families signed up (or the whole troop, for a soon event without sign-ups) are told,
+   * with the short note if there is one. */
+  cancelled?: boolean;
+  cancelNote?: string;
+  /** Written only by the server: one date of a repeating event (see eventSeries). */
+  seriesId?: string;
   /** Written only by the server. */
   signupCounts?: { held: number; going: number; waitingPermission: number; waitlist: number };
   feesPending?: { count: number; amountCents: number };
   feesPosted?: { count: number; amountCents: number };
+}
+
+/** A repeating event's shared settings (troops/{t}/eventSeries/{id}). Written only by the server. */
+export interface EventSeries {
+  id: string;
+  title: string;
+  pattern: 'weekly' | 'biweekly' | 'monthly';
+  /** "Every Tuesday", "Every other Tuesday" or "The 2nd Tuesday of each month". */
+  label: string;
+  start: string;
+  until: string;
+  count: number;
 }
 
 export interface Thread {

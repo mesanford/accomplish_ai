@@ -70,7 +70,8 @@ def event_lines(entry: dict, stamp: datetime, zone: ZoneInfo | None) -> list[str
         lines.append(f"DESCRIPTION:{escape_text(entry['description'])}")
     if entry.get("url"):
         lines.append(f"URL:{entry['url']}")
-    lines += ["STATUS:CONFIRMED", "TRANSP:TRANSPARENT" if entry.get("start_time") is None else "TRANSP:OPAQUE"]
+    status = "STATUS:CANCELLED" if entry.get("cancelled") else "STATUS:CONFIRMED"
+    lines += [status, "TRANSP:TRANSPARENT" if entry.get("start_time") is None else "TRANSP:OPAQUE"]
     lines.append("END:VEVENT")
     return lines
 

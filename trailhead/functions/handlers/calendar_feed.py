@@ -67,7 +67,8 @@ def member_entries(events: list[tuple[str, dict]], troop_id: str, app_url: str, 
         entries.append(
             {
                 "uid": f"{troop_id}-{event_id}@forthright",
-                "title": title.strip()[:120],
+                "title": ("Cancelled: " if event.get("cancelled") is True else "") + title.strip()[:120],
+                "cancelled": event.get("cancelled") is True,
                 "start": start,
                 "end": end if end and end >= start else None,
                 "start_time": parse_clock(event.get("startTime")),

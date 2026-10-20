@@ -84,6 +84,20 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     signed-up families two days ahead (once per event date). Every member gets a private calendar feed
     (`get_calendar_feed`, served at `/cal/{token}.ics` by `calendar_feed` through a Hosting rewrite); the public
     website has `/cal/site/{slug}.ics`.
+    **Changes, cancellations and repeating events.** A leader can change an event's name, date or place, cancel it
+    with a short note, or put it back on (Event page). `on_event_written_alerts` emails and pushes the people who need
+    to know when an upcoming event's date, times or place change, or it is cancelled or back on: everyone signed up,
+    or, for an event without sign-ups in the next 14 days, the whole troop (Scouts by push only). The server-only
+    `alertedFor` field holds the details last announced, so nothing is sent twice. A cancelled event takes no
+    sign-ups or reminders, shows as cancelled in calendar feeds and leaves the public website. A leader adds a
+    repeating event (weekly, every other week or monthly on the same weekday, up to a year and 52 dates) with
+    `create_event_series`: each date is an ordinary event sharing a `seriesId`, with its own sign-ups and attendance,
+    and `troops/{t}/eventSeries/{id}` keeps the shared settings. `update_event_series` changes the name, place or
+    times of one date and every later one, or cancels them, and sends one email per family for the whole change.
+    **Weekly digest.** `send_weekly_digest` emails adults and parents every Sunday at 17:00 Central: the coming
+    week's events (with who they signed up), sign-up deadlines, permission slips waiting on them and new
+    announcement titles. It skips an empty week, Scouts are never emailed, and anyone can turn it off on the Account
+    page (`set_email_digest`, `users/{uid}.emailDigest`). `troops/{t}/digestRuns/{week}` makes it once a week.
 14. **Scout accounts.** A leader gives an adult the **treasurer** role. The treasurer's **Accounts** page runs
     fundraisers with a credit rule (`save_campaign`, `post_sales`), charges many Scouts at once or everyone marked
     present at an event (`post_charge`, `charge_attendees`), records payments (`record_payment`), reverses a wrong

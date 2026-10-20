@@ -1,24 +1,26 @@
-import { collection, doc, updateDoc } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { EventLogFields } from '../components/activity/EventLogFields';
+import { EventEditor } from '../components/events/EventEditor';
 import { EventSettings } from '../components/events/EventSettings';
 import { FeesPanel } from '../components/events/FeesPanel';
 import { PersonSignup } from '../components/events/PersonSignup';
+import { RosterTools } from '../components/events/RosterTools';
+import { SeriesEditor } from '../components/events/SeriesEditor';
 import { SignupRoster } from '../components/events/SignupRoster';
 import { RequirementRef } from '../components/RequirementRef';
 import { Empty, formatDate, Loading, Notice, PageHeader } from '../components/ui';
-import { errorMessage } from '../lib/api';
 import { awardName } from '../lib/catalog';
+import { clockText } from '../lib/eventChanges';
 import { audienceAllows, AUDIENCE_LABELS, formatFee, spotsLine } from '../lib/eventSignups';
 import { NEED_LABELS } from '../lib/healthForm';
-import { importRsvps } from '../lib/eventsApi';
 import { db } from '../lib/firebase';
-import { useDoc, useQuery } from '../lib/hooks';
+import { useDoc } from '../lib/hooks';
 import { useTroop } from '../lib/troop';
-import type { TroopEvent } from '../lib/types';
+import type { EventSeries, TroopEvent } from '../lib/types';
 
-function Details({ event }: { event: TroopEvent }) {
+function Details({ event, series }: { event: TroopEvent; series?: EventSeries | null }) {
   const s = event.signups;
   const counts = event.signupCounts;
   const days =
@@ -26,10 +28,18 @@ function Details({ event }: { event: TroopEvent }) {
       ? `${formatDate(event.start)} to ${formatDate(event.endDate)}`
       : formatDate(event.start);
   const times = event.startTime
-    ? ` · ${event.startTime}${event.endTime ? ` to ${event.endTime}` : ''}`
+    ? ` · ${clockText(event.startTime)}${event.endTime ? ` to ${clockText(event.endTime)}` : ''}`
     : '';
   return (
     <ul className="stack small">
+      {event.cancelled ? (
+        <li>
+          <Notice kind="error">
+            This event is cancelled.{event.cancelNote ? ` ${event.cancelNote}` : ''}
+          </Notice>
+        </li>
+      ) : null}
+      {series ? <li>Repeats: {series.label}</li> : null}
       <li>
         {days}
         {times}
@@ -55,73 +65,17 @@ function Details({ event }: { event: TroopEvent }) {
   );
 }
 
-function LeaderTools({ troopId, event }: { troopId: string; event: TroopEvent }) {
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-  const rsvpQ = useMemo(
-    () => collection(db, `troops/${troopId}/events/${event.id}/rsvps`),
-    [troopId, event.id],
-  );
-  const rsvps = useQuery<{ id: string; going?: boolean }>(rsvpQ, `${event.id}/rsvps`);
-  const earlier = rsvps.data.filter((r) => r.going).length;
-  async function run(task: () => Promise<unknown>, done: string) {
-    setError('');
-    setMessage('');
-    try {
-      await task();
-      setMessage(done);
-    } catch (err) {
-      setError(errorMessage(err));
-    }
-  }
-  const closed = Boolean(event.signups?.closed);
-  return (
-    <div className="stack">
-      <div className="row">
-        <button
-          type="button"
-          className="btn secondary small"
-          onClick={() =>
-            run(
-              () =>
-                updateDoc(doc(db, `troops/${troopId}/events/${event.id}`), {
-                  'signups.closed': !closed,
-                }),
-              closed ? 'Sign-ups reopened.' : 'Sign-ups closed.',
-            )
-          }
-        >
-          {closed ? 'Reopen sign-ups' : 'Close sign-ups'}
-        </button>
-        {earlier > 0 ? (
-          <button
-            type="button"
-            className="btn secondary small"
-            onClick={() =>
-              run(
-                () =>
-                  importRsvps(troopId, event.id).then((r) =>
-                    setMessage(`Added ${r.imported} from earlier RSVPs.`),
-                  ),
-                '',
-              )
-            }
-          >
-            Add {earlier} earlier RSVPs to the roster
-          </button>
-        ) : null}
-      </div>
-      <Notice kind="error">{error}</Notice>
-      <Notice kind="ok">{message}</Notice>
-    </div>
-  );
-}
-
 export function EventPage() {
   const { eventId = '' } = useParams();
   const { troopId, access, actingScoutIds, members, isLeader, has } = useTroop();
   const ref = useMemo(() => doc(db, `troops/${troopId}/events/${eventId}`), [troopId, eventId]);
   const live = useDoc<TroopEvent>(ref);
+  const seriesId = live.data?.seriesId;
+  const seriesRef = useMemo(
+    () => (seriesId ? doc(db, `troops/${troopId}/eventSeries/${seriesId}`) : null),
+    [troopId, seriesId],
+  );
+  const series = useDoc<EventSeries>(seriesRef).data;
   // Remembers the leader's choice, so turning sign-ups on doesn't snap the settings shut before "Saved." shows.
   const [settingsOpen, setSettingsOpen] = useState<boolean | null>(null);
   if (live.loading) {
@@ -149,8 +103,8 @@ export function EventPage() {
           </Link>
         ) : null}
       </PageHeader>
-      <Details event={event} />
-      {s?.enabled ? (
+      <Details event={event} series={series} />
+      {s?.enabled && !event.cancelled ? (
         <section className="stack" aria-label="Your sign-ups">
           <h2 className="blazed">Sign up</h2>
           {mine.length === 0 ? (
@@ -175,9 +129,19 @@ export function EventPage() {
           {s?.enabled ? (
             <section className="card stack" aria-label="Roster">
               <h2>Roster</h2>
-              <LeaderTools troopId={troopId} event={event} />
+              <RosterTools troopId={troopId} event={event} />
               <SignupRoster troopId={troopId} event={event} />
             </section>
+          ) : null}
+          <details className="card">
+            <summary>Change the date or place, or cancel</summary>
+            <EventEditor key={`${event.start}-${event.cancelled}`} troopId={troopId} event={event} />
+          </details>
+          {series ? (
+            <details className="card">
+              <summary>Change every later date</summary>
+              <SeriesEditor troopId={troopId} event={event} series={series} />
+            </details>
           ) : null}
           <details
             className="card"

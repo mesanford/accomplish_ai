@@ -73,6 +73,8 @@ def read_config(event: dict | None) -> dict | None:
 def closed_reason(config: dict, event: dict, now: datetime, zone: ZoneInfo | None) -> str | None:
     """Why families can no longer sign up, or None. The deadline day itself is still open. Leaders can still add."""
     today = now.astimezone(zone).date() if zone else now.date()
+    if event.get("cancelled") is True:
+        return "This event is cancelled."
     if config["closed"]:
         return "Sign-ups are closed. Ask a leader to add you."
     if config["deadline"] and today > config["deadline"]:

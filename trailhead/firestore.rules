@@ -290,12 +290,23 @@ service cloud.firestore {
       match /yptReminders/{m} {
         allow read, write: if false;
       }
+      // A repeating event's shared settings, written only by create_event_series and update_event_series.
+      match /eventSeries/{s} {
+        allow read: if isMember(t);
+        allow write: if false;
+      }
+      // Which weeks' family digests have gone out (the weekly job's once-a-week claim). Server only.
+      match /digestRuns/{week} {
+        allow read, write: if false;
+      }
       match /counselors/{c} {
         allow read: if isMember(t);
         allow write: if isLeader(t);
       }
       // Events. A leader writes the details and the sign-up settings (the `signups` map, feeCents, startTime, endTime,
-      // endDate). The server owns signupCounts, feesPending, feesPosted and reminderSentFor.
+      // endDate) and may cancel one (`cancelled`, with an optional short `cancelNote` that goes in the email). The
+      // server owns signupCounts, feesPending, feesPosted, reminderSentFor, alertedFor (the details families were last
+      // told about) and seriesId (set only by create_event_series).
       match /events/{e} {
         allow read: if isMember(t);
         allow create: if isLeader(t) && !request.resource.data.keys().hasAny(serverOwned()) && okSettings(request.resource.data);
@@ -309,7 +320,9 @@ service cloud.firestore {
             && (!('feeCents' in d) || (d.feeCents is int && d.feeCents >= 0 && d.feeCents <= 1000000))
             && (!('healthForm' in d) || d.healthForm in ['ab', 'abc'])
             && (!('logKind' in d) || d.logKind in ['campout', 'service', 'hike', 'other'])
-            && (!('logValues' in d) || validLogValues(d.logValues));
+            && (!('logValues' in d) || validLogValues(d.logValues))
+            && (!('cancelled' in d) || d.cancelled is bool)
+            && (!('cancelNote' in d) || (d.cancelNote is string && d.cancelNote.size() <= 200));
         }
         // What each Scout who is marked present earns: nights camped, service hours and miles hiked.
         function validLogValues(v) {
@@ -318,7 +331,9 @@ service cloud.firestore {
             && v.get('miles', 0) is number && v.get('miles', 0) >= 0 && v.get('miles', 0) <= 2000
             && v.get('serviceHours', 0) is number && v.get('serviceHours', 0) >= 0 && v.get('serviceHours', 0) <= 1000;
         }
-        function serverOwned() { return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor']; }
+        function serverOwned() {
+          return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor', 'alertedFor', 'seriesId'];
+        }
 
         // Sign-ups: written only by the sign_up_for_event, cancel_signup, approve_permission and import_rsvps
         // functions, so a family can't move itself off a waitlist or approve its own Scout. Leaders read them all;

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import date
 
+from handlers import event_changes as changes
 from handlers.email_templates import Email, _notification, join_names
 from trailhead_core.dates import human
 
@@ -54,3 +55,43 @@ def event_reminder(
     if pending:
         lines.append(f"{join_names(pending)} still needs a parent to give permission in Forthright.")
     return _notification(f"Reminder: {title}", lines, _event_link(troop_id, event_id, app_url), app_url)
+
+
+def event_changed(
+    kind: str,
+    title: str,
+    when: str | None,
+    lines: list[str],
+    note: str | None,
+    troop_id: str,
+    event_id: str,
+    app_url: str,
+) -> Email:
+    """An event moved, changed place, was cancelled or is back on. `note` is the leaders' short reason, if any."""
+    first = changes.headline(kind, title, when)
+    body = [first, *lines]
+    if note:
+        body.append(f"From the leaders: {note}")
+    subject = {changes.CANCELLED: f"Cancelled: {title}", changes.RESTORED: f"Back on: {title}"}.get(
+        kind, f"Changed: {title}"
+    )
+    return _notification(subject, body, _event_link(troop_id, event_id, app_url), app_url)
+
+
+def series_changed(
+    title: str,
+    from_day: date,
+    count: int,
+    lines: list[str],
+    cancelled: bool,
+    troop_id: str,
+    event_id: str,
+    app_url: str,
+) -> Email:
+    """A leader changed or cancelled every upcoming date of a repeating event at once."""
+    dates = "date" if count == 1 else f"{count} dates"
+    if cancelled:
+        body, subject = [f"{title} is cancelled from {human(from_day)} on ({dates})."], f"Cancelled: {title}"
+    else:
+        body, subject = [f"{title} has changed from {human(from_day)} on ({dates}).", *lines], f"Changed: {title}"
+    return _notification(subject, body, _event_link(troop_id, event_id, app_url), app_url)

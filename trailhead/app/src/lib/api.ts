@@ -316,6 +316,9 @@ export const deleteLead = (troopId: string, leadId: string) =>
 export const setEmailAnnouncements = (enabled: boolean) =>
   call<{ enabled: boolean }, { enabled: boolean }>('set_email_announcements', { enabled });
 
+export const setEmailDigest = (enabled: boolean) =>
+  call<{ enabled: boolean }, { enabled: boolean }>('set_email_digest', { enabled });
+
 export interface AnnouncementContent {
   kind: 'announcement' | 'newsletter';
   title: string;

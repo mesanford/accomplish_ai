@@ -134,3 +134,14 @@ def set_email_announcements(req: https_fn.CallableRequest) -> dict:
         raise fail(Code.INVALID_ARGUMENT, "Choose on or off.")
     db().collection("users").document(uid).set({"emailAnnouncements": enabled}, merge=True)
     return {"enabled": enabled}
+
+
+@https_fn.on_call()
+def set_email_digest(req: https_fn.CallableRequest) -> dict:
+    """Turn the weekly family digest (Sunday evening) on or off."""
+    uid = require_uid(req)
+    enabled = (req.data or {}).get("enabled")
+    if not isinstance(enabled, bool):
+        raise fail(Code.INVALID_ARGUMENT, "Choose on or off.")
+    db().collection("users").document(uid).set({"emailDigest": enabled}, merge=True)
+    return {"enabled": enabled}

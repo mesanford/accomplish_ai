@@ -163,3 +163,34 @@ def test_calendar_feed_tokens_are_never_readable_or_writable_by_clients():
         assert who.get("calendarFeeds/secret") == DENIED
         assert who.set(f"{T}/calendarTokens/{id(who)}", {"token": "mine"}) == DENIED
         assert who.set("calendarFeeds/mine", {"troopId": "t1", "uid": "x"}) == DENIED
+
+
+def test_a_leader_cancels_an_event_with_a_short_note_but_not_a_long_one():
+    seed()
+    base = {"title": "Campout", "start": "2026-10-17", "signups": CONFIG}
+    assert leader.set(EVENT, {**base, "cancelled": True, "cancelNote": "Storms."}) == OK
+    assert leader.set(EVENT, {**base, "cancelled": "yes"}) == DENIED
+    assert leader.set(EVENT, {**base, "cancelled": True, "cancelNote": "x" * 201}) == DENIED
+    assert parent.set(EVENT, {**base, "cancelled": True}) == DENIED
+
+
+def test_only_the_server_writes_the_alert_marker_and_the_series_id():
+    seed()
+    base = {"title": "Campout", "start": "2026-10-17", "signups": CONFIG}
+    assert leader.create(f"{T}/events/x-series", {**base, "seriesId": "s1"}) == DENIED
+    assert leader.create(f"{T}/events/x-alerted", {**base, "alertedFor": "{}"}) == DENIED
+    owner.set(EVENT, {**base, "seriesId": "s1", "alertedFor": "{}"})
+    keep = {**base, "seriesId": "s1", "alertedFor": "{}"}
+    assert leader.set(EVENT, {**keep, "place": "Gym"}) == OK
+    assert leader.set(EVENT, {**keep, "seriesId": "other"}) == DENIED
+    assert leader.set(EVENT, {**keep, "alertedFor": "changed"}) == DENIED
+
+
+def test_members_read_a_series_but_nobody_writes_one_and_digest_runs_are_closed():
+    owner.set(f"{T}/eventSeries/s1", {"title": "Troop meeting", "pattern": "weekly"})
+    owner.set(f"{T}/digestRuns/2026-10-26", {"sentAt": NOW})
+    assert parent.get(f"{T}/eventSeries/s1") == OK
+    assert stranger.get(f"{T}/eventSeries/s1") == DENIED
+    assert leader.set(f"{T}/eventSeries/s1", {"title": "Mine"}) == DENIED
+    assert leader.get(f"{T}/digestRuns/2026-10-26") == DENIED
+    assert leader.set(f"{T}/digestRuns/2026-11-02", {"sentAt": NOW}) == DENIED

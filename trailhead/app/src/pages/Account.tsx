@@ -9,12 +9,18 @@ import {
   deleteAccount,
   errorMessage,
   setEmailAnnouncements,
+  setEmailDigest,
   setEmailNotifications,
 } from '../lib/api';
 import { signOutUser, useAuth } from '../lib/auth';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
-import { EMAIL_NOTIFICATIONS_LABEL, emailNotificationsOn } from '../lib/notifications';
+import {
+  DIGEST_EMAIL_LABEL,
+  digestEmailsOn,
+  EMAIL_NOTIFICATIONS_LABEL,
+  emailNotificationsOn,
+} from '../lib/notifications';
 import { ACCOUNT_DELETES, ACCOUNT_KEPT, CANNOT_UNDO } from '../lib/removal';
 
 /** Account settings: email notifications, and deleting your own account. */
@@ -27,13 +33,16 @@ export function Account() {
   const [saving, setSaving] = useState(false);
   const [mailError, setMailError] = useState('');
   const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user]);
-  const prefs = useDoc<{ emailNotifications?: boolean; emailAnnouncements?: boolean }>(
+  const prefs = useDoc<{ emailNotifications?: boolean; emailAnnouncements?: boolean; emailDigest?: boolean }>(
     userRef,
   ).data;
   // Shows the new setting while it saves, so the box doesn't flick back until the user record updates.
-  const [pending, setPending] = useState<{ notifications?: boolean; announcements?: boolean }>({});
+  const [pending, setPending] = useState<{ notifications?: boolean; announcements?: boolean; digest?: boolean }>(
+    {},
+  );
   const emailOn = pending.notifications ?? emailNotificationsOn(prefs);
   const announcementsOn = pending.announcements ?? announcementEmailsOn(prefs);
+  const digestOn = pending.digest ?? digestEmailsOn(prefs);
 
   async function changeAnnouncements(enabled: boolean) {
     await changeEmail(enabled, setEmailAnnouncements, 'announcements');
@@ -42,7 +51,7 @@ export function Account() {
   async function changeEmail(
     enabled: boolean,
     save: (on: boolean) => Promise<unknown> = setEmailNotifications,
-    key: 'notifications' | 'announcements' = 'notifications',
+    key: 'notifications' | 'announcements' | 'digest' = 'notifications',
   ) {
     setSaving(true);
     setMailError('');
@@ -100,6 +109,16 @@ export function Account() {
         <p className="small muted">
           Leaders choose when to email an announcement. Scouts are never emailed.
         </p>
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={digestOn}
+            disabled={saving}
+            onChange={(e) => changeEmail(e.target.checked, setEmailDigest, 'digest')}
+          />
+          {DIGEST_EMAIL_LABEL}
+        </label>
+        <p className="small muted">Sent only when something is coming up.</p>
         <Notice kind="error">{mailError}</Notice>
       </section>
       <MyYpt />

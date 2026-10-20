@@ -4,7 +4,7 @@ Firebase deploys the functions found in this module, so each one is re-exported 
 Logic lives in `handlers` and `trailhead_core`; Firestore wiring lives in `endpoints`.
 """
 
-from endpoints.account import delete_account, set_email_announcements, set_email_notifications
+from endpoints.account import delete_account, set_email_announcements, set_email_digest, set_email_notifications
 from endpoints.activity import mark_scout_left, record_activity
 from endpoints.activity_log import (
     add_activity_entry,
@@ -36,13 +36,16 @@ from endpoints.consent_requests import (
 )
 from endpoints.consent_review import review_consent_notice, send_consent_reminders
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
+from endpoints.digest import send_weekly_digest
 from endpoints.domains import add_domain, check_domain, remove_domain
 from endpoints.domains_sync import sync_domains
 from endpoints.entries import record_payment, reverse_entry, settle_account
 from endpoints.equipment import check_in_item, check_out_item, decide_request, request_item
 from endpoints.equipment_photo import on_inventory_deleted, set_item_photo
+from endpoints.event_alerts import on_event_written_alerts
 from endpoints.event_fees import charge_event_fees
 from endpoints.event_reminders import send_event_reminders
+from endpoints.event_series import create_event_series, update_event_series
 from endpoints.feeds import calendar_feed, get_calendar_feed, reset_calendar_feed
 from endpoints.health_forms import record_health_form
 from endpoints.leads import delete_lead
@@ -149,6 +152,11 @@ __all__ = [
     "reset_calendar_feed",
     "save_custom_award",
     "send_event_reminders",
+    "send_weekly_digest",
+    "on_event_written_alerts",
+    "create_event_series",
+    "update_event_series",
+    "set_email_digest",
     "send_message",
     "send_ypt_reminders",
     "set_item_photo",

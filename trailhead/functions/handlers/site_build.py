@@ -102,7 +102,9 @@ def public_events(events: list[dict], today: date, limit: int = MAX_EVENTS) -> l
     for event in events:
         start = _event_date(event.get("start"))
         title = (event.get("title") or "").strip() if isinstance(event.get("title"), str) else ""
-        if event.get("public") is not True or start is None or start < today or not title:
+        if event.get("public") is not True or event.get("cancelled") is True:
+            continue
+        if start is None or start < today or not title:
             continue
         place = event.get("place")
         place = (place.strip()[:120] or None) if isinstance(place, str) else None
