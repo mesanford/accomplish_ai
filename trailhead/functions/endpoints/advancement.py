@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from contextlib import suppress
+
 from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
+from google.api_core.exceptions import NotFound
 
 from fb import db, fail, kind_blocker, require_access, troop
 from handlers.activity_log import event_log_id
@@ -130,12 +133,18 @@ NO_RECORD = {
 
 @firestore_fn.on_document_written(document="troops/{troopId}/paths/{pathId}")
 def on_path_written(event: Written) -> None:
+    recheck_path(event)
+
+
+def recheck_path(event: Written) -> None:
     before, after = _before_after(event)
     if not needs_recheck(before, after):
         return
     scout = _scout_record(troop(event.params["troopId"]), after["scoutId"])
     result = NO_RECORD if scout is None else feasibility_doc(check_path(path_from_doc(after), scout, today_local()))
-    event.data.after.reference.update({"feasibility": result})
+    # The path can be deleted while it's checked (removing a Scout erases their paths); don't fail, or recreate it.
+    with suppress(NotFound):
+        event.data.after.reference.update({"feasibility": result})
 
 
 @https_fn.on_call()
