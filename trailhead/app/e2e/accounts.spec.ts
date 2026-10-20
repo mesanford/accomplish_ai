@@ -25,7 +25,7 @@ test('a treasurer posts popcorn sales and the parent sees the credit', async ({ 
   const treasurer = await signedIn(browser, 'acct-treasurer@example.com', treasurerInvite);
   await join(treasurer, 'Terry Treasurer');
   await expect(treasurer.getByRole('heading', { name: 'Troop 505' })).toBeVisible();
-  await treasurer.getByRole('link', { name: 'Accounts' }).click();
+  await treasurer.getByRole('link', { name: 'Accounts', exact: true }).click();
   await expect(treasurer.getByRole('heading', { name: 'Accounts' })).toBeVisible();
 
   await treasurer.getByRole('link', { name: 'New fundraiser' }).click();
@@ -38,14 +38,14 @@ test('a treasurer posts popcorn sales and the parent sees the credit', async ({ 
   await expect(treasurer.getByText('Posted. 1 Scout account credited $30.00 in all.')).toBeVisible();
 
   // The summary shows the money held, with tabular amounts.
-  await treasurer.getByRole('link', { name: 'Accounts' }).click();
+  await treasurer.getByRole('link', { name: 'Accounts', exact: true }).click();
   await expect(treasurer.getByRole('row', { name: /Sam \$30\.00 \$0\.00/ })).toBeVisible();
   await expect(treasurer.getByRole('row', { name: /Fall popcorn 2026/ })).toContainText('$100.00');
 
   // The parent sees Sam's balance and the credit on Sam's page, and cannot open the troop's accounts.
   const parent = await signedIn(browser, 'acct-parent@example.com', parentInvite);
   await joinAsParent(parent, 'Jordan Parent');
-  await expect(parent.getByRole('link', { name: 'Accounts' })).toBeHidden();
+  await expect(parent.getByRole('link', { name: 'Accounts', exact: true })).toBeHidden();
   await parent.getByRole('link', { name: /Sam/ }).first().click();
   const account = parent.getByRole('region', { name: 'Scout account' });
   await expect(account.getByText('Account balance')).toBeVisible();

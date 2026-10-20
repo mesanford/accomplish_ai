@@ -23,15 +23,15 @@ test('a leader posts an announcement to parents, a parent reads it, and the lead
 
   const parent = await signedIn(browser, 'ann-parent@example.com', parentInvite);
   await joinAsParent(parent, 'Jordan Parent');
-  await expect(parent.getByRole('link', { name: 'Announcements' })).toBeVisible();
+  await expect(parent.getByRole('link', { name: 'Announcements', exact: true })).toBeVisible();
   // A parent cannot post.
-  await parent.getByRole('link', { name: 'Announcements' }).click();
+  await parent.getByRole('link', { name: 'Announcements', exact: true }).click();
   await expect(parent.getByRole('heading', { name: 'Announcements' })).toBeVisible();
   await expect(parent.getByRole('button', { name: 'New announcement' })).toBeHidden();
   await parent.getByRole('link', { name: 'Home' }).click();
 
   // The leader posts to all parents.
-  await leader.getByRole('link', { name: 'Announcements' }).click();
+  await leader.getByRole('link', { name: 'Announcements', exact: true }).click();
   await leader.getByRole('button', { name: 'New announcement' }).click();
   await expect(leader.getByText(/Only adults with current Youth Protection training can post/)).toBeVisible();
   await leader.getByLabel('Title').fill('Campout packing list');
@@ -78,7 +78,7 @@ test('the announcement form and feed fit a phone screen, and the Account page ha
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
   await expect(leader.getByRole('heading', { name: 'Troop 405' })).toBeVisible();
-  await leader.getByRole('link', { name: 'Announcements' }).click();
+  await leader.getByRole('link', { name: 'Announcements', exact: true }).click();
   await leader.getByRole('button', { name: 'Write an announcement' }).click();
   await leader.getByLabel('Type').selectOption('newsletter');
   await expect(leader.getByRole('button', { name: 'Add a section' })).toBeVisible();

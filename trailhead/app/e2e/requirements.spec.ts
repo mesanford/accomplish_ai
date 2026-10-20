@@ -34,7 +34,7 @@ test('official requirement text shows up wherever requirements are mentioned', a
   await expect(leader.getByRole('link', { name: 'Official Archery requirements' })).toBeVisible();
 
   // Events: pick the covered requirement by its text; the event list shows it as a clickable number.
-  await leader.getByRole('link', { name: 'Events' }).click();
+  await leader.getByRole('link', { name: 'Events', exact: true }).click();
   await leader.getByLabel('Event', { exact: true }).fill('Spring campout');
   await leader.getByLabel('Requirement covered (optional)').selectOption('camping');
   await expect(leader.getByText('Plan a menu for a campout.')).toBeVisible();

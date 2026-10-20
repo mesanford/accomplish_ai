@@ -62,16 +62,16 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   // Counselor joins. Leader approves the blue card and assigns them.
   const counselor = await signedIn(browser, 'mbc@example.com', counselorInvite);
   await join(counselor, 'Casey Counselor', inOneYear());
-  await expect(counselor.getByRole('link', { name: 'Counseling' })).toBeVisible();
+  await expect(counselor.getByRole('link', { name: 'Merit badge counseling', exact: true })).toBeVisible();
 
-  await leader.getByRole('link', { name: 'Blue cards' }).click();
+  await leader.getByRole('link', { name: 'Blue cards', exact: true }).click();
   await leader.getByRole('button', { name: 'Approve' }).click();
   await leader.getByLabel('Counselor').selectOption({ label: 'Casey Counselor (Counselor)' });
   await leader.getByRole('button', { name: 'Assign' }).click();
   await expect(leader.getByText('Counselor: Casey Counselor')).toBeVisible();
 
   // Counselor signs a requirement and completes the badge.
-  await counselor.getByRole('link', { name: 'Counseling' }).click();
+  await counselor.getByRole('link', { name: 'Merit badge counseling', exact: true }).click();
   await counselor.getByRole('button', { name: 'Start working with this Scout' }).click();
   // The counselor reads the badge's requirements right on the page and signs one with its button.
   await expect(counselor.getByText('Discuss the history of the game of chess.')).toBeVisible();
@@ -96,7 +96,7 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await expect(parent.getByText(/^Complete /)).toBeVisible();
 
   // Leader messages Sam; Sam has no login, so the parent is added automatically and replies.
-  await leader.getByRole('link', { name: 'Messages' }).click();
+  await leader.getByRole('link', { name: 'Messages', exact: true }).click();
   await expect(
     leader.getByText(/Scouts can message adult leaders, not other Scouts/),
   ).toBeVisible();
@@ -106,14 +106,14 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await leader.getByRole('button', { name: 'Send' }).click();
   await expect(leader.getByRole('heading', { name: /Jordan Parent/ })).toBeVisible();
 
-  await parent.getByRole('link', { name: 'Messages' }).click();
+  await parent.getByRole('link', { name: 'Messages', exact: true }).click();
   await parent.getByRole('link', { name: /Great work on Chess/ }).click();
   await parent.getByLabel('Reply').fill('Thank you!');
   await parent.getByRole('button', { name: 'Reply' }).click();
   await expect(leader.getByText('Thank you!')).toBeVisible();
 
   // Leader takes attendance at a campout; Sam's camping nights are logged.
-  await leader.getByRole('link', { name: 'Events' }).click();
+  await leader.getByRole('link', { name: 'Events', exact: true }).click();
   await leader.getByLabel('Event').fill('October campout');
   await leader.getByLabel('Nights camped').fill('2');
   await leader.getByRole('button', { name: 'Add event' }).click();

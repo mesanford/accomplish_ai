@@ -83,7 +83,7 @@ test('a leader gives a committee member the parent role and they agree to the no
 
   // The new parent must agree before the troop opens again. Nothing is recorded for them until they do.
   await expect(member.getByRole('heading', { name: 'Agree to the parent notice' })).toBeVisible();
-  await expect(member.getByRole('link', { name: 'Events' })).toBeVisible();
+  await expect(member.getByRole('link', { name: 'Events', exact: true })).toBeVisible();
   await member.getByRole('button', { name: 'Agree and continue' }).click();
   await expect(member.getByText('Tick the box to agree, or choose not to agree.')).toBeVisible();
   await member.getByRole('checkbox', { name: /I am the parent or guardian of Sam, and I agree/ }).check();

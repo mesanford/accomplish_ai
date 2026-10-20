@@ -82,7 +82,7 @@ test('an advancement chair can read, edit and delete any announcement', async ({
   const chairInvite = await createInviteLink(leader, 'advancement');
 
   // The Scoutmaster posts to parents only. An advancement chair is not in that audience.
-  await leader.getByRole('link', { name: 'Announcements' }).click();
+  await leader.getByRole('link', { name: 'Announcements', exact: true }).click();
   await leader.getByRole('button', { name: 'New announcement' }).click();
   await leader.getByLabel('Title').fill('Parents only note');
   await leader.getByLabel('Who is this for?').selectOption('parents');
@@ -93,7 +93,7 @@ test('an advancement chair can read, edit and delete any announcement', async ({
   // The chair joins afterwards and still reads it (later joiners catch up), and can edit and delete it.
   const chair = await signedIn(browser, 'chairpost-chair@example.com', chairInvite);
   await join(chair, 'Ada Chair', inOneYear());
-  await chair.getByRole('link', { name: 'Announcements' }).click();
+  await chair.getByRole('link', { name: 'Announcements', exact: true }).click();
   await expect(chair.getByRole('heading', { name: 'Parents only note' })).toBeVisible({ timeout: 20_000 });
   await chair.getByRole('button', { name: 'Edit' }).click();
   await chair.getByLabel('Message').fill('Please bring the signed form.');

@@ -28,7 +28,7 @@ test('a leader adds a page and a document, publishes, and a visitor sees them', 
   await expect(leader.getByRole('heading', { name: 'Troop 404' })).toBeVisible();
 
   // A public event for the calendar page.
-  await leader.getByRole('link', { name: 'Events' }).click();
+  await leader.getByRole('link', { name: 'Events', exact: true }).click();
   await leader.getByLabel('Event').fill('Winter campout');
   await leader.getByLabel('Date').fill(inDays(20));
   await leader.getByLabel('Place', { exact: true }).fill('Camp Lowden');

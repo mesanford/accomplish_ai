@@ -56,7 +56,7 @@ test('a parent records Parts A and B and a leader sees the event roster flag cle
   const parent = await signedIn(browser, 'health-parent@example.com', invite);
   await joinAsParent(parent, 'Jordan Parent');
   await parent.setViewportSize({ width: 375, height: 800 });
-  await parent.getByRole('link', { name: 'Health forms' }).click();
+  await parent.getByRole('link', { name: 'Health forms', exact: true }).click();
   const card = parent.getByRole('region', { name: 'Health forms for Riley' });
   await expect(card.getByRole('heading', { name: /Parts A and B.*missing/ })).toBeVisible();
   await card.getByLabel('New date for Parts A and B').fill(yesterday());

@@ -115,7 +115,7 @@ test('a treasurer and a quartermaster see their own Getting started lists and He
   await expect(treasurer.getByText('Pay out account credit as cash.', { exact: false })).toBeVisible();
   await expect(treasurer.getByRole('heading', { name: 'What you cannot see or change' }).first()).toBeVisible();
   await treasurer.screenshot({ path: `${SHOTS}/treasurer-help.png`, fullPage: true });
-  await treasurer.getByRole('link', { name: 'Accounts' }).click();
+  await treasurer.getByRole('link', { name: 'Accounts', exact: true }).click();
   await expect(treasurer.getByRole('button', { name: 'Help: Scout accounts' })).toBeVisible();
 
   // Saving the account settings ticks the first step.
@@ -132,7 +132,7 @@ test('a treasurer and a quartermaster see their own Getting started lists and He
   const qCard = qm.getByRole('region', { name: 'Getting started as quartermaster' });
   await expect(qCard.getByText('0 of 3 done')).toBeVisible();
   await expect(qm.getByRole('region', { name: 'Getting started as treasurer' })).toBeHidden();
-  await expect(qm.getByRole('link', { name: 'Accounts' })).toBeHidden();
+  await expect(qm.getByRole('link', { name: 'Accounts', exact: true })).toBeHidden();
   await qm.getByRole('link', { name: 'Help', exact: true }).click();
   await expect(qm.getByRole('heading', { name: "I'm the quartermaster" })).toBeVisible();
   await expect(qm.getByRole('heading', { name: 'Keep a repair log' })).toBeVisible();

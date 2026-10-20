@@ -54,7 +54,7 @@ test('a leader builds the troop website, uploads photos and publishes it', async
   await expect(leader.getByText('Media consent given')).toBeVisible();
 
   // A public event for the site's calendar.
-  await leader.getByRole('link', { name: 'Events' }).click();
+  await leader.getByRole('link', { name: 'Events', exact: true }).click();
   await leader.getByLabel('Event').fill('Fall campout');
   await leader.getByLabel('Date').fill(inDays(14));
   await leader.getByLabel('Place', { exact: true }).fill('Camp Lowden');
