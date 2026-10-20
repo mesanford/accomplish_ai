@@ -108,6 +108,16 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     code acting for one troop uses `fb.troop_today` / `fb.troop_date`, never the Central-only `today_local()`, which
     is left for the global nightly jobs. Scheduled jobs still run at fixed Central times but count each troop's days
     in its own zone.
+    **Home screen and scheduled announcements.** The troop home opens with **What do you want to do?**: shortcuts
+    chosen by what the person can do (`homeActions.ts`): a leader plans an event, sends a message, manages Scouts,
+    helps a Scout advance, handles blue cards and opens Troop settings; a parent signs up, sees their Scout's
+    progress and messages a leader. **What's happening** below shows a leader events in the next two weeks, scheduled
+    messages, Scouts with an advancement path, waiting blue cards and permission slips and new families, and shows
+    everyone what's coming up. A post can be scheduled (**Send later**, 5 minutes to 60 days ahead):
+    `schedule_announcement` checks it as if sent now and keeps it in `troops/{t}/scheduledPosts`; every 15 minutes
+    `send_scheduled_announcements` sends the due ones through the same code as posting now (audience, Youth
+    Protection and email limits applied at send time), or marks one failed with the reason. The poster or a
+    Scoutmaster removes a waiting one with `cancel_scheduled_announcement`.
 14. **Scout accounts.** A leader gives an adult the **treasurer** role. The treasurer's **Accounts** page runs
     fundraisers with a credit rule (`save_campaign`, `post_sales`), charges many Scouts at once or everyone marked
     present at an event (`post_charge`, `charge_attendees`), records payments (`record_payment`), reverses a wrong

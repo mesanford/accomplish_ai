@@ -237,6 +237,21 @@ export interface TroopEvent {
   feesPosted?: { count: number; amountCents: number };
 }
 
+/** An announcement waiting to be sent (troops/{t}/scheduledPosts/{id}). Written only by the server. */
+export interface ScheduledPost {
+  id: string;
+  title: string;
+  kind: 'announcement' | 'newsletter';
+  audienceLabel: string;
+  email: boolean;
+  sendAt: Timestamp;
+  status: 'scheduled' | 'sending' | 'sent' | 'failed';
+  /** Why it could not go out, when `failed`. */
+  reason?: string;
+  postedByUid: string;
+  postedByName: string;
+}
+
 /** A repeating event's shared settings (troops/{t}/eventSeries/{id}). Written only by the server. */
 export interface EventSeries {
   id: string;

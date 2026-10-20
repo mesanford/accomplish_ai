@@ -99,3 +99,19 @@ def test_a_person_reads_their_own_marker_and_nobody_elses():
     Client("owner").set(f"{T}/announcementReads/parent", {"lastSeenAt": datetime(2026, 10, 2, tzinfo=UTC)})
     assert parent.get(f"{T}/announcementReads/parent") == OK
     assert leader.get(f"{T}/announcementReads/parent") == DENIED
+
+
+def test_leaders_and_the_poster_read_scheduled_posts_and_nobody_writes_them():
+    owner = Client("owner")
+    sched = {"title": "Court of honor", "status": "scheduled", "postedByUid": "parent", "sendAt": datetime.now(UTC)}
+    owner.set(f"{T}/scheduledPosts/p1", sched)
+    leader, assistant, parent, scout1, stranger = (
+        Client(u) for u in ("leader", "assistant", "parent", "scout1", "stranger")
+    )
+    assert leader.get(f"{T}/scheduledPosts/p1") == OK
+    assert assistant.get(f"{T}/scheduledPosts/p1") == OK
+    assert parent.get(f"{T}/scheduledPosts/p1") == OK  # the poster
+    assert scout1.get(f"{T}/scheduledPosts/p1") == DENIED
+    assert stranger.get(f"{T}/scheduledPosts/p1") == DENIED
+    assert leader.set(f"{T}/scheduledPosts/p2", sched) == DENIED
+    assert parent.set(f"{T}/scheduledPosts/p1", {**sched, "status": "sent"}) == DENIED

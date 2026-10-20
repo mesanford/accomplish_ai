@@ -20,6 +20,11 @@ from endpoints.advancement import (
     on_signoff_created,
 )
 from endpoints.announcement_catchup import on_access_written_announcements
+from endpoints.announcement_schedule import (
+    cancel_scheduled_announcement,
+    schedule_announcement,
+    send_scheduled_announcements,
+)
 from endpoints.announcements import delete_announcement, edit_announcement, post_announcement
 from endpoints.assistant import draft_path
 from endpoints.campaigns import post_sales, save_account_settings, save_campaign
@@ -155,6 +160,9 @@ __all__ = [
     "send_event_reminders",
     "send_weekly_digest",
     "save_troop_settings",
+    "schedule_announcement",
+    "cancel_scheduled_announcement",
+    "send_scheduled_announcements",
     "on_event_written_alerts",
     "create_event_series",
     "update_event_series",

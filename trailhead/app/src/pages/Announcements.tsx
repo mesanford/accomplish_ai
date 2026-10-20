@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AnnouncementCard } from '../components/AnnouncementCard';
 import { AnnouncementComposer } from '../components/AnnouncementComposer';
 import { NextStep } from '../components/NextStep';
+import { ScheduledPosts } from '../components/ScheduledPosts';
 import { Empty, Loading, Notice, PageHeader } from '../components/ui';
 import { markAnnouncementsSeen, useAnnouncementFeed } from '../lib/announcementFeed';
 import { isUnread } from '../lib/announcements';
@@ -12,7 +14,9 @@ import { HelpTip } from '../components/HelpTip';
 export function Announcements() {
   const { troopId, has, access } = useTroop();
   const { uid, posts, lastSeenMs, loading, error } = useAnnouncementFeed();
-  const [composing, setComposing] = useState(false);
+  // ?new=1 (the home screen's "Send a message to the troop") opens the form straight away.
+  const [params] = useSearchParams();
+  const [composing, setComposing] = useState(params.get('new') === '1');
   const [notice, setNotice] = useState('');
   // Unread markers use the time from before this visit, so they stay visible while the person reads.
   const seenOnArrival = useRef<number | null>(null);
@@ -50,6 +54,7 @@ export function Announcements() {
           />
         </section>
       ) : null}
+      <ScheduledPosts uid={uid ?? undefined} canPost={canPost} />
       <Notice kind="error">{error ? 'Announcements could not be loaded. Try again in a moment.' : ''}</Notice>
       {loading ? (
         <Loading />

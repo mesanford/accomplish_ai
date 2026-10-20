@@ -1,21 +1,20 @@
-import { collection, query, where } from 'firebase/firestore';
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AddScoutForm } from '../components/AddScoutForm';
 import { GettingStarted } from '../components/GettingStarted';
+import { LeaderStats } from '../components/home/LeaderStats';
+import { QuickActions } from '../components/home/QuickActions';
+import { UpcomingEvents } from '../components/home/UpcomingEvents';
+import { useUpcoming } from '../components/home/useUpcoming';
 import { HelpTip } from '../components/HelpTip';
 import { HomeAnnouncement } from '../components/HomeAnnouncement';
 import { NoticeUpdateCard } from '../components/NoticeUpdateCard';
 import { NextStep } from '../components/NextStep';
 import { YptAlert } from '../components/YptAlert';
 import { Empty, Loading, PageHeader } from '../components/ui';
-import { db } from '../lib/firebase';
-import { blueCardAction, noScoutsText } from '../lib/homeCopy';
+import { noScoutsText } from '../lib/homeCopy';
 import { useStaleScouts } from '../lib/consentHooks';
-import { useQuery } from '../lib/hooks';
 import { useNewLeadCount } from '../lib/leads';
 import { useTroop } from '../lib/troop';
-import type { BlueCard } from '../lib/types';
 
 function ScoutCards() {
   const { troopId, members, visibleScoutIds, isLeader, access, parentOf } = useTroop();
@@ -81,36 +80,9 @@ function NoticeAlert() {
   );
 }
 
-function LeaderSummary() {
-  const { troopId, canManageBadges } = useTroop();
-  const pendingQuery = useMemo(
-    () =>
-      query(
-        collection(db, 'troops', troopId, 'blueCards'),
-        where('status', 'in', ['requested', 'approved']),
-      ),
-    [troopId],
-  );
-  const pending = useQuery<BlueCard>(pendingQuery, `${troopId}/pending-cards`);
-  const action = blueCardAction(pending.data.length, canManageBadges);
-  return (
-    <div className="row">
-      <Link className={action.waiting ? 'btn' : 'btn quiet'} to={`/t/${troopId}/blue-cards`}>
-        {action.text}
-      </Link>
-      <HelpTip topic="blueCard" />
-      <Link className="btn secondary" to={`/t/${troopId}/roster`}>
-        Add Scouts and invite families
-      </Link>
-      <Link className="btn quiet" to={`/t/${troopId}/events`}>
-        Take attendance
-      </Link>
-    </div>
-  );
-}
-
 export function TroopHome() {
   const { troop, access, loading, isLeader, has, troopId } = useTroop();
+  const upcoming = useUpcoming(troopId);
   if (loading && !troop) {
     return <Loading />;
   }
@@ -126,15 +98,14 @@ export function TroopHome() {
       <NoticeUpdateCard />
       {isLeader ? <LeadAlert /> : null}
       {isLeader ? <NoticeAlert /> : null}
-      {isLeader ? <LeaderSummary /> : null}
-      {has('counselor') ? (
-        <div className="row">
-          <Link className="btn secondary" to={`/t/${troopId}/counseling`}>
-            Your merit badge Scouts
-          </Link>
-        </div>
-      ) : null}
-      <section className="stack">
+      <QuickActions />
+      <section className="stack" aria-label="What's happening">
+        <h2 className="blazed">What's happening</h2>
+        {isLeader ? <LeaderStats events={upcoming.events} today={upcoming.today} /> : null}
+        <h3>Coming up</h3>
+        <UpcomingEvents troopId={troopId} events={upcoming.events} today={upcoming.today} isLeader={isLeader} />
+      </section>
+      <section className="stack" id="scouts">
         <h2 className="blazed">{isLeader ? 'Scouts' : 'Your Scouts'}</h2>
         <ScoutCards />
       </section>

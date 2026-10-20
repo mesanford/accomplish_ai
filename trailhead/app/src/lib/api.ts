@@ -357,6 +357,16 @@ export interface PostAnnouncementForm extends AnnouncementContent {
 export const postAnnouncement = (form: PostAnnouncementForm) =>
   call<PostAnnouncementForm, { announcementId: string; emailed: number; emailSkipped: number }>('post_announcement', form);
 
+/** Check a post now and send it at `sendAt` (an ISO time with its offset), 5 minutes to 60 days ahead. */
+export const scheduleAnnouncement = (form: PostAnnouncementForm & { sendAt: string }) =>
+  call<PostAnnouncementForm & { sendAt: string }, { scheduledId: string; sendAt: string }>('schedule_announcement', form);
+
+export const cancelScheduledAnnouncement = (troopId: string, scheduledId: string) =>
+  call<{ troopId: string; scheduledId: string }, { removed: boolean }>('cancel_scheduled_announcement', {
+    troopId,
+    scheduledId,
+  });
+
 export const editAnnouncement = (troopId: string, announcementId: string, content: AnnouncementContent) =>
   call<AnnouncementContent & { troopId: string; announcementId: string }, { announcementId: string }>('edit_announcement', {
     troopId,

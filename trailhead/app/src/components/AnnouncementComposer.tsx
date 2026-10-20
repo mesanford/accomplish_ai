@@ -3,7 +3,8 @@ import { type FormEvent, useMemo, useState } from 'react';
 import { AudiencePicker, audienceReady } from './AudiencePicker';
 import { NewsletterFields } from './NewsletterFields';
 import { Field, Notice, todayIso } from './ui';
-import { editAnnouncement, errorMessage, postAnnouncement } from '../lib/api';
+import { editAnnouncement, errorMessage, postAnnouncement, scheduleAnnouncement } from '../lib/api';
+import { defaultSendAt, sendTimeText } from '../lib/scheduledPosts';
 import { type Announcement, type AudienceSpec, reachesScouts, YPT_NOTE } from '../lib/announcements';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
@@ -26,6 +27,8 @@ export function AnnouncementComposer({ editing, onDone }: Props) {
   const [audience, setAudience] = useState<AudienceSpec>({ type: 'troop' });
   const [email, setEmail] = useState(false);
   const [pinned, setPinned] = useState(editing?.pinned ?? false);
+  const [later, setLater] = useState(false);
+  const [sendAt, setSendAt] = useState(defaultSendAt());
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const q = useMemo(() => query(collection(db, `troops/${troopId}/events`), orderBy('start', 'desc')), [troopId]);
@@ -57,6 +60,10 @@ export function AnnouncementComposer({ editing, onDone }: Props) {
       if (editing) {
         await editAnnouncement(troopId, editing.id, content);
         onDone('Saved. Nobody was emailed again.');
+      } else if (later) {
+        const when = new Date(sendAt);
+        await scheduleAnnouncement({ troopId, ...content, audience, email, sendAt: when.toISOString() });
+        onDone(`Scheduled for ${sendTimeText(when)}.`);
       } else {
         const sent = await postAnnouncement({ troopId, ...content, audience, email });
         const note = sent.emailed > 0 ? ` Emailed ${sent.emailed}.` : '';
@@ -99,6 +106,19 @@ export function AnnouncementComposer({ editing, onDone }: Props) {
           Also email the parents and adults in this audience (Scouts are never emailed)
         </label>
       )}
+      {editing ? null : (
+        <div className="row">
+          <label className="check">
+            <input type="checkbox" checked={later} onChange={(e) => setLater(e.target.checked)} />
+            Send later
+          </label>
+          {later ? (
+            <Field label="Send at (your time)" htmlFor="ann-send-at">
+              <input id="ann-send-at" type="datetime-local" value={sendAt} onChange={(e) => setSendAt(e.target.value)} />
+            </Field>
+          ) : null}
+        </div>
+      )}
       <p className="small muted">
         {YPT_NOTE}
         {!editing && reachesScouts(audience.type) ? ' This audience includes Scouts.' : ''}
@@ -107,7 +127,7 @@ export function AnnouncementComposer({ editing, onDone }: Props) {
       <Notice kind="error">{error}</Notice>
       <div className="row">
         <button className="btn" type="submit" disabled={busy || !ready}>
-          {busy ? 'Saving…' : editing ? 'Save changes' : 'Post'}
+          {busy ? 'Saving…' : editing ? 'Save changes' : later ? 'Schedule' : 'Post'}
         </button>
         <button className="btn quiet" type="button" disabled={busy} onClick={() => onDone('')}>
           Cancel

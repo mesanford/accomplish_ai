@@ -59,7 +59,11 @@ def _signups(t, event_id: str) -> tuple[set[str], str]:
 def _checked(req, data: dict, today: date):
     """Everything a post needs, with the checks that run before anything is written."""
     troop_id = data.get("troopId")
-    access = require_access(req, troop_id)
+    return checked_for(require_access(req, troop_id), troop_id, data, today)
+
+
+def checked_for(access: dict, troop_id: str, data: dict, today: date):
+    """The checks for a post by this login, whether it is sent now or later (see announcement_schedule)."""
     if not can_post(access):
         raise fail(DENIED, "Only leaders and committee members can post announcements.")
     try:
@@ -86,11 +90,17 @@ def post_announcement(req: https_fn.CallableRequest) -> dict:
     """Post to an audience, and optionally email the adults in it (once; editing never emails again)."""
     data = req.data or {}
     today = troop_today(data.get("troopId"))
-    t, access, content, spec, audience, members, logins, sender = _checked(req, data, today)
+    return publish(req.auth.uid, _checked(req, data, today), data, today)
+
+
+def publish(uid: str, checked: tuple, data: dict, today: date) -> dict:
+    """Write the post, email it if asked and push it. `checked` is what `checked_for` returned for this login."""
+    t, access, content, spec, audience, members, logins, sender = checked
+    troop_id = data["troopId"]
     uids, skipped, wants_email = [], 0, data.get("email") is True
     if wants_email:
-        uids, skipped = mail.recipients(aud.email_uids(audience, req.auth.uid, members, logins))
-        if uids and not mail.take_slot(req.data["troopId"], today):
+        uids, skipped = mail.recipients(aud.email_uids(audience, uid, members, logins))
+        if uids and not mail.take_slot(troop_id, today):
             raise fail(https_fn.FunctionsErrorCode.RESOURCE_EXHAUSTED, RATE_LIMITED)
     events = _event_snapshots(t, content.pop("eventIds"))
     post = {**content, "events": events}
@@ -100,8 +110,8 @@ def post_announcement(req: https_fn.CallableRequest) -> dict:
             **post,
             "audience": spec,
             "audienceLabel": audience.label,
-            "readerUids": aud.readers(audience, req.auth.uid, logins),
-            "postedByUid": req.auth.uid,
+            "readerUids": aud.readers(audience, uid, logins),
+            "postedByUid": uid,
             "postedByMemberId": access["memberId"],
             "postedByName": sender.get("displayName", "A leader"),
             "emailed": 0,
@@ -111,12 +121,12 @@ def post_announcement(req: https_fn.CallableRequest) -> dict:
     emailed = 0
     if uids:
         name = (t.get().to_dict() or {}).get("name", "Your troop")
-        emailed = mail.send(post, uids, sender.get("displayName", "A leader"), name, req.data["troopId"], ref.id)
+        emailed = mail.send(post, uids, sender.get("displayName", "A leader"), name, troop_id, ref.id)
         ref.update({"emailed": emailed})
     # A push goes to every login in the audience (Scouts with their own login too), whether or not it is emailed.
     name = (t.get().to_dict() or {}).get("name", "Your troop")
-    others = [u for u in audience.uids if u != req.auth.uid]
-    push_all("announcement", others, push_text.announcement(name, req.data["troopId"]))
+    others = [u for u in audience.uids if u != uid]
+    push_all("announcement", others, push_text.announcement(name, troop_id))
     return {"announcementId": ref.id, "emailed": emailed, "emailSkipped": skipped}
 
 

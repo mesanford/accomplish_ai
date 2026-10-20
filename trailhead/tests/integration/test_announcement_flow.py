@@ -282,3 +282,58 @@ def test_an_advancement_chair_who_arrives_later_can_read_recent_posts_outside_th
     add_advancement_chair()
     wait_for(lambda: "chair" in read(f"{T}/announcements/{recent}")["readerUids"])
     assert "chair" not in read(f"{T}/announcements/{old}")["readerUids"]  # older than 12 months
+
+
+def schedule(uid="lead", hours=1, **extra):
+    body = {"troopId": "tn", "title": "Court of honor", "body": "Sunday at 2.", "audience": {"type": "parents"}}
+    send_at = (datetime.now(UTC) + timedelta(hours=hours)).isoformat()
+    return call("schedule_announcement", uid, {**body, "sendAt": send_at, **extra})
+
+
+def in_process(monkeypatch):
+    """`run_scheduled` runs as the deployed job would; the scheduled trigger itself can't fire on the emulators."""
+    monkeypatch.setenv("FUNCTIONS_EMULATOR", "true")
+    monkeypatch.setenv("GCLOUD_PROJECT", PROJECT)
+    monkeypatch.setenv("FIREBASE_AUTH_EMULATOR_HOST", AUTH.removeprefix("http://"))
+    from endpoints.announcement_schedule import run_scheduled
+
+    return run_scheduled
+
+
+def test_a_scheduled_post_waits_then_goes_out_once_through_the_usual_checks(monkeypatch):
+    run_scheduled = in_process(monkeypatch)
+    assert schedule("mom").status_code == 403  # parents can't post now or later
+    assert schedule(hours=24 * 61).status_code == 400
+    made = posted(schedule(email=True))
+    waiting = read(f"{T}/scheduledPosts/{made['scheduledId']}")
+    assert waiting["status"] == "scheduled" and waiting["audienceLabel"] == "All parents" and waiting["email"] is True
+    assert list_docs(f"{T}/announcements") == [] and sent_to() == set()
+
+    assert run_scheduled(datetime.now(UTC)) == {"sent": 0, "failed": 0}  # not due yet
+    assert run_scheduled(datetime.now(UTC) + timedelta(hours=2)) == {"sent": 1, "failed": 0}
+    done = read(f"{T}/scheduledPosts/{made['scheduledId']}")
+    assert done["status"] == "sent"
+    post_doc = read(f"{T}/announcements/{done['announcementId']}")
+    assert post_doc["title"] == "Court of honor" and post_doc["postedByName"] == "Lead Person"
+    assert sent_to() == {email_of(u) for u in ("mom", "dad", "pending")}
+    assert run_scheduled(datetime.now(UTC) + timedelta(hours=3)) == {"sent": 0, "failed": 0}  # never twice
+
+
+def test_a_post_whose_poster_can_no_longer_send_it_is_marked_failed(monkeypatch):
+    run_scheduled = in_process(monkeypatch)
+    made = posted(schedule("com", audience={"type": "troop"}))  # the troop includes Scouts: needs current training
+    owner.set(f"{T}/members/m-com", {**read(f"{T}/members/m-com"), "yptExpiresAt": PAST})
+    assert run_scheduled(datetime.now(UTC) + timedelta(hours=2)) == {"sent": 0, "failed": 1}
+    failed = read(f"{T}/scheduledPosts/{made['scheduledId']}")
+    assert failed["status"] == "failed" and "Youth Protection" in failed["reason"]
+    assert list_docs(f"{T}/announcements") == []
+
+
+def test_the_poster_or_a_scoutmaster_cancels_a_scheduled_post():
+    mine = posted(schedule("com"))["scheduledId"]
+    theirs = posted(schedule("asst"))["scheduledId"]
+    assert call("cancel_scheduled_announcement", "mom", {"troopId": "tn", "scheduledId": mine}).status_code == 403
+    assert call("cancel_scheduled_announcement", "asst", {"troopId": "tn", "scheduledId": mine}).status_code == 403
+    assert posted(call("cancel_scheduled_announcement", "com", {"troopId": "tn", "scheduledId": mine}))["removed"]
+    assert posted(call("cancel_scheduled_announcement", "lead", {"troopId": "tn", "scheduledId": theirs}))["removed"]
+    assert list_docs(f"{T}/scheduledPosts") == []
