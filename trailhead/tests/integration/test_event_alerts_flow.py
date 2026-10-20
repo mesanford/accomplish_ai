@@ -102,6 +102,8 @@ def test_cancelling_a_meeting_without_sign_ups_tells_the_whole_troop_and_restori
     assert sent_to("event_changed", 4) == {mail(u) for u in ADULTS}
     one = outbox("event_changed")[0]
     assert one["subject"] == "Cancelled: Troop meeting" and "The church hall is closed." in one["text"]
+    # Scouts hear only about their own sign-ups (privacy policy), so the Scout's own login gets no notification.
+    assert all(p["uid"] != "scout1" for p in list_docs("pushOutbox") if p["template"] == "event_changed")
 
     owner.set(EV, {**read(EV), "cancelled": False})
     wait_for(lambda: len(outbox("event_changed")) >= 8)

@@ -17,5 +17,5 @@ export const MAX_CANCEL_NOTE = 200;
 export function whoHears(signupsOn: boolean): string {
   return signupsOn
     ? 'Everyone signed up is told by email and on their phones.'
-    : 'The whole troop is told by email and on their phones if the event is in the next two weeks.';
+    : "The troop's adults and parents are told by email and on their phones if the event is in the next two weeks.";
 }

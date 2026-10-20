@@ -87,7 +87,8 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     **Changes, cancellations and repeating events.** A leader can change an event's name, date or place, cancel it
     with a short note, or put it back on (Event page). `on_event_written_alerts` emails and pushes the people who need
     to know when an upcoming event's date, times or place change, or it is cancelled or back on: everyone signed up,
-    or, for an event without sign-ups in the next 14 days, the whole troop (Scouts by push only). The server-only
+    or, for an event without sign-ups in the next 14 days, the troop's adults and parents (Scouts signed up get a phone
+    notification; Scouts are not told about events they didn't sign up for, as the privacy policy says). The server-only
     `alertedFor` field holds the details last announced, so nothing is sent twice. A cancelled event takes no
     sign-ups or reminders, shows as cancelled in calendar feeds and leaves the public website. A leader adds a
     repeating event (weekly, every other week or monthly on the same weekday, up to a year and 52 dates) with

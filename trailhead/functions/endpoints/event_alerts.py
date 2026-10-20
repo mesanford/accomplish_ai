@@ -2,7 +2,9 @@
 touches the event.
 
 Who hears: everyone signed up (parents about their Scouts, adults about themselves, Scouts by push only). An event
-without sign-ups has no such list, so the whole troop hears, but only about events in the next two weeks.
+without sign-ups has no such list, so the troop's adults and parents hear, but only about events in the next two
+weeks. Scouts are left out of that: the privacy policy limits their notifications to announcements sent to them and
+their own sign-ups.
 """
 
 from __future__ import annotations
@@ -41,14 +43,12 @@ def audience(troop_id: str, event_id: str, event: dict, today: date) -> tuple[di
     if not changes.whole_troop(event, today):
         return {}, []
     members = {d.id: d.to_dict() or {} for d in t.collection("members").stream()}
-    families, scouts = {}, []
+    families = {}
     for d in t.collection("access").stream():
         member = members.get((d.to_dict() or {}).get("memberId") or "") or {}
-        if member.get("kind") == "scout":
-            scouts.append(d.id)
-        else:
+        if member.get("kind") != "scout":
             families[d.id] = []
-    return families, scouts
+    return families, []
 
 
 def send(template: str, troop_id: str, families: dict, scouts: list[str], email_for, note) -> int:

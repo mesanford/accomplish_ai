@@ -102,6 +102,10 @@ export const TROOP_CATEGORIES: FeatureCategory[] = [
         text: 'Parents are linked to their own Scouts and act for those under 13. A parent agrees to a plain notice before seeing anything, and their consent is recorded.',
       },
       {
+        title: 'Troop settings',
+        text: "Your troop's details, meeting place, time zone and leadership in one place, including the committee chair and chartered organization representative.",
+      },
+      {
         title: 'Simple invitations',
         text: 'Invite adults with a link. People sign in with Google or a link sent by email, so there are no passwords to remember.',
       },

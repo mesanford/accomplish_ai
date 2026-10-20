@@ -14,6 +14,6 @@ describe('clockText', () => {
 describe('whoHears', () => {
   it('names who gets the alert', () => {
     expect(whoHears(true)).toContain('signed up');
-    expect(whoHears(false)).toContain('whole troop');
+    expect(whoHears(false)).toContain("troop's adults and parents");
   });
 });

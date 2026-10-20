@@ -96,6 +96,14 @@ export const ADVANCEMENT_CATEGORIES: FeatureCategory[] = [
         text: 'Families get a reminder two days before an event. Each member can add the troop calendar to Google, Apple or Outlook with a private link.',
       },
       {
+        title: 'Changes and cancellations',
+        text: 'Move an event, change the place or cancel it, and everyone signed up hears by email and on their phone. For a meeting without sign-ups, the troop\'s families do.',
+      },
+      {
+        title: 'Repeating meetings',
+        text: 'Add the weekly troop meeting once: every week, every other week or the same weekday each month. Change or cancel the rest of the dates in one step.',
+      },
+      {
         title: 'Event fees',
         text: 'Set a fee, and the treasurer charges it to the Scouts who went, straight into their Scout accounts. Each Scout is charged once.',
       },
@@ -140,6 +148,14 @@ export const ADVANCEMENT_CATEGORIES: FeatureCategory[] = [
       {
         title: 'Newsletters',
         text: 'Write a newsletter with sections and links to upcoming events, and email it to parents and adults. Scouts are never emailed.',
+      },
+      {
+        title: 'Schedule a post',
+        text: 'Write an announcement now and send it later, up to 60 days ahead.',
+      },
+      {
+        title: 'A weekly email for families',
+        text: "Every Sunday evening, parents get the coming week's events, sign-up deadlines and any permission slips waiting on them, and nothing when the week is quiet.",
       },
       {
         title: 'Messages with Youth Protection built in',
