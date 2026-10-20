@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html, body { margin: 0; }
+      .p { width: 1080px; height: 1350px; background: #f5f2ea; position: relative; overflow: hidden; color: #1a1f14; font-family: "Source Sans 3", sans-serif; }
+      .topo { position: absolute; right: -150px; top: -230px; width: 760px; opacity: 0.55; }
+      .body { position: absolute; left: 96px; right: 96px; top: 420px; }
+      .label { font-family: "IBM Plex Mono", monospace; font-size: 30px; letter-spacing: 4px; text-transform: uppercase; color: #3d5a1c; }
+      .rule { width: 120px; height: 8px; background: #e8b655; border-radius: 4px; margin: 34px 0 40px; }
+      h1 { font-family: "Zilla Slab", serif; font-weight: 700; font-size: 104px; line-height: 1.04; margin: 0; letter-spacing: -1px; text-wrap: balance; white-space: pre-line; }
+      .line { margin-top: 44px; font-size: 40px; line-height: 1.3; color: #474f3f; text-wrap: balance; white-space: pre-line; }
+      .foot { position: absolute; left: 96px; right: 96px; bottom: 90px; display: flex; align-items: center; justify-content: space-between; }
+      .foot img { height: 64px; }
+      .url { font-family: "IBM Plex Mono", monospace; font-size: 30px; color: #3d5a1c; }
+    </style>
+  </head>
+  <body>
+    <div class="p">
+      <svg class="topo" viewBox="0 0 480 400" aria-hidden="true">
+        <g fill="none" stroke="#7a4f24" stroke-width="1.4">
+          <ellipse cx="300" cy="250" rx="150" ry="95" />
+          <ellipse cx="300" cy="250" rx="112" ry="70" />
+          <ellipse cx="300" cy="250" rx="74" ry="45" />
+          <ellipse cx="300" cy="250" rx="38" ry="22" />
+        </g>
+        <path
+          d="M60 372 C110 330 170 330 215 300 C260 270 250 230 290 215 C335 198 380 210 400 170 C410 150 405 125 420 105"
+          fill="none" stroke="#a8321e" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"
+        />
+      </svg>
+      <div class="body">
+        <div class="label" id="label"></div>
+        <div class="rule"></div>
+        <h1 id="title"></h1>
+        <div class="line" id="line"></div>
+      </div>
+      <div class="foot">
+        <img src="../../../app/src/assets/forthright-lockup.svg" alt="" />
+        <span class="url">forthrightapp.com</span>
+      </div>
+    </div>
+    <script>
+      const post = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+      for (const key of ["label", "title", "line"]) document.getElementById(key).textContent = post[key];
+    </script>
+  </body>
+</html>
