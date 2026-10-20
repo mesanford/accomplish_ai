@@ -16,7 +16,7 @@ from firebase_functions import https_fn
 
 from endpoints.mailer import address_of, app_url, send_all
 from endpoints.removal import erase_scout
-from fb import db, fail, is_held, require_leader, require_uid, troop
+from fb import db, fail, is_held, require_leader, require_uid, troop, troop_date
 from handlers import email_templates as tpl
 from handlers.consent_requests import (
     AGREED,
@@ -35,6 +35,7 @@ from handlers.consent_requests import (
 from handlers.email_recipients import wants_email
 from handlers.membership import INVITE_DAYS, InvalidInput
 from handlers.retention import local_date
+from handlers.signup_config import troop_zone
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -145,7 +146,7 @@ def set_consent_parents(req: https_fn.CallableRequest) -> dict:
     if not held and not data.get("invite"):
         record = t.collection("scoutRecords").document(scout_id).get().to_dict()
         consented = bool((t.collection("consents").document(scout_id).get().to_dict() or {}).get("parentConsents"))
-        if not consented and needs_parent_consent(record, local_date(now)):
+        if not consented and needs_parent_consent(record, troop_date(troop_id, now)):
             t.collection("members").document(scout_id).update({"consentHold": True})
             held = True
     kind = "consent" if held else "invite"
@@ -235,12 +236,13 @@ def sync_holds(t, now: datetime) -> int:
     members = {d.id: d.to_dict() or {} for d in t.collection("members").where("kind", "==", "scout").stream()}
     records = {d.id: d.to_dict() for d in t.collection("scoutRecords").stream()}
     consents = {d.id: d.to_dict() or {} for d in t.collection("consents").stream()}
+    zone = troop_zone(t.get().to_dict())
     held, batch, ops = 0, db().batch(), 0
     for scout_id, member in members.items():
         if member.get("leftAt"):
             continue
         has_parent = bool(consents.get(scout_id, {}).get("parentConsents"))
-        should = not has_parent and needs_parent_consent(records.get(scout_id), local_date(now))
+        should = not has_parent and needs_parent_consent(records.get(scout_id), local_date(now, zone))
         held += int(should)
         if should != bool(member.get("consentHold")):
             ref = t.collection("members").document(scout_id)

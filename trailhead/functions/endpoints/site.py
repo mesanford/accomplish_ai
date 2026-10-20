@@ -13,6 +13,7 @@ from endpoints.site_files import MissingFile, delete_public_files, publish_files
 from fb import db, fail, require_leader, troop
 from handlers.images import UnreadableImage
 from handlers.retention import today_local
+from handlers.signup_config import troop_zone
 from handlers.site import InvalidSite, validate_draft
 from handlers.site_build import (
     MAX_CALENDAR,
@@ -33,9 +34,9 @@ Code = https_fn.FunctionsErrorCode
 TAKEN = "That web address is already used by another troop. Choose a different one."
 
 
-def _upcoming(t) -> list[dict]:
+def _upcoming(t, troop_doc: dict) -> list[dict]:
     events = [d.to_dict() for d in t.collection("events").where("public", "==", True).stream()]
-    return public_events(events, today_local(), MAX_CALENDAR)
+    return public_events(events, today_local(zone=troop_zone(troop_doc)), MAX_CALENDAR)
 
 
 def _record(path: str | None, tags: dict, urls: dict[str, str]) -> dict | None:
@@ -81,7 +82,7 @@ def publish_site(req: https_fn.CallableRequest) -> dict:
     documents, document_records, documents_left_out = publish_documents(troop_id, members)
     left_out = [*left_out, *documents_left_out]
     troop_doc = t.get().to_dict() or {}
-    public = build_public_site(clean, troop_id, troop_doc, urls, contacts, gallery, _upcoming(t), documents)
+    public = build_public_site(clean, troop_id, troop_doc, urls, contacts, gallery, _upcoming(t, troop_doc), documents)
     site_ref = db().collection("publicSites")
 
     @firestore.transactional
@@ -150,11 +151,12 @@ def unpublish_site(req: https_fn.CallableRequest) -> dict:
 def on_event_written_site(event: firestore_fn.Event) -> None:
     """Keep a published site's upcoming events in step with the troop calendar."""
     t = troop(event.params["troopId"])
-    site = (t.get().to_dict() or {}).get("site") or {}
+    troop_doc = t.get().to_dict() or {}
+    site = troop_doc.get("site") or {}
     if not site.get("published") or not site.get("slug"):
         return
     ref = db().collection("publicSites").document(site["slug"])
     if not ref.get().exists:
         return
-    upcoming = _upcoming(t)
+    upcoming = _upcoming(t, troop_doc)
     ref.update({"events": upcoming[:MAX_EVENTS], "calendar": upcoming})

@@ -8,11 +8,10 @@ import uuid
 from firebase_functions import https_fn
 
 from endpoints.money import bad, post, require_treasurer, roster_scouts
-from fb import fail, troop
+from fb import fail, troop, troop_today
 from handlers.ledger import compute_account, parse_day, payment_entry, reversal_entry
 from handlers.ledger_lifecycle import is_former, settlement_entries
 from handlers.membership import InvalidInput
-from handlers.retention import today_local
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -41,7 +40,7 @@ def record_payment(req: https_fn.CallableRequest) -> dict:
         return [payment_entry(state, scout_id, data, settings["allowNegative"])]
 
     try:
-        day = parse_day(data.get("date"), today_local())
+        day = parse_day(data.get("date"), troop_today(troop_id))
         [(entry_id, entry)] = post(troop_id, [scout_id], build, req.auth.uid, day)
     except InvalidInput as err:
         raise bad(err) from err

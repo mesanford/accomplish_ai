@@ -12,9 +12,9 @@ import logging
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from endpoints.event_alerts import audience, send, troop_today
+from endpoints.event_alerts import audience, send
 from endpoints.mailer import app_url
-from fb import db, fail, require_leader, troop
+from fb import db, fail, require_leader, troop, troop_today
 from handlers import event_changes as changes
 from handlers import event_emails as mail
 from handlers import push as push_text

@@ -23,6 +23,7 @@ from handlers.ledger import compute_account
 from handlers.membership import InvalidInput
 from handlers.retention import today_local
 from handlers.roles import acts_for
+from handlers.signup_config import troop_zone
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -85,6 +86,7 @@ def create_checkout(req: https_fn.CallableRequest) -> dict:
     cfg = require_on()
     t = troop(troop_id)
     troop_doc = t.get().to_dict() or {}
+    today = today_local(zone=troop_zone(troop_doc))
     linked = connection(troop_doc, cfg)
     if not linked.get("chargesEnabled"):
         raise fail(Code.FAILED_PRECONDITION, "The troop hasn't finished setting up online payments.")
@@ -98,7 +100,7 @@ def create_checkout(req: https_fn.CallableRequest) -> dict:
         charge_ids, amount = pay.checkout_amount(compute_account(entries), data, settings["allowPrepay"])
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
-    _count_session(t, req.auth.uid, today_local())
+    _count_session(t, req.auth.uid, today)
 
     account = linked["stripeAccountId"]
     stripe = Stripe(cfg)
@@ -117,7 +119,7 @@ def create_checkout(req: https_fn.CallableRequest) -> dict:
         "stripeAccountId": account,
         "mode": cfg.mode,
         "createdBy": req.auth.uid,
-        "date": today_local().isoformat(),
+        "date": today.isoformat(),
         "createdAt": firestore.SERVER_TIMESTAMP,
     }
     ref.set(record)

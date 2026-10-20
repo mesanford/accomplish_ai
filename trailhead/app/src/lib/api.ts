@@ -2,6 +2,7 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import type { PilotForm } from './pilotForm';
 import type { CustomRequirement, Feasibility, PathItemDoc } from './types';
+import type { MeetingPlace, TroopPositions } from './types';
 
 async function call<In, Out>(name: string, data: In): Promise<Out> {
   const result = await httpsCallable<In, Out>(functions, name)(data);
@@ -18,7 +19,25 @@ export interface TroopForm {
   yptExpiresAt: string;
   /** The creator's role. Leave out for Scoutmaster. */
   creatorRole?: string;
+  /** The troop's time zone (see timeZones.ts). */
+  timezone?: string;
 }
+
+export interface TroopSettingsForm {
+  troopId: string;
+  name: string;
+  unitNumber: string;
+  council: string;
+  district: string;
+  charterOrg: string;
+  meetingPlace: MeetingPlace;
+  timezone: string;
+  positions: TroopPositions;
+}
+
+/** Leaders save the troop's details, meeting place, time zone and key positions. */
+export const saveTroopSettings = (form: TroopSettingsForm) =>
+  call<TroopSettingsForm, { saved: boolean }>('save_troop_settings', form);
 
 export const createTroop = (form: TroopForm) => call<TroopForm, { troopId: string }>('create_troop', form);
 

@@ -5,12 +5,20 @@ import { Field, Notice, PageHeader } from '../components/ui';
 import { createTroop, errorMessage, type TroopForm } from '../lib/api';
 import { CREATOR_CHOICES, creatorHint, DEFAULT_CREATOR_ROLE } from '../lib/creatorRole';
 import { stillNeeded } from '../lib/formCheck';
+import { browserZone, ZONES } from '../lib/timeZones';
 
-const EMPTY: TroopForm = { name: '', unitNumber: '', council: '', displayName: '', yptExpiresAt: '', creatorRole: DEFAULT_CREATOR_ROLE };
+const EMPTY: TroopForm = {
+  name: '',
+  unitNumber: '',
+  council: '',
+  displayName: '',
+  yptExpiresAt: '',
+  creatorRole: DEFAULT_CREATOR_ROLE,
+};
 
 export function CreateTroop() {
   const navigate = useNavigate();
-  const [form, setForm] = useState<TroopForm>(EMPTY);
+  const [form, setForm] = useState<TroopForm>(() => ({ ...EMPTY, timezone: browserZone() }));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const set = (key: keyof TroopForm) => (e: { target: { value: string } }) => setForm({ ...form, [key]: e.target.value });
@@ -58,6 +66,19 @@ export function CreateTroop() {
         </Field>
         <Field label="Council" htmlFor="council" hint="Optional. For example, the name of your local Scouting council.">
           <input id="council" value={form.council} onChange={set('council')} />
+        </Field>
+        <Field
+          label="Time zone"
+          htmlFor="timezone"
+          hint="Where the troop meets. Dates, deadlines and reminders follow it. You can change it in Troop settings."
+        >
+          <select id="timezone" value={form.timezone} onChange={set('timezone')}>
+            {ZONES.map(([id, label]) => (
+              <option key={id} value={id}>
+                {label}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field label="Your name" htmlFor="you">
           <input id="you" required value={form.displayName} onChange={set('displayName')} autoComplete="name" />

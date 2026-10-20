@@ -10,7 +10,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.advancement import _scout_record
-from fb import db, fail, require_access, require_not_held, troop
+from fb import db, fail, require_access, require_not_held, troop, troop_today
 from handlers.assistant import (
     DAILY_DRAFT_LIMIT,
     TROOP_MONTHLY_DRAFT_LIMIT,
@@ -23,7 +23,6 @@ from handlers.assistant import (
 )
 from handlers.claude_model import DEFAULT_MODEL, claude_model, real_client
 from handlers.fake_planner import fake_plan
-from handlers.retention import today_local
 from handlers.site_about import scrub_names
 from trailhead_core import load_catalog
 
@@ -105,7 +104,7 @@ def draft_path(req: https_fn.CallableRequest) -> dict:
     if scout is None:
         raise fail(Code.FAILED_PRECONDITION, "Add the Scout's birth month and rank first.")
 
-    today = today_local()
+    today = troop_today(troop_id)
     _count_draft(req.auth.uid, troop_id, today)
     if use_fake_llm():
         model: ModelFn = lambda _prompt: fake_plan(scout, goal_id, catalog, today)  # noqa: E731

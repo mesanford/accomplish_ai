@@ -50,6 +50,7 @@ import { TroopHome } from './pages/TroopHome';
 import { Documents } from './pages/Documents';
 import { Equipment } from './pages/Equipment';
 import { EquipmentItem } from './pages/EquipmentItem';
+import { TroopSettings } from './pages/TroopSettings';
 import { Website } from './pages/Website';
 
 /** Sends signed-out visitors to sign in, then back to where they were going (such as an invite link). */
@@ -142,6 +143,7 @@ const router = createBrowserRouter([
       { path: 'equipment', element: <Equipment /> },
       { path: 'equipment/:itemId', element: <EquipmentItem /> },
       { path: 'website', element: <Website /> },
+      { path: 'settings', element: <TroopSettings /> },
       { path: 'accounts', element: <Accounts /> },
       { path: 'accounts/charge', element: <PostCharge /> },
       { path: 'accounts/payment', element: <RecordPayment /> },

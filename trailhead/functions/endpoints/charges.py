@@ -12,7 +12,7 @@ from datetime import date
 from firebase_functions import https_fn
 
 from endpoints.money import bad, clean_ids, post, require_treasurer, roster_scouts
-from fb import fail, troop
+from fb import fail, troop, troop_today
 from handlers.ledger import (
     DESCRIPTION_LEN,
     already_charged,
@@ -24,7 +24,6 @@ from handlers.ledger import (
     parse_text,
 )
 from handlers.membership import InvalidInput
-from handlers.retention import today_local
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -85,7 +84,7 @@ def post_charges(
 def _charge(req: https_fn.CallableRequest, scout_ids: list[str], event_id: str | None) -> dict:
     data = req.data or {}
     try:
-        day = parse_day(data.get("date"), today_local())
+        day = parse_day(data.get("date"), troop_today(data.get("troopId")))
         return post_charges(
             data["troopId"],
             scout_ids,

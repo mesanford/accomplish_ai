@@ -12,7 +12,7 @@ from endpoints.consent import send_consent_confirmation, stage_parent_consent
 from endpoints.consent_requests import request_ref
 from endpoints.join_again import add_invite_role
 from endpoints.mailer import address_of
-from fb import db, fail, require_leader, require_uid, troop
+from fb import db, fail, require_leader, require_uid, troop, troop_date
 from handlers.consent import check_parent_consent, parent_consent_entry
 from handlers.consent_requests import AGREED, settle, with_status
 from handlers.membership import (
@@ -23,7 +23,8 @@ from handlers.membership import (
     new_troop,
     scout_login_blocker,
 )
-from handlers.retention import local_date, today_local
+from handlers.retention import today_local
+from handlers.signup_config import troop_zone
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 
@@ -72,7 +73,7 @@ def create_invite(req: https_fn.CallableRequest) -> dict:
         invite = new_invite(data, set(scouts), unlinked, now)
         if invite["role"] == "scout":
             record = t.collection("scoutRecords").document(invite["scoutMemberId"]).get().to_dict()
-            blocker = scout_login_blocker(record, local_date(now))
+            blocker = scout_login_blocker(record, troop_date(troop_id, now))
             if blocker:
                 raise InvalidInput(blocker)
     except InvalidInput as err:
@@ -136,7 +137,7 @@ def accept_invite(req: https_fn.CallableRequest) -> dict:
                 scout_ids, ypt = [member_id], None
             else:
                 member_ref = t.collection("members").document()
-                member = adult_member(data, uid, [role], today_local())
+                member = adult_member(data, uid, [role], today_local(zone=troop_zone(troop_doc)))
                 tx.set(member_ref, member)
                 member_id, ypt = member_ref.id, member["yptExpiresAt"]
                 scout_ids = invite.get("scoutIds", [])

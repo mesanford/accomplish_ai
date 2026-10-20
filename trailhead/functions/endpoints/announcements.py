@@ -10,7 +10,7 @@ from firebase_functions import https_fn
 
 from endpoints import announcement_mail as mail
 from endpoints.push import push_all
-from fb import fail, require_access, troop
+from fb import fail, require_access, troop, troop_today
 from handlers import announcement_audience as aud
 from handlers import push as push_text
 from handlers.announcements import (
@@ -23,7 +23,6 @@ from handlers.announcements import (
     parse_content,
 )
 from handlers.membership import InvalidInput
-from handlers.retention import today_local
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 DENIED = https_fn.FunctionsErrorCode.PERMISSION_DENIED
@@ -86,11 +85,12 @@ def _checked(req, data: dict, today: date):
 def post_announcement(req: https_fn.CallableRequest) -> dict:
     """Post to an audience, and optionally email the adults in it (once; editing never emails again)."""
     data = req.data or {}
-    t, access, content, spec, audience, members, logins, sender = _checked(req, data, today_local())
+    today = troop_today(data.get("troopId"))
+    t, access, content, spec, audience, members, logins, sender = _checked(req, data, today)
     uids, skipped, wants_email = [], 0, data.get("email") is True
     if wants_email:
         uids, skipped = mail.recipients(aud.email_uids(audience, req.auth.uid, members, logins))
-        if uids and not mail.take_slot(req.data["troopId"], today_local()):
+        if uids and not mail.take_slot(req.data["troopId"], today):
             raise fail(https_fn.FunctionsErrorCode.RESOURCE_EXHAUSTED, RATE_LIMITED)
     events = _event_snapshots(t, content.pop("eventIds"))
     post = {**content, "events": events}

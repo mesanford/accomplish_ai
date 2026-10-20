@@ -11,7 +11,9 @@ from firebase_functions import https_fn, options
 
 from handlers.account import BADGE_MANAGER_ROLES, LEADER_ROLES
 from handlers.consent_kinds import HOLD_MESSAGE, is_held, kind_blocker
+from handlers.retention import local_date, today_local
 from handlers.roles import acts_for
+from handlers.signup_config import troop_zone
 
 initialize_app()
 options.set_global_options(region="us-central1", max_instances=10)
@@ -107,3 +109,18 @@ def require_not_held(t, scout_ids) -> None:
     """Refuse if any of these Scouts is waiting for parent consent. `t` is the troop reference."""
     for scout_id in dict.fromkeys(s for s in scout_ids if isinstance(s, str) and s):
         refuse_if_held(t.collection("members").document(scout_id).get().to_dict())
+
+
+def troop_zone_of(troop_id: str):
+    """The troop's own time zone (troops/{t}.timezone, set on Troop settings), US Central if it has none."""
+    return troop_zone(troop(troop_id).get().to_dict())
+
+
+def troop_today(troop_id: str, now=None):
+    """Today's date where the troop is. Use this, not `today_local()`, for anything one troop does."""
+    return today_local(now, troop_zone_of(troop_id))
+
+
+def troop_date(troop_id: str, value):
+    """A Firestore timestamp as a calendar date where the troop is."""
+    return local_date(value, troop_zone_of(troop_id))

@@ -98,6 +98,16 @@ path templates, a Claude plan assistant and the Scoutbook Plus handoff report. D
     week's events (with who they signed up), sign-up deadlines, permission slips waiting on them and new
     announcement titles. It skips an empty week, Scouts are never emailed, and anyone can turn it off on the Account
     page (`set_email_digest`, `users/{uid}.emailDigest`). `troops/{t}/digestRuns/{week}` makes it once a week.
+    **Troop settings and time zones.** Leaders open **Troop settings** to change the troop name, unit number,
+    council, district, chartered organization, meeting place and address, time zone and two key positions that are
+    not app roles (committee chair, chartered organization representative), and to manage leadership: who holds each
+    role, changing an adult's roles (the Roster's role editor) and inviting a leader. `save_troop_settings` writes the
+    troop document (closed to clients) and copies a new name or unit number to every member's `users/{uid}.troops`
+    entry and the published website. The time zone (`troops/{t}.timezone`, picked when the troop is created and
+    defaulting to the creator's browser zone, else Central) decides what "today" is for everything the troop does:
+    code acting for one troop uses `fb.troop_today` / `fb.troop_date`, never the Central-only `today_local()`, which
+    is left for the global nightly jobs. Scheduled jobs still run at fixed Central times but count each troop's days
+    in its own zone.
 14. **Scout accounts.** A leader gives an adult the **treasurer** role. The treasurer's **Accounts** page runs
     fundraisers with a credit rule (`save_campaign`, `post_sales`), charges many Scouts at once or everyone marked
     present at an event (`post_charge`, `charge_attendees`), records payments (`record_payment`), reverses a wrong

@@ -8,7 +8,7 @@ from firebase_admin import firestore
 from firebase_functions import https_fn
 
 from endpoints.equipment_core import Code, bad, read_recipient, require_manager, stage_checkout
-from fb import db, fail, require_access, troop
+from fb import db, fail, require_access, troop, troop_today
 from handlers.equipment import (
     MAX_PENDING_REQUESTS,
     default_due,
@@ -19,7 +19,6 @@ from handlers.equipment import (
     parse_request,
 )
 from handlers.membership import InvalidInput
-from handlers.retention import today_local
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ def check_out_item(req: https_fn.CallableRequest) -> dict:
     access = require_manager(req, troop_id)
     item_id = _id(data, "itemId", "Choose an item.")
     try:
-        terms = parse_checkout(data, today_local())
+        terms = parse_checkout(data, troop_today(troop_id))
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     t = troop(troop_id)
@@ -74,6 +73,7 @@ def check_in_item(req: https_fn.CallableRequest) -> dict:
         condition, note = parse_check_in(data)
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
+    today = troop_today(troop_id)
     t = troop(troop_id)
     loan_ref = t.collection("checkouts").document(checkout_id)
 
@@ -110,7 +110,7 @@ def check_in_item(req: https_fn.CallableRequest) -> dict:
                     "itemId": item_ref.id,
                     "kind": "returned",
                     "note": text[:500],
-                    "date": today_local().isoformat(),
+                    "date": today.isoformat(),
                     "byMemberId": access["memberId"],
                     "createdAt": firestore.SERVER_TIMESTAMP,
                 },
@@ -181,6 +181,7 @@ def decide_request(req: https_fn.CallableRequest) -> dict:
     approve = data.get("approve")
     if not isinstance(approve, bool):
         raise fail(Code.INVALID_ARGUMENT, "Choose approve or decline.")
+    today = troop_today(troop_id)
     t = troop(troop_id)
     ref = t.collection("equipmentRequests").document(request_id)
 
@@ -207,7 +208,7 @@ def decide_request(req: https_fn.CallableRequest) -> dict:
         if data.get("dueDate"):
             day = parse_day(data["dueDate"], "The due date")
         else:
-            day = default_due(recipient["event"], today_local())
+            day = default_due(recipient["event"], today)
         terms = {"quantity": ask["quantity"], "toKind": "event", "dueDate": day, "note": ask.get("note", "")}
         extra = {"requestId": request_id}
         loan_id = stage_checkout(tx, t, item_ref, snap.to_dict(), terms, recipient, access["memberId"], extra)

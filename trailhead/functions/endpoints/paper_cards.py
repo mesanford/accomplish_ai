@@ -6,10 +6,9 @@ from datetime import UTC, datetime
 
 from firebase_functions import https_fn
 
-from fb import db, fail, require_badge_manager, require_not_held, troop
+from fb import db, fail, require_badge_manager, require_not_held, troop, troop_today
 from handlers.membership import InvalidInput
 from handlers.paper_cards import already_started, card_doc, check_paper_card, progress_doc, signoff_doc
-from handlers.retention import today_local
 from trailhead_core.catalog import badge_version, load_catalog
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -29,7 +28,7 @@ def record_paper_blue_card(req: https_fn.CallableRequest) -> dict:
         raise fail(https_fn.FunctionsErrorCode.NOT_FOUND, "That Scout isn't on the roster.")
     catalog = load_catalog()
     try:
-        plan = check_paper_card(data, record, catalog, today_local())
+        plan = check_paper_card(data, record, catalog, troop_today(troop_id))
     except InvalidInput as err:
         raise fail(BAD, str(err)) from err
 

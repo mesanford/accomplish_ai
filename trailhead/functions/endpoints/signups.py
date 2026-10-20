@@ -55,7 +55,7 @@ def sign_up_for_event(req: https_fn.CallableRequest) -> dict:
             if not is_leader(access) and (closed := rules.closed_reason(config, event, now, zone)):
                 raise SignupError(closed)
             record = t.collection("scoutRecords").document(member_id).get().to_dict()
-            how = rules.route(access, member_id, member, record, config, local_date(now))
+            how = rules.route(access, member_id, member, record, config, local_date(now, zone))
             answers = rules.clean_answers(config, data.get("answers"), enforce_required=how != "leader")
             note = rules.clean_note(data.get("healthNote")) if how == "parent" else ""
             doc = rules.new_signup(

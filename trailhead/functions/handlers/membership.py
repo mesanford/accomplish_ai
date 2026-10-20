@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, date, datetime, time, timedelta
 
+from handlers.time_zones import DEFAULT_ZONE, known_zone
 from trailhead_core.catalog import load_catalog
 
 ROLES = (
@@ -67,6 +68,7 @@ def new_troop(data: dict, uid: str, today: date) -> tuple[dict, dict]:
         "name": _text(data, "name", "Troop name"),
         "unitNumber": _text(data, "unitNumber", "Unit number", 10),
         "council": (data.get("council") or "").strip()[:80],
+        "timezone": known_zone(data.get("timezone")) or DEFAULT_ZONE,
         "createdBy": uid,
     }
     choice = data.get("creatorRole") or DEFAULT_CREATOR_ROLE

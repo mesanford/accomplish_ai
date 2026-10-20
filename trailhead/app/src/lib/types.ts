@@ -27,10 +27,31 @@ export interface UserDoc {
   troops?: Record<string, Membership>;
 }
 
+/** Where the troop meets. Every part is optional; `state` is a two-letter code. */
+export interface MeetingPlace {
+  place: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+}
+
+/** Key positions that are not app roles, as adult member ids. */
+export interface TroopPositions {
+  committeeChair: string | null;
+  charterRep: string | null;
+}
+
 export interface Troop {
   name: string;
   unitNumber: string;
   council?: string;
+  district?: string;
+  charterOrg?: string;
+  meetingPlace?: MeetingPlace;
+  /** IANA time zone (see timeZones.ts); Central when missing. Decides what "today" is for the troop. */
+  timezone?: string;
+  positions?: TroopPositions;
   /** The public website's state. Written only by the server. */
   site?: { slug?: string; published?: boolean; publishedAt?: Timestamp | null };
   /** The troop's Scout account rules. Written only by save_account_settings. */

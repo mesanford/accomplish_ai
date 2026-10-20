@@ -76,6 +76,7 @@ from endpoints.site_consent import set_media_consent
 from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 from endpoints.stripe_webhook import stripe_webhook
+from endpoints.troop_settings import save_troop_settings
 from endpoints.ypt_reminders import send_ypt_reminders
 from endpoints.ypt_self import set_my_ypt
 
@@ -153,6 +154,7 @@ __all__ = [
     "save_custom_award",
     "send_event_reminders",
     "send_weekly_digest",
+    "save_troop_settings",
     "on_event_written_alerts",
     "create_event_series",
     "update_event_series",

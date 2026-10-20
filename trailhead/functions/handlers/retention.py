@@ -47,18 +47,20 @@ def is_due(event: date | None, months: int, today: date) -> bool:
     return event is not None and add_months(event, months) <= today
 
 
-def local_date(value) -> date | None:
-    """A Firestore timestamp (a datetime) as a US Central calendar date. Anything else is unknown (None)."""
+def local_date(value, zone: ZoneInfo | None = None) -> date | None:
+    """A Firestore timestamp (a datetime) as a calendar date in `zone` (a troop's own time zone; US Central when not
+    given). Anything else is unknown (None)."""
     if isinstance(value, datetime):
         aware = value if value.tzinfo else value.replace(tzinfo=UTC)
-        return aware.astimezone(TIMEZONE).date()
+        return aware.astimezone(zone or TIMEZONE).date()
     if isinstance(value, date):
         return value
     return None
 
 
-def today_local(now: datetime | None = None) -> date:
-    return local_date(now or datetime.now(UTC))
+def today_local(now: datetime | None = None, zone: ZoneInfo | None = None) -> date:
+    """Today in `zone`. Code acting for one troop passes that troop's zone (see `fb.troop_today`)."""
+    return local_date(now or datetime.now(UTC), zone)
 
 
 def query_cutoff(today: date, months: int) -> datetime:

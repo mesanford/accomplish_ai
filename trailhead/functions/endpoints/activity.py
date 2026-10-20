@@ -14,6 +14,7 @@ from firebase_functions import https_fn
 
 from fb import fail, require_access, require_leader, troop
 from handlers.retention import local_date, today_local
+from handlers.signup_config import troop_zone
 
 log = logging.getLogger(__name__)
 Code = https_fn.FunctionsErrorCode
@@ -25,7 +26,9 @@ def record_activity(req: https_fn.CallableRequest) -> dict:
     troop_id = (req.data or {}).get("troopId")
     require_access(req, troop_id)
     t = troop(troop_id)
-    if local_date((t.get().to_dict() or {}).get("lastActiveAt")) == today_local():
+    doc = t.get().to_dict() or {}
+    zone = troop_zone(doc)
+    if local_date(doc.get("lastActiveAt"), zone) == today_local(zone=zone):
         return {"recorded": False}
     t.update({"lastActiveAt": firestore.SERVER_TIMESTAMP})
     return {"recorded": True}

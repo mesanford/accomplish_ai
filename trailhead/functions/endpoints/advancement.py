@@ -8,11 +8,10 @@ from firebase_admin import firestore
 from firebase_functions import firestore_fn, https_fn
 from google.api_core.exceptions import NotFound
 
-from fb import db, fail, kind_blocker, require_access, troop
+from fb import db, fail, kind_blocker, require_access, troop, troop_today
 from handlers.activity_log import event_log_id
 from handlers.attendance import attendance_effects, mark_ready
 from handlers.paths import feasibility_doc, needs_recheck, path_from_doc, scout_from_docs
-from handlers.retention import today_local
 from handlers.signoffs import apply_signoff
 from trailhead_core import check_path
 from trailhead_core.catalog import is_custom_award
@@ -33,7 +32,9 @@ def on_signoff_created(event: firestore_fn.Event[firestore_fn.DocumentSnapshot |
     signoff = event.data.to_dict()
     if signoff.get("status") != "pending":
         return  # paper blue cards write accepted sign-offs and their progress directly
-    t = troop(event.params["troopId"])
+    troop_id = event.params["troopId"]
+    t = troop(troop_id)
+    today = troop_today(troop_id)
     progress_ref = t.collection("progress").document(f"{signoff['scoutId']}_{signoff['awardId']}")
 
     custom_ids = None
@@ -46,7 +47,7 @@ def on_signoff_created(event: firestore_fn.Event[firestore_fn.DocumentSnapshot |
     def apply(tx):
         snap = progress_ref.get(transaction=tx)
         current = snap.to_dict() if snap.exists else None
-        outcome = apply_signoff(event.params["signoffId"], signoff, current, custom_ids, today_local())
+        outcome = apply_signoff(event.params["signoffId"], signoff, current, custom_ids, today)
         if outcome.accepted:
             tx.set(progress_ref, outcome.progress)
             tx.update(event.data.reference, {"status": "accepted"})
@@ -71,7 +72,7 @@ def on_blue_card_written(event: Written) -> None:
             "awardId": after["awardId"],
             "versionId": after["versionId"],
             "status": "complete",
-            "completedAt": str(today_local()),
+            "completedAt": str(troop_today(event.params["troopId"])),
             "completedByUid": after.get("counselorUid"),
         },
         merge=True,
@@ -140,8 +141,11 @@ def recheck_path(event: Written) -> None:
     before, after = _before_after(event)
     if not needs_recheck(before, after):
         return
-    scout = _scout_record(troop(event.params["troopId"]), after["scoutId"])
-    result = NO_RECORD if scout is None else feasibility_doc(check_path(path_from_doc(after), scout, today_local()))
+    troop_id = event.params["troopId"]
+    scout = _scout_record(troop(troop_id), after["scoutId"])
+    result = (
+        NO_RECORD if scout is None else feasibility_doc(check_path(path_from_doc(after), scout, troop_today(troop_id)))
+    )
     # The path can be deleted while it's checked (removing a Scout erases their paths); don't fail, or recreate it.
     with suppress(NotFound):
         event.data.after.reference.update({"feasibility": result})
@@ -155,4 +159,4 @@ def check_path_preview(req: https_fn.CallableRequest) -> dict:
     scout = _scout_record(troop(troop_id), path_data["scoutId"])
     if scout is None:
         raise fail(https_fn.FunctionsErrorCode.FAILED_PRECONDITION, "No Scout record yet.")
-    return feasibility_doc(check_path(path_from_doc(path_data), scout, today_local()))
+    return feasibility_doc(check_path(path_from_doc(path_data), scout, troop_today(troop_id)))

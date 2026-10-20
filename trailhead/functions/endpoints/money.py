@@ -13,11 +13,10 @@ from datetime import date
 from firebase_admin import firestore
 from firebase_functions import https_fn
 
-from fb import db, fail, kind_blocker, require_access, troop
+from fb import db, fail, kind_blocker, require_access, troop, troop_today
 from handlers.account_settings import settings_of
 from handlers.ledger import MAX_SCOUTS, account_doc, compute_account
 from handlers.membership import InvalidInput
-from handlers.retention import today_local
 
 Code = https_fn.FunctionsErrorCode
 TREASURER = "treasurer"
@@ -87,7 +86,7 @@ def post(
     """
     t = troop(troop_id)
     author = name_of(t, created_by)
-    stamp = (day or today_local()).isoformat()
+    stamp = (day or troop_today(troop_id)).isoformat()
 
     def entries_for(tx, account_id: str) -> dict[str, dict]:
         query = t.collection("ledger").where("scoutId", "==", account_id)

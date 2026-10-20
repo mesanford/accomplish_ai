@@ -8,7 +8,7 @@ without sign-ups has no such list, so the whole troop hears, but only about even
 from __future__ import annotations
 
 import logging
-from datetime import UTC, date, datetime
+from datetime import date, datetime
 
 from firebase_admin import firestore
 from firebase_functions import firestore_fn
@@ -19,20 +19,14 @@ from endpoints.notify import deliver
 from endpoints.push import push_all
 from endpoints.signup_core import refs
 from endpoints.signup_mail import by_login
-from fb import db, troop
+from fb import db, troop, troop_today
 from handlers import event_changes as changes
 from handlers import event_emails as mail
 from handlers import push as push_text
-from handlers.signup_config import as_date, troop_zone
+from handlers.signup_config import as_date
 from trailhead_core.dates import human
 
 log = logging.getLogger(__name__)
-
-
-def troop_today(troop_id: str, now: datetime | None = None) -> date:
-    zone = troop_zone(troop(troop_id).get().to_dict())
-    now = now or datetime.now(UTC)
-    return (now.astimezone(zone) if zone else now).date()
 
 
 def audience(troop_id: str, event_id: str, event: dict, today: date) -> tuple[dict[str, list[str]], list[str]]:

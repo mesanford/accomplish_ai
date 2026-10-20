@@ -9,9 +9,8 @@ from firebase_functions import https_fn
 
 from endpoints.parent_links import stage_link, stage_roles, stage_unlink
 from fb import db as get_db
-from fb import fail, require_leader, troop
+from fb import fail, require_leader, troop, troop_today
 from handlers.membership import YPT_ROLES, InvalidInput, parse_ypt
-from handlers.retention import today_local
 from handlers.roles import (
     NO_LEADER,
     NO_MANAGER,
@@ -70,7 +69,7 @@ def set_member_roles(req: https_fn.CallableRequest) -> dict:
             raise InvalidInput(NO_LEADER)
         if loses_all_badge_managers(uid, roles, access_docs):
             raise InvalidInput(NO_MANAGER)
-        today, expires, extra = today_local(), member.get("yptExpiresAt"), {}
+        today, expires, extra = troop_today(troop_id), member.get("yptExpiresAt"), {}
         if data.get("yptExpiresAt"):
             expires = parse_ypt(data["yptExpiresAt"], [], today)
             by = "self" if caller["memberId"] == member_id else caller["memberId"]
