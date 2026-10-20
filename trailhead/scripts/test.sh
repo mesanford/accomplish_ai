@@ -19,7 +19,16 @@ export PYTHONPYCACHEPREFIX="$(cd ../.. && pwd)/.deps.nosync/trailhead/pycache"
 # Workers show the path the venv was created at (its scripts' #! line), which can differ from the real path when a
 # parent folder is a symlink (~/Documents/Products -> ~/Products). Match the part that's the same either way.
 workers=".deps.nosync/trailhead/functions-venv/bin/functions-framework"
-stop_workers() { pkill -f "$workers" || true; }
+# Wait for them to exit (up to 15 seconds, then force): a worker still shutting down holds its port, and the next
+# batch's worker for that function then fails with "Address already in use", so every call to it gets an instant 400.
+stop_workers() {
+  pkill -f "$workers" || true
+  for _ in {1..30}; do
+    pgrep -f "$workers" >/dev/null || return 0
+    sleep 0.5
+  done
+  pkill -9 -f "$workers" || true
+}
 stop_workers # leftovers from an earlier run that didn't finish
 # Even per batch, stop the run if workers pile up or memory runs low (see scripts/memory_watchdog.sh).
 WATCHDOG_WORKERS="$workers" scripts/memory_watchdog.sh "$$" &
