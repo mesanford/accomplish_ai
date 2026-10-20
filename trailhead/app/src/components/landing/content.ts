@@ -37,8 +37,8 @@ export const SAFETY: { title: string; text: string }[] = [
     text: 'Photos of Scouts go on a troop website only with media consent. Location data is removed from every photo.',
   },
   {
-    title: 'No ads, no tracking, no selling',
-    text: 'Forthright shows no ads, has no tracking and never sells data. Data is deleted on a published schedule.',
+    title: 'No ads, no selling, nothing tracked in the app',
+    text: 'Forthright shows no ads and never sells data. Nothing you do after signing in is tracked. Data is deleted on a published schedule.',
   },
 ];
 

@@ -9,6 +9,7 @@ import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
 import { paragraphs } from '../lib/siteTheme';
 import type { PublicSite as Site } from '../lib/types';
+import { useNoAnalytics } from '../lib/analytics';
 
 /** Sets the tab title and search description while the page is open. */
 function usePageMeta(title: string, description: string) {
@@ -69,6 +70,7 @@ function Missing() {
 /** A troop's public site. On Forthright's address the slug and page come from the URL; on a troop's own domain
  * the slug is passed in and the URL's first part is the page. */
 export function PublicSite({ slug: fixedSlug, page: fixedPage }: { slug?: string; page?: string }) {
+  useNoAnalytics(); // troop websites show Scouts' names and photos: never tracked
   const params = useParams();
   const slug = fixedSlug ?? params.slug ?? '';
   const page = fixedPage ?? params.page;

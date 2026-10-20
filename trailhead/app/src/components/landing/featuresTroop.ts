@@ -121,8 +121,8 @@ export const TROOP_CATEGORIES: FeatureCategory[] = [
         text: 'A parent acts for a younger Scout. Scouts 13 and older can have their own login.',
       },
       {
-        title: 'No ads, no tracking, no selling',
-        text: 'Forthright shows no ads, uses no tracking and never sells data. Data is deleted on a published schedule.',
+        title: 'No ads, no selling, nothing tracked in the app',
+        text: 'Forthright shows no ads and never sells data. Nothing you do after signing in is tracked, and data is deleted on a published schedule.',
       },
       {
         title: 'Works with a weak signal',

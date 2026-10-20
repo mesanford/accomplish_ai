@@ -5,6 +5,7 @@ import { LandingFooter } from '../components/landing/Sections';
 import { SiteBar } from '../components/landing/SiteBar';
 import { PRIVACY_EMAIL } from '../lib/privacy';
 import '../landing.css';
+import { useMarketingAnalytics } from '../lib/analytics';
 
 const TITLE = 'Features: Forthright for Scouts BSA troops';
 const CANONICAL = 'https://forthrightapp.com/features';
@@ -52,6 +53,7 @@ function Category({ category }: { category: FeatureCategory }) {
 /** The public features page at `/features`: every feature, grouped by category. */
 export function Features() {
   usePageHead();
+  useMarketingAnalytics();
   return (
     <div className="landing">
       <header className="l-hero l-features-hero">

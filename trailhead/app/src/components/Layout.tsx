@@ -9,6 +9,7 @@ import { NAV_TIPS } from '../lib/navTips';
 import { TroopProvider, useTroop } from '../lib/troop';
 import { useUnreadBadge } from '../lib/useUnreadBadge';
 import { ConsentGate } from './ConsentGate';
+import { useNoAnalytics } from '../lib/analytics';
 
 function TroopNav() {
   const { troopId, troop, has, isLeader, canManageBadges } = useTroop();
@@ -63,6 +64,7 @@ function TroopOutlet() {
 }
 
 function Shell({ troopNav, children }: { troopNav: boolean; children?: ReactNode }) {
+  useNoAnalytics(); // the app is never tracked; arriving from a marketing page reloads without Tag Manager
   const { user } = useAuth();
   const navigate = useNavigate();
   return (
