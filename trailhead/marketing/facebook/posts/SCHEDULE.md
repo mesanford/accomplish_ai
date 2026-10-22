@@ -1,6 +1,6 @@
 # Facebook posts, autumn 2026
 
-Scheduled in Meta's Planner on 2026-10-20, all at 7:30 pm Central except the first, published right away. Images are rendered from `post.html` and
+Scheduled in Meta's Planner on 2026-10-20 and changed on 2026-10-22 (see Changes below). Times are Central. Images are rendered from `post.html` and
 `posts.json` with `render.cjs` (see its first lines). Hashtags: one or two descriptive tags per post (#ScoutsBSA,
 #Scoutmaster, #EagleScout, #MeritBadge); Scouting America's campaign tags (#ScoutMeIn, #BeAScout) are left out so the
 page doesn't read as official.
@@ -19,3 +19,26 @@ page doesn't read as official.
 | Tue Nov 17  | `08-pilot.png`            | We're looking for a few more pilot troops. Forthright is free during the pilot, then $20 a month or $199 a year per troop. We set up your troop with you, you try it with your leaders and families, and you tell us what to change. Ask to join: forthrightapp.com/pilot #Scoutmaster #ScoutsBSA               |
 
 Nov 3 (US Election Day) was skipped on purpose. If Facebook asks to add a "Send Message" button while scheduling, the post isn't saved until that prompt is answered.
+
+## Changes on 2026-10-22
+
+- `02-path-planner` was published early, Oct 22 at 8:57 am, by a mis-click in the reschedule dialog (its Oct 27 slot
+  went to `11-plans-change`).
+- "Meet Forthright" (Oct 22, 7:30 pm) repeats `09-what-is-forthright`; it is to be deleted by hand (a permanent delete).
+- Added `11-plans-change` (Oct 27, 8:00 am), `12-weekly-email` (Nov 19, 8:00 am) and `13-send-later` (Nov 20,
+  8:00 am; Facebook only schedules about four weeks ahead, so Nov 24 wasn't possible).
+- Moved `04-youth-protection` to Nov 4, 8:00 am. Morning posts (Oct 27, Nov 4, Nov 19, Nov 20) against the 7:30 pm ones
+  test which time does better.
+
+Captions: `11-plans-change`: "Plans change. When a leader moves a campout, changes the meeting place or cancels a
+meeting in Forthright, everyone signed up hears by email and on their phone. For a meeting in the next two weeks
+without sign-ups, the troop's families do. And the weekly troop meeting? Add it once: every week, every other week or
+the same weekday each month. forthrightapp.com/features #Scoutmaster #ScoutsBSA". `12-weekly-email`: "The week ahead,
+in one email. Every Sunday evening, Forthright sends parents the coming week's events, sign-up deadlines and any
+permission slips waiting on them. A quiet week means no email, and families can turn it off any time. #ScoutsBSA".
+`13-send-later`: "Write it now, send it later. Leaders can schedule an announcement up to 60 days ahead, so the court
+of honor reminder goes out right when families need it. #Scoutmaster".
+
+Facebook scheduling notes: pressing Enter in the reschedule dialog's time field triggers "Publish now" (use Tab and
+click "Schedule for later"); posts can be scheduled only about four weeks ahead; a "Send Message" button prompt can
+block saving until answered.

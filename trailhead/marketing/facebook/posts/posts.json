@@ -58,5 +58,23 @@
     "label": "Who it’s for",
     "title": "Scouts, parents, leaders and counselors",
     "line": "Each sees what they need, and nothing they shouldn’t."
+  },
+  {
+    "file": "11-plans-change",
+    "label": "New this week",
+    "title": "Plans change.\nFamilies hear.",
+    "line": "Moves and cancellations reach everyone signed up, by email and phone."
+  },
+  {
+    "file": "12-weekly-email",
+    "label": "Weekly family email",
+    "title": "The week ahead, in one email",
+    "line": "Sunday evening: events, deadlines and permission slips."
+  },
+  {
+    "file": "13-send-later",
+    "label": "Announcements",
+    "title": "Write it now.\nSend it later.",
+    "line": "Schedule announcements up to 60 days ahead."
   }
 ]
