@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MONTH_NAMES, rangeText } from '../../lib/isoDate';
+import { type CouncilEvent, councilEventsIn } from '../../lib/councilEvents';
 import type { Entry, WeekendInfo } from '../../lib/yearView';
 import type { GridLinks } from './MonthGrid';
 import { StatusMark } from './StatusMark';
@@ -8,6 +9,8 @@ interface Props {
   weekends: WeekendInfo[];
   links: GridLinks;
   canStart: boolean;
+  /** The council's events, shown beside the troop's own: they don't book a weekend. */
+  council: CouncilEvent[];
 }
 
 function EntryLink({ entry, links }: { entry: Entry; links: GridLinks }) {
@@ -20,8 +23,25 @@ function EntryLink({ entry, links }: { entry: Entry; links: GridLinks }) {
   return <>{entry.label}</>;
 }
 
-function Row({ w, links, canStart }: { w: WeekendInfo; links: GridLinks; canStart: boolean }) {
+function CouncilLine({ e, links, canStart }: { e: CouncilEvent; links: GridLinks; canStart: boolean }) {
+  const params = new URLSearchParams({ start: e.start, end: e.end ?? e.start, title: e.title });
+  return (
+    <span className="small">
+      <span aria-hidden="true">◇ </span>Council: {e.title}
+      {e.repeats ? <span className="muted"> (repeats)</span> : null}
+      {canStart ? (
+        <>
+          {' · '}
+          <Link to={`/t/${links.troopId}/events/plans?${params.toString()}`}>Start a plan from this</Link>
+        </>
+      ) : null}
+    </span>
+  );
+}
+
+function Row({ w, links, canStart, council }: { w: WeekendInfo; links: GridLinks; canStart: boolean; council: CouncilEvent[] }) {
   const planUrl = `/t/${links.troopId}/events/plans?start=${w.sat}&end=${w.sun}`;
+  const fromCouncil = councilEventsIn(council, w.sat, w.sun);
   return (
     <li className={`cal-row ${w.status}`}>
       <div className="stack" style={{ gap: 2 }}>
@@ -36,6 +56,9 @@ function Row({ w, links, canStart }: { w: WeekendInfo; links: GridLinks; canStar
             {e.kind === 'maybe' ? <span className="muted small"> (being planned)</span> : null}
           </span>
         ))}
+        {fromCouncil.map((e) => (
+          <CouncilLine key={`${e.start}-${e.title}`} e={e} links={links} canStart={canStart} />
+        ))}
       </div>
       {w.status === 'open' && canStart ? (
         <Link className="btn secondary small" to={planUrl}>
@@ -47,7 +70,7 @@ function Row({ w, links, canStart }: { w: WeekendInfo; links: GridLinks; canStar
 }
 
 /** Weekends grouped by month, one row each: easy to read on a phone or a projector. */
-export function WeekendList({ weekends, links, canStart }: Props) {
+export function WeekendList({ weekends, links, canStart, council }: Props) {
   const months = [...new Set(weekends.map((w) => w.sat.slice(0, 7)))];
   return (
     <div className="stack">
@@ -60,7 +83,7 @@ export function WeekendList({ weekends, links, canStart }: Props) {
             {weekends
               .filter((w) => w.sat.startsWith(m))
               .map((w) => (
-                <Row key={w.sat} w={w} links={links} canStart={canStart} />
+                <Row key={w.sat} w={w} links={links} canStart={canStart} council={council} />
               ))}
           </ul>
         </section>

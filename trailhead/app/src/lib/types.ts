@@ -58,6 +58,8 @@ export interface Troop {
   accounts?: Partial<AccountSettings>;
   /** The troop's own Stripe account for card payments. Written only by the server. */
   payments?: TroopPayments;
+  /** The council's calendar feed (see councilEvents.ts). Written only by set_council_calendar. */
+  councilCalendar?: { url: string; key: string };
 }
 
 export interface Access {

@@ -82,6 +82,16 @@ service cloud.firestore {
       allow read: if signedIn();
       allow write: if false;
     }
+    // Council calendar feeds, shared by council (councilFeeds) and their upcoming events (councilEvents). Anyone
+    // signed in reads them; only set_council_calendar and refresh_council_calendars write them.
+    match /councilFeeds/{key} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /councilEvents/{key} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
     match /placeRuns/{id} {
       allow read, write: if false;
     }

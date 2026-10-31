@@ -40,6 +40,7 @@ from endpoints.consent_requests import (
     sync_consent_holds,
 )
 from endpoints.consent_review import review_consent_notice, send_consent_reminders
+from endpoints.council_calendar import refresh_council_calendars, set_council_calendar
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.digest import send_weekly_digest
 from endpoints.domains import add_domain, check_domain, remove_domain
@@ -160,6 +161,8 @@ __all__ = [
     "request_item",
     "request_pilot",
     "plan_action",
+    "set_council_calendar",
+    "refresh_council_calendars",
     "find_places",
     "refresh_places",
     "estimate_drive_time",

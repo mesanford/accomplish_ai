@@ -33,3 +33,8 @@ export function datesFromParams(params: URLSearchParams): { start: string; end: 
   }
   return { start, end: ok(end) && end >= start ? end : null };
 }
+
+/** A name passed in the address (?title=), such as a council event a plan is started from. */
+export function titleFromParams(params: URLSearchParams): string {
+  return (params.get('title') ?? '').trim().slice(0, 120);
+}

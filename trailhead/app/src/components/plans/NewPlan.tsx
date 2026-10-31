@@ -1,7 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { rangeText } from '../../lib/isoDate';
-import { coreWithDates, datesFromParams } from '../../lib/planDefaults';
+import { coreWithDates, datesFromParams, titleFromParams } from '../../lib/planDefaults';
 import { KIND_LABELS, type PlanKind } from '../../lib/plans';
 import { createPlan, updateCore } from '../../lib/plansApi';
 import { Field, Notice } from '../ui';
@@ -10,10 +10,10 @@ import { useAction } from './useAction';
 /** Planners start a plan from a kind and a name. */
 export function NewPlan({ troopId }: { troopId: string }) {
   const [kind, setKind] = useState<PlanKind>('campout');
-  const [title, setTitle] = useState('');
   const act = useAction();
   const nav = useNavigate();
   const [params] = useSearchParams();
+  const [title, setTitle] = useState(() => titleFromParams(params));
   const dates = datesFromParams(params);
 
   function submit(e: FormEvent) {

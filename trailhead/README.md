@@ -236,6 +236,8 @@ A plan's research step offers **Places to look at**, from an app-wide catalog (`
 
 **Year at a glance** (Events → Year at a glance) shows the next 12 months: booked (events), maybe (plans being discussed, for people who can see plans), open weekends and the 11 federal holidays with their observed days and long weekends. "Big screen" turns it into a list for a projector at a PLC, and an open weekend starts a plan for those dates.
 
+**Council calendars.** On Troop settings a leader pastes the council calendar's feed link (the iCal or Subscribe link, such as ScoutingEvent's). `set_council_calendar` reads it once to check it is a calendar, keeps it on the troop and shares it by council in `councilFeeds`, so other troops whose council name matches are offered it; nothing is found or read automatically. `refresh_council_calendars` reads every shared feed each morning into `councilEvents`, keeping the last events if a feed fails. The year at a glance lists council events beside each weekend, read-only and never booked, with "Start a plan from this". A repeating council event shows its first date only. Links are fetched over https only, never to private or internal addresses, with redirects checked and a size and time limit.
+
 ## Not built yet
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.
