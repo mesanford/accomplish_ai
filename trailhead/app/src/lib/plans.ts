@@ -5,7 +5,7 @@ import type { Timestamp } from 'firebase/firestore';
 import type { Amenity, Brief } from './planBrief';
 import type { Role } from './types';
 
-export type PlanKind = 'campout' | 'service' | 'other';
+export type PlanKind = 'campout' | 'service' | 'highAdventure' | 'other';
 export type PlanStatus = 'draft' | 'decided' | 'published' | 'cancelled' | 'closed';
 export type Transport = 'families' | 'carpool' | 'none';
 export type Availability = 'unknown' | 'contacted' | 'available' | 'held' | 'booked' | 'unavailable';

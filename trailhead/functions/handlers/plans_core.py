@@ -12,7 +12,7 @@ import re
 from handlers.membership import InvalidInput
 from handlers.signup_config import as_date
 
-KINDS = ("campout", "service", "other")
+KINDS = ("campout", "service", "highAdventure", "other")
 LOG_KINDS = ("campout", "service", "hike", "other")
 TRANSPORT = ("families", "carpool", "none")
 MAX_TITLE, MAX_PLACE, MAX_NOTES = 120, 120, 2000
@@ -116,6 +116,8 @@ def core(raw: dict | None) -> dict:
         "packingList": text(raw.get("packingList"), MAX_NOTES, "packing list"),
         "segments": [segment((raw.get("segments") or [None])[0] if isinstance(raw.get("segments"), list) else None)],
     }
+    if out["kind"] == "highAdventure":
+        out["segments"][0]["partC"] = True  # high adventure needs health form Part C (see plan_rules.json, health_c)
     return out
 
 

@@ -7,12 +7,21 @@ export type Amenity =
   | 'water' | 'toilets' | 'showers' | 'fires' | 'swimming'
   | 'boating' | 'hiking' | 'shelter' | 'accessible' | 'store';
 
+export type TripLength = 'day' | 'weekend' | 'short' | 'week';
+export type Season = 'spring' | 'summer' | 'fall' | 'winter' | 'any';
+export type Interest =
+  | 'hiking' | 'paddling' | 'fishing' | 'climbing' | 'swimming'
+  | 'biking' | 'history' | 'nature' | 'service' | 'skills';
+
 export interface Brief {
   maxDriveMinutes: number | null;
   budgetCents: number | null;
   lodging: Lodging;
   mustHaves: Amenity[];
   notes: string;
+  tripLength: TripLength | null;
+  season: Season | null;
+  interests: Interest[];
 }
 
 export const LODGING_LABELS: Record<Lodging, string> = { tents: 'Tents', cabins: 'Cabins or indoors', either: 'Either' };
@@ -29,6 +38,38 @@ export const AMENITY_LABELS: Record<Amenity, string> = {
   store: 'A store nearby',
 };
 export const AMENITIES = Object.keys(AMENITY_LABELS) as Amenity[];
+export const TRIP_LENGTH_LABELS: Record<TripLength, string> = {
+  day: 'Just a day',
+  weekend: '1 or 2 nights (a weekend)',
+  short: '3 to 5 nights',
+  week: 'A week or more',
+};
+export const SEASON_LABELS: Record<Season, string> = {
+  spring: 'Spring',
+  summer: 'Summer',
+  fall: 'Fall',
+  winter: 'Winter',
+  any: "We don't know yet",
+};
+export const INTEREST_LABELS: Record<Interest, string> = {
+  hiking: 'Hiking',
+  paddling: 'Canoeing or kayaking',
+  fishing: 'Fishing',
+  climbing: 'Climbing',
+  swimming: 'Swimming',
+  biking: 'Biking',
+  history: 'History',
+  nature: 'Nature and wildlife',
+  service: 'Helping others',
+  skills: 'Scout skills and advancement',
+};
+/** Longest-drive choices, in minutes; null is "farther is fine". */
+export const DRIVE_CHOICES: [number | null, string][] = [
+  [60, 'Under an hour'],
+  [120, 'Up to 2 hours'],
+  [240, 'Up to 4 hours'],
+  [null, 'Farther is fine'],
+];
 
 interface Checked {
   costCents?: number | null;

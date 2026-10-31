@@ -58,6 +58,26 @@ export const GUIDES: Record<PlanKind, ResearchGuide> = {
       'Who do we call on the day?',
     ],
   },
+  highAdventure: {
+    lookIn: [
+      'The national high adventure bases, which open bookings well ahead of each season',
+      'Your council\'s own high adventure programs',
+      'A trek your troop plans itself, on public land, with permits',
+    ],
+    goodSigns: [
+      'Ages and fitness that match your crew, with time to train',
+      'A cost families can plan and fundraise for over a year or more',
+      'Enough adults who can go for the whole trip',
+      'A booking date you can make, with a backup choice',
+    ],
+    ask: [
+      'When does booking open for our year, and how are spots given out?',
+      'What are the crew size, age and adult rules?',
+      'What do the deposit and final payment cost, and when are they due?',
+      'What medical forms, swim tests or training does each person need?',
+      'What gear do you provide, and what do we bring?',
+    ],
+  },
   other: {
     lookIn: [
       'Ideas from your Scouts at the next PLC',

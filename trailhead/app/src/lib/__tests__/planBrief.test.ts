@@ -3,7 +3,16 @@ import { type Brief, briefProblems, toAsk } from '../planBrief';
 import { pastTrips } from '../planPast';
 import type { TroopEvent } from '../types';
 
-const brief: Brief = { maxDriveMinutes: 120, budgetCents: 4000, lodging: 'tents', mustHaves: ['water', 'toilets'], notes: '' };
+const brief: Brief = {
+  maxDriveMinutes: 120,
+  budgetCents: 4000,
+  lodging: 'tents',
+  mustHaves: ['water', 'toilets'],
+  notes: '',
+  tripLength: 'weekend',
+  season: 'fall',
+  interests: [],
+};
 
 describe('briefProblems', () => {
   it('names what does not fit, in words', () => {

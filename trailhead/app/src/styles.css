@@ -243,3 +243,10 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
   .packet h2 { break-after: avoid; }
   .packet { font-size: 12pt; }
 }
+
+/* One question at a time on a plan's first step: big choices that work as radio buttons or checkboxes. */
+.choices { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); }
+.choice { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-weight: 600; cursor: pointer; }
+.choice input { width: auto; }
+.choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.choice:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }

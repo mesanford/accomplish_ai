@@ -206,8 +206,27 @@ def test_a_brief_keeps_known_must_haves_and_checks_limits():
         "lodging": "cabins",
         "mustHaves": ["water", "showers"],
         "notes": "",
+        "tripLength": None,
+        "season": None,
+        "interests": [],
     }
     assert brief(None)["lodging"] == "either" and brief(None)["maxDriveMinutes"] is None
     for bad in ({"maxDriveMinutes": 2000}, {"budgetCents": -5}, {"notes": "x" * 501}):
         with pytest.raises(InvalidInput):
             brief(bad)
+
+
+def test_a_brief_records_length_season_and_interests_from_fixed_lists():
+    from handlers.plans_brief import brief
+
+    out = brief({"tripLength": "weekend", "season": "fall", "interests": ["paddling", "hiking", "jetskis"]})
+    assert (out["tripLength"], out["season"], out["interests"]) == ("weekend", "fall", ["hiking", "paddling"])
+    assert brief({"tripLength": "month"})["tripLength"] is None
+    assert brief({"interests": [{"x": 1}, "hiking"], "mustHaves": [["water"], "water"]})["interests"] == ["hiking"]
+
+
+def test_high_adventure_plans_need_part_c_and_get_a_long_timeline():
+    plan = core.core({"title": "Philmont", "kind": "highAdventure", "segments": [{"start": "2028-07-01"}]})
+    assert plan["segments"][0]["partC"] is True
+    timeline = tpl.template_milestones("highAdventure")
+    assert timeline[0]["offsetDays"] < -700 and timeline[-1]["offsetDays"] > 0

@@ -1,6 +1,15 @@
 import { type FormEvent, useState } from 'react';
 import { centsToDollars } from '../../lib/eventSignups';
-import { AMENITY_LABELS, type Amenity, type Brief, LODGING_LABELS, type Lodging } from '../../lib/planBrief';
+import {
+  AMENITY_LABELS,
+  type Amenity,
+  type Brief,
+  INTEREST_LABELS,
+  LODGING_LABELS,
+  type Lodging,
+  SEASON_LABELS,
+  TRIP_LENGTH_LABELS,
+} from '../../lib/planBrief';
 import { centsOrNull, intOrNull, minutesText, money } from '../../lib/planForms';
 import type { EventPlan } from '../../lib/plans';
 import { updateBrief } from '../../lib/plansApi';
@@ -12,6 +21,9 @@ import { useAction } from './useAction';
 function Summary({ brief, kind }: { brief: Brief; kind: EventPlan['kind'] }) {
   return (
     <ul className="small">
+      {brief.tripLength ? <li>How long: {TRIP_LENGTH_LABELS[brief.tripLength]}</li> : null}
+      {brief.season ? <li>When: {SEASON_LABELS[brief.season]}</li> : null}
+      {brief.interests.length ? <li>To do: {brief.interests.map((i) => INTEREST_LABELS[i]).join(', ')}</li> : null}
       <li>Longest drive: {brief.maxDriveMinutes ? minutesText(brief.maxDriveMinutes) : 'No limit set'}</li>
       <li>Budget per Scout: {brief.budgetCents ? money(brief.budgetCents) : 'No limit set'}</li>
       {kind === 'campout' ? <li>Sleeping: {LODGING_LABELS[brief.lodging]}</li> : null}
@@ -22,9 +34,20 @@ function Summary({ brief, kind }: { brief: Brief; kind: EventPlan['kind'] }) {
 }
 
 /** "What are you looking for?": asked before research, so every option can be checked against it. */
-export function BriefForm({ troopId, plan, canEdit }: { troopId: string; plan: EventPlan; canEdit: boolean }) {
+export function BriefForm({
+  troopId,
+  plan,
+  canEdit,
+  onAsk,
+}: {
+  troopId: string;
+  plan: EventPlan;
+  canEdit: boolean;
+  /** Go through the questions again. */
+  onAsk: () => void;
+}) {
   const b = plan.brief;
-  const [editing, setEditing] = useState(!b);
+  const [editing, setEditing] = useState(false);
   const [drive, setDrive] = useState(b?.maxDriveMinutes?.toString() ?? '');
   const [budget, setBudget] = useState(centsToDollars(b?.budgetCents));
   const [lodging, setLodging] = useState<Lodging>(b?.lodging ?? 'either');
@@ -46,7 +69,16 @@ export function BriefForm({ troopId, plan, canEdit }: { troopId: string; plan: E
       return;
     }
     setProblem('');
-    const brief: Brief = { maxDriveMinutes, budgetCents, lodging, mustHaves, notes: notes.trim() };
+    const brief: Brief = {
+      maxDriveMinutes,
+      budgetCents,
+      lodging,
+      mustHaves,
+      notes: notes.trim(),
+      tripLength: b?.tripLength ?? null,
+      season: b?.season ?? null,
+      interests: b?.interests ?? [],
+    };
     if (await act.run(() => updateBrief(troopId, plan.id, brief))) {
       setEditing(false);
     }
@@ -58,10 +90,15 @@ export function BriefForm({ troopId, plan, canEdit }: { troopId: string; plan: E
         <h2>What you're looking for</h2>
         {b ? <Summary brief={b} kind={plan.kind} /> : <p className="muted">The planners haven't said yet.</p>}
         {canEdit ? (
-          <div>
-            <button className="btn secondary small" type="button" onClick={() => setEditing(true)}>
-              Change
+          <div className="row">
+            <button className="btn secondary small" type="button" onClick={onAsk}>
+              {b ? 'Answer the questions again' : 'Answer the questions'}
             </button>
+            {b ? (
+              <button className="btn secondary small" type="button" onClick={() => setEditing(true)}>
+                Fine-tune
+              </button>
+            ) : null}
           </div>
         ) : null}
       </section>

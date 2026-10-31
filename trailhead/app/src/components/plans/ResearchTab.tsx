@@ -3,23 +3,33 @@ import { createOption } from '../../lib/plansOptions';
 import { useTroop } from '../../lib/troop';
 import { Empty } from '../ui';
 import { BriefForm } from './BriefForm';
+import { IdeaStarters } from './IdeaStarters';
 import { OptionCard } from './OptionCard';
 import { OptionForm } from './OptionForm';
 import { PastTrips } from './PastTrips';
 import type { PlanTabProps } from './planProps';
 import { ResearchGuide } from './ResearchGuide';
+import { TripQuestions } from './TripQuestions';
 import { useAction } from './useAction';
 
 /** Research cards: places and ideas to compare, with their availability. */
 export function ResearchTab({ troopId, plan, options, canEdit }: PlanTabProps) {
   const { access } = useTroop();
   const [adding, setAdding] = useState(false);
+  const [asking, setAsking] = useState(!plan.brief);
   const act = useAction();
   const memberId = access?.memberId ?? '';
   const sorted = [...options].sort((a, b) => a.name.localeCompare(b.name));
   return (
     <section className="stack" aria-label="Research">
-      <BriefForm troopId={troopId} plan={plan} canEdit={canEdit} />
+      {canEdit && asking ? (
+        <TripQuestions troopId={troopId} plan={plan} onDone={() => setAsking(false)} />
+      ) : (
+        <BriefForm troopId={troopId} plan={plan} canEdit={canEdit} onAsk={() => setAsking(true)} />
+      )}
+      {canEdit && plan.brief && !asking ? (
+        <IdeaStarters troopId={troopId} plan={plan} options={options} memberId={memberId} />
+      ) : null}
       <ResearchGuide kind={plan.kind} open={sorted.length === 0} />
       {canEdit ? <PastTrips troopId={troopId} plan={plan} options={options} memberId={memberId} /> : null}
       <h2>Options</h2>

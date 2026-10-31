@@ -38,9 +38,25 @@ SERVICE = [
     ("Record service hours", 3, "leader"),
     ("Send a thank-you note", 14, "patrols"),
 ]
+# A long trip's usual sequence, counted back from the trek. Booking windows and payment dates differ by program and
+# year: the destination's own site decides, so these are reminders to check, not dates to rely on.
+HIGH_ADVENTURE = [
+    ("Survey interest and pick a destination", -760, "patrols"),
+    ("Book during the program's registration window (check its site)", -700, "leader"),
+    ("Pay the deposit", -640, "treasurer"),
+    ("Plan fundraising (ask the council if it needs approval)", -600, "committee"),
+    ("Name the crew and its adults", -365, "leader"),
+    ("Schedule physicals for health form Part C", -180, "leader"),
+    ("Line up first aid training the program asks for", -150, "leader"),
+    ("Start conditioning hikes", -120, "patrols"),
+    ("Final payment (check the program's date)", -90, "treasurer"),
+    ("Shakedown: gear check and practice trip", -30, "patrols"),
+    ("Debrief and share photos with families", 14, "patrols"),
+]
 TEMPLATES = {
     "campout": {"logKind": "campout", "milestones": CAMPOUT},
     "service": {"logKind": "service", "milestones": SERVICE},
+    "highAdventure": {"logKind": "campout", "milestones": HIGH_ADVENTURE},
     "other": {"logKind": "other", "milestones": []},
 }
 

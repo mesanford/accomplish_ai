@@ -32,11 +32,33 @@ test('a leader researches, plans and publishes a campout, and a parent sees the 
   await leader.getByRole('button', { name: 'Start the plan' }).click();
   await expect(leader.getByRole('heading', { name: 'Fall campout' })).toBeVisible();
 
+  // The plan starts with questions, one at a time, then shows ideas that fit the answers.
+  await expect(leader.getByText('Question 1 of 7')).toBeVisible();
+  await leader.getByRole('radio', { name: '1 or 2 nights (a weekend)' }).check();
+  await leader.getByRole('button', { name: 'Next' }).click();
+  await leader.getByRole('radio', { name: 'Fall' }).check();
+  await leader.getByRole('button', { name: 'Next' }).click();
+  await leader.getByRole('radio', { name: 'Up to 2 hours' }).check();
+  await leader.getByRole('button', { name: 'Next' }).click();
+  await leader.getByRole('checkbox', { name: 'Canoeing or kayaking' }).check();
+  await leader.getByRole('button', { name: 'Next' }).click();
+  await leader.getByRole('radio', { name: 'Tents' }).check();
+  await leader.getByRole('button', { name: 'Next' }).click();
+  await leader.getByRole('button', { name: 'Skip' }).click(); // no must-haves
+  await leader.getByRole('radio', { name: 'Up to $50' }).check();
+  await leader.getByRole('button', { name: 'Show us ideas' }).click();
+  await expect(leader.getByText('How long: 1 or 2 nights (a weekend)')).toBeVisible();
+  const ideas = leader.getByRole('region', { name: 'Ideas to try' });
+  await expect(ideas.getByText('A canoe or kayak trip on a lake or slow river')).toBeVisible();
+  await ideas.getByRole('button', { name: 'Add this idea' }).first().click();
+  await expect(leader.getByText('Added to your ideas.')).toBeVisible();
+
   // Research: one place, marked booked; then record the decision.
   await leader.getByRole('button', { name: 'Add an option' }).click();
-  await leader.getByLabel('Name', { exact: true }).fill('Pine Lake State Park');
-  await leader.getByLabel('Availability').selectOption('booked');
-  await leader.getByRole('button', { name: 'Save option' }).click();
+  const optionForm = leader.locator('form').filter({ has: leader.getByRole('button', { name: 'Save option' }) });
+  await optionForm.getByLabel('Name', { exact: true }).fill('Pine Lake State Park');
+  await optionForm.getByLabel('Availability').selectOption('booked');
+  await optionForm.getByRole('button', { name: 'Save option' }).click();
   await expect(leader.getByText('Pine Lake State Park').first()).toBeVisible();
   await leader.getByRole('button', { name: 'Decide', exact: true }).click();
   await leader.getByLabel('Chosen option').selectOption({ label: 'Pine Lake State Park' });

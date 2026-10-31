@@ -1,7 +1,12 @@
 // Labels and fixed text for event plans (see plans.ts, which re-exports them).
 import type { Availability, CheckStatus, PlanField, PlanKind, PlanStatus } from './plans';
 
-export const KIND_LABELS: Record<PlanKind, string> = { campout: 'Campout', service: 'Service project', other: 'Other' };
+export const KIND_LABELS: Record<PlanKind, string> = {
+  campout: 'Campout',
+  service: 'Service project',
+  highAdventure: 'High adventure',
+  other: 'Something else',
+};
 export const STATUS_LABELS: Record<PlanStatus, string> = {
   draft: 'Planning',
   decided: 'Decided',
