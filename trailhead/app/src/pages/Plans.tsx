@@ -1,3 +1,4 @@
+import { CatalogNotice } from '../components/plans/CatalogNotice';
 import { Link } from 'react-router-dom';
 import { NewPlan } from '../components/plans/NewPlan';
 import { PlanFromEvent } from '../components/plans/PlanFromEvent';
@@ -29,6 +30,7 @@ export function Plans() {
           All events
         </Link>
       </PageHeader>
+      <CatalogNotice />
       {plans.loading ? <Loading /> : null}
       <Notice kind="error">{plans.error}</Notice>
       {!plans.loading && groups.length === 0 ? <Empty>No plans yet.</Empty> : null}

@@ -228,6 +228,14 @@ Before publishing, readiness checks look at what the plan says it will do: healt
 
 Publishing (leaders only) writes an ordinary event carrying `planId`, so sign-ups, permission, fees, health form checks, reminders, alerts, activity credit and calendar feeds all work unchanged. After that the event owns its details. The plan shows where the live event differs, and a re-publish writes only the fields a leader ticks. Everything goes through one callable, `plan_action` (`functions/endpoints/plans.py`); clients write only a plan's research cards. Data lives in `troops/{t}/eventPlans` (with `options`, `milestones`, `acks` and `private/adult`) and `planSummaries`, which is what families see on the event page. Deleting a plan leaves its event on the calendar; an adult who deletes their account is taken off every plan.
 
+## Place catalog and the year at a glance
+
+A plan's research step offers **Places to look at**, from an app-wide catalog (`places`, read by anyone signed in, written only by the `refresh_places` job): federal campgrounds from the Recreation.gov bulk download (only its facility files are fetched, with range requests), state parks from OpenStreetMap, or from a state's own GIS layer where `functions/handlers/places_states.py` lists one (Wisconsin so far), and the four national high adventure bases. For each base, Claude reads the program's own page and lists a few facts, each with the page's exact words; a fact is kept only if those words are on the page. Availability is never read: each place links to its official page and its booking site, and troops record what they learn on a research card. State parks say "a campground is mapped nearby" rather than "has camping", because that is all the map knows.
+
+`refresh_places` wakes every 2 hours and does nothing unless a refresh is due (every 182 days) or one is under way; each wake-up works for up to 7 minutes and saves its place, so a refresh spreads over a day or so and a busy source is retried later. When it finishes, `catalogMeta/current` holds what was added, changed and removed, and planners see a "Places updated" notice on the Plans page until they dismiss it. `find_places` lists places in the troop's state and the states next to it, nearest first, with OpenRouteService drive times for the closest 25 (one request, counted against the troop's daily drive time limit).
+
+**Year at a glance** (Events → Year at a glance) shows the next 12 months: booked (events), maybe (plans being discussed, for people who can see plans), open weekends and the 11 federal holidays with their observed days and long weekends. "Big screen" turns it into a list for a projector at a PLC, and an open weekend starts a plan for those dates.
+
 ## Not built yet
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.

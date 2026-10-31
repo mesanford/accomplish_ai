@@ -254,3 +254,31 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
 /* A plan's research guide: columns line up at the top (a grid row would otherwise stretch the heading's row). */
 .plan-guide-col { align-content: start; }
 .plan-guide-col ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+
+/* Year at a glance (TroopCalendar): status uses an icon, a word and a pattern, never colour alone. */
+.cal-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.cal-mark { font-weight: 600; white-space: nowrap; }
+.cal-mark.booked { color: var(--accent); }
+.cal-mark.maybe { color: var(--warn-ink); }
+.cal-months { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); }
+.cal-month h3 { margin: 0 0 6px; }
+.cal-cells { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.cal-head { font-size: 11px; color: var(--muted); text-decoration: none; }
+.cal-day { display: flex; flex-direction: column; align-items: center; min-height: 34px; padding: 2px 0; border: 1px solid transparent; border-radius: 6px; font-size: 13px; color: inherit; text-decoration: none; }
+.cal-icon { font-size: 11px; line-height: 1; }
+.cal-day.booked { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.cal-day.maybe { background: repeating-linear-gradient(135deg, var(--warn-fill) 0 4px, transparent 4px 8px); color: var(--warn-ink); border-color: var(--warn-ink); font-weight: 600; }
+.cal-day.open { border: 1px dashed var(--line); }
+.cal-day.holiday { text-decoration: underline; text-underline-offset: 3px; }
+.cal-holidays { list-style: none; margin: 6px 0 0; padding: 0; }
+.cal-row { border-left: 6px solid transparent; }
+.cal-row.booked { border-left-color: var(--accent); }
+.cal-row.maybe { border-left: 6px dashed var(--warn-ink); }
+.cal-row.open { border-left: 6px dotted var(--line); }
+.cal-list { display: none; }
+.cal-big .cal-months { display: none; }
+.cal-big .cal-list { display: block; font-size: 1.25rem; }
+@media (max-width: 719px) {
+  .cal-months { display: none; }
+  .cal-list { display: block; }
+}

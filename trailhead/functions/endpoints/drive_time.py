@@ -49,7 +49,7 @@ def _follow(url: str) -> str | None:
     return None
 
 
-def _ors(path: str, key: str, body: dict | None = None) -> dict:
+def ors_request(path: str, key: str, body: dict | None = None) -> dict:
     data = json.dumps(body).encode() if body is not None else None
     headers = {"Authorization": key, "Accept": "application/json", "User-Agent": "Forthright/1.0"}
     if body is not None:
@@ -62,12 +62,12 @@ def _ors(path: str, key: str, body: dict | None = None) -> dict:
 def _geocoder(key: str):
     def geocode(text: str):
         query = urllib.parse.urlencode({"text": text, "boundary.country": "US", "size": 1})
-        return dt.geocoded(_ors(f"/geocode/search?{query}", key))
+        return dt.geocoded(ors_request(f"/geocode/search?{query}", key))
 
     return geocode
 
 
-def _home(t, key: str):
+def home_location(t, key: str):
     """The meeting place's location, looked up again only when its address changed."""
     address = dt.home_address((t.get().to_dict() or {}).get("meetingPlace"))
     if not address:
@@ -83,7 +83,7 @@ def _home(t, key: str):
     return found
 
 
-def _take_slot(t, today) -> bool:
+def take_drive_slot(t, today) -> bool:
     ref = t.collection("usage").document(f"drive_{today.isoformat()}")  # cleared by the retention job by its day
 
     @firestore.transactional
@@ -114,13 +114,13 @@ def estimate_drive_time(req: https_fn.CallableRequest) -> dict:
     key = os.environ.get("ORS_API_KEY", "")
     if in_emulator() or not key or key.startswith("emulator"):
         raise fail(Code.FAILED_PRECONDITION, "Drive time estimates aren't set up here. Enter the minutes yourself.")
-    if not _take_slot(t, troop_today(troop_id)):
+    if not take_drive_slot(t, troop_today(troop_id)):
         raise fail(Code.RESOURCE_EXHAUSTED, "Your troop has used today's drive time estimates. Try again tomorrow.")
     try:
-        start = _home(t, key)
+        start = home_location(t, key)
         end = dt.destination(data["mapsUrl"], _follow, _geocoder(key))
         body = {"coordinates": [[start[1], start[0]], [end[1], end[0]]]}
-        summary = dt.route_summary(_ors("/v2/directions/driving-car", key, body))
+        summary = dt.route_summary(ors_request("/v2/directions/driving-car", key, body))
     except InvalidInput as err:
         raise fail(Code.INVALID_ARGUMENT, str(err)) from err
     except urllib.error.HTTPError as err:

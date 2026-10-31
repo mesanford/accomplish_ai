@@ -1,7 +1,9 @@
 import { type FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { rangeText } from '../../lib/isoDate';
+import { coreWithDates, datesFromParams } from '../../lib/planDefaults';
 import { KIND_LABELS, type PlanKind } from '../../lib/plans';
-import { createPlan } from '../../lib/plansApi';
+import { createPlan, updateCore } from '../../lib/plansApi';
 import { Field, Notice } from '../ui';
 import { useAction } from './useAction';
 
@@ -11,6 +13,8 @@ export function NewPlan({ troopId }: { troopId: string }) {
   const [title, setTitle] = useState('');
   const act = useAction();
   const nav = useNavigate();
+  const [params] = useSearchParams();
+  const dates = datesFromParams(params);
 
   function submit(e: FormEvent) {
     e.preventDefault();
@@ -20,6 +24,9 @@ export function NewPlan({ troopId }: { troopId: string }) {
     }
     void act.run(async () => {
       const out = await createPlan(troopId, kind, title.trim());
+      if (dates) {
+        await updateCore(troopId, out.planId, coreWithDates(title.trim(), kind, dates.start, dates.end));
+      }
       nav(`/t/${troopId}/events/plans/${out.planId}`);
     }, '');
   }
@@ -27,6 +34,7 @@ export function NewPlan({ troopId }: { troopId: string }) {
   return (
     <form className="form card" onSubmit={submit} noValidate>
       <h2>New plan</h2>
+      {dates ? <p className="muted">For {rangeText(dates.start, dates.end)}</p> : null}
       <div className="row">
         <Field label="Kind" htmlFor="np-kind">
           <select id="np-kind" value={kind} onChange={(e) => setKind(e.target.value as PlanKind)}>

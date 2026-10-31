@@ -64,6 +64,8 @@ from endpoints.patrols import assign_patrol, delete_patrol, save_patrol
 from endpoints.payments import connect_stripe, disconnect_stripe, payments_status
 from endpoints.permission import approve_permission, record_paper_permission
 from endpoints.pilot import request_pilot
+from endpoints.places_find import find_places
+from endpoints.places_job import refresh_places
 from endpoints.plans import plan_action
 from endpoints.prior import record_prior_advancement
 from endpoints.push import register_push_device, remove_push_device
@@ -158,6 +160,8 @@ __all__ = [
     "request_item",
     "request_pilot",
     "plan_action",
+    "find_places",
+    "refresh_places",
     "estimate_drive_time",
     "reset_calendar_feed",
     "save_custom_award",

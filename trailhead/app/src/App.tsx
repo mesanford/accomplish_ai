@@ -20,6 +20,7 @@ import { Events } from './pages/Events';
 import { PlanPacket } from './pages/PlanPacket';
 import { PlanPage } from './pages/PlanPage';
 import { Plans } from './pages/Plans';
+import { TroopCalendar } from './pages/TroopCalendar';
 import { FinishSignIn } from './pages/FinishSignIn';
 import { HealthForms } from './pages/HealthForms';
 import { HelpPage } from './pages/Help';
@@ -139,6 +140,7 @@ const router = createBrowserRouter([
       { path: 'events/plans', element: <Plans /> },
       { path: 'events/plans/:planId', element: <PlanPage /> },
       { path: 'events/plans/:planId/packet', element: <PlanPacket /> },
+      { path: 'events/calendar', element: <TroopCalendar /> },
       { path: 'events/:eventId', element: <EventPage /> },
       { path: 'events/:eventId/attendance', element: <AttendancePage /> },
       { path: 'recruiting', element: <Recruiting /> },

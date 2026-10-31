@@ -72,6 +72,19 @@ service cloud.firestore {
       allow read: if signedIn();
       allow write: if isAdmin();
     }
+    // The place catalog (campgrounds, state parks, high adventure bases) from public sources, and when it was
+    // last refreshed. Anyone signed in reads them; only the refresh_places job writes them.
+    match /places/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /catalogMeta/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /placeRuns/{id} {
+      allow read, write: if false;
+    }
     match /pathTemplates/{id} {
       allow read: if signedIn();
       allow write: if isAdmin();

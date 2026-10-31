@@ -7,6 +7,7 @@ import { IdeaStarters } from './IdeaStarters';
 import { OptionCard } from './OptionCard';
 import { OptionForm } from './OptionForm';
 import { PastTrips } from './PastTrips';
+import { PlaceFinder } from './PlaceFinder';
 import type { PlanTabProps } from './planProps';
 import { ResearchGuide } from './ResearchGuide';
 import { TripQuestions } from './TripQuestions';
@@ -31,6 +32,7 @@ export function ResearchTab({ troopId, plan, options, canEdit, canShare }: PlanT
         <IdeaStarters troopId={troopId} plan={plan} options={options} memberId={memberId} />
       ) : null}
       <ResearchGuide kind={plan.kind} open={sorted.length === 0} />
+      {canShare ? <PlaceFinder troopId={troopId} plan={plan} options={options} memberId={memberId} /> : null}
       {canShare ? <PastTrips troopId={troopId} plan={plan} options={options} memberId={memberId} /> : null}
       <h2>Options</h2>
       <p className="muted">Keep what you learn about each place here. Say when you last checked that it is available.</p>
