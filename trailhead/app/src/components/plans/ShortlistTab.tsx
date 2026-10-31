@@ -16,7 +16,7 @@ function opens(o: PlanOption): string {
 
 const COLUMNS: { label: string; cell: (o: PlanOption) => ReactNode }[] = [
   { label: 'Cost per Scout', cell: (o) => money(o.costCents) },
-  { label: 'Drive time', cell: (o) => minutesText(o.driveMinutes) },
+  { label: 'Drive time', cell: (o) => `${minutesText(o.driveMinutes)}${o.driveEstimated ? ' (estimate)' : ''}` },
   { label: 'Capacity', cell: (o) => o.capacity ?? 'Not set' },
   { label: 'Booking opens', cell: opens },
   {

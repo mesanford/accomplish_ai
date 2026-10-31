@@ -44,6 +44,7 @@ from endpoints.custom_awards import archive_custom_award, move_to_custom_version
 from endpoints.digest import send_weekly_digest
 from endpoints.domains import add_domain, check_domain, remove_domain
 from endpoints.domains_sync import sync_domains
+from endpoints.drive_time import estimate_drive_time
 from endpoints.entries import record_payment, reverse_entry, settle_account
 from endpoints.equipment import check_in_item, check_out_item, decide_request, request_item
 from endpoints.equipment_photo import on_inventory_deleted, set_item_photo
@@ -157,6 +158,7 @@ __all__ = [
     "request_item",
     "request_pilot",
     "plan_action",
+    "estimate_drive_time",
     "reset_calendar_feed",
     "save_custom_award",
     "send_event_reminders",

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { isMapsLink } from '../../lib/driveTime';
 import { minutesText, money } from '../../lib/planForms';
 import { AVAILABILITY_LABELS, type Availability, type PlanOption, safeLink } from '../../lib/plans';
 import { deleteOption, setAvailability, setPinned, updateOption } from '../../lib/plansOptions';
@@ -51,6 +52,8 @@ export function OptionCard({
     return (
       <li className="card">
         <OptionForm
+          troopId={troopId}
+          planId={planId}
           option={option}
           busy={act.busy}
           error={act.error}
@@ -79,7 +82,10 @@ export function OptionCard({
       <ul className="stack small">
         {option.type ? <li>Kind: {option.type}</li> : null}
         <li>Cost per Scout: {money(option.costCents)}</li>
-        <li>Drive: {minutesText(option.driveMinutes)}</li>
+        <li>
+          Drive: {minutesText(option.driveMinutes)}
+          {option.driveEstimated ? ' (estimate)' : ''}
+        </li>
         <li>Capacity: {option.capacity ?? 'Not set'}</li>
         {b?.date || b?.note ? (
           <li>
@@ -87,6 +93,13 @@ export function OptionCard({
           </li>
         ) : null}
       </ul>
+      {option.mapsUrl && isMapsLink(option.mapsUrl) ? (
+        <p className="small">
+          <a href={option.mapsUrl} target="_blank" rel="noopener noreferrer">
+            Open in Google Maps
+          </a>
+        </p>
+      ) : null}
       <Links links={option.links ?? []} />
       {option.pros ? <p className="small">Pros: {option.pros}</p> : null}
       {option.cons ? <p className="small">Cons: {option.cons}</p> : null}

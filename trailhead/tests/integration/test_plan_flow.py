@@ -141,3 +141,14 @@ def test_a_plan_started_from_an_event_is_linked_without_changing_it():
     plan = read(f"{T}/eventPlans/{plan_id}")
     assert plan["status"] == "published" and plan["segments"][0]["partC"] is True
     assert act("leader", "create_from_event", eventId="e1").status_code == 400
+
+
+def test_drive_time_checks_who_asks_and_the_link_and_never_calls_the_service_here():
+    plan_id = a_ready_plan()
+    good = {"troopId": "t1", "planId": plan_id, "mapsUrl": "https://maps.app.goo.gl/AbC123"}
+    assert call("estimate_drive_time", "parent", good).status_code == 403
+    bad = call("estimate_drive_time", "leader", {**good, "mapsUrl": "https://evil.example/maps/@1.0,2.0"})
+    assert bad.status_code == 400 and "Google Maps" in bad.text
+    here = call("estimate_drive_time", "leader", good)
+    assert here.status_code == 400 and "aren't set up here" in here.text
+    assert read(f"{T}/usage/drive_{datetime.now(UTC).date().isoformat()}") is None  # no quota used

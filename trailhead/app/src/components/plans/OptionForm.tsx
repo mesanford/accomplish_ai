@@ -1,20 +1,26 @@
 import { type FormEvent, useState } from 'react';
 import { centsToDollars } from '../../lib/eventSignups';
+import { isMapsLink } from '../../lib/driveTime';
 import { badLink, centsOrNull, intOrNull, linksFromText } from '../../lib/planForms';
 import { AVAILABILITY_LABELS, type Availability, type PlanOption } from '../../lib/plans';
 import type { OptionForm as OptionValues } from '../../lib/plansOptions';
 import { Field, Notice } from '../ui';
+import { DriveEstimate } from './DriveEstimate';
 
 const STATES = Object.keys(AVAILABILITY_LABELS) as Availability[];
 
 /** Add or edit one research card. `onSave` gets clean values; a problem is shown here and nothing is sent. */
 export function OptionForm({
+  troopId,
+  planId,
   option,
   busy,
   error,
   onSave,
   onCancel,
 }: {
+  troopId: string;
+  planId: string;
   option?: PlanOption;
   busy: boolean;
   error: string;
@@ -26,7 +32,9 @@ export function OptionForm({
   const [type, setType] = useState(option?.type ?? '');
   const [links, setLinks] = useState((option?.links ?? []).join('\n'));
   const [cost, setCost] = useState(centsToDollars(option?.costCents));
+  const [mapsUrl, setMapsUrl] = useState(option?.mapsUrl ?? '');
   const [drive, setDrive] = useState(option?.driveMinutes?.toString() ?? '');
+  const [estimated, setEstimated] = useState(option?.driveEstimated === true);
   const [capacity, setCapacity] = useState(option?.capacity?.toString() ?? '');
   const [opens, setOpens] = useState(option?.bookingOpens?.date ?? '');
   const [opensNote, setOpensNote] = useState(option?.bookingOpens?.note ?? '');
@@ -49,6 +57,8 @@ export function OptionForm({
       setProblem('Add up to 5 links.');
     } else if (badLink(list)) {
       setProblem('Links must start with http:// or https://.');
+    } else if (mapsUrl.trim() && !isMapsLink(mapsUrl)) {
+      setProblem('The Google Maps link must be a Google Maps address, such as one from Share in Google Maps.');
     } else if (costCents === undefined) {
       setProblem('Enter the cost as dollars, such as 25 or 12.50.');
     } else if (driveMinutes === undefined) {
@@ -61,8 +71,10 @@ export function OptionForm({
         name,
         type,
         links: list,
+        mapsUrl,
         costCents,
         driveMinutes,
+        driveEstimated: estimated,
         capacity: cap,
         bookingOpens: { date: opens || null, note: opensNote },
         availability: { state, note },
@@ -86,12 +98,31 @@ export function OptionForm({
       <Field label="Links, one per line" htmlFor={`${id}-links`} hint="Up to 5. Web pages only.">
         <textarea id={`${id}-links`} value={links} onChange={(e) => setLinks(e.target.value)} />
       </Field>
+      <DriveEstimate
+        id={id}
+        troopId={troopId}
+        planId={planId}
+        mapsUrl={mapsUrl}
+        onMapsUrl={setMapsUrl}
+        onEstimate={(minutes) => {
+          setDrive(String(minutes));
+          setEstimated(true);
+        }}
+      />
       <div className="row">
         <Field label="Cost per Scout, in dollars" htmlFor={`${id}-cost`}>
           <input id={`${id}-cost`} inputMode="decimal" value={cost} onChange={(e) => setCost(e.target.value)} />
         </Field>
-        <Field label="Drive time, in minutes" htmlFor={`${id}-drive`}>
-          <input id={`${id}-drive`} inputMode="numeric" value={drive} onChange={(e) => setDrive(e.target.value)} />
+        <Field label="Drive time, in minutes" htmlFor={`${id}-drive`} hint={estimated ? 'Estimated. Change it if you know better.' : undefined}>
+          <input
+            id={`${id}-drive`}
+            inputMode="numeric"
+            value={drive}
+            onChange={(e) => {
+              setDrive(e.target.value);
+              setEstimated(false);
+            }}
+          />
         </Field>
         <Field label="Capacity" htmlFor={`${id}-cap`}>
           <input id={`${id}-cap`} inputMode="numeric" value={capacity} onChange={(e) => setCapacity(e.target.value)} />

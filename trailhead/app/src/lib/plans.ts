@@ -95,7 +95,11 @@ export interface PlanOption {
   /** Up to five. Show only http(s) links (see safeLink). */
   links?: string[];
   costCents?: number | null;
+  /** A Google Maps link to the place (see driveTime.ts). */
+  mapsUrl?: string;
   driveMinutes?: number | null;
+  /** The drive time came from an estimate (OpenRouteService), not typed in. */
+  driveEstimated?: boolean;
   capacity?: number | null;
   bookingOpens?: { date: string | null; note?: string } | null;
   /** A status a person sets, stamped with who and the server's time whenever it changes. */

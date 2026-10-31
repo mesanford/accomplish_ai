@@ -27,6 +27,8 @@ export function ResearchTab({ troopId, plan, options, canEdit }: PlanTabProps) {
         <div className="card">
           <h3>Add an option</h3>
           <OptionForm
+            troopId={troopId}
+            planId={plan.id}
             busy={act.busy}
             error={act.error}
             onCancel={() => setAdding(false)}

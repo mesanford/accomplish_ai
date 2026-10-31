@@ -632,10 +632,11 @@ service cloud.firestore {
         function optText(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
         function optInt(d, k, max) { return !(k in d) || d[k] == null || (d[k] is int && d[k] >= 0 && d[k] <= max); }
         function validOption(d) {
-          return d.keys().hasOnly(['name', 'type', 'links', 'costCents', 'driveMinutes', 'capacity', 'bookingOpens',
-              'availability', 'pros', 'cons', 'notes', 'pinned', 'createdByMemberId', 'createdAt'])
+          return d.keys().hasOnly(['name', 'type', 'links', 'mapsUrl', 'costCents', 'driveMinutes', 'driveEstimated',
+              'capacity', 'bookingOpens', 'availability', 'pros', 'cons', 'notes', 'pinned', 'createdByMemberId', 'createdAt'])
             && d.keys().hasAll(['name', 'availability', 'pinned', 'createdByMemberId', 'createdAt'])
             && d.name is string && d.name.size() > 0 && d.name.size() <= 120
+            && optText(d, 'mapsUrl', 500) && (!('driveEstimated' in d) || d.driveEstimated is bool)
             && optText(d, 'type', 40) && optText(d, 'pros', 1000) && optText(d, 'cons', 1000) && optText(d, 'notes', 1000)
             && (!('links' in d) || (d.links is list && d.links.size() <= 5))
             && optInt(d, 'costCents', 10000000) && optInt(d, 'driveMinutes', 1440) && optInt(d, 'capacity', 10000)
@@ -652,6 +653,10 @@ service cloud.firestore {
           return a.keys().hasOnly(['state', 'byMemberId', 'at', 'note'])
             && a.byMemberId == access(t).memberId && a.at == request.time && optText(a, 'note', 200);
         }
+      }
+      // Where the troop's meeting place is, for drive time estimates. Only estimate_drive_time reads or writes it.
+      match /planning/{d} {
+        allow read, write: if false;
       }
       // What families see on a published plan's event page (notes and packing list). Written only by plan_action.
       match /planSummaries/{p} {

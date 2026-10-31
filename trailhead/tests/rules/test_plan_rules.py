@@ -139,3 +139,17 @@ def test_leaders_cannot_set_or_change_an_events_plan_link():
     assert leader.set(f"{T}/events/e1", {**base, "planId": "p2", "planSegmentId": "s1"}) == DENIED
     assert leader.set(f"{T}/events/e1", {**base, "planSegmentId": "s1"}) == DENIED  # removing it is a change too
     assert leader.set(f"{T}/events/e1", {**base, "place": "Pine Lake", "planId": "p1", "planSegmentId": "s1"}) == OK
+
+
+def test_a_card_may_keep_a_maps_link_and_an_estimated_drive_time():
+    seed()
+    card = option("m-leader", mapsUrl="https://maps.app.goo.gl/AbC123", driveMinutes=85, driveEstimated=True)
+    assert leader.set_stamped(f"{PLAN}/options/m", card, STAMPED) == OK
+    assert leader.set_stamped(f"{PLAN}/options/n", option("m-leader", mapsUrl="x" * 501), STAMPED) == DENIED
+    assert leader.set_stamped(f"{PLAN}/options/o", option("m-leader", driveEstimated="yes"), STAMPED) == DENIED
+
+
+def test_no_client_reads_or_writes_the_troops_saved_location():
+    owner.set(f"{T}/planning/home", {"address": "12 Elm St", "lat": 39.78, "lng": -89.65})
+    assert leader.get(f"{T}/planning/home") == DENIED
+    assert leader.set(f"{T}/planning/home", {"lat": 0.0}) == DENIED

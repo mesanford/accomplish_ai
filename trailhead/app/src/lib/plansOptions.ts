@@ -11,7 +11,9 @@ export interface OptionForm {
   type: string;
   links: string[];
   costCents: number | null;
+  mapsUrl: string;
   driveMinutes: number | null;
+  driveEstimated: boolean;
   capacity: number | null;
   bookingOpens: { date: string | null; note: string } | null;
   availability: { state: Availability; note: string };
@@ -31,7 +33,9 @@ function fieldsOf(form: OptionForm) {
     type: form.type.trim(),
     links: form.links,
     costCents: form.costCents,
+    mapsUrl: form.mapsUrl.trim(),
     driveMinutes: form.driveMinutes,
+    driveEstimated: form.driveEstimated && form.driveMinutes !== null,
     capacity: form.capacity,
     bookingOpens: hasBooking ? { date: booking.date || null, note: booking.note.trim() } : null,
     pros: form.pros,
