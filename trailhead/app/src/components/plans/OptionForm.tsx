@@ -3,8 +3,10 @@ import { centsToDollars } from '../../lib/eventSignups';
 import { isMapsLink } from '../../lib/driveTime';
 import { badLink, centsOrNull, intOrNull, linksFromText } from '../../lib/planForms';
 import { AVAILABILITY_LABELS, type Availability, type PlanOption } from '../../lib/plans';
+import type { Amenity } from '../../lib/planBrief';
 import type { OptionForm as OptionValues } from '../../lib/plansOptions';
 import { Field, Notice } from '../ui';
+import { AmenityPicker } from './AmenityPicker';
 import { DriveEstimate } from './DriveEstimate';
 
 const STATES = Object.keys(AVAILABILITY_LABELS) as Availability[];
@@ -36,6 +38,7 @@ export function OptionForm({
   const [drive, setDrive] = useState(option?.driveMinutes?.toString() ?? '');
   const [estimated, setEstimated] = useState(option?.driveEstimated === true);
   const [capacity, setCapacity] = useState(option?.capacity?.toString() ?? '');
+  const [amenities, setAmenities] = useState<Amenity[]>(option?.amenities ?? []);
   const [opens, setOpens] = useState(option?.bookingOpens?.date ?? '');
   const [opensNote, setOpensNote] = useState(option?.bookingOpens?.note ?? '');
   const [state, setState] = useState<Availability>(option?.availability.state ?? 'unknown');
@@ -76,6 +79,7 @@ export function OptionForm({
         driveMinutes,
         driveEstimated: estimated,
         capacity: cap,
+        amenities,
         bookingOpens: { date: opens || null, note: opensNote },
         availability: { state, note },
         pros,
@@ -128,6 +132,7 @@ export function OptionForm({
           <input id={`${id}-cap`} inputMode="numeric" value={capacity} onChange={(e) => setCapacity(e.target.value)} />
         </Field>
       </div>
+      <AmenityPicker legend="What this place has (leave unticked if you don't know yet)" value={amenities} onChange={setAmenities} />
       <div className="row">
         <Field label="Booking opens" htmlFor={`${id}-opens`}>
           <input id={`${id}-opens`} type="date" value={opens} onChange={(e) => setOpens(e.target.value)} />

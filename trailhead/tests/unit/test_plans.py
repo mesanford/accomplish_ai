@@ -193,3 +193,21 @@ def test_an_adult_is_taken_off_a_plan_and_their_records_become_former_member():
     }
     assert record_update({"done": {"byMemberId": "a1"}}, "a1") == {"done": {"byMemberId": None}}
     assert record_update({"byMemberId": "a2"}, "a1") is None
+
+
+def test_a_brief_keeps_known_must_haves_and_checks_limits():
+    from handlers.plans_brief import brief
+
+    raw = {"maxDriveMinutes": 120, "budgetCents": 4000, "lodging": "cabins", "mustHaves": ["showers", "water", "x"]}
+    out = brief(raw)
+    assert out == {
+        "maxDriveMinutes": 120,
+        "budgetCents": 4000,
+        "lodging": "cabins",
+        "mustHaves": ["water", "showers"],
+        "notes": "",
+    }
+    assert brief(None)["lodging"] == "either" and brief(None)["maxDriveMinutes"] is None
+    for bad in ({"maxDriveMinutes": 2000}, {"budgetCents": -5}, {"notes": "x" * 501}):
+        with pytest.raises(InvalidInput):
+            brief(bad)

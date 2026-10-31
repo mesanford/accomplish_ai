@@ -3,6 +3,7 @@
 // whenever it changes, and is sent back untouched when it does not.
 import { addDoc, collection, deleteDoc, type DocumentData, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import type { Amenity } from './planBrief';
 import type { Availability, PlanOption } from './plans';
 
 /** What the research form edits. */
@@ -15,6 +16,7 @@ export interface OptionForm {
   driveMinutes: number | null;
   driveEstimated: boolean;
   capacity: number | null;
+  amenities: Amenity[];
   bookingOpens: { date: string | null; note: string } | null;
   availability: { state: Availability; note: string };
   pros: string;
@@ -37,6 +39,7 @@ function fieldsOf(form: OptionForm) {
     driveMinutes: form.driveMinutes,
     driveEstimated: form.driveEstimated && form.driveMinutes !== null,
     capacity: form.capacity,
+    amenities: form.amenities,
     bookingOpens: hasBooking ? { date: booking.date || null, note: booking.note.trim() } : null,
     pros: form.pros,
     cons: form.cons,

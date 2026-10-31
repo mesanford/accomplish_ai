@@ -6,6 +6,7 @@ from firebase_admin import firestore
 
 from endpoints.plans_shared import Ctx, bad, refresh_intent, require_adults, rules, stamp, write_summary
 from fb import db
+from handlers import plans_brief
 from handlers import plans_core as core
 from handlers import plans_templates as tpl
 from handlers.membership import InvalidInput
@@ -64,6 +65,7 @@ def clone_plan(ctx: Ctx) -> dict:
     title = f"Copy of {src.get('title', '')}"[: core.MAX_TITLE]
     try:
         fields = core.core({**src, "title": title, "segments": [seg], "targetWindow": {}})
+        fields["brief"] = plans_brief.brief(src.get("brief")) if src.get("brief") else None
     except InvalidInput as err:
         raise bad(err) from err
     milestones = [
@@ -109,6 +111,16 @@ def set_staffing(ctx: Ctx) -> dict:
     ctx.plan_ref.update({"staffing": staff, "updatedAt": NOW})
     ctx.plan = {**ctx.plan, "staffing": staff}
     return {"results": refresh_intent(ctx)}
+
+
+def update_brief(ctx: Ctx) -> dict:
+    """What the troop is looking for: longest drive, budget per Scout, tents or cabins, must-haves, notes."""
+    try:
+        fields = plans_brief.brief(ctx.data.get("brief"))
+    except InvalidInput as err:
+        raise bad(err) from err
+    ctx.plan_ref.update({"brief": fields, "updatedAt": NOW})
+    return {"saved": True}
 
 
 def set_trip_lead(ctx: Ctx) -> dict:

@@ -29,6 +29,7 @@ OPS = {
     "clone_plan": (edit.clone_plan, PLANNER, True),
     "update_core": (edit.update_core, EDIT, True),
     "set_staffing": (edit.set_staffing, EDIT, True),
+    "update_brief": (edit.update_brief, EDIT, True),
     "set_trip_lead": (edit.set_trip_lead, PLANNER, True),
     "record_decision": (edit.record_decision, EDIT, True),
     "update_private": (edit.update_private, EDIT, True),

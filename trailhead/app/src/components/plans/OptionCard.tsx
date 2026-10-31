@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { isMapsLink } from '../../lib/driveTime';
 import { minutesText, money } from '../../lib/planForms';
-import { AVAILABILITY_LABELS, type Availability, type PlanOption, safeLink } from '../../lib/plans';
+import { AVAILABILITY_LABELS, type Availability, type EventPlan, type PlanOption, safeLink } from '../../lib/plans';
 import { deleteOption, setAvailability, setPinned, updateOption } from '../../lib/plansOptions';
 import { formatDate, Notice } from '../ui';
 import { AvailabilityAge } from './AvailabilityAge';
+import { BriefFit } from './BriefFit';
 import { OptionForm } from './OptionForm';
 import { AvailabilityChip } from './StatusChip';
 import { useAction } from './useAction';
@@ -32,17 +33,18 @@ function Links({ links }: { links: string[] }) {
 /** One research card, with a quick availability change, pin, edit and delete. */
 export function OptionCard({
   troopId,
-  planId,
+  plan,
   memberId,
   option,
   canEdit,
 }: {
   troopId: string;
-  planId: string;
+  plan: EventPlan;
   memberId: string;
   option: PlanOption;
   canEdit: boolean;
 }) {
+  const planId = plan.id;
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const act = useAction();
@@ -93,6 +95,7 @@ export function OptionCard({
           </li>
         ) : null}
       </ul>
+      <BriefFit plan={plan} option={option} />
       {option.mapsUrl && isMapsLink(option.mapsUrl) ? (
         <p className="small">
           <a href={option.mapsUrl} target="_blank" rel="noopener noreferrer">

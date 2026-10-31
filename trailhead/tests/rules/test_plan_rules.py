@@ -153,3 +153,9 @@ def test_no_client_reads_or_writes_the_troops_saved_location():
     owner.set(f"{T}/planning/home", {"address": "12 Elm St", "lat": 39.78, "lng": -89.65})
     assert leader.get(f"{T}/planning/home") == DENIED
     assert leader.set(f"{T}/planning/home", {"lat": 0.0}) == DENIED
+
+
+def test_a_card_lists_only_known_amenities():
+    seed()
+    assert leader.set_stamped(f"{PLAN}/options/a", option("m-leader", amenities=["water", "showers"]), STAMPED) == OK
+    assert leader.set_stamped(f"{PLAN}/options/b", option("m-leader", amenities=["hot tub"]), STAMPED) == DENIED

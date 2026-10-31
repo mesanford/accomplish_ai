@@ -152,3 +152,14 @@ def test_drive_time_checks_who_asks_and_the_link_and_never_calls_the_service_her
     here = call("estimate_drive_time", "leader", good)
     assert here.status_code == 400 and "aren't set up here" in here.text
     assert read(f"{T}/usage/drive_{datetime.now(UTC).date().isoformat()}") is None  # no quota used
+
+
+def test_planners_save_a_brief_and_a_clone_keeps_it():
+    plan_id = a_ready_plan()
+    raw = {"maxDriveMinutes": 120, "budgetCents": 4000, "lodging": "cabins", "mustHaves": ["showers", "water", "spa"]}
+    ok(act("committee", "update_brief", planId=plan_id, brief=raw))
+    assert read(f"{T}/eventPlans/{plan_id}")["brief"]["mustHaves"] == ["water", "showers"]
+    assert act("parent", "update_brief", planId=plan_id, brief=raw).status_code == 403
+    assert act("leader", "update_brief", planId=plan_id, brief={"maxDriveMinutes": 5000}).status_code == 400
+    copy = ok(act("leader", "clone_plan", planId=plan_id))["planId"]
+    assert read(f"{T}/eventPlans/{copy}")["brief"]["lodging"] == "cabins"

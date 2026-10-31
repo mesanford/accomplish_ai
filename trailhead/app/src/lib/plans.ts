@@ -2,6 +2,7 @@
 // becomes an ordinary event. Only the plan_action function writes a plan; clients write its options (research
 // cards). Mirrors functions/handlers/plans_*.py and trailhead_core/plan_checks.py.
 import type { Timestamp } from 'firebase/firestore';
+import type { Amenity, Brief } from './planBrief';
 import type { Role } from './types';
 
 export type PlanKind = 'campout' | 'service' | 'other';
@@ -75,6 +76,8 @@ export interface EventPlan {
     byMemberId: string | null;
     at?: Timestamp;
   } | null;
+  /** What the troop is looking for (see planBrief.ts); null until someone answers. */
+  brief?: Brief | null;
   tripLeadUid: string | null;
   tripLeadMemberId: string | null;
   eventIds: Record<string, string>;
@@ -101,6 +104,7 @@ export interface PlanOption {
   /** The drive time came from an estimate (OpenRouteService), not typed in. */
   driveEstimated?: boolean;
   capacity?: number | null;
+  amenities?: Amenity[];
   bookingOpens?: { date: string | null; note?: string } | null;
   /** A status a person sets, stamped with who and the server's time whenever it changes. */
   availability: { state: Availability; byMemberId: string; at: Timestamp; note?: string };
@@ -182,19 +186,4 @@ export function isStale(at: Timestamp | undefined | null, now: Date = new Date()
   return days !== null && days > STALE_DAYS;
 }
 
-/** Milestones in date order, with ones that have no date yet last. */
-export function sortMilestones(list: Milestone[]): Milestone[] {
-  return [...list].sort((a, b) => {
-    if (a.dueOn && b.dueOn && a.dueOn !== b.dueOn) {
-      return a.dueOn < b.dueOn ? -1 : 1;
-    }
-    if (Boolean(a.dueOn) !== Boolean(b.dueOn)) {
-      return a.dueOn ? -1 : 1;
-    }
-    return a.order - b.order;
-  });
-}
-
-export function isOverdue(m: Milestone, today: string): boolean {
-  return !m.done && Boolean(m.dueOn) && (m.dueOn as string) < today;
-}
+export { isOverdue, sortMilestones } from './planMilestones';

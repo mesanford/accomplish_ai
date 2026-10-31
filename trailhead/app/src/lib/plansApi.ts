@@ -3,6 +3,7 @@
 // plansOptions.ts).
 import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
+import type { Brief } from './planBrief';
 import type { CheckResult, DiffRow, Milestone, PlanKind, PlanPrivate, PlanSegment, Staffing } from './plans';
 
 async function act<Out>(troopId: string, op: string, data: Record<string, unknown> = {}): Promise<Out> {
@@ -43,6 +44,8 @@ export const updateCore = (troopId: string, planId: string, core: CoreForm) =>
   act<{ saved: boolean }>(troopId, 'update_core', { planId, core });
 export const setStaffing = (troopId: string, planId: string, staffing: Staffing) =>
   act<{ results: CheckResult[] }>(troopId, 'set_staffing', { planId, staffing });
+export const updateBrief = (troopId: string, planId: string, brief: Brief) =>
+  act<{ saved: boolean }>(troopId, 'update_brief', { planId, brief });
 export const setTripLead = (troopId: string, planId: string, memberId: string | null) =>
   act<{ saved: boolean }>(troopId, 'set_trip_lead', { planId, memberId });
 export const recordDecision = (troopId: string, planId: string, decision: DecisionForm) =>

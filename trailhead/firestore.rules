@@ -633,12 +633,16 @@ service cloud.firestore {
         function optInt(d, k, max) { return !(k in d) || d[k] == null || (d[k] is int && d[k] >= 0 && d[k] <= max); }
         function validOption(d) {
           return d.keys().hasOnly(['name', 'type', 'links', 'mapsUrl', 'costCents', 'driveMinutes', 'driveEstimated',
-              'capacity', 'bookingOpens', 'availability', 'pros', 'cons', 'notes', 'pinned', 'createdByMemberId', 'createdAt'])
+              'capacity', 'amenities', 'bookingOpens', 'availability', 'pros', 'cons', 'notes', 'pinned', 'createdByMemberId',
+              'createdAt'])
             && d.keys().hasAll(['name', 'availability', 'pinned', 'createdByMemberId', 'createdAt'])
             && d.name is string && d.name.size() > 0 && d.name.size() <= 120
             && optText(d, 'mapsUrl', 500) && (!('driveEstimated' in d) || d.driveEstimated is bool)
             && optText(d, 'type', 40) && optText(d, 'pros', 1000) && optText(d, 'cons', 1000) && optText(d, 'notes', 1000)
             && (!('links' in d) || (d.links is list && d.links.size() <= 5))
+            && (!('amenities' in d) || (d.amenities is list && d.amenities.size() <= 10
+                && d.amenities.hasOnly(['water', 'toilets', 'showers', 'fires', 'swimming', 'boating', 'hiking', 'shelter',
+                    'accessible', 'store'])))
             && optInt(d, 'costCents', 10000000) && optInt(d, 'driveMinutes', 1440) && optInt(d, 'capacity', 10000)
             && (!('bookingOpens' in d) || d.bookingOpens == null || (d.bookingOpens is map
                 && d.bookingOpens.keys().hasOnly(['date', 'note'])
