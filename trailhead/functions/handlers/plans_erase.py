@@ -1,7 +1,9 @@
-"""Removing an adult from event plans when they delete their account. Pure functions, no network or Firestore.
+"""Removing a person from event plans: an adult who deletes their account, or a Scout a leader removes. Pure
+functions, no network or Firestore.
 
-Plans name adults as planned staff, drivers, the trip lead and the person who recorded a decision. Staff and
-drivers are taken off the plan; records of who did something keep only "Former member" (a missing id).
+Plans name adults as planned staff, drivers and the trip lead, and anyone as the person who started a plan, added a
+card, liked one, recorded a decision or completed a milestone. Staff, drivers and likes are taken off; records of
+who did something keep only "Former member" (a missing id).
 """
 
 from __future__ import annotations
@@ -36,6 +38,9 @@ def record_update(doc: dict, member_id: str) -> dict | None:
     for key in ("byMemberId", "createdByMemberId"):
         if doc.get(key) == member_id:
             out[key] = None
+    likes = doc.get("likes")
+    if isinstance(likes, list) and member_id in likes:
+        out["likes"] = [m for m in likes if m != member_id]
     for key in ("availability", "done"):
         inner = doc.get(key)
         if isinstance(inner, dict) and inner.get("byMemberId") == member_id:

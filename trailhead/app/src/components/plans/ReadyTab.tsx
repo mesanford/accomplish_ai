@@ -7,14 +7,14 @@ import type { PlanTabProps } from './planProps';
 import { useAction } from './useAction';
 
 /** Readiness checks against the rules, with "Check again" and, for leaders, acknowledgements. */
-export function ReadyTab({ troopId, plan, canEdit, isLeader }: PlanTabProps) {
+export function ReadyTab({ troopId, plan, canShare, isLeader }: PlanTabProps) {
   const [fresh, setFresh] = useState<CheckResult[] | null>(null);
   const act = useAction();
   const results = fresh ?? plan.intentReadiness?.results ?? [];
   return (
     <section className="stack" aria-label="Ready">
       <Notice kind="warn">{ADVISORY}</Notice>
-      {canEdit ? (
+      {canShare ? (
         <div>
           <button className="btn" type="button" disabled={act.busy} onClick={() => act.run(async () => setFresh((await checkIntent(troopId, plan.id)).results), 'Checked.')}>
             Check again

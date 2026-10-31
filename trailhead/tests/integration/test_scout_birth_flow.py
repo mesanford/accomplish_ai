@@ -5,6 +5,7 @@ from datetime import UTC, date, datetime
 
 import pytest
 
+from handlers.consent import CONSENT_NOTICE_VERSION
 from tests.integration.test_functions import call, owner
 from tests.integration.test_membership_flow import new_troop, ok
 from tests.rules.emulator import read, reset
@@ -15,7 +16,7 @@ pytestmark = pytest.mark.skipif(
 )
 YEAR = date.today().year
 OLDER, YOUNG = YEAR - 15, YEAR - 11
-AGREED = {"uid": "mom", "memberId": "m-mom", "at": datetime.now(UTC), "version": "2026-10-18.1"}
+AGREED = {"uid": "mom", "memberId": "m-mom", "at": datetime.now(UTC), "version": CONSENT_NOTICE_VERSION}
 
 
 @pytest.fixture(autouse=True)

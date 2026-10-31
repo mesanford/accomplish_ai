@@ -1,3 +1,4 @@
+import { usePlanAccess } from '../../lib/planAccess';
 import { PrivatePanel } from './PrivatePanel';
 import { CoreForm } from './CoreForm';
 import { MilestonesPanel } from './MilestonesPanel';
@@ -8,6 +9,7 @@ import { TripLeadSelect } from './TripLeadSelect';
 /** The plan itself: details, adults and drivers, trip lead, milestones and adult-only details. */
 export function PlanTab(props: PlanTabProps & { planner: boolean }) {
   const { troopId, plan, canEdit, planner } = props;
+  const { treasurer } = usePlanAccess();
   return (
     <div className="stack">
       <div className="card">
@@ -24,7 +26,7 @@ export function PlanTab(props: PlanTabProps & { planner: boolean }) {
       <div className="card">
         <MilestonesPanel {...props} />
       </div>
-      <PrivatePanel troopId={troopId} planId={plan.id} canEdit={canEdit} />
+      {canEdit || treasurer ? <PrivatePanel troopId={troopId} planId={plan.id} canEdit={canEdit} /> : null}
     </div>
   );
 }

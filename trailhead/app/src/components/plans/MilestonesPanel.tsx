@@ -6,7 +6,7 @@ import { MilestoneForm, OWNER_LABELS } from './MilestoneForm';
 import type { PlanTabProps } from './planProps';
 import { useAction } from './useAction';
 
-function MilestoneRow({ troopId, planId, m, canEdit }: { troopId: string; planId: string; m: Milestone; canEdit: boolean }) {
+function MilestoneRow({ troopId, planId, m, canEdit, canShare }: { troopId: string; planId: string; m: Milestone; canEdit: boolean; canShare: boolean }) {
   const [editing, setEditing] = useState(false);
   const act = useAction();
   const late = isOverdue(m, todayIso());
@@ -34,7 +34,7 @@ function MilestoneRow({ troopId, planId, m, canEdit }: { troopId: string; planId
         <input
           type="checkbox"
           checked={Boolean(m.done)}
-          disabled={!canEdit || act.busy}
+          disabled={!canShare || act.busy}
           onChange={(e) => act.run(() => completeMilestone(troopId, planId, m.id, e.target.checked))}
         />
         <span>
@@ -68,7 +68,7 @@ function MilestoneRow({ troopId, planId, m, canEdit }: { troopId: string; planId
 }
 
 /** The plan's to-do list, in date order. */
-export function MilestonesPanel({ troopId, plan, milestones, canEdit }: PlanTabProps) {
+export function MilestonesPanel({ troopId, plan, milestones, canEdit, canShare }: PlanTabProps) {
   const [adding, setAdding] = useState(false);
   const act = useAction();
   const sorted = sortMilestones(milestones);
@@ -79,7 +79,7 @@ export function MilestonesPanel({ troopId, plan, milestones, canEdit }: PlanTabP
       {sorted.length === 0 ? <Empty>No milestones yet.</Empty> : null}
       <ul className="list">
         {sorted.map((m) => (
-          <MilestoneRow key={m.id} troopId={troopId} planId={plan.id} m={m} canEdit={canEdit} />
+          <MilestoneRow key={m.id} troopId={troopId} planId={plan.id} m={m} canEdit={canEdit} canShare={canShare} />
         ))}
       </ul>
       {canEdit && adding ? (

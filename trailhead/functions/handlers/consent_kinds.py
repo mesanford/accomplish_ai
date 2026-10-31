@@ -17,6 +17,7 @@ DATA_KINDS = {
     "activity": "2026-10-17.1",
     "equipment": "2026-10-17.1",
     "healthForms": "2026-10-18.1",
+    "planning": "2026-10-31.1",
 }
 KIND_WORDS = {
     "accounts": "Scout account entries",
@@ -25,6 +26,7 @@ KIND_WORDS = {
     "activity": "activity log entries",
     "equipment": "equipment loans",
     "healthForms": "health form dates",
+    "planning": "trip planning ideas",
 }
 UPDATED_REASON = "Waiting for a parent to agree to the updated notice."
 HOLD_MESSAGE = (

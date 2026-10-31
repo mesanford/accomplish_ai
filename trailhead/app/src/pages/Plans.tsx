@@ -19,7 +19,7 @@ function dates(p: EventPlan): string {
 
 export function Plans() {
   const { troopId } = useTroop();
-  const { planner, isLeader } = usePlanAccess();
+  const { planner, isLeader, scout } = usePlanAccess();
   const plans = usePlans();
   const groups = groupPlans(plans.data);
   return (
@@ -52,7 +52,7 @@ export function Plans() {
           </ul>
         </section>
       ))}
-      {planner ? <NewPlan troopId={troopId} /> : null}
+      {planner || scout ? <NewPlan troopId={troopId} /> : null}
       {isLeader ? <PlanFromEvent troopId={troopId} /> : null}
     </>
   );

@@ -50,7 +50,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       'Troop websites: what leaders choose to publish, such as meeting details, events, contacts, photos and extra pages.',
       'Documents leaders upload, such as permission slips, gear lists and the troop handbook, with their titles, categories and who can see them.',
       'Announcements and newsletters leaders post, and the last time each person opened Announcements, so Forthright can show what is new.',
-      "Event plans that leaders and committee members write: places they are looking at, a decision, notes for families and a packing list, milestones, which adults and drivers are planned and how many seats they have, acknowledgements of readiness checks, and adult-only contacts, confirmation numbers and the names of helpers who are not in the troop. Plans hold no Scout data: only a rough count of Scouts.",
+      "Event plans that leaders, committee members and Scouts 13 and older write: the answers to a plan's first questions, places and ideas they are looking at, who added and who liked each one, a decision and who recorded it, notes for families and a packing list, milestones and who completed them, which adults and drivers are planned and how many seats they have, acknowledgements of readiness checks, and adult-only contacts, confirmation numbers and the names of helpers who are not in the troop.",
       'Usage counts: how many AI drafts each person makes per day, so we can keep a daily limit.',
     ],
     notes: [
@@ -89,7 +89,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
       "A Scout's patrol and patrol office are visible to everyone in the troop. Camping nights, service hours and hiking miles are visible to leaders, the Scout's parents and the Scout if 13 or older. The troop can export its totals as a spreadsheet and report troop service hours to its council.",
       'The equipment list is visible to everyone in the troop. The quartermaster and leaders see who has borrowed what; parents see what their own Scout has borrowed, and anyone can see what is checked out to them.',
       'Calendar feeds use a private web address for each member. They list event names, dates, places and links, and never include names or other information about Scouts. You can replace your address at any time, and it stops working when you leave the troop.',
-      "Event plans are seen by leaders, committee members, the treasurer and the plan's trip lead: the planned adults and drivers, who acknowledged a readiness check, and the adult-only contacts, confirmation numbers and helper names. Families see only the notes for families and the packing list, on the event page of a published plan.",
+      "Event plans are seen by leaders, committee members, the treasurer, the plan's trip lead and the troop's Scouts who sign in, including which Scouts added or liked an idea. Only the adults see the adult-only contacts, confirmation numbers and helper names. Families see only the notes for families and the packing list, on the event page of a published plan.",
       'These limits are enforced on our servers, not only in the app.',
       "We, the operator, can access stored data. We look at a troop's information only to run and secure Forthright, to answer a request from the troop or a family, to look into a safety concern, or when the law requires it.",
       'Anything a leader publishes on the troop website is public.',
@@ -153,7 +153,7 @@ export const PRIVACY_SECTIONS: PolicySection[] = [
     items: [
       "A Scout's records (name, birth month and year, advancement, blue cards and photos of them, sign-offs, attendance, camping, service and hiking logs, health form dates, plans and consent records): deleted 12 months after a leader marks the Scout as having left the troop, or 12 months after the Scout turns 18, whichever comes first. Because we store only the birth month and year, we treat a Scout as 18 from the first day of the month after their 18th birthday month. A leader can also delete a Scout's records at any time.",
       'Troop messages: a conversation and all of its messages are deleted 24 months after its last message.',
-      "Event plans: kept until a leader deletes them, which also deletes their research, milestones and adult-only details. If an adult deletes their account, they are removed from the plans' adults, drivers and trip lead.",
+      "Event plans: kept until a leader deletes them, which also deletes their research, milestones and adult-only details. If an adult deletes their account, or a leader removes a Scout, they are removed from every plan: their likes are taken off, and what they added or recorded shows as from a former member.",
       'Announcements and newsletters: deleted 24 months after they are posted. The record of when you last opened Announcements is deleted when you delete your account.',
       "Scout account entries and card payment records: kept for 7 years after their date, so the troop's books stay complete, even after a Scout's other records are deleted. When a Scout is removed, their name is replaced with a reference number.",
       'Documents: deleted when a leader deletes them, or with the rest of the troop.',

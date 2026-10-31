@@ -27,7 +27,7 @@ const LABELS: Record<TabKey, string> = {
 export function PlanPage() {
   const { planId = '' } = useParams();
   const { troopId } = useTroop();
-  const { uid, planner, isLeader } = usePlanAccess();
+  const { uid, planner, isLeader, scout } = usePlanAccess();
   const { plan, options, milestones } = usePlan(planId);
   const [tab, setTab] = useState<TabKey>('research');
   const exists = Boolean(plan.data);
@@ -50,7 +50,7 @@ export function PlanPage() {
     return <Empty>That plan was not found.</Empty>;
   }
   const canEdit = planner || (uid !== null && p.tripLeadUid === uid);
-  const props: PlanTabProps = { troopId, plan: p, options, milestones, canEdit, isLeader };
+  const props: PlanTabProps = { troopId, plan: p, options, milestones, canEdit, canShare: canEdit || scout, isLeader };
   const tabs = (Object.keys(LABELS) as TabKey[]).filter((k) => k !== 'publish' || isLeader);
   return (
     <>
@@ -62,7 +62,7 @@ export function PlanPage() {
           </Link>
         ) : null}
       </PageHeader>
-      <PlanActions troopId={troopId} plan={p} planner={planner} isLeader={isLeader} />
+      {scout ? null : <PlanActions troopId={troopId} plan={p} planner={planner} isLeader={isLeader} />}
       <div className="tabs" role="group" aria-label="Plan sections">
         {tabs.map((k) => (
           <button key={k} type="button" className="btn secondary small" aria-pressed={tab === k} onClick={() => setTab(k)}>

@@ -6,6 +6,7 @@ import { deleteOption, setAvailability, setPinned, updateOption } from '../../li
 import { formatDate, Notice } from '../ui';
 import { AvailabilityAge } from './AvailabilityAge';
 import { BriefFit } from './BriefFit';
+import { Likes } from './Likes';
 import { OptionForm } from './OptionForm';
 import { AvailabilityChip } from './StatusChip';
 import { useAction } from './useAction';
@@ -37,14 +38,19 @@ export function OptionCard({
   memberId,
   option,
   canEdit,
+  canShare,
 }: {
   troopId: string;
   plan: EventPlan;
   memberId: string;
   option: PlanOption;
+  /** Adults who edit the plan: may change any card. */
   canEdit: boolean;
+  /** Everyone who shares in planning, Scouts included: may like cards and shortlist them. */
+  canShare: boolean;
 }) {
   const planId = plan.id;
+  const mayChange = canEdit || (Boolean(memberId) && option.createdByMemberId === memberId);
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const act = useAction();
@@ -107,7 +113,15 @@ export function OptionCard({
       {option.pros ? <p className="small">Pros: {option.pros}</p> : null}
       {option.cons ? <p className="small">Cons: {option.cons}</p> : null}
       {option.notes ? <p className="small muted">{option.notes}</p> : null}
-      {canEdit ? (
+      <Likes troopId={troopId} planId={planId} option={option} memberId={memberId} canShare={canShare} />
+      {canShare && !mayChange ? (
+        <div className="row">
+          <button className="btn secondary small" type="button" disabled={act.busy} onClick={() => act.run(() => setPinned(troopId, planId, option.id, !option.pinned))}>
+            {option.pinned ? 'Remove from shortlist' : 'Add to shortlist'}
+          </button>
+        </div>
+      ) : null}
+      {mayChange ? (
         <div className="row">
           <label className="small" htmlFor={`st-${option.id}`}>
             Availability

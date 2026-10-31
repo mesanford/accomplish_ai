@@ -112,7 +112,9 @@ export interface PlanOption {
   cons?: string;
   notes?: string;
   pinned: boolean;
-  createdByMemberId: string;
+  /** Who liked it (member ids), each once. */
+  likes?: string[];
+  createdByMemberId: string | null;
   createdAt: Timestamp;
 }
 

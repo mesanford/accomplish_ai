@@ -163,3 +163,47 @@ def test_planners_save_a_brief_and_a_clone_keeps_it():
     assert act("leader", "update_brief", planId=plan_id, brief={"maxDriveMinutes": 5000}).status_code == 400
     copy = ok(act("leader", "clone_plan", planId=plan_id))["planId"]
     assert read(f"{T}/eventPlans/{copy}")["brief"]["lodging"] == "cabins"
+
+
+def scout(uid: str, member_id: str, consent_version: str | None, held: bool = False):
+    """A Scout who signs in, with a parent's consent at `consent_version` (None: no parent consent on record)."""
+    owner.set(f"{T}/access/{uid}", {"memberId": member_id, "roles": ["scout"], "scoutIds": [member_id]})
+    owner.set(f"{T}/members/{member_id}", {"kind": "scout", "displayName": uid.title(), "consentHold": held})
+    if consent_version:
+        entry = {"uid": "parent", "memberId": "m-parent", "at": datetime.now(UTC), "version": consent_version}
+        owner.set(f"{T}/consents/{member_id}", {"parentConsents": [entry]})
+
+
+def card(name="Pine Lake"):
+    return {"name": name, "availability": {"state": "unknown"}}
+
+
+def test_a_scout_starts_a_plan_adds_and_likes_ideas_but_leaves_adult_jobs_to_adults():
+    from handlers.consent import CONSENT_NOTICE_VERSION
+
+    scout("sam", "s-sam", CONSENT_NOTICE_VERSION)
+    scout("riley", "s-riley", CONSENT_NOTICE_VERSION)
+    plan_id = ok(act("sam", "create_from_template", kind="campout", title="Patrol campout"))["planId"]
+    ok(act("sam", "update_brief", planId=plan_id, brief={"tripLength": "weekend", "interests": ["fishing"]}))
+    mine = ok(act("sam", "save_option", planId=plan_id, option=card()))["optionId"]
+    ok(act("riley", "like_option", planId=plan_id, optionId=mine, like=True))
+    ok(act("riley", "pin_option", planId=plan_id, optionId=mine, pinned=True))
+    saved = read(f"{T}/eventPlans/{plan_id}/options/{mine}")
+    assert saved["createdByMemberId"] == "s-sam" and saved["likes"] == ["s-riley"] and saved["pinned"] is True
+    assert act("riley", "save_option", planId=plan_id, optionId=mine, option=card("Mine now")).status_code == 403
+    assert act("riley", "delete_option", planId=plan_id, optionId=mine).status_code == 403
+    ok(act("leader", "save_option", planId=plan_id, optionId=mine, option=card("Pine Lake State Park")))
+    ok(act("sam", "record_decision", planId=plan_id, decision={"optionId": mine, "tally": "PLC chose it, 6-2"}))
+    for op in ("update_core", "set_staffing", "update_private", "publish", "delete_plan", "acknowledge"):
+        assert act("sam", op, planId=plan_id).status_code == 403, op
+
+
+def test_a_scout_waits_for_a_parent_before_adding_anything():
+    scout("held", "s-held", None, held=True)
+    scout("older", "s-older", "2026-10-18.1")  # agreed before planning was in the notice
+    for uid in ("held", "older"):
+        response = act(uid, "create_from_template", kind="campout", title="Campout")
+        assert response.status_code == 400 and "parent" in response.text, uid
+    plan_id = a_ready_plan()
+    assert act("older", "save_option", planId=plan_id, option=card()).status_code == 400
+    assert ok(act("older", "reconcile", planId=plan_id)) is not None  # reading is fine

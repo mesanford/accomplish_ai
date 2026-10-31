@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 import pytest
 import requests
 
+from handlers.consent import CONSENT_NOTICE_VERSION
 from tests.integration.test_functions import call, owner
 from tests.integration.test_membership_flow import new_troop, ok
 from tests.rules.emulator import DOCS, list_docs, read, reset
@@ -103,7 +104,7 @@ def test_invite_from_a_lead_needs_no_scouts_and_marks_it():
                 "code": invite["code"],
                 "displayName": "Jordan",
                 "consent": True,
-                "consentVersion": "2026-10-18.1",
+                "consentVersion": CONSENT_NOTICE_VERSION,
             },
         )
     )

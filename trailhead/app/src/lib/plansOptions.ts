@@ -1,8 +1,8 @@
-// Research cards (troops/{t}/eventPlans/{p}/options/{o}) are the one thing the client writes directly. This follows
-// validOption and freshAvailability in firestore.rules: availability is stamped with who set it and the server's time
-// whenever it changes, and is sent back untouched when it does not.
-import { addDoc, collection, deleteDoc, type DocumentData, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db } from './firebase';
+// Research cards (troops/{t}/eventPlans/{p}/options/{o}). Only the plan_action function writes them, for adults and
+// Scouts alike, so each card is checked, consent is checked for Scouts, and availability is stamped with who set it
+// and the server's time whenever it changes (functions/endpoints/plans_options.py).
+import { httpsCallable } from 'firebase/functions';
+import { functions } from './firebase';
 import type { Amenity } from './planBrief';
 import type { Availability, PlanOption } from './plans';
 
@@ -24,36 +24,13 @@ export interface OptionForm {
   notes: string;
 }
 
-const optionsPath = (troopId: string, planId: string) => `troops/${troopId}/eventPlans/${planId}/options`;
-
-/** The fields of the form that are not availability. */
-function fieldsOf(form: OptionForm) {
-  const booking = form.bookingOpens;
-  const hasBooking = booking && (booking.date || booking.note.trim());
-  return {
-    name: form.name.trim(),
-    type: form.type.trim(),
-    links: form.links,
-    costCents: form.costCents,
-    mapsUrl: form.mapsUrl.trim(),
-    driveMinutes: form.driveMinutes,
-    driveEstimated: form.driveEstimated && form.driveMinutes !== null,
-    capacity: form.capacity,
-    amenities: form.amenities,
-    bookingOpens: hasBooking ? { date: booking.date || null, note: booking.note.trim() } : null,
-    pros: form.pros,
-    cons: form.cons,
-    notes: form.notes,
-  };
+async function act(troopId: string, planId: string, op: string, data: Record<string, unknown>) {
+  await httpsCallable(functions, 'plan_action')({ troopId, planId, op, ...data });
 }
 
-/** A new availability map. The note is left out when empty, since the rules take only the keys listed. */
-function freshAvailability(memberId: string, state: Availability, note: string) {
-  const out: Record<string, unknown> = { state, byMemberId: memberId, at: serverTimestamp() };
-  if (note.trim()) {
-    out.note = note.trim();
-  }
-  return out;
+/** The form as the server reads it. */
+function sent(form: OptionForm) {
+  return { ...form, mapsUrl: form.mapsUrl.trim(), driveEstimated: form.driveEstimated && form.driveMinutes !== null };
 }
 
 /** True when the status or its note differs from what is stored, so a new stamp is needed. */
@@ -61,39 +38,37 @@ export function availabilityChanged(old: PlanOption['availability'], state: Avai
   return old.state !== state || (old.note ?? '') !== note.trim();
 }
 
-export async function createOption(troopId: string, planId: string, memberId: string, form: OptionForm) {
-  await addDoc(collection(db, optionsPath(troopId, planId)), {
-    ...fieldsOf(form),
-    pinned: false,
-    availability: freshAvailability(memberId, form.availability.state, form.availability.note),
-    createdByMemberId: memberId,
-    createdAt: serverTimestamp(),
-  });
+/** `_memberId` is kept for callers; the server stamps the card with the signed-in person. */
+export async function createOption(troopId: string, planId: string, _memberId: string, form: OptionForm) {
+  await act(troopId, planId, 'save_option', { option: sent(form) });
 }
 
-/** Sends only the changed fields, so createdByMemberId and createdAt are never touched. */
-export async function updateOption(troopId: string, planId: string, memberId: string, old: PlanOption, form: OptionForm) {
-  const changes: DocumentData = { ...fieldsOf(form) };
-  if (availabilityChanged(old.availability, form.availability.state, form.availability.note)) {
-    changes.availability = freshAvailability(memberId, form.availability.state, form.availability.note);
-  }
-  await updateDoc(doc(db, optionsPath(troopId, planId), old.id), changes);
+export async function updateOption(troopId: string, planId: string, _memberId: string, old: PlanOption, form: OptionForm) {
+  await act(troopId, planId, 'save_option', { optionId: old.id, option: sent(form) });
 }
 
 /** A quick change of status from the card. */
-export async function setAvailability(troopId: string, planId: string, memberId: string, option: PlanOption, state: Availability) {
+export async function setAvailability(
+  troopId: string,
+  planId: string,
+  _memberId: string,
+  option: PlanOption,
+  state: Availability,
+) {
   if (!availabilityChanged(option.availability, state, option.availability.note ?? '')) {
     return;
   }
-  await updateDoc(doc(db, optionsPath(troopId, planId), option.id), {
-    availability: freshAvailability(memberId, state, option.availability.note ?? ''),
-  });
+  await act(troopId, planId, 'set_availability', { optionId: option.id, state });
 }
 
 export async function setPinned(troopId: string, planId: string, optionId: string, pinned: boolean) {
-  await updateDoc(doc(db, optionsPath(troopId, planId), optionId), { pinned });
+  await act(troopId, planId, 'pin_option', { optionId, pinned });
+}
+
+export async function setLiked(troopId: string, planId: string, optionId: string, like: boolean) {
+  await act(troopId, planId, 'like_option', { optionId, like });
 }
 
 export async function deleteOption(troopId: string, planId: string, optionId: string) {
-  await deleteDoc(doc(db, optionsPath(troopId, planId), optionId));
+  await act(troopId, planId, 'delete_option', { optionId });
 }

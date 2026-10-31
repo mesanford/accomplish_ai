@@ -19,14 +19,14 @@ import type { TroopEvent } from '../lib/types';
 
 export function Events() {
   const { troopId, isLeader } = useTroop();
-  const { planner } = usePlanAccess();
+  const { planner, scout } = usePlanAccess();
   const q = useMemo(() => query(collection(db, `troops/${troopId}/events`), orderBy('start', 'desc')), [troopId]);
   const events = useQuery<TroopEvent>(q, `${troopId}/events`);
   return (
     <>
       <PageHeader eyebrow="Troop" title="Events" />
       <FeedLink />
-      {planner ? (
+      {planner || scout ? (
         <p>
           <Link className="btn secondary small" to={`/t/${troopId}/events/plans`}>
             Plan a trip

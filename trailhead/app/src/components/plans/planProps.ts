@@ -8,5 +8,7 @@ export interface PlanTabProps {
   milestones: Milestone[];
   /** Planners and the plan's trip lead. */
   canEdit: boolean;
+  /** Everyone who shares in planning: planners, the trip lead and Scouts who sign in. */
+  canShare: boolean;
   isLeader: boolean;
 }

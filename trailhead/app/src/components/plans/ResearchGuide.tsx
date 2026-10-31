@@ -3,9 +3,9 @@ import type { PlanKind } from '../../lib/plans';
 
 function List({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="stack">
+    <div className="stack plan-guide-col">
       <h3>{title}</h3>
-      <ul className="small">
+      <ul>
         {items.map((i) => (
           <li key={i}>{i}</li>
         ))}

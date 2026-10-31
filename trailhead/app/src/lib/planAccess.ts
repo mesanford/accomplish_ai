@@ -12,7 +12,9 @@ export function usePlanAccess() {
   const { user } = useAuth();
   const planner = canPlan(isLeader, has);
   const treasurer = has('treasurer');
-  return { uid: user?.uid ?? null, planner, treasurer, isLeader, listAll: planner || treasurer };
+  // Planning is Scout-led: Scouts who sign in (13 and older) start plans, add ideas, like and shortlist them.
+  const scout = has('scout') && !planner;
+  return { uid: user?.uid ?? null, planner, treasurer, scout, isLeader, listAll: planner || treasurer || scout };
 }
 
 /** The plans this person may list: all of them, or (for anyone else) only those they lead. */

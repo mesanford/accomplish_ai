@@ -6,6 +6,7 @@ import time
 import pytest
 import requests
 
+from handlers.consent import CONSENT_NOTICE_VERSION
 from tests.integration.test_functions import call, owner, wait_for
 from tests.integration.test_membership_flow import AGREE
 from tests.rules.emulator import PROJECT, list_docs, read, reset
@@ -119,5 +120,5 @@ def test_consent_confirmation_goes_to_the_parent_even_if_notifications_are_off()
     assert recipients("consent_confirmation", 1) == {email_of("pending")}
     [mail] = outbox("consent_confirmation")
     assert mail["subject"] == "You agreed to Forthright's notice for Ava"
-    assert "2026-10-18.1" in mail["text"] and "/privacy" in mail["text"]
+    assert CONSENT_NOTICE_VERSION in mail["text"] and "/privacy" in mail["text"]
     assert "Jones" not in mail["text"]

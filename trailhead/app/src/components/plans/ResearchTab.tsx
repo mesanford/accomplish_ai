@@ -13,7 +13,7 @@ import { TripQuestions } from './TripQuestions';
 import { useAction } from './useAction';
 
 /** Research cards: places and ideas to compare, with their availability. */
-export function ResearchTab({ troopId, plan, options, canEdit }: PlanTabProps) {
+export function ResearchTab({ troopId, plan, options, canEdit, canShare }: PlanTabProps) {
   const { access } = useTroop();
   const [adding, setAdding] = useState(false);
   const [asking, setAsking] = useState(!plan.brief);
@@ -22,25 +22,25 @@ export function ResearchTab({ troopId, plan, options, canEdit }: PlanTabProps) {
   const sorted = [...options].sort((a, b) => a.name.localeCompare(b.name));
   return (
     <section className="stack" aria-label="Research">
-      {canEdit && asking ? (
+      {canShare && asking ? (
         <TripQuestions troopId={troopId} plan={plan} onDone={() => setAsking(false)} />
       ) : (
-        <BriefForm troopId={troopId} plan={plan} canEdit={canEdit} onAsk={() => setAsking(true)} />
+        <BriefForm troopId={troopId} plan={plan} canEdit={canShare} onAsk={() => setAsking(true)} />
       )}
-      {canEdit && plan.brief && !asking ? (
+      {canShare && plan.brief && !asking ? (
         <IdeaStarters troopId={troopId} plan={plan} options={options} memberId={memberId} />
       ) : null}
       <ResearchGuide kind={plan.kind} open={sorted.length === 0} />
-      {canEdit ? <PastTrips troopId={troopId} plan={plan} options={options} memberId={memberId} /> : null}
+      {canShare ? <PastTrips troopId={troopId} plan={plan} options={options} memberId={memberId} /> : null}
       <h2>Options</h2>
       <p className="muted">Keep what you learn about each place here. Say when you last checked that it is available.</p>
       {sorted.length === 0 ? <Empty>No options yet. Add one below, or start from a place your troop has been.</Empty> : null}
       <ul className="stack">
         {sorted.map((o) => (
-          <OptionCard key={o.id} troopId={troopId} plan={plan} memberId={memberId} option={o} canEdit={canEdit} />
+          <OptionCard key={o.id} troopId={troopId} plan={plan} memberId={memberId} option={o} canEdit={canEdit} canShare={canShare} />
         ))}
       </ul>
-      {canEdit && adding ? (
+      {canShare && adding ? (
         <div className="card">
           <h3>Add an option</h3>
           <OptionForm
@@ -57,7 +57,7 @@ export function ResearchTab({ troopId, plan, options, canEdit }: PlanTabProps) {
           />
         </div>
       ) : null}
-      {canEdit && !adding ? (
+      {canShare && !adding ? (
         <div>
           <button className="btn" type="button" onClick={() => setAdding(true)}>
             Add an option

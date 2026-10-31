@@ -1,7 +1,7 @@
-"""Event plans: planners (leaders and committee), the plan's trip lead and the treasurer read a plan; only the
-plan_action function writes it; planners and the trip lead write its research cards, with availability stamped by
-the server's time. Plans' event fields are server-owned. Seed users come from conftest, plus a committee member, a
-treasurer, a parent who is the trip lead and a Scout quartermaster."""
+"""Event plans: planners (leaders and committee), the plan's trip lead, the treasurer and Scouts who sign in read a
+plan; only the plan_action function writes a plan and everything under it, research cards included. Scouts never
+read the adult-only panel. Plans' event fields are server-owned. Seed users come from conftest, plus a committee
+member, a treasurer, a parent who is the trip lead and a Scout who is also the quartermaster."""
 
 from datetime import UTC, datetime
 
@@ -54,9 +54,17 @@ def test_planners_the_trip_lead_and_the_treasurer_read_a_plan_and_everything_und
             assert who.get(path) == OK, path
 
 
-def test_families_counselors_scouts_and_the_scout_quartermaster_read_nothing():
+def test_scouts_read_plans_cards_and_milestones_but_never_the_adult_panel():
     seed()
-    for who in (parent, counselor, scout1, scoutqm, stranger):
+    for who in (scout1, scoutqm):
+        for path in (PLAN, OPTION, f"{PLAN}/milestones/m1", f"{PLAN}/acks/two_deep"):
+            assert who.get(path) == OK, path
+        assert who.get(f"{PLAN}/private/adult") == DENIED
+
+
+def test_families_counselors_and_strangers_read_nothing():
+    seed()
+    for who in (parent, counselor, stranger):
         for path in (PLAN, OPTION, f"{PLAN}/milestones/m1", f"{PLAN}/private/adult"):
             assert who.get(path) == DENIED, path
 
@@ -73,55 +81,15 @@ def test_a_committee_member_who_loses_the_role_loses_access():
     assert committee.get(PLAN) == DENIED
 
 
-def test_no_client_writes_a_plan_or_its_milestones_acks_or_private_panel():
+def test_no_client_writes_a_plan_or_anything_under_it():
     seed()
-    server_only = (PLAN, f"{PLAN}/milestones/m2", f"{PLAN}/acks/transport", f"{PLAN}/private/adult")
-    for path in (*server_only, f"{T}/planSummaries/p1"):
-        assert leader.set(path, {"title": "x"}) == DENIED, path
+    server_only = (PLAN, OPTION, f"{PLAN}/options/new", f"{PLAN}/milestones/m2", f"{PLAN}/acks/transport")
+    for path in (*server_only, f"{PLAN}/private/adult", f"{T}/planSummaries/p1"):
+        for who in (leader, committee, lead, scout1):
+            assert who.set(path, {"title": "x"}) == DENIED, path
+    assert leader.set_stamped(f"{PLAN}/options/a", option("m-leader"), STAMPED) == DENIED
+    assert leader.delete(OPTION) == DENIED and scout1.delete(OPTION) == DENIED
     assert leader.delete(PLAN) == DENIED
-
-
-def test_planners_and_the_trip_lead_add_research_cards_with_the_server_time():
-    seed()
-    assert leader.set_stamped(f"{PLAN}/options/a", option("m-leader"), STAMPED) == OK
-    assert committee.set_stamped(f"{PLAN}/options/b", option("m-com"), STAMPED) == OK
-    assert lead.set_stamped(f"{PLAN}/options/c", option("m-lead"), STAMPED) == OK
-    assert treasurer.set_stamped(f"{PLAN}/options/d", option("m-tre"), STAMPED) == DENIED
-    assert parent.set_stamped(f"{PLAN}/options/e", option("m-parent"), STAMPED) == DENIED
-
-
-def test_a_research_card_must_name_its_author_and_use_the_server_time():
-    seed()
-    assert leader.set_stamped(f"{PLAN}/options/a", option("m-com"), STAMPED) == DENIED  # someone else's name
-    assert leader.set(f"{PLAN}/options/b", option("m-leader", at=datetime(2020, 1, 1, tzinfo=UTC))) == DENIED
-
-
-def test_research_cards_are_checked():
-    seed()
-    for bad in (
-        {"name": ""},
-        {"name": "x" * 121},
-        {"links": ["a", "b", "c", "d", "e", "f"]},
-        {"costCents": -1},
-        {"costCents": 12.5},
-        {"pinned": "yes"},
-        {"availability": {"state": "maybe", "byMemberId": "m-leader", "note": ""}},
-        {"secret": "nope"},
-        {"bookingOpens": {"date": "soon"}},
-    ):
-        assert leader.set_stamped(f"{PLAN}/options/x", option("m-leader", **bad), STAMPED) == DENIED, bad
-
-
-def test_editing_a_card_keeps_its_author_and_restamps_availability_only_when_it_changes():
-    seed()
-    current = option("m-leader", at=NOW)
-    assert committee.set(OPTION, {**current, "pinned": True}) == OK  # availability unchanged
-    changed = {**current, "availability": {"state": "held", "byMemberId": "m-com", "note": "Held until Friday"}}
-    changed.pop("createdAt")
-    with_created = {**changed, "createdAt": NOW}
-    assert committee.set(OPTION, {**with_created, "availability": {**changed["availability"], "at": NOW}}) == DENIED
-    assert committee.set_stamped(OPTION, with_created, ["availability.at"]) == OK
-    assert committee.set(OPTION, {**current, "pinned": True, "createdByMemberId": "m-com"}) == DENIED
 
 
 def test_members_read_a_plan_summary_but_strangers_do_not():
@@ -141,21 +109,7 @@ def test_leaders_cannot_set_or_change_an_events_plan_link():
     assert leader.set(f"{T}/events/e1", {**base, "place": "Pine Lake", "planId": "p1", "planSegmentId": "s1"}) == OK
 
 
-def test_a_card_may_keep_a_maps_link_and_an_estimated_drive_time():
-    seed()
-    card = option("m-leader", mapsUrl="https://maps.app.goo.gl/AbC123", driveMinutes=85, driveEstimated=True)
-    assert leader.set_stamped(f"{PLAN}/options/m", card, STAMPED) == OK
-    assert leader.set_stamped(f"{PLAN}/options/n", option("m-leader", mapsUrl="x" * 501), STAMPED) == DENIED
-    assert leader.set_stamped(f"{PLAN}/options/o", option("m-leader", driveEstimated="yes"), STAMPED) == DENIED
-
-
 def test_no_client_reads_or_writes_the_troops_saved_location():
     owner.set(f"{T}/planning/home", {"address": "12 Elm St", "lat": 39.78, "lng": -89.65})
     assert leader.get(f"{T}/planning/home") == DENIED
     assert leader.set(f"{T}/planning/home", {"lat": 0.0}) == DENIED
-
-
-def test_a_card_lists_only_known_amenities():
-    seed()
-    assert leader.set_stamped(f"{PLAN}/options/a", option("m-leader", amenities=["water", "showers"]), STAMPED) == OK
-    assert leader.set_stamped(f"{PLAN}/options/b", option("m-leader", amenities=["hot tub"]), STAMPED) == DENIED

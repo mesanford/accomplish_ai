@@ -21,7 +21,8 @@ export function ConsentNotice({ troopName }: { troopName: string }) {
         hiking miles, gear they borrow, event sign-ups and attendance, any health or emergency note
         you add to a sign-up, the dates of their BSA health form (never medical details), Scout
         account entries the treasurer records (fundraiser credit, charges and payments), and troop
-        messages. We also keep the parent and guardian names and email addresses the troop enters so
+        messages. If your Scout is 13 or older and signs in, we also keep the trip ideas they add, like
+        or choose when the troop plans a trip, with their name. We also keep the parent and guardian names and email addresses the troop enters so
         we can ask for permission, until a parent answers or for at most 30 days. If your Scout is
         13 or older and signs in, also their email address and what they type.
       </p>
@@ -30,7 +31,8 @@ export function ConsentNotice({ troopName }: { troopName: string }) {
         events. Only leaders, you, your Scout if 13 or older, and their assigned counselors see
         their records. Only leaders see health notes; leaders, you and your Scout see health form
         dates. Only the treasurer, Scoutmaster, advancement chair, you and your Scout if 13 or older
-        see their account. We use it only to run Forthright for your troop. We do not sell it or use
+        see their account. The troop's leaders, committee, treasurer and other Scouts who sign in see
+        trip ideas. We use it only to run Forthright for your troop. We do not sell it or use
         it for ads.
       </p>
       <p>

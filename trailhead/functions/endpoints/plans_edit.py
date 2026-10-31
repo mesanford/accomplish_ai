@@ -76,7 +76,8 @@ def clone_plan(ctx: Ctx) -> dict:
     plan_id = new_plan(ctx, fields, milestones)
     batch = db().batch()
     for snap in src_ref.collection("options").stream():
-        option = {**(snap.to_dict() or {}), "pinned": False, "createdByMemberId": ctx.member_id, "createdAt": NOW}
+        option = {**(snap.to_dict() or {}), "pinned": False, "likes": []}
+        option |= {"createdByMemberId": ctx.member_id, "createdAt": NOW}
         option["availability"] = {"state": "unknown", "byMemberId": ctx.member_id, "at": NOW, "note": ""}
         batch.set(ctx.plan_ref.collection("options").document(), option)
     batch.commit()

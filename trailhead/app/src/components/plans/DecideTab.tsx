@@ -6,7 +6,7 @@ import type { PlanTabProps } from './planProps';
 import { useAction } from './useAction';
 
 /** Record which option the troop chose, why, and when to look at it again. */
-export function DecideTab({ troopId, plan, options, canEdit }: PlanTabProps) {
+export function DecideTab({ troopId, plan, options, canShare }: PlanTabProps) {
   const { memberName } = useTroop();
   const d = plan.decision;
   const [optionId, setOptionId] = useState(d?.optionId ?? '');
@@ -41,7 +41,7 @@ export function DecideTab({ troopId, plan, options, canEdit }: PlanTabProps) {
       ) : (
         <p className="muted">No decision yet.</p>
       )}
-      {canEdit ? (
+      {canShare ? (
         <form className="form" onSubmit={save}>
           <h2>Record the decision</h2>
           <Field label="Chosen option" htmlFor="dc-option">

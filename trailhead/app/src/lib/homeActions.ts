@@ -16,6 +16,8 @@ export interface Who {
   parent: boolean;
   /** Treasurer, Scoutmaster or advancement chair: the Accounts page. */
   accounts: boolean;
+  /** A Scout who signs in: they help plan trips. */
+  scout?: boolean;
 }
 
 const A = {
@@ -27,6 +29,7 @@ const A = {
   attendance: { key: 'attendance', label: 'Take attendance', hint: 'Open an event and tick who came', to: 'events' },
   settings: { key: 'settings', label: 'Troop settings', hint: 'Details, meeting place, time zone, leadership', to: 'settings' },
   counseling: { key: 'counseling', label: 'Your merit badge Scouts', hint: 'Sign off requirements you counsel', to: 'counseling' },
+  trip: { key: 'trip', label: 'Plan a trip with your troop', hint: 'Answer a few questions, add ideas and like the best', to: 'events/plans' },
   signup: { key: 'signup', label: 'Sign up for an event', hint: 'See what is coming up and who is going', to: 'events' },
   path: { key: 'path', label: "See your Scout's progress", hint: 'Their path, badges and blue cards', to: '#scouts' },
   leader: { key: 'leader', label: 'Message a leader', hint: 'Every conversation includes a second adult', to: 'messages' },
@@ -40,6 +43,9 @@ export function homeActions(who: Who): HomeAction[] {
   if (who.isLeader) {
     out.push(A.event, A.message, A.scouts, A.advance, A.cards, A.attendance);
   } else {
+    if (who.scout) {
+      out.push(A.trip, A.signup);
+    }
     if (who.parent) {
       out.push(A.signup, A.path, A.leader, A.health);
     }
