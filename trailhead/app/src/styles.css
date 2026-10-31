@@ -226,3 +226,17 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
 
 /* "A new version is ready" notice from the service worker (see UpdateBanner). */
 .update-banner { position: fixed; z-index: 30; left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom, 0px)); max-width: 28rem; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: var(--ink); color: var(--bg); box-shadow: 0 4px 16px rgb(0 0 0 / 25%); }
+
+/* Event plans: the shortlist and the publish differences are tables that stack as cards on a phone. */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs .btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+@media (max-width: 640px) {
+  table.compare thead, table.stack-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.compare tr, table.stack-table tr { display: block; border-bottom: 2px solid var(--line); padding: 6px 0; }
+  table.compare th[scope="row"], table.compare td, table.stack-table td { display: block; border-bottom: 0; padding: 4px 12px; }
+  table.compare td::before, table.stack-table td::before { content: attr(data-label); display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+}
+@media print {
+  .packet h2 { break-after: avoid; }
+  .packet { font-size: 12pt; }
+}

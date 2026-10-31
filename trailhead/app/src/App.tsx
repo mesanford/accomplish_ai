@@ -17,6 +17,9 @@ import { CustomAwards } from './pages/CustomAwards';
 import { CreateTroop } from './pages/CreateTroop';
 import { EventPage } from './pages/EventPage';
 import { Events } from './pages/Events';
+import { PlanPacket } from './pages/PlanPacket';
+import { PlanPage } from './pages/PlanPage';
+import { Plans } from './pages/Plans';
 import { FinishSignIn } from './pages/FinishSignIn';
 import { HealthForms } from './pages/HealthForms';
 import { HelpPage } from './pages/Help';
@@ -133,6 +136,9 @@ const router = createBrowserRouter([
       { path: 'health', element: <HealthForms /> },
       { path: 'counseling', element: <Counseling /> },
       { path: 'events', element: <Events /> },
+      { path: 'events/plans', element: <Plans /> },
+      { path: 'events/plans/:planId', element: <PlanPage /> },
+      { path: 'events/plans/:planId/packet', element: <PlanPacket /> },
       { path: 'events/:eventId', element: <EventPage /> },
       { path: 'events/:eventId/attendance', element: <AttendancePage /> },
       { path: 'recruiting', element: <Recruiting /> },

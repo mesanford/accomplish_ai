@@ -1,0 +1,42 @@
+{
+  "version": "2026-11-01",
+  "advisory": "Forthright is a planning aid. The Guide to Safe Scouting, your council and your chartered organization's rules govern. Verify before you go.",
+  "rules": [
+    {
+      "id": "health_ab",
+      "title": "Health form Parts A and B",
+      "text": "Every Scouting activity needs Parts A and B of the Annual Health and Medical Record for each person going.",
+      "sourceUrl": "https://scoutingwire.org/annual-health-and-medical-record-ahmr/",
+      "confidence": "high",
+      "verifiedOn": null,
+      "verifiedBy": null
+    },
+    {
+      "id": "health_c",
+      "title": "Health form Part C",
+      "text": "Part C, a physical exam by a licensed provider, is also needed for events longer than 72 hours, resident camps and high adventure.",
+      "sourceUrl": "https://scoutingwire.org/annual-health-and-medical-record-ahmr/",
+      "confidence": "high",
+      "verifiedOn": null,
+      "verifiedBy": null
+    },
+    {
+      "id": "two_deep",
+      "title": "Two-deep adult leadership",
+      "text": "At least two registered adults aged 21 or older go on every activity, and no adult is ever alone with one Scout.",
+      "sourceUrl": "https://onscouting.org/2018/01/19/whats-the-difference-between-two-deep-leadership-and-no-one-on-one-contact/",
+      "confidence": "medium",
+      "verifiedOn": null,
+      "verifiedBy": null
+    },
+    {
+      "id": "transport",
+      "title": "Transport",
+      "text": "Drivers are 18 or older with a valid licence, no youth drive, everyone wears a seat belt, and no one drives more than 10 hours in any 24 hours.",
+      "sourceUrl": "https://scoutingwire.org/safeguarding-moment-transporting-scouts-safely/",
+      "confidence": "high",
+      "verifiedOn": null,
+      "verifiedBy": null
+    }
+  ]
+}

@@ -14,6 +14,7 @@ from endpoints.feeds import cleanup_ops as feed_cleanup_ops
 from endpoints.ledger_retention import forget_author_ops
 from fb import db, fail, require_uid, troop
 from handlers.account import is_last_leader, last_leader_message, plan_contacts
+from handlers.plans_erase import plan_update, record_update
 from handlers.removal import plan_threads, usage_ids
 
 log = logging.getLogger(__name__)
@@ -48,6 +49,7 @@ def _adult_ops(t, uid: str, member_id: str) -> list:
     # Health form dates and the record of which Youth Protection reminders were sent.
     ops += [delete_op(t.collection(c).document(member_id)) for c in ("healthForms", "yptReminders")]
     ops += holder_ops(t, member_id, "adult")  # gear loans and requests keep only "Former member"
+    ops += _plan_ops(t, member_id)
 
     name = (t.collection("members").document(member_id).get().to_dict() or {}).get("displayName", "")
     draft_ref = t.collection("site").document("draft")
@@ -59,6 +61,21 @@ def _adult_ops(t, uid: str, member_id: str) -> list:
         ops.append(update_op(draft_ref, {"contacts": contacts}))
     if public_contacts is not None:
         ops.append(update_op(public_ref, {"contacts": public_contacts}))
+    return ops
+
+
+def _plan_ops(t, member_id: str) -> list:
+    """Event plans: off the staff and drivers lists, and "Former member" on what they recorded."""
+    ops = []
+    for plan in t.collection("eventPlans").stream():
+        fields = plan_update(plan.to_dict() or {}, member_id)
+        if fields:
+            ops.append(update_op(plan.reference, fields))
+        for sub in ("options", "milestones", "acks"):
+            for d in plan.reference.collection(sub).stream():
+                record = record_update(d.to_dict() or {}, member_id)
+                if record:
+                    ops.append(update_op(d.reference, record))
     return ops
 
 

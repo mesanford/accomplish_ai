@@ -86,6 +86,22 @@ class Client:
     def delete(self, path: str) -> int:
         return requests.delete(f"{DOCS}/{path}", headers=self.headers, timeout=10).status_code
 
+    def set_stamped(self, path: str, data: dict, stamped: list[str]) -> int:
+        """Create or replace a document, setting each `stamped` field path (such as "availability.at") to the
+        server's time, the way a client's serverTimestamp() does. Rules see those fields as request.time."""
+        body = {
+            "writes": [
+                {
+                    "update": {
+                        "name": f"projects/{PROJECT}/databases/(default)/documents/{path}",
+                        "fields": {k: encode(v) for k, v in data.items()},
+                    },
+                    "updateTransforms": [{"fieldPath": f, "setToServerValue": "REQUEST_TIME"} for f in stamped],
+                }
+            ]
+        }
+        return requests.post(f"{DOCS}:commit", json=body, headers=self.headers, timeout=10).status_code
+
 
 def reset() -> None:
     url = f"http://{HOST}/emulator/v1/projects/{PROJECT}/databases/(default)/documents"

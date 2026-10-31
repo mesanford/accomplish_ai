@@ -220,6 +220,14 @@ migration once, after deploying. It gives the role to each troop's creator and i
 
 The Equipment page is the troop's gear and library catalog. The quartermaster role (an adult, or a Scout 13 or older) and the leaders add items, check them out to a person or an event, check them in with a condition note and keep a repair log. Everyone in the troop can search the catalog and request an item for an event; parents see what their Scout has checked out. Data lives in `troops/{t}/inventory`, `checkouts`, `equipmentRequests` and `maintenance`; loans and requests are written only by functions (`check_out_item`, `check_in_item`, `request_item`, `decide_request`). Erasing a Scout or deleting an adult's account keeps their loans as "Former Scout" or "Former member". The nightly job deletes closed loans, answered requests and repair notes after 7 years.
 
+## Event planning
+
+Leaders and committee members plan trips under **Events → Plan a trip**: research cards for places (with an availability status a person sets, stamped with who and when), a shortlist compared side by side, a recorded decision, then the plan itself: dates, place, fee, sign-up settings, planned adults and drivers, a backward timeline of milestones, notes and a packing list for families, and an adult-only panel for contacts and confirmation numbers. A planner can name an adult as the plan's trip lead, who then edits that one plan. The treasurer reads plans. Plans never hold Scout data.
+
+Before publishing, readiness checks look at what the plan says it will do: health form parts (Part C past 72 hours), two-deep adult leadership and transport. Each reads pass, needs work, missing information or acknowledged; a leader can acknowledge one that does not pass, with a note. The rules behind them live in `functions/trailhead_core/content/plan_rules.json`, each with its source and a `verifiedOn` date that stays empty until the rule owner checks it against the source. The checks advise and record; they never say a trip is approved.
+
+Publishing (leaders only) writes an ordinary event carrying `planId`, so sign-ups, permission, fees, health form checks, reminders, alerts, activity credit and calendar feeds all work unchanged. After that the event owns its details. The plan shows where the live event differs, and a re-publish writes only the fields a leader ticks. Everything goes through one callable, `plan_action` (`functions/endpoints/plans.py`); clients write only a plan's research cards. Data lives in `troops/{t}/eventPlans` (with `options`, `milestones`, `acks` and `private/adult`) and `planSummaries`, which is what families see on the event page. Deleting a plan leaves its event on the calendar; an adult who deletes their account is taken off every plan.
+
 ## Not built yet
 
 - Claude requirement Q&A. Plan drafting and the website About helper are built.

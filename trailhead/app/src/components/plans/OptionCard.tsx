@@ -1,0 +1,138 @@
+import { useState } from 'react';
+import { minutesText, money } from '../../lib/planForms';
+import { AVAILABILITY_LABELS, type Availability, type PlanOption, safeLink } from '../../lib/plans';
+import { deleteOption, setAvailability, setPinned, updateOption } from '../../lib/plansOptions';
+import { formatDate, Notice } from '../ui';
+import { AvailabilityAge } from './AvailabilityAge';
+import { OptionForm } from './OptionForm';
+import { AvailabilityChip } from './StatusChip';
+import { useAction } from './useAction';
+
+const STATES = Object.keys(AVAILABILITY_LABELS) as Availability[];
+
+function Links({ links }: { links: string[] }) {
+  const safe = links.map((l) => ({ raw: l, href: safeLink(l) })).filter((l) => l.href !== null);
+  if (safe.length === 0) {
+    return null;
+  }
+  return (
+    <ul className="stack small">
+      {safe.map((l) => (
+        <li key={l.raw}>
+          <a href={l.href as string} target="_blank" rel="noopener noreferrer">
+            {l.raw}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** One research card, with a quick availability change, pin, edit and delete. */
+export function OptionCard({
+  troopId,
+  planId,
+  memberId,
+  option,
+  canEdit,
+}: {
+  troopId: string;
+  planId: string;
+  memberId: string;
+  option: PlanOption;
+  canEdit: boolean;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const act = useAction();
+  const b = option.bookingOpens;
+
+  if (editing) {
+    return (
+      <li className="card">
+        <OptionForm
+          option={option}
+          busy={act.busy}
+          error={act.error}
+          onCancel={() => setEditing(false)}
+          onSave={async (values) => {
+            if (await act.run(() => updateOption(troopId, planId, memberId, option, values))) {
+              setEditing(false);
+            }
+          }}
+        />
+      </li>
+    );
+  }
+  return (
+    <li className="card stack">
+      <div className="row spread">
+        <h3>
+          {option.pinned ? <span aria-hidden="true">★ </span> : null}
+          {option.name}
+          {option.pinned ? <span className="muted small"> (on the shortlist)</span> : null}
+        </h3>
+        <AvailabilityChip state={option.availability.state} />
+      </div>
+      <AvailabilityAge option={option} />
+      {option.availability.note ? <p className="small">{option.availability.note}</p> : null}
+      <ul className="stack small">
+        {option.type ? <li>Kind: {option.type}</li> : null}
+        <li>Cost per Scout: {money(option.costCents)}</li>
+        <li>Drive: {minutesText(option.driveMinutes)}</li>
+        <li>Capacity: {option.capacity ?? 'Not set'}</li>
+        {b?.date || b?.note ? (
+          <li>
+            Booking opens: {b.date ? formatDate(b.date) : ''} {b.note ?? ''}
+          </li>
+        ) : null}
+      </ul>
+      <Links links={option.links ?? []} />
+      {option.pros ? <p className="small">Pros: {option.pros}</p> : null}
+      {option.cons ? <p className="small">Cons: {option.cons}</p> : null}
+      {option.notes ? <p className="small muted">{option.notes}</p> : null}
+      {canEdit ? (
+        <div className="row">
+          <label className="small" htmlFor={`st-${option.id}`}>
+            Availability
+          </label>
+          <select
+            id={`st-${option.id}`}
+            value={option.availability.state}
+            disabled={act.busy}
+            onChange={(e) => act.run(() => setAvailability(troopId, planId, memberId, option, e.target.value as Availability))}
+          >
+            {STATES.map((s) => (
+              <option key={s} value={s}>
+                {AVAILABILITY_LABELS[s]}
+              </option>
+            ))}
+          </select>
+          <button className="btn secondary small" type="button" disabled={act.busy} onClick={() => act.run(() => setPinned(troopId, planId, option.id, !option.pinned))}>
+            {option.pinned ? 'Remove from shortlist' : 'Add to shortlist'}
+          </button>
+          <button className="btn secondary small" type="button" onClick={() => setEditing(true)}>
+            Edit
+          </button>
+          <button className="btn secondary small" type="button" onClick={() => setConfirming(true)}>
+            Delete
+          </button>
+        </div>
+      ) : null}
+      {confirming ? (
+        <Notice kind="warn">
+          <p>Delete {option.name}? This can not be undone.</p>
+          <div className="row">
+            <button className="btn small" type="button" disabled={act.busy} onClick={() => act.run(() => deleteOption(troopId, planId, option.id))}>
+              Yes, delete it
+            </button>
+            <button className="btn secondary small" type="button" onClick={() => setConfirming(false)}>
+              Keep it
+            </button>
+          </div>
+        </Notice>
+      ) : null}
+      <Notice kind="error">{act.error}</Notice>
+    </li>
+  );
+}

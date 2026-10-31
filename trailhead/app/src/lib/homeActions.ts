@@ -19,7 +19,7 @@ export interface Who {
 }
 
 const A = {
-  event: { key: 'event', label: 'Plan an event', hint: 'A campout, service day or a weekly meeting', to: 'events' },
+  event: { key: 'event', label: 'Plan a trip or event', hint: 'Research a campout, decide, and put it on the calendar', to: 'events/plans' },
   message: { key: 'message', label: 'Send a message to the troop', hint: 'Post now or schedule it, and email families', to: 'announcements?new=1' },
   scouts: { key: 'scouts', label: 'Manage Scouts and families', hint: 'Add Scouts, invite parents, change roles', to: 'roster' },
   advance: { key: 'advance', label: 'Help a Scout advance', hint: 'Plan a path to the next rank or sign off requirements', to: '#scouts' },

@@ -46,6 +46,9 @@ service cloud.firestore {
     // Troop gear: the quartermaster (an adult, or a Scout 13 or older) and the leaders manage the inventory. The
     // quartermaster role grants nothing else.
     function canManageGear(t) { return isLeader(t) || hasRole(t, 'quartermaster'); }
+    // Event planning: leaders and committee members plan trips. Checked from the access doc on every request, so
+    // losing the role ends access straight away. A plan's trip lead and the treasurer are checked per plan.
+    function canPlan(t) { return isLeader(t) || hasRole(t, 'committee'); }
     function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
     // Health form dates (BSA Annual Health and Medical Record), never medical details. A person, a Scout's linked
     // parent and leaders read them; only the record_health_form function writes them (it stamps who and when).
@@ -306,7 +309,7 @@ service cloud.firestore {
       // Events. A leader writes the details and the sign-up settings (the `signups` map, feeCents, startTime, endTime,
       // endDate) and may cancel one (`cancelled`, with an optional short `cancelNote` that goes in the email). The
       // server owns signupCounts, feesPending, feesPosted, reminderSentFor, alertedFor (the details families were last
-      // told about) and seriesId (set only by create_event_series).
+      // told about), seriesId (set only by create_event_series) and planId and planSegmentId (set only by plan_action).
       match /events/{e} {
         allow read: if isMember(t);
         allow create: if isLeader(t) && !request.resource.data.keys().hasAny(serverOwned()) && okSettings(request.resource.data);
@@ -332,7 +335,8 @@ service cloud.firestore {
             && v.get('serviceHours', 0) is number && v.get('serviceHours', 0) >= 0 && v.get('serviceHours', 0) <= 1000;
         }
         function serverOwned() {
-          return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor', 'alertedFor', 'seriesId'];
+          return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor', 'alertedFor', 'seriesId', 'planId',
+            'planSegmentId'];
         }
 
         // Sign-ups: written only by the sign_up_for_event, cancel_signup, approve_permission and import_rsvps
@@ -581,6 +585,77 @@ service cloud.firestore {
       // every account see every payment. The troop's Stripe connection is on the troop document under `payments`.
       match /payments/{p} {
         allow read: if canSeeAccount(t, resource.data.scoutId);
+        allow write: if false;
+      }
+      // Event plans: a trip from research to a shortlist, a decision and a plan, before it becomes an event. Only the
+      // plan_action function writes a plan and its milestones, acknowledgements and adult-only panel. Planners, the
+      // plan's trip lead and the treasurer read them; clients list with where('tripLeadUid', '==', uid) if they are
+      // not planners or the treasurer. Plans never hold Scout data. The Scout quartermaster role reads nothing here.
+      match /eventPlans/{p} {
+        function plan() { return get(/databases/$(database)/documents/troops/$(t)/eventPlans/$(p)).data; }
+        function canEditPlan() { return canPlan(t) || (isMember(t) && plan().get('tripLeadUid', null) == request.auth.uid); }
+        function canReadPlan() { return canEditPlan() || hasRole(t, 'treasurer'); }
+
+        allow read: if canPlan(t) || hasRole(t, 'treasurer')
+          || (isMember(t) && resource.data.get('tripLeadUid', null) == request.auth.uid);
+        allow write: if false;
+
+        // Research cards, which planners and the trip lead write directly. Availability is a status a person sets,
+        // stamped with who set it and the server's time whenever it changes.
+        match /options/{o} {
+          allow read: if canReadPlan();
+          allow create: if canEditPlan() && validOption(request.resource.data)
+            && request.resource.data.createdByMemberId == access(t).memberId
+            && request.resource.data.createdAt == request.time
+            && freshAvailability(request.resource.data.availability);
+          allow update: if canEditPlan() && validOption(request.resource.data)
+            && request.resource.data.createdByMemberId == resource.data.createdByMemberId
+            && request.resource.data.createdAt == resource.data.createdAt
+            && (request.resource.data.availability == resource.data.availability
+                || freshAvailability(request.resource.data.availability));
+          allow delete: if canEditPlan();
+        }
+        match /milestones/{m} {
+          allow read: if canReadPlan();
+          allow write: if false;
+        }
+        match /acks/{a} {
+          allow read: if canReadPlan();
+          allow write: if false;
+        }
+        // Contacts, confirmation numbers and helpers who aren't members. Read only when the panel is opened.
+        match /private/{d} {
+          allow read: if canReadPlan();
+          allow write: if false;
+        }
+
+        function optText(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+        function optInt(d, k, max) { return !(k in d) || d[k] == null || (d[k] is int && d[k] >= 0 && d[k] <= max); }
+        function validOption(d) {
+          return d.keys().hasOnly(['name', 'type', 'links', 'costCents', 'driveMinutes', 'capacity', 'bookingOpens',
+              'availability', 'pros', 'cons', 'notes', 'pinned', 'createdByMemberId', 'createdAt'])
+            && d.keys().hasAll(['name', 'availability', 'pinned', 'createdByMemberId', 'createdAt'])
+            && d.name is string && d.name.size() > 0 && d.name.size() <= 120
+            && optText(d, 'type', 40) && optText(d, 'pros', 1000) && optText(d, 'cons', 1000) && optText(d, 'notes', 1000)
+            && (!('links' in d) || (d.links is list && d.links.size() <= 5))
+            && optInt(d, 'costCents', 10000000) && optInt(d, 'driveMinutes', 1440) && optInt(d, 'capacity', 10000)
+            && (!('bookingOpens' in d) || d.bookingOpens == null || (d.bookingOpens is map
+                && d.bookingOpens.keys().hasOnly(['date', 'note'])
+                && (d.bookingOpens.get('date', null) == null
+                    || (d.bookingOpens.date is string && d.bookingOpens.date.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')))
+                && optText(d.bookingOpens, 'note', 200)))
+            && d.availability is map
+            && d.availability.state in ['unknown', 'contacted', 'available', 'held', 'booked', 'unavailable']
+            && d.pinned is bool;
+        }
+        function freshAvailability(a) {
+          return a.keys().hasOnly(['state', 'byMemberId', 'at', 'note'])
+            && a.byMemberId == access(t).memberId && a.at == request.time && optText(a, 'note', 200);
+        }
+      }
+      // What families see on a published plan's event page (notes and packing list). Written only by plan_action.
+      match /planSummaries/{p} {
+        allow read: if isMember(t);
         allow write: if false;
       }
     }
