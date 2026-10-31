@@ -47,7 +47,7 @@ export function TroopCalendar() {
       </PageHeader>
       <div className="tabs" role="group" aria-label="View">
         <button className="btn secondary small" type="button" aria-pressed={big} onClick={() => setBig(!big)}>
-          Big screen
+          List view
         </button>
       </div>
       <Legend />

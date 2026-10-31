@@ -27,10 +27,10 @@ test('the year at a glance shows booked and open weekends, and an open one start
   await leader.getByRole('button', { name: 'Add event' }).click();
   await expect(leader.getByRole('link', { name: 'Fall campout' })).toBeVisible();
 
-  // The year view, as a list for the big screen: the campout's weekend is booked, others are open.
+  // The year view as a list: the campout's weekend is booked, others are open.
   await leader.getByRole('link', { name: 'Year at a glance' }).click();
   await expect(leader.getByRole('heading', { name: 'Year at a glance' })).toBeVisible();
-  await leader.getByRole('button', { name: 'Big screen' }).click();
+  await leader.getByRole('button', { name: 'List view' }).click();
   const list = leader.locator('.cal-list');
   await expect(list.getByText(/Fall campout/).first()).toBeVisible();
   await expect(list.getByText('Booked').first()).toBeVisible();
