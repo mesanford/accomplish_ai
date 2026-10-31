@@ -272,6 +272,13 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
 .cal-day.holiday { text-decoration: underline; text-underline-offset: 3px; }
 .cal-holidays { list-style: none; margin: 6px 0 0; padding: 0; }
 .cal-row { border-left: 6px solid transparent; }
+/* Weekend rows line up in three columns (dates, status and events, action) whatever their text lengths. */
+.list > li.cal-row { display: grid; grid-template-columns: minmax(11em, 16em) minmax(0, 1fr) auto; justify-content: stretch; align-items: center; }
+.list > li.cal-row > :last-child:not(:nth-child(2)) { justify-self: end; }
+@media (max-width: 560px) {
+  .list > li.cal-row { grid-template-columns: minmax(0, 1fr); }
+  .list > li.cal-row > :last-child:not(:nth-child(2)) { justify-self: start; }
+}
 .cal-row.booked { border-left-color: var(--accent); }
 .cal-row.maybe { border-left: 6px dashed var(--warn-ink); }
 .cal-row.open { border-left: 6px dotted var(--line); }
