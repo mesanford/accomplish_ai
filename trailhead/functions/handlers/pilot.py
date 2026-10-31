@@ -5,11 +5,12 @@ from __future__ import annotations
 from datetime import datetime
 from html import escape
 
-from handlers.email_templates import PRIVACY_EMAIL, Email
+from handlers.email_templates import Email
 from handlers.membership import InvalidInput
 from handlers.recruiting import _EMAIL, Spam, _clean
 
 DAILY_CAP = 30
+PILOT_NOTICE_EMAIL = "marcus@msanford.com"  # who hears about new pilot requests
 ROLES = ("Scoutmaster", "Advancement chair", "Other leader or committee member", "Parent or guardian", "Other")
 
 
@@ -48,4 +49,4 @@ def operator_notice(request: dict) -> Email:
     return Email("New Forthright pilot request", text, html)
 
 
-__all__ = ["DAILY_CAP", "PRIVACY_EMAIL", "ROLES", "new_pilot_request", "operator_notice", "usage_key"]
+__all__ = ["DAILY_CAP", "PILOT_NOTICE_EMAIL", "ROLES", "new_pilot_request", "operator_notice", "usage_key"]

@@ -41,7 +41,7 @@ def test_a_valid_request_is_stored_and_the_operator_is_told():
     assert (doc["name"], doc["unit"], doc["role"], doc["status"]) == ("Pat Leader", "303", "Scoutmaster", "new")
     assert doc["note"] == "We have 20 Scouts."
     (mail,) = [m for m in list_docs("emailOutbox") if m["template"] == "pilot_request"]
-    assert mail["to"] == "privacy@msanford.com"
+    assert mail["to"] == "marcus@msanford.com"
     assert "We have 20 Scouts." not in mail["text"]
 
 
