@@ -46,6 +46,9 @@ service cloud.firestore {
     // Troop gear: the quartermaster (an adult, or a Scout 13 or older) and the leaders manage the inventory. The
     // quartermaster role grants nothing else.
     function canManageGear(t) { return isLeader(t) || hasRole(t, 'quartermaster'); }
+    // Event planning: leaders and committee members plan trips. Checked from the access doc on every request, so
+    // losing the role ends access straight away. A plan's trip lead and the treasurer are checked per plan.
+    function canPlan(t) { return isLeader(t) || hasRole(t, 'committee'); }
     function yptCurrent(t) { return access(t).yptExpiresAt > request.time; }
     // Health form dates (BSA Annual Health and Medical Record), never medical details. A person, a Scout's linked
     // parent and leaders read them; only the record_health_form function writes them (it stamps who and when).
@@ -68,6 +71,29 @@ service cloud.firestore {
     match /awards/{awardId} {
       allow read: if signedIn();
       allow write: if isAdmin();
+    }
+    // The place catalog (campgrounds, state parks, high adventure bases) from public sources, and when it was
+    // last refreshed. Anyone signed in reads them; only the refresh_places job writes them.
+    match /places/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /catalogMeta/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    // Council calendar feeds, shared by council (councilFeeds) and their upcoming events (councilEvents). Anyone
+    // signed in reads them; only set_council_calendar and refresh_council_calendars write them.
+    match /councilFeeds/{key} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /councilEvents/{key} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /placeRuns/{id} {
+      allow read, write: if false;
     }
     match /pathTemplates/{id} {
       allow read: if signedIn();
@@ -306,7 +332,7 @@ service cloud.firestore {
       // Events. A leader writes the details and the sign-up settings (the `signups` map, feeCents, startTime, endTime,
       // endDate) and may cancel one (`cancelled`, with an optional short `cancelNote` that goes in the email). The
       // server owns signupCounts, feesPending, feesPosted, reminderSentFor, alertedFor (the details families were last
-      // told about) and seriesId (set only by create_event_series).
+      // told about), seriesId (set only by create_event_series) and planId and planSegmentId (set only by plan_action).
       match /events/{e} {
         allow read: if isMember(t);
         allow create: if isLeader(t) && !request.resource.data.keys().hasAny(serverOwned()) && okSettings(request.resource.data);
@@ -332,7 +358,8 @@ service cloud.firestore {
             && v.get('serviceHours', 0) is number && v.get('serviceHours', 0) >= 0 && v.get('serviceHours', 0) <= 1000;
         }
         function serverOwned() {
-          return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor', 'alertedFor', 'seriesId'];
+          return ['signupCounts', 'feesPending', 'feesPosted', 'reminderSentFor', 'alertedFor', 'seriesId', 'planId',
+            'planSegmentId'];
         }
 
         // Sign-ups: written only by the sign_up_for_event, cancel_signup, approve_permission and import_rsvps
@@ -581,6 +608,48 @@ service cloud.firestore {
       // every account see every payment. The troop's Stripe connection is on the troop document under `payments`.
       match /payments/{p} {
         allow read: if canSeeAccount(t, resource.data.scoutId);
+        allow write: if false;
+      }
+      // Event plans: a trip from research to a shortlist, a decision and a plan, before it becomes an event. Only the
+      // plan_action function writes a plan and everything under it, including research cards, so roles, consent
+      // and stamps are applied the same way for everyone. Planners, the plan's trip lead, the treasurer and Scouts
+      // who sign in (planning is Scout-led) read plans; clients list with where('tripLeadUid', '==', uid) if they
+      // are none of those. The adult-only panel (contacts, helpers) is never shown to Scouts.
+      match /eventPlans/{p} {
+        function plan() { return get(/databases/$(database)/documents/troops/$(t)/eventPlans/$(p)).data; }
+        function canEditPlan() { return canPlan(t) || (isMember(t) && plan().get('tripLeadUid', null) == request.auth.uid); }
+        function canReadAdultPanel() { return canEditPlan() || hasRole(t, 'treasurer'); }
+        function canReadPlan() { return canReadAdultPanel() || hasRole(t, 'scout'); }
+
+        allow read: if canPlan(t) || hasRole(t, 'treasurer') || hasRole(t, 'scout')
+          || (isMember(t) && resource.data.get('tripLeadUid', null) == request.auth.uid);
+        allow write: if false;
+
+        match /options/{o} {
+          allow read: if canReadPlan();
+          allow write: if false;
+        }
+        match /milestones/{m} {
+          allow read: if canReadPlan();
+          allow write: if false;
+        }
+        match /acks/{a} {
+          allow read: if canReadPlan();
+          allow write: if false;
+        }
+        // Contacts, confirmation numbers and helpers who aren't members. Read only when the panel is opened.
+        match /private/{d} {
+          allow read: if canReadAdultPanel();
+          allow write: if false;
+        }
+      }
+      // Where the troop's meeting place is, for drive time estimates. Only estimate_drive_time reads or writes it.
+      match /planning/{d} {
+        allow read, write: if false;
+      }
+      // What families see on a published plan's event page (notes and packing list). Written only by plan_action.
+      match /planSummaries/{p} {
+        allow read: if isMember(t);
         allow write: if false;
       }
     }

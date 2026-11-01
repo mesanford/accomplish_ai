@@ -12,6 +12,7 @@ from endpoints.equipment_erase import holder_ops
 from endpoints.erase import commit, delete_op, update_op
 from endpoints.feeds import cleanup_ops as feed_cleanup_ops
 from endpoints.ledger_retention import forget_author_ops
+from endpoints.plans_shared import plan_erase_ops
 from fb import db, fail, require_uid, troop
 from handlers.account import is_last_leader, last_leader_message, plan_contacts
 from handlers.removal import plan_threads, usage_ids
@@ -48,6 +49,7 @@ def _adult_ops(t, uid: str, member_id: str) -> list:
     # Health form dates and the record of which Youth Protection reminders were sent.
     ops += [delete_op(t.collection(c).document(member_id)) for c in ("healthForms", "yptReminders")]
     ops += holder_ops(t, member_id, "adult")  # gear loans and requests keep only "Former member"
+    ops += plan_erase_ops(t, member_id)
 
     name = (t.collection("members").document(member_id).get().to_dict() or {}).get("displayName", "")
     draft_ref = t.collection("site").document("draft")

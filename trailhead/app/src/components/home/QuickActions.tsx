@@ -11,6 +11,7 @@ export function QuickActions() {
     counselor: has('counselor'),
     parent: has('parent') && (access?.scoutIds ?? []).length > 0,
     accounts: has('treasurer', 'scoutmaster', 'advancement'),
+    scout: has('scout'),
   });
   return (
     <section className="stack" aria-label="What do you want to do?">

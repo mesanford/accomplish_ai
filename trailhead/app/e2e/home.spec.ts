@@ -21,7 +21,7 @@ test('the home screen offers what each person can do and shows what is happening
 
   // A leader's choices, and an empty summary.
   const actions = leader.getByRole('region', { name: 'What do you want to do?' });
-  for (const name of ['Plan an event', 'Send a message to the troop', 'Manage Scouts and families', 'Troop settings']) {
+  for (const name of ['Plan a trip or event', 'Send a message to the troop', 'Manage Scouts and families', 'Troop settings']) {
     await expect(actions.getByText(name, { exact: true })).toBeVisible();
   }
   const happening = leader.getByRole('region', { name: "What's happening" });

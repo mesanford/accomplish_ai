@@ -10,6 +10,7 @@ from firebase_functions import https_fn
 from endpoints.equipment_erase import holder_ops
 from endpoints.erase import commit, delete_files, delete_folder, delete_op, update_op
 from endpoints.ledger_retention import close_scout_account
+from endpoints.plans_shared import plan_erase_ops
 from endpoints.site_consent import _take_down_photos as take_down_photos
 from fb import db, fail, require_leader, troop
 from handlers.patrols import plan_erase
@@ -55,6 +56,7 @@ def _plan_ops(t, scout_id: str, scout_uid: str | None) -> tuple[list, list[str],
     ops += [delete_op(ref) for ref in _per_event_refs(t, scout_id)]
     ops += [delete_op(t.collection(name).document(scout_id)) for name in KEYED_BY_ID]
     ops += holder_ops(t, scout_id, "scout")  # gear loans and requests keep only "Former Scout"
+    ops += plan_erase_ops(t, scout_id)  # their name comes off plans: cards, likes, decisions
 
     access = plan_access(scout_id, _docs(t.collection("access")))
     for uid in access.delete_uids:

@@ -40,10 +40,12 @@ from endpoints.consent_requests import (
     sync_consent_holds,
 )
 from endpoints.consent_review import review_consent_notice, send_consent_reminders
+from endpoints.council_calendar import refresh_council_calendars, set_council_calendar
 from endpoints.custom_awards import archive_custom_award, move_to_custom_version, save_custom_award
 from endpoints.digest import send_weekly_digest
 from endpoints.domains import add_domain, check_domain, remove_domain
 from endpoints.domains_sync import sync_domains
+from endpoints.drive_time import estimate_drive_time
 from endpoints.entries import record_payment, reverse_entry, settle_account
 from endpoints.equipment import check_in_item, check_out_item, decide_request, request_item
 from endpoints.equipment_photo import on_inventory_deleted, set_item_photo
@@ -63,6 +65,9 @@ from endpoints.patrols import assign_patrol, delete_patrol, save_patrol
 from endpoints.payments import connect_stripe, disconnect_stripe, payments_status
 from endpoints.permission import approve_permission, record_paper_permission
 from endpoints.pilot import request_pilot
+from endpoints.places_find import find_places
+from endpoints.places_job import refresh_places
+from endpoints.plans import plan_action
 from endpoints.prior import record_prior_advancement
 from endpoints.push import register_push_device, remove_push_device
 from endpoints.quartermaster import set_scout_quartermaster
@@ -155,6 +160,12 @@ __all__ = [
     "remove_scout",
     "request_item",
     "request_pilot",
+    "plan_action",
+    "set_council_calendar",
+    "refresh_council_calendars",
+    "find_places",
+    "refresh_places",
+    "estimate_drive_time",
     "reset_calendar_feed",
     "save_custom_award",
     "send_event_reminders",

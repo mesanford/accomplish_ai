@@ -19,7 +19,10 @@ pytestmark = pytest.mark.skipif(
 )
 TID = "tn"
 T = f"troops/{TID}"
-NOW = datetime(2026, 10, 14, 12, tzinfo=UTC)  # a Wednesday; 07:00 in US Central
+# The next Wednesday at 12:00 UTC (early morning in US Central), never in the past: set_my_ypt checks dates against the
+# server's real clock, so a fixed date here started failing once it went by.
+_WED = datetime.now(UTC).date() + timedelta(days=(2 - datetime.now(UTC).weekday()) % 7)
+NOW = datetime(_WED.year, _WED.month, _WED.day, 12, tzinfo=UTC)
 
 
 def ypt(days_from_today: int) -> datetime:
@@ -127,7 +130,7 @@ def test_the_scoutmaster_gets_a_weekly_list_once_a_week(run):
         assert name in mail["text"]
     assert "Fine Person" not in mail["text"] and "Mom Person" not in mail["text"]
     assert "Ava" not in mail["text"] and "Sam" not in mail["text"]
-    assert read(f"{T}/yptReminders/_weekly")["weekOf"] == "2026-10-12"
+    assert read(f"{T}/yptReminders/_weekly")["weekOf"] == (NOW - timedelta(days=2)).date().isoformat()  # its Monday
     run(NOW + timedelta(days=5))  # the next Monday
     assert len([m for m in list_docs("emailOutbox") if m["template"] == "ypt_weekly"]) == 2
 
@@ -264,7 +267,9 @@ def test_an_adult_enters_their_own_date_on_the_member_and_the_access_record():
 
 def test_dates_in_the_past_or_over_three_years_away_are_refused_and_scouts_and_strangers_cannot():
     before = read(f"{T}/members/m-seven")
-    assert own_date("seven", -1).status_code == 400
+    # Past by the server's clock, which judges "today" in US Central time, so two days back, not one.
+    past = (datetime.now(UTC) - timedelta(days=2)).date().isoformat()
+    assert call("set_my_ypt", "seven", {"troopId": TID, "yptExpiresAt": past}).status_code == 400
     assert own_date("seven", 365 * 3 + 30).status_code == 400
     assert call("set_my_ypt", "seven", {"troopId": TID, "yptExpiresAt": "soon"}).status_code == 400
     assert read(f"{T}/members/m-seven") == before

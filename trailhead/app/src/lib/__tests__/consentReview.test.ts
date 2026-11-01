@@ -98,11 +98,13 @@ describe('the changelog', () => {
     expect(changesSince('2026-10-16.1')).toEqual([
       ...CONSENT_CHANGELOG['2026-10-17.1'],
       ...CONSENT_CHANGELOG['2026-10-18.1'],
+      ...CONSENT_CHANGELOG['2026-10-31.1'],
     ]);
     expect(changesSince('2026-10-15.3')).toEqual([
       ...CONSENT_CHANGELOG['2026-10-16.1'],
       ...CONSENT_CHANGELOG['2026-10-17.1'],
       ...CONSENT_CHANGELOG['2026-10-18.1'],
+      ...CONSENT_CHANGELOG['2026-10-31.1'],
     ]);
   });
 

@@ -10,7 +10,7 @@ from firebase_functions import https_fn
 from endpoints.mailer import send_all
 from fb import db, fail
 from handlers.membership import InvalidInput
-from handlers.pilot import DAILY_CAP, PRIVACY_EMAIL, new_pilot_request, operator_notice, usage_key
+from handlers.pilot import DAILY_CAP, PILOT_NOTICE_EMAIL, new_pilot_request, operator_notice, usage_key
 from handlers.recruiting import Spam
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
@@ -46,5 +46,5 @@ def request_pilot(req: https_fn.CallableRequest) -> dict:
             "We have had a lot of requests today. Please try again tomorrow.",
         )
     # Telling the operator is best effort: send_all never raises, and the request is already saved.
-    send_all("pilot_request", [PRIVACY_EMAIL], operator_notice(request))
+    send_all("pilot_request", [PILOT_NOTICE_EMAIL], operator_notice(request))
     return SUCCESS

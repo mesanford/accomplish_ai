@@ -42,6 +42,8 @@ batch_size=${TEST_BATCH_SIZE:-4}
 # never calls either service (the emulator always logs email instead of sending), so stand-ins will do.
 [[ -f functions/.secret.local ]] || echo "ANTHROPIC_API_KEY=emulator-never-calls-anthropic" > functions/.secret.local
 grep -q '^RESEND_API_KEY=' functions/.secret.local || echo "RESEND_API_KEY=emulator-never-calls-resend" >> functions/.secret.local
+# Drive time estimates (OpenRouteService): estimate_drive_time refuses to call it on the emulator.
+grep -q '^ORS_API_KEY=' functions/.secret.local || echo "ORS_API_KEY=emulator-never-calls-openrouteservice" >> functions/.secret.local
 # Card payments: the emulator only ever talks to the fake Stripe server the tests start (see tests/integration/fake_stripe.py).
 # The webhook secret stand-in is the one tests sign fake deliveries with.
 grep -q '^STRIPE_SECRET_KEY=' functions/.secret.local || echo "STRIPE_SECRET_KEY=sk_test_emulator-never-calls-stripe" >> functions/.secret.local

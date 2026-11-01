@@ -11,19 +11,43 @@ import { awardName } from '../lib/catalog';
 import { clockText } from '../lib/eventChanges';
 import { db } from '../lib/firebase';
 import { useQuery } from '../lib/hooks';
+import { holidayOn, longWeekend } from '../lib/holidays';
 import { formatFee, spotsLine } from '../lib/eventSignups';
 import { plural } from '../lib/plural';
+import { usePlanAccess } from '../lib/planAccess';
 import { useTroop } from '../lib/troop';
 import type { TroopEvent } from '../lib/types';
 
+function holidayText(iso: string): string {
+  const day = holidayOn(iso);
+  if (day) {
+    return ` · ${day.name}`;
+  }
+  const weekend = longWeekend(iso);
+  return weekend ? ` · ${weekend}` : '';
+}
+
 export function Events() {
   const { troopId, isLeader } = useTroop();
+  const { planner, scout } = usePlanAccess();
   const q = useMemo(() => query(collection(db, `troops/${troopId}/events`), orderBy('start', 'desc')), [troopId]);
   const events = useQuery<TroopEvent>(q, `${troopId}/events`);
   return (
     <>
       <PageHeader eyebrow="Troop" title="Events" />
       <FeedLink />
+      <p>
+        <Link className="btn secondary small" to={`/t/${troopId}/events/calendar`}>
+          Year at a glance
+        </Link>
+      </p>
+      {planner || scout ? (
+        <p>
+          <Link className="btn secondary small" to={`/t/${troopId}/events/plans`}>
+            Plan a trip
+          </Link>
+        </p>
+      ) : null}
       {isLeader ? (
         <GuideBlock
           id="events"
@@ -55,6 +79,7 @@ export function Events() {
                   {ev.cancelled ? <span className="pill bad">Cancelled</span> : null}
                   {ev.cancelled ? ' ' : ''}
                   {formatDate(ev.start)}
+                  {holidayText(ev.start)}
                   {ev.startTime ? ` · ${clockText(ev.startTime)}` : ''}
                   {ev.place ? ` · ${ev.place}` : ''}
                   {ev.public ? ' · On the troop website' : ''}

@@ -5,6 +5,7 @@ from datetime import date
 
 import pytest
 
+from handlers.consent import CONSENT_NOTICE_VERSION
 from tests.integration.test_functions import call, owner, wait_for
 from tests.rules.emulator import Client, read, reset
 
@@ -31,7 +32,7 @@ def new_troop(number: str) -> str:
     return ok(call("create_troop", "lead", form))["troopId"]
 
 
-NOTICE = "2026-10-18.1"
+NOTICE = CONSENT_NOTICE_VERSION
 AGREE = {"consent": True, "consentVersion": NOTICE}
 
 

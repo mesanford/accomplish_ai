@@ -1,3 +1,4 @@
+import { CouncilCalendar } from '../components/settings/CouncilCalendar';
 import { Leadership } from '../components/settings/Leadership';
 import { TroopDetailsForm } from '../components/settings/TroopDetailsForm';
 import { NoAccess } from '../components/NoAccess';
@@ -23,6 +24,10 @@ export function TroopSettings() {
       <section className="card stack" aria-label="Troop details">
         <h2>Troop details</h2>
         <TroopDetailsForm key={key} saved={saved} />
+      </section>
+      <section className="card stack" aria-label="Council calendar">
+        <h2>Council calendar</h2>
+        <CouncilCalendar />
       </section>
       <section className="card stack" aria-label="Leadership">
         <h2>Leadership</h2>

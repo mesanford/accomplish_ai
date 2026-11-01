@@ -33,6 +33,11 @@ describe('homeActions', () => {
     expect(keys({ isLeader: true, canPost: true, counselor: true, accounts: true })).toHaveLength(8);
   });
 
+  it('invites a Scout to plan trips first', () => {
+    const scout = homeActions({ isLeader: false, canPost: false, counselor: false, parent: false, accounts: false, scout: true });
+    expect(scout.map((a) => a.key).slice(0, 2)).toEqual(['trip', 'signup']);
+  });
+
   it('always offers something', () => {
     expect(keys({})).toEqual(['signup', 'leader']);
   });

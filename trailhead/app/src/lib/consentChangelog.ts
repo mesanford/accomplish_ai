@@ -22,6 +22,9 @@ export const CONSENT_CHANGELOG: Record<string, string[]> = {
     'Scouts under 13: only a parent or guardian can give permission, by email sent to you. A leader cannot give it for you.',
     'When this notice changes, we email you and remind you weekly, up to four times, even if you turned off notification emails.',
   ],
+  '2026-10-31.1': [
+    "Trip planning: if your Scout is 13 or older and signs in, they can help plan troop trips. We keep the trip ideas they add, like or choose, with their name. The troop's leaders, committee, treasurer and other Scouts who sign in see them.",
+  ],
 };
 
 /**
@@ -36,6 +39,7 @@ export const DATA_KINDS_ADDED: Record<string, string> = {
   activity: '2026-10-17.1',
   equipment: '2026-10-17.1',
   healthForms: '2026-10-18.1',
+  planning: '2026-10-31.1',
 };
 
 export const DATA_KIND_WORDS: Record<string, string> = {
@@ -45,6 +49,7 @@ export const DATA_KIND_WORDS: Record<string, string> = {
   activity: 'activity log entries',
   equipment: 'equipment loans',
   healthForms: 'health form dates',
+  planning: 'trip planning ideas',
 };
 
 export const UPDATED_REASON = 'Waiting for a parent to agree to the updated notice.';

@@ -20,7 +20,7 @@ def consented(*versions: str) -> dict:
 
 
 def test_every_kind_was_added_by_a_version_that_exists_and_is_not_in_the_future():
-    assert set(DATA_KINDS) == {"accounts", "health", "patrols", "activity", "equipment", "healthForms"}
+    assert set(DATA_KINDS) == {"accounts", "health", "patrols", "activity", "equipment", "healthForms", "planning"}
     for added in DATA_KINDS.values():
         assert added <= CONSENT_NOTICE_VERSION
 
@@ -39,20 +39,23 @@ def test_a_parent_who_agreed_before_a_kind_was_added_blocks_that_kind():
         "health",
         "healthForms",
         "patrols",
+        "planning",
     ]
     assert blocked_kinds(consented("2026-10-16.1")) == [
         "activity",
         "equipment",
         "healthForms",
         "patrols",
+        "planning",
     ]  # accounts and health ok
-    assert blocked_kinds(consented("2026-10-17.1")) == ["healthForms"]
-    assert blocked_kinds(consented("2026-10-18.1")) == []
+    assert blocked_kinds(consented("2026-10-17.1")) == ["healthForms", "planning"]
+    assert blocked_kinds(consented("2026-10-18.1")) == ["planning"]
 
 
 def test_the_newest_parent_consent_counts_so_one_current_parent_lifts_the_block():
-    assert latest_parent_version(consented("2026-10-15.3", "2026-10-18.1")) == "2026-10-18.1"
-    assert blocked_kinds(consented("2026-10-15.3", "2026-10-18.1")) == []
+    current = CONSENT_NOTICE_VERSION
+    assert latest_parent_version(consented("2026-10-15.3", current)) == current
+    assert blocked_kinds(consented("2026-10-15.3", current)) == []
 
 
 def test_no_parent_consent_on_record_blocks_no_kind_here():

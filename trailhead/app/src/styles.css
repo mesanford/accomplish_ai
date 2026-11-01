@@ -52,6 +52,9 @@ a { color: var(--accent); }
 
 .stack { display: grid; gap: 12px; min-width: 0; }
 .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+/* Fields side by side line up at the top, so a hint under one doesn't push the other down. A row that also holds a
+   button (a field with its action) keeps the centering. */
+.row:has(> .field):not(:has(> button)) { align-items: flex-start; }
 .spread { justify-content: space-between; }
 .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); }
 .muted { color: var(--muted); }
@@ -226,3 +229,63 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
 
 /* "A new version is ready" notice from the service worker (see UpdateBanner). */
 .update-banner { position: fixed; z-index: 30; left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom, 0px)); max-width: 28rem; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: var(--ink); color: var(--bg); box-shadow: 0 4px 16px rgb(0 0 0 / 25%); }
+
+/* Event plans: the shortlist and the publish differences are tables that stack as cards on a phone. */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs .btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+@media (max-width: 640px) {
+  table.compare thead, table.stack-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.compare tr, table.stack-table tr { display: block; border-bottom: 2px solid var(--line); padding: 6px 0; }
+  table.compare th[scope="row"], table.compare td, table.stack-table td { display: block; border-bottom: 0; padding: 4px 12px; }
+  table.compare td::before, table.stack-table td::before { content: attr(data-label); display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+}
+@media print {
+  .packet h2 { break-after: avoid; }
+  .packet { font-size: 12pt; }
+}
+
+/* One question at a time on a plan's first step: big choices that work as radio buttons or checkboxes. */
+.choices { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); }
+.choice { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-weight: 600; cursor: pointer; }
+.choice input { width: auto; }
+.choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.choice:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* A plan's research guide: columns line up at the top (a grid row would otherwise stretch the heading's row). */
+.plan-guide-col { align-content: start; }
+.plan-guide-col ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+
+/* Year at a glance (TroopCalendar): status uses an icon, a word and a pattern, never colour alone. */
+.cal-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.cal-mark { font-weight: 600; white-space: nowrap; }
+.cal-mark.booked { color: var(--accent); }
+.cal-mark.maybe { color: var(--warn-ink); }
+.cal-months { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); }
+.cal-month h3 { margin: 0 0 6px; }
+.cal-cells { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.cal-head { font-size: 11px; color: var(--muted); text-decoration: none; }
+.cal-day { display: flex; flex-direction: column; align-items: center; min-height: 34px; padding: 2px 0; border: 1px solid transparent; border-radius: 6px; font-size: 13px; color: inherit; text-decoration: none; }
+.cal-icon { font-size: 11px; line-height: 1; }
+.cal-day.booked { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.cal-day.maybe { background: repeating-linear-gradient(135deg, var(--warn-fill) 0 4px, transparent 4px 8px); color: var(--warn-ink); border-color: var(--warn-ink); font-weight: 600; }
+.cal-day.open { border: 1px dashed var(--line); }
+.cal-day.holiday { text-decoration: underline; text-underline-offset: 3px; }
+.cal-holidays { list-style: none; margin: 6px 0 0; padding: 0; }
+.cal-row { border-left: 6px solid transparent; }
+/* Weekend rows line up in three columns (dates, status and events, action) whatever their text lengths. */
+.list > li.cal-row { display: grid; grid-template-columns: minmax(11em, 16em) minmax(0, 1fr) auto; justify-content: stretch; align-items: center; }
+.list > li.cal-row > :last-child:not(:nth-child(2)) { justify-self: end; }
+@media (max-width: 560px) {
+  .list > li.cal-row { grid-template-columns: minmax(0, 1fr); }
+  .list > li.cal-row > :last-child:not(:nth-child(2)) { justify-self: start; }
+}
+.cal-row.booked { border-left-color: var(--accent); }
+.cal-row.maybe { border-left: 6px dashed var(--warn-ink); }
+.cal-row.open { border-left: 6px dotted var(--line); }
+.cal-list { display: none; }
+.cal-big .cal-months { display: none; }
+.cal-big .cal-list { display: block; font-size: 1.25rem; }
+@media (max-width: 719px) {
+  .cal-months { display: none; }
+  .cal-list { display: block; }
+}

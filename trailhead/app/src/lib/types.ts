@@ -58,6 +58,8 @@ export interface Troop {
   accounts?: Partial<AccountSettings>;
   /** The troop's own Stripe account for card payments. Written only by the server. */
   payments?: TroopPayments;
+  /** The council's calendar feed (see councilEvents.ts). Written only by set_council_calendar. */
+  councilCalendar?: { url: string; key: string };
 }
 
 export interface Access {
@@ -231,6 +233,9 @@ export interface TroopEvent {
   cancelNote?: string;
   /** Written only by the server: one date of a repeating event (see eventSeries). */
   seriesId?: string;
+  /** Written only by the server: the event plan this event was published from (see plans.ts), and its segment. */
+  planId?: string;
+  planSegmentId?: string;
   /** Written only by the server. */
   signupCounts?: { held: number; going: number; waitingPermission: number; waitlist: number };
   feesPending?: { count: number; amountCents: number };

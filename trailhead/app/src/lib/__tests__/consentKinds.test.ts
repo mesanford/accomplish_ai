@@ -33,19 +33,21 @@ describe('which notice version added each kind of data', () => {
       'health',
       'healthForms',
       'patrols',
+      'planning',
     ]);
     expect(blockedKinds(doc('2026-10-16.1'))).toEqual([
       'activity',
       'equipment',
       'healthForms',
       'patrols',
+      'planning',
     ]);
     expect(blockedKinds(doc(CONSENT_NOTICE_VERSION))).toEqual([]);
   });
 
   it('lets one parent on the current notice lift the block for the Scout', () => {
     expect(latestParentVersion(doc('2026-10-15.3', '2026-10-17.1'))).toBe('2026-10-17.1');
-    expect(blockedKinds(doc('2026-10-15.3', '2026-10-17.1'))).toEqual(['healthForms']); // added in 2026-10-18.1
+    expect(blockedKinds(doc('2026-10-15.3', '2026-10-17.1'))).toEqual(['healthForms', 'planning']); // added in 2026-10-18.1 and 2026-10-31.1
   });
 
   it('holds nothing back when no parent consent is on record', () => {

@@ -5,6 +5,8 @@ import { EventLogFields } from '../components/activity/EventLogFields';
 import { EventEditor } from '../components/events/EventEditor';
 import { EventSettings } from '../components/events/EventSettings';
 import { FeesPanel } from '../components/events/FeesPanel';
+import { EventPlanLinks } from '../components/plans/EventPlanLinks';
+import { FamilyPanel } from '../components/plans/FamilyPanel';
 import { PersonSignup } from '../components/events/PersonSignup';
 import { RosterTools } from '../components/events/RosterTools';
 import { SeriesEditor } from '../components/events/SeriesEditor';
@@ -14,6 +16,7 @@ import { Empty, formatDate, Loading, Notice, PageHeader } from '../components/ui
 import { awardName } from '../lib/catalog';
 import { clockText } from '../lib/eventChanges';
 import { audienceAllows, AUDIENCE_LABELS, formatFee, spotsLine } from '../lib/eventSignups';
+import { holidayOn, longWeekend } from '../lib/holidays';
 import { NEED_LABELS } from '../lib/healthForm';
 import { db } from '../lib/firebase';
 import { useDoc } from '../lib/hooks';
@@ -30,6 +33,7 @@ function Details({ event, series }: { event: TroopEvent; series?: EventSeries | 
   const times = event.startTime
     ? ` · ${clockText(event.startTime)}${event.endTime ? ` to ${clockText(event.endTime)}` : ''}`
     : '';
+  const holiday = holidayOn(event.start)?.name ?? longWeekend(event.start);
   return (
     <ul className="stack small">
       {event.cancelled ? (
@@ -45,6 +49,7 @@ function Details({ event, series }: { event: TroopEvent; series?: EventSeries | 
         {times}
         {event.place ? ` · ${event.place}` : ''}
       </li>
+      {holiday ? <li>{holiday}</li> : null}
       {event.feeCents ? <li>Fee: {formatFee(event.feeCents)} per Scout</li> : null}
       {event.healthForm ? <li>Health form needed: {NEED_LABELS[event.healthForm]}</li> : null}
       {(event.linkedRequirements ?? []).map((r) => (
@@ -104,6 +109,8 @@ export function EventPage() {
         ) : null}
       </PageHeader>
       <Details event={event} series={series} />
+      {event.planId ? <EventPlanLinks troopId={troopId} planId={event.planId} /> : null}
+      {event.planId ? <FamilyPanel troopId={troopId} planId={event.planId} /> : null}
       {s?.enabled && !event.cancelled ? (
         <section className="stack" aria-label="Your sign-ups">
           <h2 className="blazed">Sign up</h2>
