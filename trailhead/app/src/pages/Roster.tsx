@@ -181,34 +181,40 @@ export function Roster() {
               }
               const paused = blockedKinds(consents.data.find((c) => c.id === s.id)).length > 0;
               return (
-                <li key={s.id}>
-                  <span>
-                    <Link to={`/t/${troopId}/scouts/${s.id}`}>{s.displayName}</Link>
-                    {rankOf(s.id) ? <span className="muted small"> · {rankOf(s.id)}</span> : null}
-                    {patrolOf(s.patrolId ?? '') ? (
-                      <span className="muted small">
-                        {' · '}
-                        <ColorSwatch color={patrolOf(s.patrolId ?? '')?.color} />{' '}
-                        {patrolOf(s.patrolId ?? '')?.name}
-                        {officeOf(s.id, patrolOf(s.patrolId ?? ''))
-                          ? ` (${officeOf(s.id, patrolOf(s.patrolId ?? ''))})`
-                          : ''}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="muted small">
-                    {parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}
-                  </span>
-                  <TipPill tone={consent.tone} tip={consent.tip}>
-                    {consent.text}
-                  </TipPill>
-                  <HealthPills form={healthForms.get(s.id)} />
-                  {stale.has(s.id) ? (
-                    <TipPill tone="warn" tip={paused ? PAUSED_TIP : REVIEW_TIP}>
-                      {paused ? UPDATED_REASON : "Parent hasn't reviewed the new notice"}
+                <li key={s.id} className="member-row">
+                  <div className="member-info">
+                    <span>
+                      <Link to={`/t/${troopId}/scouts/${s.id}`}>{s.displayName}</Link>
+                      {rankOf(s.id) ? <span className="muted small"> · {rankOf(s.id)}</span> : null}
+                      {patrolOf(s.patrolId ?? '') ? (
+                        <span className="muted small">
+                          {' · '}
+                          <ColorSwatch color={patrolOf(s.patrolId ?? '')?.color} />{' '}
+                          {patrolOf(s.patrolId ?? '')?.name}
+                          {officeOf(s.id, patrolOf(s.patrolId ?? ''))
+                            ? ` (${officeOf(s.id, patrolOf(s.patrolId ?? ''))})`
+                            : ''}
+                        </span>
+                      ) : null}
+                    </span>
+                    <span className="muted small">
+                      {parentLine(s.guardianIds ?? [], waitingFor(s.id), memberName)}
+                    </span>
+                  </div>
+                  <div className="member-status">
+                    <TipPill tone={consent.tone} tip={consent.tip}>
+                      {consent.text}
                     </TipPill>
-                  ) : null}
-                  <ScoutQuartermaster scout={s} />
+                    <HealthPills form={healthForms.get(s.id)} />
+                    {stale.has(s.id) ? (
+                      <TipPill tone="warn" tip={paused ? PAUSED_TIP : REVIEW_TIP}>
+                        {paused ? UPDATED_REASON : "Parent hasn't reviewed the new notice"}
+                      </TipPill>
+                    ) : null}
+                  </div>
+                  <div className="member-actions">
+                    <ScoutQuartermaster scout={s} />
+                  </div>
                 </li>
               );
             })}

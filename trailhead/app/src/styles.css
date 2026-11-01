@@ -289,3 +289,15 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
   .cal-months { display: none; }
   .cal-list { display: block; }
 }
+
+/* Roster rows: who they are, their status pills and their buttons in three columns that line up from row to row.
+   Opened panels (roles, health form dates) take the full width underneath. */
+.list > li.member-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, auto); justify-content: stretch; align-items: center; }
+.member-info { display: grid; gap: 2px; min-width: 0; }
+.member-status { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.member-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.list > li.member-row > .member-panel { grid-column: 1 / -1; }
+@media (max-width: 760px) {
+  .list > li.member-row { grid-template-columns: minmax(0, 1fr); }
+  .member-actions { justify-content: flex-start; }
+}
