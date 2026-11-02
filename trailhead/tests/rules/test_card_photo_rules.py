@@ -2,6 +2,8 @@
 
 import pytest
 
+from .conftest import FUTURE, T
+from .emulator import Client
 from .storage import Storage, reset_storage, storage_up
 
 OK, DENIED = 200, 403
@@ -66,3 +68,13 @@ def test_card_files_must_be_images_or_pdfs_under_10_mb():
     assert leader.upload("cards/t1/s1/s1_archery/page.html", b"<script>", "text/html") == DENIED
     assert leader.upload("cards/t1/s1/s1_archery/huge.png", b"\0" * (10 * 1024 * 1024 + 1)) == DENIED
     assert leader.upload("cards/t1/s1/s1_archery/big.jpg", b"\0" * (9 * 1024 * 1024), "image/jpeg") == OK
+
+
+def test_a_parent_waiting_to_agree_to_the_consent_notice_cannot_read_card_photos():
+    """As in Firestore: a linked parent acts for the Scout only once they agree."""
+    assert Storage("owner").upload(PHOTO) == OK
+    waiting = {"memberId": "m-parent", "roles": ["parent"], "scoutIds": ["s1"], "consentPendingScoutIds": ["s1"]}
+    Client("owner").set(f"{T}/access/parent", {**waiting, "yptExpiresAt": FUTURE})
+    assert Storage("parent").download(PHOTO) == DENIED
+    Client("owner").set(f"{T}/access/parent", {**waiting, "consentPendingScoutIds": [], "yptExpiresAt": FUTURE})
+    assert Storage("parent").download(PHOTO) == OK

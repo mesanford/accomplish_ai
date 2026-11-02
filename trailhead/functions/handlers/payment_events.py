@@ -82,7 +82,9 @@ def read_event(event: dict) -> Action:
             "chargesEnabled": obj.get("charges_enabled") is True,
             "detailsSubmitted": obj.get("details_submitted") is True,
         }
-        return Action("account", account=obj.get("id") or event.get("account"), details=fields)
+        return Action(
+            "account", account=obj.get("id") or event.get("account"), livemode=base["livemode"], details=fields
+        )
     if kind == "account.application.deauthorized":
         return Action("deauthorized", **base)
     return Action("ignore", **base)

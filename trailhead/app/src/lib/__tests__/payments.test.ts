@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { dashboardUrl, feeFor, grossUp, isStripeUrl, type PaymentRecord, statusLabel, stripeFee } from '../payments';
+import {
+  dashboardUrl,
+  feeFor,
+  grossUp,
+  isStripeUrl,
+  type PaymentRecord,
+  reviewRefundNote,
+  statusLabel,
+  stripeFee,
+} from '../payments';
 import { PAYMENTS_HEADER, paymentsCsv } from '../paymentsCsv';
 
 describe('card fee preview', () => {
@@ -45,6 +54,15 @@ describe('statusLabel and dashboardUrl', () => {
       'Refunded, disputed (the money went back to the family)',
     );
     expect(statusLabel({ status: 'paid', dispute: { status: 'something_new' } })).toBe('Paid, disputed (something new)');
+  });
+
+  it('warns the treasurer when a payment waiting for review was refunded', () => {
+    expect(reviewRefundNote({ status: 'review', refundedCents: 3500 })).toBe(
+      "$35.00 refunded in Stripe. It was never on the account, so don't credit it.",
+    );
+    expect(reviewRefundNote({ status: 'review' })).toBeNull();
+    expect(reviewRefundNote({ status: 'review', refundedCents: 0 })).toBeNull();
+    expect(reviewRefundNote({ status: 'refunded', refundedCents: 3500 })).toBeNull(); // its reversal was posted
   });
 
   it("links to the payment in the troop's own dashboard", () => {

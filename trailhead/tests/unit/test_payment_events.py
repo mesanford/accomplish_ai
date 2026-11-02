@@ -83,6 +83,8 @@ def test_account_events():
     a = read_event(event("account.updated", {"id": ACCT, "charges_enabled": True, "details_submitted": True}))
     assert a.kind == "account" and a.account == ACCT and a.details == {"chargesEnabled": True, "detailsSubmitted": True}
     assert read_event(event("account.application.deauthorized", {"id": "ca_1"})).kind == "deauthorized"
+    live = event("account.updated", {"id": ACCT}, livemode=True)
+    assert read_event(live).livemode is True  # sync_account compares it with the troop's mode
 
 
 def test_anything_else_is_ignored():
