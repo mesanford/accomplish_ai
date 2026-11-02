@@ -2,7 +2,16 @@ from datetime import UTC, date, datetime, timedelta
 
 import pytest
 
-from handlers.membership import InvalidInput, check_invite, new_invite, new_scout, new_troop, parse_ypt, under_13
+from handlers.membership import (
+    CREATOR_ROLES,
+    InvalidInput,
+    check_invite,
+    new_invite,
+    new_scout,
+    new_troop,
+    parse_ypt,
+    under_13,
+)
 
 TODAY = date(2026, 10, 13)
 NOW = datetime(2026, 10, 13, 12, tzinfo=UTC)
@@ -27,7 +36,11 @@ def test_new_troop_needs_name_number_and_training():
         ("scoutmaster", ["leader", "scoutmaster"]),
         ("leader", ["leader"]),
         ("advancement", ["leader", "advancement"]),
+        ("registered_leader", ["leader"]),
         ("committee_chair", ["leader", "committee"]),
+        ("committee_secretary", ["leader", "committee"]),
+        ("committee_member", ["leader", "committee"]),
+        ("parent", ["leader", "parent"]),
     ],
 )
 def test_creator_gets_the_role_they_pick_and_always_the_ability_to_assign_roles(choice, roles):
@@ -47,7 +60,7 @@ def test_creator_role_must_be_one_of_the_choices():
 
 def test_every_creator_choice_needs_training_because_each_includes_leader():
     data = {"name": "Troop 101", "unitNumber": "101", "displayName": "Pat", "yptExpiresAt": ""}
-    for choice in ("scoutmaster", "leader", "advancement", "committee_chair"):
+    for choice in CREATOR_ROLES:
         with pytest.raises(InvalidInput, match="Youth Protection"):
             new_troop({**data, "creatorRole": choice}, "u1", TODAY)
 
@@ -109,3 +122,11 @@ def test_scout_logins_fail_closed_without_a_birth_month_and_year():
     assert "birth month and year" in scout_login_blocker({"birthYear": 2012}, today)
     assert "under 13" in scout_login_blocker({"birthYear": 2014, "birthMonth": 1}, today)
     assert scout_login_blocker({"birthYear": 2012, "birthMonth": 5}, today) is None
+
+
+def test_new_troop_keeps_the_council_and_district():
+    data = {"name": "Troop 101", "unitNumber": "101", "displayName": "Pat", "yptExpiresAt": "2027-05-01"}
+    troop, _ = new_troop({**data, "council": " Pathway to Adventure ", "district": " Sangamon "}, "u1", TODAY)
+    assert troop["council"] == "Pathway to Adventure" and troop["district"] == "Sangamon"
+    troop, _ = new_troop(data, "u1", TODAY)
+    assert troop["district"] == ""

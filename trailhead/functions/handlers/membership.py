@@ -28,7 +28,11 @@ CREATOR_ROLES = {
     "scoutmaster": ["leader", "scoutmaster"],
     "leader": ["leader"],
     "advancement": ["leader", "advancement"],
+    "registered_leader": ["leader"],
     "committee_chair": ["leader", "committee"],
+    "committee_secretary": ["leader", "committee"],
+    "committee_member": ["leader", "committee"],
+    "parent": ["leader", "parent"],
 }
 DEFAULT_CREATOR_ROLE = "scoutmaster"
 
@@ -68,12 +72,13 @@ def new_troop(data: dict, uid: str, today: date) -> tuple[dict, dict]:
         "name": _text(data, "name", "Troop name"),
         "unitNumber": _text(data, "unitNumber", "Unit number", 10),
         "council": (data.get("council") or "").strip()[:80],
+        "district": (data.get("district") or "").strip()[:80],
         "timezone": known_zone(data.get("timezone")) or DEFAULT_ZONE,
         "createdBy": uid,
     }
     choice = data.get("creatorRole") or DEFAULT_CREATOR_ROLE
     if choice not in CREATOR_ROLES:
-        raise InvalidInput("Pick your role: Scoutmaster, leader, advancement chair or committee chair.")
+        raise InvalidInput("Pick your role in the troop from the list.")
     member = adult_member(data, uid, list(CREATOR_ROLES[choice]), today)
     return troop, member
 

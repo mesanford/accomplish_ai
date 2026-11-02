@@ -39,6 +39,7 @@ export interface MeetingPlace {
 /** Key positions that are not app roles, as adult member ids. */
 export interface TroopPositions {
   committeeChair: string | null;
+  committeeSecretary: string | null;
   charterRep: string | null;
 }
 

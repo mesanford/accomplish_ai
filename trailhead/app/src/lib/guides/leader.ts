@@ -24,7 +24,7 @@ export const LEADER_GUIDE: RoleGuide = {
   tasks: [
     {
       task: 'Set up the troop',
-      steps: ['When you create the troop, pick your role: Scoutmaster, leader, advancement chair or committee chair. Each gives you the leader role, so you can give out roles.', 'Open Roster.', 'Add each Scout with their birth month, year and current rank.', 'Invite parents with an invite link.', 'Use Events to add your next meeting or campout.'],
+      steps: ['When you create the troop, pick your role, such as Scoutmaster, committee chair or parent. Each gives you the leader role, so you can give out roles.', 'Open Roster.', 'Add each Scout with their birth month, year and current rank.', 'Invite parents with an invite link.', 'Use Events to add your next meeting or campout.'],
     },
     {
       task: 'Invite a parent or counselor',

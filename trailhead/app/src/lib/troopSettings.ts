@@ -16,7 +16,11 @@ export function settingsFrom(troopId: string, troop: Troop | null): TroopSetting
     charterOrg: troop?.charterOrg ?? '',
     meetingPlace: { ...EMPTY_PLACE, ...troop?.meetingPlace },
     timezone: troop?.timezone || DEFAULT_ZONE,
-    positions: { committeeChair: troop?.positions?.committeeChair ?? null, charterRep: troop?.positions?.charterRep ?? null },
+    positions: {
+      committeeChair: troop?.positions?.committeeChair ?? null,
+      committeeSecretary: troop?.positions?.committeeSecretary ?? null,
+      charterRep: troop?.positions?.charterRep ?? null,
+    },
   };
 }
 

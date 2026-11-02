@@ -15,6 +15,8 @@ export interface TroopForm {
   name: string;
   unitNumber: string;
   council: string;
+  /** Optional; also editable in Troop settings. */
+  district?: string;
   displayName: string;
   yptExpiresAt: string;
   /** The creator's role. Leave out for Scoutmaster. */

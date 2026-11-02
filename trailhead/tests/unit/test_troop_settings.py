@@ -23,7 +23,7 @@ GOOD = {
         "zip": "62701",
     },
     "timezone": "America/Los_Angeles",
-    "positions": {"committeeChair": "m-chair", "charterRep": ""},
+    "positions": {"committeeChair": "m-chair", "committeeSecretary": "m-chair", "charterRep": ""},
 }
 
 
@@ -37,7 +37,7 @@ def test_a_full_set_of_settings():
         "state": "IL",
         "zip": "62701",
     }
-    assert out["positions"] == {"committeeChair": "m-chair", "charterRep": None}
+    assert out["positions"] == {"committeeChair": "m-chair", "committeeSecretary": "m-chair", "charterRep": None}
 
 
 def test_only_name_unit_and_time_zone_are_needed():

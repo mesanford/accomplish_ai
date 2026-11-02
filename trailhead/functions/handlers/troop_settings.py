@@ -1,7 +1,7 @@
 """Troop settings: the troop's details, meeting place, time zone and key positions. Pure, no Firestore.
 
 Leaders save these with `save_troop_settings`. The roles people hold (Scoutmaster, treasurer and so on) are set per
-person with `set_member_roles`; `positions` holds the two key positions that are not app roles.
+person with `set_member_roles`; `positions` holds the key positions that are not app roles.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from handlers.time_zones import known_zone
 
 TEXT_LIMITS = {"council": 80, "district": 80, "charterOrg": 120}
 ADDRESS_LIMITS = {"place": 120, "street": 120, "city": 80}
-POSITIONS = ("committeeChair", "charterRep")
+POSITIONS = ("committeeChair", "committeeSecretary", "charterRep")
 STATES = set(
     "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR "
     "PA RI SC SD TN TX UT VT VA WA WV WI WY PR VI GU MP AS AA AE AP".split()

@@ -12,6 +12,7 @@ import { Field, Notice } from '../ui';
 
 const POSITION_LABELS = {
   committeeChair: 'Committee chair',
+  committeeSecretary: 'Committee secretary',
   charterRep: 'Chartered organization representative',
 } as const;
 
