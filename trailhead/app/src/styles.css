@@ -63,7 +63,8 @@ a { color: var(--accent); }
 .count { font: 500 13px var(--mono); color: var(--label); font-variant-numeric: tabular-nums; }
 .mono { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; min-width: 0; align-content: start; }
+/* align-content: a card stretched to match a taller neighbour keeps its content at the top, not spread down. */
 .card.link { color: inherit; text-decoration: none; }
 fieldset.card { margin: 0; }
 fieldset.card > legend { padding-inline: 4px; }
