@@ -42,3 +42,19 @@ of honor reminder goes out right when families need it. #Scoutmaster".
 Facebook scheduling notes: pressing Enter in the reschedule dialog's time field triggers "Publish now" (use Tab and
 click "Schedule for later"); posts can be scheduled only about four weeks ahead; a "Send Message" button prompt can
 block saving until answered.
+
+## Added on 2026-11-02
+
+- Promo video published as a reel, Mon Nov 2 at 10:11 am (Business Suite now posts every video as a reel). Video:
+  `forthright-promo-video` project (`~/Documents/Products/forthright-promo-video`, 68 s, same cut as the YouTube
+  trailer at youtu.be/7UG0VRhA_Ig). Facebook's copyright check showed "may have found copyrighted content" while
+  processing, for the music track. The track is the owner's own composition (Apple Loops and Logic Pro, cleared for
+  commercial use), so any claim on it should be disputed, not accepted. Caption: "Running a troop shouldn't feel like a second job. Here's Forthright in a
+  minute: roster and families, advancement paths and blue cards, Scout-led trip planning, the year calendar, sign-ups
+  with permission and health form checks, Scout accounts with fundraiser credit, and a troop website. Free during our
+  pilot: forthrightapp.com/pilot #Scoutmaster #ScoutsBSA"
+- 30-second vertical cut (`out/forthright-vertical-30s.mp4`, `Vertical` composition in the promo project) scheduled
+  as a reel for Fri Nov 6, 7:30 pm; Facebook's check found no copyright issues. Also published the same day as a
+  YouTube Short: youtube.com/shorts/z2A1dWnD_S8. Facebook caption: "Running a troop shouldn't feel like a second
+  job. Forthright puts advancement paths, Scout-led trip planning, event sign-ups with health form checks and Scout
+  accounts in one place. Free during our pilot: forthrightapp.com/pilot #Scoutmaster #ScoutsBSA"
