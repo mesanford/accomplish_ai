@@ -22,4 +22,5 @@ app/.env.production
 functions/venv
 app/node_modules
 app/dist-troops/
+app/*.tsbuildinfo
 .firebase.troops.json
