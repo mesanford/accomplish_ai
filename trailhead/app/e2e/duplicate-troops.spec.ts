@@ -41,7 +41,8 @@ test('a second leader finds the troop already here, asks to join, and a leader a
   await expect(asking.getByLabel('Role')).toHaveValue('committee_member');
   await asking.getByRole('button', { name: 'Approve Robin Helper' }).click();
   await expect(asking).toHaveCount(0);
-  await expect(first.getByText('Robin Helper', { exact: true })).toBeVisible();
+  await expect(first.getByRole('button', { name: 'Change roles for Robin Helper' })).toBeVisible();
+  await expect(first.getByText(/Robin Helper · Leader and committee member/)).toBeVisible();
 
   // Robin's one troop is now Troop 1107, so the home page opens it.
   await second.reload();
@@ -51,19 +52,25 @@ test('a second leader finds the troop already here, asks to join, and a leader a
 test('a different troop with the same number is created anyway, then deleted from Troop settings', async ({
   browser,
 }) => {
+  // Each test makes its own troops: a failed test restarts the worker, which resets the emulators.
+  const boys = await signedIn(browser, 'dup-boys@example.com');
+  await fillCreateForm(boys, 'Troop 2207 Boys', '2207B', 'Bay-Lakes Council', 'Lee Leader');
+  await boys.getByRole('button', { name: 'Create troop' }).click();
+  await expect(boys.getByRole('heading', { name: 'Troop 2207 Boys' })).toBeVisible();
+
   const leader = await signedIn(browser, 'dup-girls@example.com');
-  await fillCreateForm(leader, 'Troop 1107 Girls', '1107G', 'Bay-Lakes Council', 'Sam Leader');
+  await fillCreateForm(leader, 'Troop 2207 Girls', '2207G', 'Bay-Lakes Council', 'Sam Leader');
   await leader.getByRole('button', { name: 'Create troop' }).click();
   const found = leader.getByRole('region', { name: 'Already on Forthright' });
-  await expect(found.getByText('Unit 1107 · Bay-Lakes Council')).toBeVisible();
+  await expect(found.getByText('Unit 2207B · Bay-Lakes Council')).toBeVisible();
   await found.getByLabel('This is not my troop. Create mine.').check();
   await leader.getByRole('button', { name: 'Create troop' }).click();
-  await expect(leader.getByRole('heading', { name: 'Troop 1107 Girls' })).toBeVisible();
+  await expect(leader.getByRole('heading', { name: 'Troop 2207 Girls' })).toBeVisible();
 
   await leader.getByRole('link', { name: 'Troop settings', exact: true }).click();
   const danger = leader.getByRole('region', { name: 'Delete this troop' });
   await danger.getByRole('button', { name: 'Delete this troop' }).click();
-  await danger.getByRole('button', { name: 'Yes, delete Troop 1107 Girls for good' }).click();
+  await danger.getByRole('button', { name: 'Yes, delete Troop 2207 Girls for good' }).click();
   await expect(leader.getByRole('heading', { name: 'Your troops' })).toBeVisible();
   await expect(leader.getByText("You're not in a troop yet.")).toBeVisible();
 });
