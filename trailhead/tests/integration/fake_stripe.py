@@ -38,6 +38,7 @@ class FakeStripe:
         self.charges_enabled = True
         self.fail_next: int | None = None  # answer the next request with this status
         self.expire_status = 200
+        self.session_status = "complete"  # what GET /v1/checkout/sessions/{id} reports
         self._ids: dict[str, int] = {}
         self._by_key: dict[str, dict] = {}
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), self._handler())
@@ -67,6 +68,8 @@ class FakeStripe:
             body = {"url": f"https://connect.stripe.com/setup/fake?return={form.get('return_url', '')}"}
         elif method == "GET" and path.startswith("/v1/accounts/"):
             body = {"id": path.rsplit("/", 1)[-1], "charges_enabled": self.charges_enabled, "details_submitted": True}
+        elif method == "GET" and path.startswith("/v1/checkout/sessions/"):
+            body = {"id": path.rsplit("/", 1)[-1], "status": self.session_status}
         elif method == "POST" and path.endswith("/expire"):
             if self.expire_status != 200:
                 return self.expire_status, {"error": {"type": "invalid_request_error", "message": "complete"}}

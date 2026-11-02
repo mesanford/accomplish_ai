@@ -7,6 +7,7 @@ disputes, and PAYMENTS_MODE=off refusing everything. Nothing here reaches Stripe
 import json
 import os
 import time
+from datetime import UTC, datetime, timedelta
 
 import pytest
 import requests
@@ -57,8 +58,8 @@ def open_charge(tid: str, scout: str, cents: int, words: str) -> str:
     return ok(call("post_charge", "treas", form))["entryIds"][0]
 
 
-def deliver(kind: str, obj: dict, account: str, secret: str | None = None, stamp: int | None = None):
-    body = json.dumps({"id": f"evt_{time.time_ns()}", "type": kind, "account": account, "livemode": False,
+def deliver(kind: str, obj: dict, account: str, secret: str | None = None, stamp: int | None = None, live=False):
+    body = json.dumps({"id": f"evt_{time.time_ns()}", "type": kind, "account": account, "livemode": live,
                        "data": {"object": obj}}).encode()  # fmt: skip
     head = signature(body, stamp or int(time.time()), secret)
     return requests.post(WEBHOOK, data=body, headers={"Stripe-Signature": head}, timeout=30)
@@ -163,6 +164,34 @@ def test_a_parent_starts_checkout_for_open_charges(fake):
     fake.expire_status = 400  # Stripe says that one already completed
     assert call("create_checkout", "mom", {**form, "chargeIds": [campout]}).status_code == 400
     assert read(f"troops/{tid}/payments/{again['paymentId']}")["status"] == "open"
+    # It ended on its own and the "expired" event hasn't arrived: Stripe still refuses, but a new checkout may start.
+    fake.session_status = "expired"
+    ok(call("create_checkout", "mom", {**form, "chargeIds": [campout]}))
+    assert read(f"troops/{tid}/payments/{again['paymentId']}")["status"] == "expired"
+
+
+def test_no_second_checkout_while_a_payment_is_settling_or_starting(fake):
+    tid, sam, _ = connected("92", fake)
+    charge = open_charge(tid, sam, 3500, "Fall campout")
+    form = {"troopId": tid, "scoutId": sam, "chargeIds": [charge]}
+    pid = ok(call("create_checkout", "mom", form))["paymentId"]
+    session = {**paid_session(tid, pid, fake), "payment_status": "unpaid"}  # a bank debit, still going through
+    deliver("checkout.session.completed", session, "acct_fake_1")
+    assert call("create_checkout", "mom", form).status_code == 400
+    assert [p["status"] for p in list_docs(f"troops/{tid}/payments")] == ["processing"]  # the refused one is gone
+    deliver("checkout.session.async_payment_failed", session, "acct_fake_1")
+
+    # Another checkout for this Scout still starting blocks, and the refusal leaves the family's open page alone;
+    # one abandoned long ago doesn't block.
+    page = ok(call("create_checkout", "mom", form))["paymentId"]
+    starting = {"scoutId": sam, "status": "starting", "stripeAccountId": "acct_fake_1", "mode": "test"}
+    owner.set(f"troops/{tid}/payments/p-now", {**starting, "createdAt": datetime.now(UTC)})
+    assert call("create_checkout", "mom", form).status_code == 400
+    assert read(f"troops/{tid}/payments/{page}")["status"] == "open"
+    owner.set(f"troops/{tid}/payments/p-now", {**starting, "createdAt": datetime.now(UTC) - timedelta(hours=1)})
+    ok(call("create_checkout", "mom", form))
+    assert read(f"troops/{tid}/payments/p-now")["status"] == "expired"
+    assert read(f"troops/{tid}/payments/{page}")["status"] == "expired"
 
 
 def test_the_card_fee_prepaying_and_the_daily_limit(fake):
@@ -224,6 +253,12 @@ def test_a_session_that_does_not_match_its_record_is_never_credited(fake):
     assert deliver("checkout.session.completed", session, "acct_someone_else").json()["outcome"] == "review:account"
     assert deliver("checkout.session.completed", {**session, "amount_total": 50}, "acct_fake_1").status_code == 200
     assert not card_entries(tid, sam) and read(f"troops/{tid}/payments/{pid}")["status"] == "review"
+    # Refunding a payment that was never credited records the refund and doesn't make Stripe retry.
+    refund = {"id": "ch_1", "payment_intent": f"pi_{pid}", "amount_refunded": 3500, "metadata": session["metadata"]}
+    refunded = deliver("charge.refunded", refund, "acct_fake_1")
+    assert refunded.status_code == 200 and refunded.json()["outcome"] == "review"
+    record = read(f"troops/{tid}/payments/{pid}")
+    assert record["status"] == "review" and record["refundedCents"] == 3500 and not card_entries(tid, sam)
     unknown = {**session, "metadata": {"troopId": tid, "paymentId": "nope"}, "client_reference_id": "nope"}
     assert deliver("checkout.session.completed", unknown, "acct_fake_1").json()["outcome"] == "not-ours"
 
@@ -277,6 +312,12 @@ def test_account_updates_follow_stripe(fake):
     updated = {"id": "acct_fake_1", "charges_enabled": False, "details_submitted": True}
     assert deliver("account.updated", updated, "acct_fake_1").json()["outcome"] == "troops:1"
     assert read(f"troops/{tid}")["payments"]["chargesEnabled"] is False
+    # A live endpoint also gets test-mode events (and the reverse): they never touch a troop in the other mode.
+    enabled = {**updated, "charges_enabled": True}
+    assert deliver("account.updated", enabled, "acct_fake_1", live=True).json()["outcome"] == "troops:0"
+    assert deliver("account.application.deauthorized", {"id": "ca_1"}, "acct_fake_1", live=True).status_code == 200
+    assert read(f"troops/{tid}")["payments"]["chargesEnabled"] is False
+    assert read(f"troops/{tid}")["payments"]["stripeAccountId"] == "acct_fake_1"
     assert deliver("account.application.deauthorized", {"id": "ca_1"}, "acct_fake_1").status_code == 200
     assert "stripeAccountId" not in read(f"troops/{tid}")["payments"]
 

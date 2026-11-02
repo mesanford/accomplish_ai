@@ -1,6 +1,7 @@
 import { httpsCallable } from 'firebase/functions';
 import type { Timestamp } from 'firebase/firestore';
 import { functions } from './firebase';
+import { formatCents } from './money';
 
 /** Card payments through the troop's own Stripe account (functions/handlers/payments.py has the rules and math).
  * The server works out every amount; the fee shown here is a preview with the same formula. */
@@ -144,6 +145,15 @@ export function statusLabel(p: Pick<PaymentRecord, 'status' | 'dispute'>): strin
     return words;
   }
   return `${words}, disputed (${DISPUTE_WORDS[p.dispute.status] ?? p.dispute.status.replace(/_/g, ' ')})`;
+}
+
+/** For the treasurer: a payment waiting for review was refunded in Stripe. It was never credited to the account, so
+ * crediting it by hand would give the family money they already got back. */
+export function reviewRefundNote(p: Pick<PaymentRecord, 'status' | 'refundedCents'>): string | null {
+  if (p.status !== 'review' || !p.refundedCents || p.refundedCents <= 0) {
+    return null;
+  }
+  return `${formatCents(p.refundedCents)} refunded in Stripe. It was never on the account, so don't credit it.`;
 }
 
 /** The treasurer's link to the payment in the troop's own Stripe dashboard. */

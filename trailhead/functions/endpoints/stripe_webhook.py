@@ -127,6 +127,11 @@ def refund(action: Action) -> str:
     if wrong:
         return _review(ref, wrong)
     if not record.get("ledgerEntryId"):
+        if record.get("status") == REVIEW:  # never credited, so there is nothing to reverse; the treasurer sees it
+            fields = {"refundedCents": action.refunded, "updatedAt": firestore.SERVER_TIMESTAMP}
+            if record.get("refundedCents") != action.refunded:
+                ref.update(fields)
+            return "review"
         raise Retry("refund arrived before its payment was recorded")
     scout_id, outcome = record["scoutId"], {}
 

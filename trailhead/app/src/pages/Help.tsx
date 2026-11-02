@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { PageHeader } from '../components/ui';
+import { plural } from '../lib/plural';
 import { GLOSSARY } from '../lib/help';
 import { guidesToOpen, ROLE_GUIDES } from '../lib/roleGuides';
 import { useTroop } from '../lib/troop';
@@ -28,39 +29,53 @@ export function HelpPage() {
       </div>
       {guides.map((g) => (
         <details key={g.id} className="card help-guide" open={Boolean(q) || mine.has(g.id)}>
-          <summary>
+          <summary className="help-summary">
             <h2>{g.title}</h2>
+            {g.tasks.length > 0 ? <span className="muted small">{plural(g.tasks.length, 'task')}</span> : null}
           </summary>
-          {g.showAccess ? (
-            <div className="stack">
-              <h3>What you can see and do</h3>
-              <ul className="guide-list">
-                {g.sees.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ul>
-              <h3>What you cannot see or change</h3>
-              <ul className="guide-list">
-                {g.cannot.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-          {g.tasks.map((t) => (
-            <div key={t.task} className="stack">
-              <h3>{t.task}</h3>
-              <ol className="guide-steps">
-                {t.steps.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ol>
-            </div>
-          ))}
+          <div className="help-body">
+            {g.showAccess ? (
+              <div className="help-access">
+                <section>
+                  <h3 className="help-label">What you can see and do</h3>
+                  <ul className="guide-list">
+                    {g.sees.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ul>
+                </section>
+                <section>
+                  <h3 className="help-label">What you cannot see or change</h3>
+                  <ul className="guide-list">
+                    {g.cannot.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+            ) : null}
+            {g.tasks.length > 0 ? (
+              <section>
+                <h3 className="help-label">How to</h3>
+                <div className="help-tasks">
+                  {g.tasks.map((t) => (
+                    <section key={t.task} className="help-task">
+                      <h4>{t.task}</h4>
+                      <ol className="guide-steps">
+                        {t.steps.map((s) => (
+                          <li key={s}>{s}</li>
+                        ))}
+                      </ol>
+                    </section>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+          </div>
         </details>
       ))}
-      <section className="stack" aria-labelledby="glossary-h">
-        <h2 className="blazed" id="glossary-h">Scouting words, explained</h2>
+      <section className="card help-glossary" aria-labelledby="glossary-h">
+        <h2 id="glossary-h">Scouting words, explained</h2>
         {terms.length === 0 && guides.length === 0 ? <p className="muted">Nothing matches that search. Try a shorter word.</p> : null}
         <dl className="glossary">
           {terms.map((t) => (

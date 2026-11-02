@@ -63,7 +63,8 @@ a { color: var(--accent); }
 .count { font: 500 13px var(--mono); color: var(--label); font-variant-numeric: tabular-nums; }
 .mono { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; min-width: 0; align-content: start; }
+/* align-content: a card stretched to match a taller neighbour keeps its content at the top, not spread down. */
 .card.link { color: inherit; text-decoration: none; }
 fieldset.card { margin: 0; }
 fieldset.card > legend { padding-inline: 4px; }
@@ -200,10 +201,24 @@ tbody tr:nth-child(even) td { background: var(--zebra); }
 .steps li.done .tick { background: var(--good); border-color: var(--good); }
 .steps li.done { color: var(--muted); }
 .next-step { display: grid; gap: 12px; justify-items: center; }
-.help-guide > summary { cursor: pointer; }
-.help-guide > summary h2 { display: inline; }
-.glossary { margin: 0; display: grid; gap: 12px; }
-.glossary dt { font-weight: 700; }
+/* Help: each guide is a card whose title row opens it; inside, labelled sections and one panel per task. */
+h4 { font-family: var(--display); font-size: 1.05rem; line-height: 1.2; margin: 0; color: var(--ink); }
+.help-guide { padding: 0; gap: 0; overflow: hidden; }
+.help-summary { list-style: none; display: flex; align-items: baseline; gap: 12px; padding: 18px 20px; cursor: pointer; }
+.help-summary::-webkit-details-marker { display: none; }
+.help-summary::before { content: "▸"; color: var(--accent); flex: none; font-size: 1.3rem; line-height: 1; transition: transform .15s; }
+.help-guide[open] > .help-summary::before { transform: rotate(90deg); }
+.help-guide[open] > .help-summary { border-bottom: 1px solid var(--line); }
+.help-summary h2 { font-size: 1.45rem; }
+.help-body { padding: 20px; display: grid; gap: 28px; }
+.help-label { font: 600 12px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--label); margin: 0 0 10px; }
+.help-access { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+.help-tasks { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); }
+.help-task { background: var(--zebra); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 8px; }
+.help-glossary { padding: 20px; gap: 16px; }
+.help-glossary h2 { font-size: 1.45rem; }
+.glossary { margin: 0; display: grid; gap: 14px 28px; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); }
+.glossary dt { font-family: var(--display); font-weight: 700; }
 .glossary dd { margin: 2px 0 0; color: var(--muted); }
 
 /* Troop website color suggestions beside the color picker */
@@ -288,4 +303,16 @@ td input.cell { max-width: 9rem; text-align: right; font-variant-numeric: tabula
 @media (max-width: 719px) {
   .cal-months { display: none; }
   .cal-list { display: block; }
+}
+
+/* Roster rows: who they are, their status pills and their buttons in three columns that line up from row to row.
+   Opened panels (roles, health form dates) take the full width underneath. */
+.list > li.member-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, auto); justify-content: stretch; align-items: center; }
+.member-info { display: grid; gap: 2px; min-width: 0; }
+.member-status { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.member-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.list > li.member-row > .member-panel { grid-column: 1 / -1; }
+@media (max-width: 760px) {
+  .list > li.member-row { grid-template-columns: minmax(0, 1fr); }
+  .member-actions { justify-content: flex-start; }
 }

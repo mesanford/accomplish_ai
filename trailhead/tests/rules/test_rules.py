@@ -1,6 +1,6 @@
 from datetime import UTC, datetime
 
-from .conftest import T
+from .conftest import FUTURE, PAST, T
 from .emulator import Client
 
 OK, DENIED = 200, 403
@@ -153,3 +153,29 @@ def test_leader_can_start_a_blue_card_for_a_scout():
     card = {"scoutId": "s2", "awardId": "art", "versionId": "v1", "status": "requested", "requestedAt": NOW}
     assert leader.create(f"{T}/blueCards/s2_art", card) == OK
     assert parent.create(f"{T}/blueCards/s2_cooking", {**card, "awardId": "cooking"}) == DENIED
+
+
+def test_leaders_cannot_change_who_a_member_is_or_their_parents():
+    """kind, guardianIds and uid feed the messaging Youth Protection checks and thread readers: server-only."""
+    sam = {"kind": "scout", "displayName": "Sam"}
+    assert leader.set(f"{T}/members/s1", {**sam, "kind": "adult"}) == DENIED
+    assert leader.set(f"{T}/members/s1", {**sam, "guardianIds": ["m-asst"]}) == DENIED
+    assert leader.set(f"{T}/members/s1", {**sam, "uid": "assistant"}) == DENIED
+    assert leader.create(f"{T}/members/a9", {"kind": "adult", "displayName": "A", "uid": "assistant"}) == DENIED
+    assert leader.create(f"{T}/members/a9", {"kind": "adult", "displayName": "A", "guardianIds": []}) == DENIED
+    assert leader.set(f"{T}/members/s1", {**sam, "displayName": "Samuel"}) == OK  # other edits still work
+
+
+def test_a_counselor_who_left_or_lapsed_cannot_move_their_card():
+    owner = Client("owner")
+    card = {"scoutId": "s1", "awardId": "chess", "versionId": "v1", "status": "in_progress"}
+    done = {**card, "status": "complete", "counselorUid": "counselor"}
+    mbc = {"memberId": "m-mbc", "scoutIds": []}
+    owner.set(f"{T}/access/counselor", {**mbc, "roles": ["counselor"], "yptExpiresAt": PAST})
+    assert counselor.set(f"{T}/blueCards/s1_chess", done) == DENIED  # training lapsed
+    owner.set(f"{T}/access/counselor", {**mbc, "roles": ["parent"], "yptExpiresAt": FUTURE})
+    assert counselor.set(f"{T}/blueCards/s1_chess", done) == DENIED  # no longer a counselor
+    owner.delete(f"{T}/access/counselor")
+    assert counselor.set(f"{T}/blueCards/s1_chess", done) == DENIED  # left the troop
+    owner.set(f"{T}/blueCards/s1_chess", {**card, "counselorUid": "chair"})
+    assert Client("chair").set(f"{T}/blueCards/s1_chess", {**done, "counselorUid": "chair"}) == OK  # chair as counselor

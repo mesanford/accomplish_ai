@@ -159,13 +159,18 @@ def disconnect_stripe(req: https_fn.CallableRequest) -> dict:
 
 
 def sync_account(action) -> str:
-    """Keep the troop's charges-enabled status in step with Stripe, or forget an account that left the platform."""
+    """Keep the troop's charges-enabled status in step with Stripe, or forget an account that left the platform.
+
+    A live endpoint also receives a connected account's test-mode events, so an event applies only to a troop
+    connected in the same mode."""
     if not action.account:
         return "ignored"
     troops = db().collection("troops").where("payments.stripeAccountId", "==", action.account).stream()
     count = 0
     for snap in troops:
         saved = (snap.to_dict() or {}).get("payments") or {}
+        if action.livemode != (saved.get("mode") == "live"):
+            continue
         if action.kind == "account":
             fields = {f"payments.{k}": v for k, v in action.details.items()}
             fields["payments.updatedAt"] = firestore.SERVER_TIMESTAMP

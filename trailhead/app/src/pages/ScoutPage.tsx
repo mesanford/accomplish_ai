@@ -11,6 +11,7 @@ import { LinkAsParent } from '../components/LinkAsParent';
 import { MarkLeft } from '../components/MarkLeft';
 import { MediaConsent } from '../components/MediaConsent';
 import { ParentConsent } from '../components/ParentConsent';
+import { PlannedCards } from '../components/PlannedCards';
 import { PathSummary } from '../components/PathSummary';
 import { BlueCardList, ProgressList } from '../components/ProgressList';
 import { RankForm } from '../components/RankForm';
@@ -122,6 +123,7 @@ export function ScoutPage() {
       {scout.kind === 'scout' ? <ScoutActivity scoutId={scoutId} rankDates={record.data?.rankDates} /> : null}
       <section className="stack">
         <h2 className="blazed">Blue cards</h2>
+        <PlannedCards scoutId={scoutId} items={path.data?.items ?? []} cards={cards.data} progress={progress.data} />
         <BlueCardList cards={cards.data} counselorName={uidName} canAddPhotos={canManageBadges} />
       </section>
       <HealthFormCard memberId={scoutId} name={scout.displayName} />

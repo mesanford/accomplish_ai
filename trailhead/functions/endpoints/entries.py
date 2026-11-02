@@ -9,7 +9,7 @@ from firebase_functions import https_fn
 
 from endpoints.money import bad, post, require_treasurer, roster_scouts
 from fb import fail, troop, troop_today
-from handlers.ledger import compute_account, parse_day, payment_entry, reversal_entry
+from handlers.ledger import GENERAL_FUND, compute_account, parse_day, payment_entry, reversal_entry
 from handlers.ledger_lifecycle import is_former, settlement_entries
 from handlers.membership import InvalidInput
 
@@ -86,7 +86,11 @@ def settle(troop_id: str, scout_id: str, to: str, sibling_id: str | None, create
         state = compute_account(entries[scout_id])
         return settlement_entries(state, scout_id, to, sibling_id, uuid.uuid4().hex)
 
-    written = post(troop_id, [scout_id], build, created_by)
+    if to == "sibling" and (not sibling_id or "/" in sibling_id):
+        raise InvalidInput("Choose a sibling: a Scout in the troop with the same parent on the app.")
+    # Both accounts are read up front: `post` reads every account it writes before `build` runs.
+    target = sibling_id if to == "sibling" else GENERAL_FUND
+    written = post(troop_id, [scout_id, target], build, created_by)
     return written[0][1]["amountCents"] * -1 if written else 0
 
 

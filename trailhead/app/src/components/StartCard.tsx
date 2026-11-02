@@ -1,9 +1,8 @@
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { errorMessage, isPermissionDenied } from '../lib/api';
 import { START_CARD_NOTE } from '../lib/badgeAuthority';
-import { BADGE_VERSION, type Badge } from '../lib/catalog';
-import { db } from '../lib/firebase';
+import { requestCard } from '../lib/blueCards';
+import type { Badge } from '../lib/catalog';
 import { useTroop } from '../lib/troop';
 import { Notice } from './ui';
 
@@ -28,13 +27,7 @@ export function StartCard({ b }: { b: Badge }) {
       return;
     }
     try {
-      await setDoc(doc(db, `troops/${troopId}/blueCards/${scoutId}_${b.id}`), {
-        scoutId,
-        awardId: b.id,
-        versionId: BADGE_VERSION,
-        status: 'requested',
-        requestedAt: serverTimestamp(),
-      });
+      await requestCard(troopId, scoutId, b.id);
       setMessage({ kind: 'ok', text: 'Blue card requested. The Scoutmaster or advancement chair will approve it and assign a counselor.' });
     } catch (err) {
       // The rules refuse a second card for the same Scout and badge, which looks like a permission error.

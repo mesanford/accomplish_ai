@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Money } from '../components/Money';
 import { Empty, formatDate, Loading, Notice, PageHeader } from '../components/ui';
 import { useMoneyAccess, useRosterScouts } from '../lib/moneyHooks';
-import { dashboardUrl, statusLabel } from '../lib/payments';
+import { dashboardUrl, reviewRefundNote, statusLabel } from '../lib/payments';
 import { paymentsCsv } from '../lib/paymentsCsv';
 import { usePaymentRecords, usePayments } from '../lib/paymentsHooks';
 import { downloadCsv } from '../lib/scoutbook';
@@ -78,11 +78,15 @@ export function Payments() {
             <tbody>
               {shown.map((p) => {
                 const link = dashboardUrl(p);
+                const refundNote = reviewRefundNote(p);
                 return (
                   <tr key={p.id}>
                     <td>{formatDate(p.date)}</td>
                     <td>{nameOf(p.scoutId) ?? 'Former Scout'}</td>
-                    <td>{statusLabel(p)}</td>
+                    <td>
+                      {statusLabel(p)}
+                      {refundNote ? <div className="small muted">{refundNote}</div> : null}
+                    </td>
                     <td className="num">
                       <Money cents={p.amountCents} />
                     </td>
@@ -95,7 +99,8 @@ export function Payments() {
                           View in Stripe
                         </a>
                       ) : (
-                        <span className="small muted">Not paid</span>
+                        // A payment waiting for review was never matched, so it has no Stripe payment id to link to.
+                        <span className="small muted">{p.status === 'review' ? 'Look it up in Stripe' : 'Not paid'}</span>
                       )}
                     </td>
                   </tr>

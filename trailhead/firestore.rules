@@ -159,13 +159,17 @@ service cloud.firestore {
         // yptExpiresAt, yptUpdatedBy and yptUpdatedAt (Youth Protection training) are written only by the server:
         // set_my_ypt (the adult) and set_member_roles (a leader). consentHold is server-only too, and a Scout is
         // created only by add_scout, which sets it when needed.
+        // kind, guardianIds and uid are server-only: messaging builds its Youth Protection checks (who is a youth,
+        // who their parents are) and thread readers from them, and the hold applies only while kind is 'scout'.
         allow create: if isLeader(t) && !('mediaConsent' in request.resource.data)
           && !('leftAt' in request.resource.data) && !('patrolId' in request.resource.data)
-          && !request.resource.data.keys().hasAny(['yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt', 'consentHold'])
+          && !request.resource.data.keys().hasAny(['yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt', 'consentHold',
+                                                   'guardianIds', 'uid'])
           && request.resource.data.get('kind', '') != 'scout';
         allow update: if isLeader(t)
           && !request.resource.data.diff(resource.data).affectedKeys()
-            .hasAny(['mediaConsent', 'leftAt', 'patrolId', 'yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt', 'consentHold']);
+            .hasAny(['mediaConsent', 'leftAt', 'patrolId', 'yptExpiresAt', 'yptUpdatedBy', 'yptUpdatedAt', 'consentHold',
+                     'kind', 'guardianIds', 'uid']);
         allow delete: if false;
       }
       // Private Scout details (birth month and year, rank dates). Only the remove_scout function deletes one.
@@ -260,9 +264,14 @@ service cloud.firestore {
           && request.resource.data.status == 'requested';
         allow update: if !isHeld(t, resource.data.scoutId)
           && ((canManageBadges(t) && (leaderTransition() || photosOnly()))
-          || (resource.data.counselorUid == request.auth.uid && counselorTransition()));
+          || (resource.data.counselorUid == request.auth.uid && canCounsel() && counselorTransition()));
         allow delete: if false;
 
+        // The assigned counselor must still be in the troop, still able to counsel (the same people the app offers
+        // as counselors) and have current Youth Protection training, as for signing.
+        function canCounsel() {
+          return (hasRole(t, 'counselor') || canManageBadges(t)) && yptCurrent(t);
+        }
         function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
         function photosOnly() {
           return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoPaths'])

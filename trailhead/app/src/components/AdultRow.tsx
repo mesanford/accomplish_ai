@@ -26,37 +26,72 @@ export function AdultRow({ adult, scouts, pendingScoutIds, health }: Props) {
   const ypt = yptInfo(adult, todayIso());
   const children = [
     ...scouts.filter((s) => (s.guardianIds ?? []).includes(adult.id)).map((s) => s.displayName),
-    ...scouts.filter((s) => pendingScoutIds.includes(s.id)).map((s) => `${s.displayName} (waiting to agree)`),
+    ...scouts
+      .filter((s) => pendingScoutIds.includes(s.id))
+      .map((s) => `${s.displayName} (waiting to agree)`),
   ];
   return (
-    <li>
-      <span>
-        {adult.displayName} <span className="muted small">· {roleList(adult.roles)}</span>
-        {children.length > 0 ? <span className="muted small"> · Parent of {children.join(', ')}</span> : null}
-      </span>
-      {waiting ? (
-        <TipPill tone="warn" tip={ADULT_PENDING_TIP}>
-          Has not agreed to the parent notice
-        </TipPill>
+    <li className="member-row">
+      <div className="member-info">
+        <span>
+          {adult.displayName} <span className="muted small">· {roleList(adult.roles)}</span>
+        </span>
+        {children.length > 0 ? (
+          <span className="muted small">Parent of {children.join(', ')}</span>
+        ) : null}
+      </div>
+      <div className="member-status">
+        {waiting ? (
+          <TipPill tone="warn" tip={ADULT_PENDING_TIP}>
+            Has not agreed to the parent notice
+          </TipPill>
+        ) : null}
+        {ypt.status !== 'notRequired' ? (
+          <TipPill tone={YPT_TONE[ypt.status]} tip={yptTip(ypt.status)}>
+            {YPT_TEXT[ypt.status]}
+            {ypt.expires ? `: ${formatDate(ypt.expires)}` : ''}
+          </TipPill>
+        ) : null}
+        {ypt.expires && adult.yptUpdatedBy ? (
+          <span className="muted small">
+            {adult.yptUpdatedBy === 'self' ? 'Entered by them' : 'Entered by a leader'}
+          </span>
+        ) : null}
+        <HealthPills form={health} />
+      </div>
+      <div className="member-actions">
+        <button
+          type="button"
+          className="btn quiet small"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          {open ? 'Close' : `Change roles for ${adult.displayName}`}
+        </button>
+        <button
+          type="button"
+          className="btn quiet small"
+          aria-expanded={healthOpen}
+          onClick={() => setHealthOpen((v) => !v)}
+        >
+          {healthOpen ? 'Close' : `Health form dates for ${adult.displayName}`}
+        </button>
+      </div>
+      {healthOpen ? (
+        <div className="member-panel">
+          <HealthFormCard memberId={adult.id} name={adult.displayName} />
+        </div>
       ) : null}
-      {ypt.status !== 'notRequired' ? (
-        <TipPill tone={YPT_TONE[ypt.status]} tip={yptTip(ypt.status)}>
-          {YPT_TEXT[ypt.status]}
-          {ypt.expires ? `: ${formatDate(ypt.expires)}` : ''}
-        </TipPill>
+      {open ? (
+        <div className="member-panel">
+          <MemberRoles
+            adult={adult}
+            scouts={scouts}
+            pendingScoutIds={pendingScoutIds}
+            onClose={() => setOpen(false)}
+          />
+        </div>
       ) : null}
-      {ypt.expires && adult.yptUpdatedBy ? (
-        <span className="muted small">{adult.yptUpdatedBy === 'self' ? 'Entered by them' : 'Entered by a leader'}</span>
-      ) : null}
-      <HealthPills form={health} />
-      <button type="button" className="btn quiet small" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-        {open ? 'Close' : `Change roles for ${adult.displayName}`}
-      </button>
-      <button type="button" className="btn quiet small" aria-expanded={healthOpen} onClick={() => setHealthOpen((v) => !v)}>
-        {healthOpen ? 'Close' : `Health form dates for ${adult.displayName}`}
-      </button>
-      {healthOpen ? <HealthFormCard memberId={adult.id} name={adult.displayName} /> : null}
-      {open ? <MemberRoles adult={adult} scouts={scouts} pendingScoutIds={pendingScoutIds} onClose={() => setOpen(false)} /> : null}
     </li>
   );
 }

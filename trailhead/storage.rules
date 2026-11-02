@@ -50,10 +50,12 @@ service firebase.storage {
           + '|application/vnd.openxmlformats-officedocument.wordprocessingml.document)');
     }
 
+    // As in firestore.rules: a parent acts for a Scout only after agreeing to the consent notice.
     function actsFor(t, scoutId) {
       return request.auth != null
         && firestore.exists(accessPath(t))
-        && scoutId in firestore.get(accessPath(t)).data.scoutIds;
+        && scoutId in firestore.get(accessPath(t)).data.scoutIds
+        && !(scoutId in firestore.get(accessPath(t)).data.get('consentPendingScoutIds', []));
     }
     function isCardFile() {
       return request.resource.size < 10 * 1024 * 1024

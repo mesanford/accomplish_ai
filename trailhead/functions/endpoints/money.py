@@ -81,7 +81,8 @@ def post(
     """Run `build(tx, settings, entries by account)` in a transaction and append what it returns.
 
     `build` may read (it runs before any write) and returns entries without dates or authors. Returns
-    [(entry id, entry)] in order. Accounts not in `account_ids` that a built entry names are read too.
+    [(entry id, entry)] in order. Every account a built entry names must be in `account_ids`: they are all read
+    before `build` runs, because `build` may write and a transaction can't read after writing.
     `after(tx, written)` may add its own writes to the same transaction (card payments mark their record paid).
     """
     t = troop(troop_id)
@@ -105,15 +106,12 @@ def post(
         # come before `build`, which may write (posting a campaign closes it): a transaction can't read after writing.
         blockers = {a: blocker_for(tx, a) for a in dict.fromkeys(account_ids)} if created_by else {}
         new = build(tx, settings, entries)
+        if unknown := sorted({e["scoutId"] for e in new} - set(entries)):
+            raise ValueError(f"post: entries for accounts not in account_ids: {unknown}")
         if created_by:
             for account_id in dict.fromkeys(e["scoutId"] for e in new):
-                if account_id not in blockers:
-                    blockers[account_id] = blocker_for(tx, account_id)
                 if reason := blockers[account_id]:
                     raise InvalidInput(reason)
-        for e in new:
-            if e["scoutId"] not in entries:
-                entries[e["scoutId"]] = entries_for(tx, e["scoutId"])
         written = []
         for e in new:
             ref = t.collection("ledger").document()
