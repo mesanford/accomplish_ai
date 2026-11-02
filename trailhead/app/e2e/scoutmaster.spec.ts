@@ -9,6 +9,7 @@ test('an assistant leader sees blue cards and merit badges read-only until the S
   await scoutmaster.getByRole('link', { name: 'Create a troop' }).click();
   await scoutmaster.getByLabel('Troop name').fill('Troop 505');
   await scoutmaster.getByLabel('Unit number').fill('505');
+  await scoutmaster.getByLabel('Council').fill('Scoutmaster Council');
   await scoutmaster.getByLabel('Your name').fill('Pat Scoutmaster');
   await scoutmaster.getByLabel('Youth Protection training expires').fill(inOneYear());
   await scoutmaster.getByRole('button', { name: 'Create troop' }).click();

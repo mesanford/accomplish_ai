@@ -14,6 +14,7 @@ from firebase_functions import https_fn
 
 from fb import db, fail, require_leader, troop
 from handlers.membership import InvalidInput
+from handlers.troop_match import match_keys
 from handlers.troop_settings import parse_settings, renamed
 
 log = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ def save_troop_settings(req: https_fn.CallableRequest) -> dict:
     except InvalidInput as err:
         raise fail(https_fn.FunctionsErrorCode.INVALID_ARGUMENT, str(err)) from err
     before = t.get().to_dict() or {}
-    t.update({**fields, "settingsUpdatedAt": firestore.SERVER_TIMESTAMP})
+    t.update({**fields, **match_keys(fields), "settingsUpdatedAt": firestore.SERVER_TIMESTAMP})
     copies = _copy_name(troop_id, t, before.get("site") or {}, fields) if renamed(before, fields) else 0
     log.info("troop settings saved renamed=%s copies=%d", copies > 0, copies)
     return {"saved": True}

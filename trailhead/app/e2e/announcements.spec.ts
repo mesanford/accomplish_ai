@@ -8,6 +8,7 @@ test('a leader posts an announcement to parents, a parent reads it, and the lead
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 404');
   await leader.getByLabel('Unit number').fill('404');
+  await leader.getByLabel('Council').fill('Announcements Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
@@ -74,6 +75,7 @@ test('the announcement form and feed fit a phone screen, and the Account page ha
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 405');
   await leader.getByLabel('Unit number').fill('405');
+  await leader.getByLabel('Council').fill('Announcements Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

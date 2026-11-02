@@ -88,15 +88,8 @@ def retire_troop(troop_id: str, today: date, dry_run: bool) -> bool:
     if dry_run:
         return False
 
-    files = sum(delete_folder(p) for p in _prefixes(troop_id))
-    release_troop_domains(troop_id)
-    for ref in _site_refs(troop_id, troop_doc):
-        ref.delete()
-    for uid in _logins(t):
-        with suppress(NotFound):  # never recreate a users document for a deleted account
-            db().collection("users").document(uid).update({f"troops.{troop_id}": firestore.DELETE_FIELD})
     kept = _anonymize_books(troop_id, t)
-    docs = sum(db().recursive_delete(c) for c in t.collections() if not (kept and c.id in BOOKS))
+    docs, files = erase_troop(troop_id, t, troop_doc, keep=BOOKS if kept else ())
     if kept:
         # Only the troop's name stays, so the operator can tell whose books these are.
         names = {k: troop_doc[k] for k in ("name", "unitNumber") if k in troop_doc}
@@ -107,6 +100,21 @@ def retire_troop(troop_id: str, today: date, dry_run: bool) -> bool:
         "retention rule=troop troop=%s deleted docs=%d files=%d ledger_kept=%d", troop_id, docs + 1, files, kept
     )
     return True
+
+
+def erase_troop(troop_id: str, t, troop_doc: dict, keep: tuple[str, ...] = ()) -> tuple[int, int]:
+    """Delete the troop's files, public site, members' troop list entries, pending join requests and every
+    subcollection except `keep`. The troop document itself is left for the caller. Returns (documents, files)."""
+    files = sum(delete_folder(p) for p in _prefixes(troop_id))
+    release_troop_domains(troop_id)
+    for ref in _site_refs(troop_id, troop_doc):
+        ref.delete()
+    requesters = [d.id for d in t.collection("joinRequests").list_documents()]
+    for uid, field in [(u, "troops") for u in _logins(t)] + [(u, "joinRequests") for u in requesters]:
+        with suppress(NotFound):  # never recreate a users document for a deleted account
+            db().collection("users").document(uid).update({f"{field}.{troop_id}": firestore.DELETE_FIELD})
+    docs = sum(db().recursive_delete(c) for c in t.collections() if c.id not in keep)
+    return docs, files
 
 
 def _anonymize_books(troop_id: str, t) -> int:

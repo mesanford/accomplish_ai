@@ -55,6 +55,7 @@ from endpoints.event_reminders import send_event_reminders
 from endpoints.event_series import create_event_series, update_event_series
 from endpoints.feeds import calendar_feed, get_calendar_feed, reset_calendar_feed
 from endpoints.health_forms import record_health_form
+from endpoints.join_requests import answer_join_request, cancel_join_request, find_troops, request_to_join
 from endpoints.leads import delete_lead
 from endpoints.membership import accept_invite, create_invite, create_troop
 from endpoints.messaging import send_message
@@ -86,6 +87,7 @@ from endpoints.site_consent import set_media_consent
 from endpoints.site_documents import on_document_written_site
 from endpoints.site_shell import site_shell
 from endpoints.stripe_webhook import stripe_webhook
+from endpoints.troop_delete import delete_troop
 from endpoints.troop_settings import save_troop_settings
 from endpoints.ypt_reminders import send_ypt_reminders
 from endpoints.ypt_self import set_my_ypt
@@ -125,6 +127,11 @@ __all__ = [
     "create_invite",
     "create_scoutbook_report",
     "create_troop",
+    "delete_troop",
+    "find_troops",
+    "request_to_join",
+    "cancel_join_request",
+    "answer_join_request",
     "delete_account",
     "delete_announcement",
     "decide_request",

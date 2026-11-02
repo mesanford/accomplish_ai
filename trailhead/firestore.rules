@@ -529,6 +529,12 @@ service cloud.firestore {
           && request.resource.data.notes is string
           && request.resource.data.notes.size() <= 2000;
       }
+      // Requests to join from people who found the troop on the create form. Only the request_to_join,
+      // cancel_join_request and answer_join_request functions write them; leaders read them to approve or decline.
+      match /joinRequests/{uid} {
+        allow read: if isLeader(t);
+        allow write: if false;
+      }
       match /exports/{x} {
         allow read: if isLeader(t);
         allow write: if false;

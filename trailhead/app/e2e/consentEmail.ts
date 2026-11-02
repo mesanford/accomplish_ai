@@ -39,6 +39,7 @@ export async function createTroopAsLeader(leader: Page, name: string, unit: stri
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill(name);
   await leader.getByLabel('Unit number').fill(unit);
+  await leader.getByLabel('Council').fill('Consentemail Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

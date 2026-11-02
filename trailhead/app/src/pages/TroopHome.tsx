@@ -13,6 +13,7 @@ import { YptAlert } from '../components/YptAlert';
 import { Empty, Loading, PageHeader } from '../components/ui';
 import { noScoutsText } from '../lib/homeCopy';
 import { useStaleScouts } from '../lib/consentHooks';
+import { useJoinRequests } from '../lib/joinRequests';
 import { useNewLeadCount } from '../lib/leads';
 import { useTroop } from '../lib/troop';
 
@@ -39,6 +40,20 @@ function ScoutCards() {
         </Link>
       ))}
     </div>
+  );
+}
+
+function JoinAlert() {
+  const { troopId } = useTroop();
+  const count = useJoinRequests().length;
+  if (count === 0) {
+    return null;
+  }
+  return (
+    <Link className="card link" to={`/t/${troopId}/roster`}>
+      <h3>{count === 1 ? '1 person asked to join the troop' : `${count} people asked to join the troop`}</h3>
+      <span className="muted small">Open the Roster to approve the people you know, or decline.</span>
+    </Link>
   );
 }
 
@@ -96,6 +111,7 @@ export function TroopHome() {
       <HomeAnnouncement />
       {isLeader ? <YptAlert /> : null}
       <NoticeUpdateCard />
+      {isLeader ? <JoinAlert /> : null}
       {isLeader ? <LeadAlert /> : null}
       {isLeader ? <NoticeAlert /> : null}
       <QuickActions />

@@ -3,6 +3,7 @@ import { errorMessage, saveTroopSettings, type TroopSettingsForm } from '../../l
 import { stillNeeded } from '../../lib/formCheck';
 import { ZONES } from '../../lib/timeZones';
 import type { MeetingPlace } from '../../lib/types';
+import { CouncilInput } from '../CouncilInput';
 import { Field, Notice } from '../ui';
 
 /** The troop's name, unit number, council, district, chartered organization, meeting place and time zone. */
@@ -48,7 +49,7 @@ export function TroopDetailsForm({ saved }: { saved: TroopSettingsForm }) {
       </div>
       <div className="row">
         <Field label="Council" htmlFor="set-council">
-          <input id="set-council" maxLength={80} value={form.council} onChange={set('council')} />
+          <CouncilInput id="set-council" value={form.council} onChange={set('council')} />
         </Field>
         <Field label="District" htmlFor="set-district">
           <input id="set-district" maxLength={80} value={form.district} onChange={set('district')} />

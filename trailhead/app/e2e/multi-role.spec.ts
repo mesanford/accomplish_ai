@@ -8,6 +8,7 @@ test('a leader adds their own child and is both leader and parent', async ({ bro
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 303');
   await leader.getByLabel('Unit number').fill('303');
+  await leader.getByLabel('Council').fill('Multi Role Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
@@ -54,6 +55,7 @@ test('a leader gives a committee member the parent role and they agree to the no
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 304');
   await leader.getByLabel('Unit number').fill('304');
+  await leader.getByLabel('Council').fill('Multi Role Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
