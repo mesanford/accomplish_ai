@@ -15,6 +15,7 @@ test('the year at a glance shows booked and open weekends, and an open one start
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 606');
   await leader.getByLabel('Unit number').fill('606');
+  await leader.getByLabel('Council').fill('Calendar Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

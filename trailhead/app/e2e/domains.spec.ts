@@ -18,6 +18,7 @@ test('a leader connects their own domain, sees the DNS records to add, then remo
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 505');
   await leader.getByLabel('Unit number').fill('505');
+  await leader.getByLabel('Council').fill('Domains Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

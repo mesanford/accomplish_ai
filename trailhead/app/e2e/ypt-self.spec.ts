@@ -9,6 +9,7 @@ test('an adult enters their own Youth Protection date and the roster says they d
   await adult.getByRole('link', { name: 'Create a troop' }).click();
   await adult.getByLabel('Troop name').fill('Troop 505');
   await adult.getByLabel('Unit number').fill('505');
+  await adult.getByLabel('Council').fill('Ypt Self Council');
   await adult.getByLabel('Your name').fill('Pat Leader');
   await adult.getByLabel('Youth Protection training expires').fill(inOneYear());
   await adult.getByRole('button', { name: 'Create troop' }).click();

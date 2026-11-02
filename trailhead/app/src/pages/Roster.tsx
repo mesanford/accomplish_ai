@@ -6,6 +6,7 @@ import { AdultRow } from '../components/AdultRow';
 import { ConsentReminder } from '../components/ConsentReminder';
 import { ConsentRequestPanel } from '../components/ConsentRequestPanel';
 import { InviteForm } from '../components/InviteForm';
+import { JoinRequests } from '../components/JoinRequests';
 import { ScoutQuartermaster } from '../components/ScoutQuartermaster';
 import { GuideBlock } from '../components/GuideBlock';
 import { HealthPills } from '../components/HealthPills';
@@ -107,6 +108,7 @@ export function Roster() {
           'Send the link by text or email. They open it and join.',
         ]}
       />
+      <JoinRequests />
       <section className="stack">
         <h2 className="blazed">
           Scouts ({patrolFilter ? `${shownScouts.length} of ${scouts.length}` : scouts.length})

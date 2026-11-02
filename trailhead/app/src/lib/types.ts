@@ -23,8 +23,16 @@ export interface Membership {
   roles: Role[];
 }
 
+/** A request to join a troop that is waiting for one of its leaders (see JoinRequest). */
+export interface PendingJoin {
+  name: string;
+  unitNumber: string;
+  requestedAt?: Timestamp;
+}
+
 export interface UserDoc {
   troops?: Record<string, Membership>;
+  joinRequests?: Record<string, PendingJoin>;
 }
 
 /** Where the troop meets. Every part is optional; `state` is a two-letter code. */
@@ -371,6 +379,18 @@ export interface PublicDocument {
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'invited' | 'joined' | 'not_interested';
+
+/** Someone who found the troop on the create form and asked to join. Document id: their uid. Leaders only. */
+export interface JoinRequest {
+  id: string;
+  uid: string;
+  displayName: string;
+  email: string;
+  /** One of the create form's role choices (creatorRole.ts). */
+  creatorRole: string;
+  yptExpiresAt?: Timestamp | null;
+  requestedAt?: Timestamp;
+}
 
 export interface Lead {
   id: string;

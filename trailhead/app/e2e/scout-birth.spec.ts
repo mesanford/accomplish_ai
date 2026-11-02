@@ -8,6 +8,7 @@ test('a leader corrects a Scout’s birth month and year, and a date under 13 wa
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 606');
   await leader.getByLabel('Unit number').fill('606');
+  await leader.getByLabel('Council').fill('Scout Birth Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

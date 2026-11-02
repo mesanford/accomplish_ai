@@ -25,6 +25,7 @@ from handlers.membership import (
 )
 from handlers.retention import today_local
 from handlers.signup_config import troop_zone
+from handlers.troop_match import match_keys
 
 BAD = https_fn.FunctionsErrorCode.INVALID_ARGUMENT
 
@@ -49,7 +50,15 @@ def create_troop(req: https_fn.CallableRequest) -> dict:
     ref = db().collection("troops").document()
     member_ref = ref.collection("members").document()
     batch = db().batch()
-    batch.set(ref, {**troop_doc, "yptCopyMemberIds": [member_ref.id], "createdAt": firestore.SERVER_TIMESTAMP})
+    batch.set(
+        ref,
+        {
+            **troop_doc,
+            **match_keys(troop_doc),
+            "yptCopyMemberIds": [member_ref.id],
+            "createdAt": firestore.SERVER_TIMESTAMP,
+        },
+    )
     batch.set(member_ref, member)
     batch.set(
         ref.collection("access").document(uid), _access(member_ref.id, member["roles"], [], member["yptExpiresAt"])

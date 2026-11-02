@@ -9,6 +9,7 @@ test('a young Scout needs a leader confirmation, a parent agrees to the notice, 
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 202');
   await leader.getByLabel('Unit number').fill('202');
+  await leader.getByLabel('Council').fill('Consent Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

@@ -8,9 +8,10 @@ test('required forms explain what is missing, and Badges works on a deep link an
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   // An empty form says what is still needed, on the page.
   await leader.getByRole('button', { name: 'Create troop' }).click();
-  await expect(leader.getByText(/Still needed: the troop name, the unit number/)).toBeVisible();
+  await expect(leader.getByText(/Still needed: the troop name, the unit number, the council/)).toBeVisible();
   await leader.getByLabel('Troop name').fill('Troop 202');
   await leader.getByLabel('Unit number').fill('202');
+  await leader.getByLabel('Council').fill('Qa Fixes Council');
   await leader.getByLabel('Your name').fill('Quinn Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

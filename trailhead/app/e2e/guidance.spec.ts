@@ -12,6 +12,7 @@ test('new leaders get guidance: checklist, help tips, how-this-page-works panels
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 202');
   await leader.getByLabel('Unit number').fill('202');
+  await leader.getByLabel('Council').fill('Guidance Council');
   await leader.getByLabel('Your name').fill('Lee Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
@@ -80,6 +81,7 @@ test('a treasurer and a quartermaster see their own Getting started lists and He
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 707');
   await leader.getByLabel('Unit number').fill('707');
+  await leader.getByLabel('Council').fill('Guidance Council');
   await leader.getByLabel('Your name').fill('Lee Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

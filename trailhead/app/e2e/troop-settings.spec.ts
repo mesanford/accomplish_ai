@@ -10,6 +10,7 @@ test('a leader picks a time zone, then changes the troop details and positions i
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 505');
   await leader.getByLabel('Unit number').fill('505');
+  await leader.getByLabel('Council').fill('Troop Settings Council');
   await leader.getByLabel('Time zone').selectOption('America/Denver');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());

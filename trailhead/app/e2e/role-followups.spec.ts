@@ -15,6 +15,7 @@ for (const c of CHOICES) {
     await creator.getByRole('link', { name: 'Create a troop' }).click();
     await creator.getByLabel('Troop name').fill(`Troop ${c.number}`);
     await creator.getByLabel('Unit number').fill(c.number);
+    await creator.getByLabel('Council').fill('Role Followups Council');
     await creator.getByLabel('Your name').fill('Pat Creator');
     await creator.getByLabel('Youth Protection training expires').fill(inOneYear());
     // Scoutmaster is the default. The hint changes with the choice.
@@ -38,6 +39,7 @@ test('a leader records a paper permission slip for a Scout whose parents are not
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 814');
   await leader.getByLabel('Unit number').fill('814');
+  await leader.getByLabel('Council').fill('Role Followups Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
@@ -74,6 +76,7 @@ test('an advancement chair can read, edit and delete any announcement', async ({
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 815');
   await leader.getByLabel('Unit number').fill('815');
+  await leader.getByLabel('Council').fill('Role Followups Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

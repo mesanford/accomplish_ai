@@ -3,10 +3,16 @@ import { inOneYear, resetEmulators, signedIn } from './helpers';
 
 test.beforeAll(resetEmulators);
 
+// Each test's troop is a different troop, so each gets its own council: the same unit number in the same council
+// would be offered as "already on Forthright".
+let troops = 0;
+
 async function startTroop(leader: Page): Promise<void> {
+  troops += 1;
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 404');
   await leader.getByLabel('Unit number').fill('404');
+  await leader.getByLabel('Council').fill(`Activity Log Council ${troops}`);
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

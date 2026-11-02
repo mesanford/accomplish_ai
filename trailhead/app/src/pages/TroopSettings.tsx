@@ -1,3 +1,4 @@
+import { DeleteTroop } from '../components/settings/DeleteTroop';
 import { CouncilCalendar } from '../components/settings/CouncilCalendar';
 import { Leadership } from '../components/settings/Leadership';
 import { TroopDetailsForm } from '../components/settings/TroopDetailsForm';
@@ -32,6 +33,10 @@ export function TroopSettings() {
       <section className="card stack" aria-label="Leadership">
         <h2>Leadership</h2>
         <Leadership key={key} saved={saved} members={members} />
+      </section>
+      <section className="card stack" aria-label="Delete this troop">
+        <h2>Delete this troop</h2>
+        <DeleteTroop />
       </section>
     </>
   );

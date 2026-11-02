@@ -8,6 +8,7 @@ test('official requirement text shows up wherever requirements are mentioned', a
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 404');
   await leader.getByLabel('Unit number').fill('404');
+  await leader.getByLabel('Council').fill('Requirements Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();

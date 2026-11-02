@@ -107,6 +107,8 @@ def delete_account(req: https_fn.CallableRequest) -> dict:
             memberships[troop_id] = snap.to_dict()
             _check_can_leave(uid, troop_id, memberships[troop_id])  # refuse before changing anything
     written = sum(_leave_troop(troop_id, uid, access) for troop_id, access in memberships.items())
+    for troop_id in (user_ref.get().to_dict() or {}).get("joinRequests") or {}:  # they hold the person's name and email
+        troop(troop_id).collection("joinRequests").document(uid).delete()
     for device in user_ref.collection("devices").list_documents():  # push tokens; deleting the user leaves these behind
         device.delete()
     user_ref.delete()

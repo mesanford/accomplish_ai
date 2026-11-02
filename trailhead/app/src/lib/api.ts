@@ -43,6 +43,46 @@ export const saveTroopSettings = (form: TroopSettingsForm) =>
 
 export const createTroop = (form: TroopForm) => call<TroopForm, { troopId: string }>('create_troop', form);
 
+/** A troop already on Forthright with the unit number and council being created. */
+export interface TroopMatch {
+  troopId: string;
+  name: string;
+  unitNumber: string;
+  council: string;
+  district: string;
+  /** The caller is in it already. */
+  member: boolean;
+  /** The caller has asked to join it and is waiting. */
+  requested: boolean;
+}
+
+export const findTroops = (unitNumber: string, council: string) =>
+  call<{ unitNumber: string; council: string }, { matches: TroopMatch[] }>('find_troops', { unitNumber, council });
+
+export interface JoinRequestForm {
+  troopId: string;
+  displayName: string;
+  creatorRole: string;
+  yptExpiresAt: string;
+}
+
+export const requestToJoin = (form: JoinRequestForm) =>
+  call<JoinRequestForm, { requested: boolean }>('request_to_join', form);
+
+export const cancelJoinRequest = (troopId: string) =>
+  call<{ troopId: string }, { cancelled: boolean }>('cancel_join_request', { troopId });
+
+/** A leader answers a request to join. `creatorRole` overrides the role the person asked for. */
+export const answerJoinRequest = (troopId: string, uid: string, approve: boolean, creatorRole?: string) =>
+  call<{ troopId: string; uid: string; approve: boolean; creatorRole?: string }, { approved: boolean }>(
+    'answer_join_request',
+    { troopId, uid, approve, creatorRole },
+  );
+
+/** Delete a troop that only the caller is in. */
+export const deleteTroop = (troopId: string) =>
+  call<{ troopId: string; confirm: true }, { deleted: boolean }>('delete_troop', { troopId, confirm: true });
+
 export interface InviteForm {
   troopId: string;
   role: string;

@@ -18,6 +18,7 @@ test('a leader, a parent and a counselor take a Scout through a merit badge', as
   await leader.getByRole('link', { name: 'Create a troop' }).click();
   await leader.getByLabel('Troop name').fill('Troop 101');
   await leader.getByLabel('Unit number').fill('101');
+  await leader.getByLabel('Council').fill('Troop Flow Council');
   await leader.getByLabel('Your name').fill('Pat Leader');
   await leader.getByLabel('Youth Protection training expires').fill(inOneYear());
   await leader.getByRole('button', { name: 'Create troop' }).click();
