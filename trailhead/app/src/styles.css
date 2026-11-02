@@ -201,10 +201,24 @@ tbody tr:nth-child(even) td { background: var(--zebra); }
 .steps li.done .tick { background: var(--good); border-color: var(--good); }
 .steps li.done { color: var(--muted); }
 .next-step { display: grid; gap: 12px; justify-items: center; }
-.help-guide > summary { cursor: pointer; }
-.help-guide > summary h2 { display: inline; }
-.glossary { margin: 0; display: grid; gap: 12px; }
-.glossary dt { font-weight: 700; }
+/* Help: each guide is a card whose title row opens it; inside, labelled sections and one panel per task. */
+h4 { font-family: var(--display); font-size: 1.05rem; line-height: 1.2; margin: 0; color: var(--ink); }
+.help-guide { padding: 0; gap: 0; overflow: hidden; }
+.help-summary { list-style: none; display: flex; align-items: baseline; gap: 12px; padding: 18px 20px; cursor: pointer; }
+.help-summary::-webkit-details-marker { display: none; }
+.help-summary::before { content: "▸"; color: var(--accent); flex: none; font-size: 1.3rem; line-height: 1; transition: transform .15s; }
+.help-guide[open] > .help-summary::before { transform: rotate(90deg); }
+.help-guide[open] > .help-summary { border-bottom: 1px solid var(--line); }
+.help-summary h2 { font-size: 1.45rem; }
+.help-body { padding: 20px; display: grid; gap: 28px; }
+.help-label { font: 600 12px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--label); margin: 0 0 10px; }
+.help-access { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+.help-tasks { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); }
+.help-task { background: var(--zebra); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 8px; }
+.help-glossary { padding: 20px; gap: 16px; }
+.help-glossary h2 { font-size: 1.45rem; }
+.glossary { margin: 0; display: grid; gap: 14px 28px; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); }
+.glossary dt { font-family: var(--display); font-weight: 700; }
 .glossary dd { margin: 2px 0 0; color: var(--muted); }
 
 /* Troop website color suggestions beside the color picker */
