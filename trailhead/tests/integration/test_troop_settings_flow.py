@@ -27,7 +27,7 @@ FORM = {
         "zip": "62701",
     },
     "timezone": "America/Denver",
-    "positions": {"committeeChair": "m-mom", "charterRep": None},
+    "positions": {"committeeChair": "m-mom", "committeeSecretary": None, "charterRep": None},
 }
 
 
@@ -49,7 +49,7 @@ def test_a_leader_saves_the_settings_and_the_new_name_reaches_every_copy():
     assert call("save_troop_settings", "lead", FORM).json()["result"] == {"saved": True}
     t = read(T)
     assert t["timezone"] == "America/Denver" and t["district"] == "Sangamon"
-    assert t["meetingPlace"]["zip"] == "62701" and t["positions"] == {"committeeChair": "m-mom", "charterRep": None}
+    assert t["meetingPlace"]["zip"] == "62701" and t["positions"] == FORM["positions"]
     assert t["site"] == {"slug": "troop-12", "published": True}  # untouched
     for uid in ("lead", "mom"):
         user = read(f"users/{uid}")

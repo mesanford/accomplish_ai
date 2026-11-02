@@ -8,8 +8,17 @@ describe('troop creator role choices', () => {
     expect(CREATOR_CHOICES[0].value).toBe('scoutmaster');
   });
 
-  it('offers the four roles', () => {
-    expect(CREATOR_CHOICES.map((c) => c.value)).toEqual(['scoutmaster', 'leader', 'advancement', 'committee_chair']);
+  it('offers the leader, committee and parent roles', () => {
+    expect(CREATOR_CHOICES.map((c) => c.value)).toEqual([
+      'scoutmaster',
+      'leader',
+      'registered_leader',
+      'advancement',
+      'committee_chair',
+      'committee_secretary',
+      'committee_member',
+      'parent',
+    ]);
   });
 
   it('gives every choice the leader role, because only leaders can give out roles', () => {
@@ -17,12 +26,18 @@ describe('troop creator role choices', () => {
       expect(c.roles, c.value).toContain('leader');
     }
     expect(CREATOR_CHOICES.find((c) => c.value === 'committee_chair')?.roles).toEqual(['leader', 'committee']);
+    expect(CREATOR_CHOICES.find((c) => c.value === 'committee_secretary')?.roles).toEqual(['leader', 'committee']);
+    expect(CREATOR_CHOICES.find((c) => c.value === 'committee_member')?.roles).toEqual(['leader', 'committee']);
+    expect(CREATOR_CHOICES.find((c) => c.value === 'registered_leader')?.roles).toEqual(['leader']);
+    expect(CREATOR_CHOICES.find((c) => c.value === 'parent')?.roles).toEqual(['leader', 'parent']);
   });
 
   it('says in the hint what a choice cannot do, and why a committee chair also gets leader', () => {
     expect(creatorHint('leader')).toMatch(/cannot change merit badge records/);
     expect(creatorHint('committee_chair')).toMatch(/also get the leader role, because only leaders can give out roles/);
     expect(creatorHint('scoutmaster')).toMatch(/blue cards and merit badges/);
+    expect(creatorHint('parent')).toMatch(/Youth Protection training/);
+    expect(creatorHint('committee_secretary')).toMatch(/committee secretary in Settings/);
     expect(creatorHint('nope')).toBe('');
   });
 });

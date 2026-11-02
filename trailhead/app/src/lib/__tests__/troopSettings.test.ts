@@ -10,7 +10,7 @@ describe('settingsFrom', () => {
     const form = settingsFrom('t1', { name: 'Troop 9', unitNumber: '9' });
     expect(form.timezone).toBe('America/Chicago');
     expect(form.meetingPlace).toEqual({ place: '', street: '', city: '', state: '', zip: '' });
-    expect(form.positions).toEqual({ committeeChair: null, charterRep: null });
+    expect(form.positions).toEqual({ committeeChair: null, committeeSecretary: null, charterRep: null });
   });
 
   it('keeps what was saved', () => {
@@ -19,7 +19,7 @@ describe('settingsFrom', () => {
       unitNumber: '1',
       timezone: 'America/Denver',
       meetingPlace: { place: 'Hall', street: '', city: 'Boise', state: 'ID', zip: '' },
-      positions: { committeeChair: 'm1', charterRep: null },
+      positions: { committeeChair: 'm1', committeeSecretary: null, charterRep: null },
     });
     expect(form.timezone).toBe('America/Denver');
     expect(form.meetingPlace.city).toBe('Boise');

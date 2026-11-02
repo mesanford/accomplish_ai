@@ -103,7 +103,7 @@ export const TROOP_CATEGORIES: FeatureCategory[] = [
       },
       {
         title: 'Troop settings',
-        text: "Your troop's details, meeting place, time zone and leadership in one place, including the committee chair and chartered organization representative.",
+        text: "Your troop's details, meeting place, time zone and leadership in one place, including the committee chair, committee secretary and chartered organization representative.",
       },
       {
         title: 'Simple invitations',

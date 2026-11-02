@@ -11,6 +11,7 @@ const EMPTY: TroopForm = {
   name: '',
   unitNumber: '',
   council: '',
+  district: '',
   displayName: '',
   yptExpiresAt: '',
   creatorRole: DEFAULT_CREATOR_ROLE,
@@ -66,6 +67,9 @@ export function CreateTroop() {
         </Field>
         <Field label="Council" htmlFor="council" hint="Optional. For example, the name of your local Scouting council.">
           <input id="council" value={form.council} onChange={set('council')} />
+        </Field>
+        <Field label="District" htmlFor="district" hint="Optional. The district within your council.">
+          <input id="district" maxLength={80} value={form.district} onChange={set('district')} />
         </Field>
         <Field
           label="Time zone"

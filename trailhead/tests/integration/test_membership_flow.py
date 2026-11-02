@@ -48,7 +48,12 @@ def new_scout(tid: str, caller: str, name: str, year: int) -> str:
 
 @pytest.mark.parametrize(
     ("choice", "roles"),
-    [("leader", ["leader"]), ("advancement", ["leader", "advancement"]), ("committee_chair", ["leader", "committee"])],
+    [
+        ("leader", ["leader"]),
+        ("advancement", ["leader", "advancement"]),
+        ("committee_chair", ["leader", "committee"]),
+        ("parent", ["leader", "parent"]),
+    ],
 )
 def test_creator_picks_their_role_and_can_still_assign_roles(choice, roles):
     form = {"name": "Troop 8", "unitNumber": "8", "displayName": "Pat", "yptExpiresAt": "2027-12-31"}
