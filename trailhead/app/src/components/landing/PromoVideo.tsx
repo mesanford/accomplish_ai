@@ -23,8 +23,9 @@ export function PromoVideo() {
           <source src={VIDEO} type="video/mp4" />
         </video>
         <p id="video-note" className="l-small">
-          68 seconds, with music and no narration. It shows the roster, advancement paths and blue cards, trip planning,
-          the calendar, event sign-ups, Scout accounts and a troop website, using a made-up troop.{' '}
+          68 seconds, with music and no narration. It shows the roster, advancement paths and blue
+          cards, trip planning, the calendar, event sign-ups, Scout accounts and a troop website,
+          using a made-up troop.{' '}
           <a href={VIDEO} download>
             Download the video
           </a>
