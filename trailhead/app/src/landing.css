@@ -143,6 +143,21 @@
 }
 
 /* Sections */
+.l-video .l-wrap {
+  display: grid;
+  gap: 12px;
+}
+.l-video-player {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
 .l-section {
   padding-block: 56px;
 }

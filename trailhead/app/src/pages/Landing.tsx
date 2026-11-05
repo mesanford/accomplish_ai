@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Hero } from '../components/landing/Hero';
 import { PilotSection } from '../components/landing/PilotSection';
+import { PromoVideo } from '../components/landing/PromoVideo';
 import { Faq, LandingFooter, Safety, WhoItHelps } from '../components/landing/Sections';
 import { PRIVACY_EMAIL } from '../lib/privacy';
 import '../landing.css';
@@ -32,6 +33,7 @@ export function Landing({ section }: { section?: string }) {
     <div className="landing">
       <Hero />
       <main>
+        <PromoVideo />
         <WhoItHelps />
         <Safety />
         <PilotSection />
