@@ -74,7 +74,8 @@ export function LandingFooter({ email }: { email: string }) {
       <div className="l-wrap">
         <p>
           <Link to="/privacy">Privacy policy</Link> · Contact{' '}
-          <a href={`mailto:${email}`}>{email}</a>
+          <a href={`mailto:${email}`}>{email}</a> · A product by{' '}
+          <a href="https://msanford.com/products/forthright">MM Sanford</a>
         </p>
         <p className="l-small">{DISCLAIMER}</p>
       </div>
